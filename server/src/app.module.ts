@@ -30,7 +30,7 @@ import { AppService } from './app.service';
         type: 'mysql',
         host: 'localhost',
         port: 3306,
-        username: 'root',
+        username: 'trading_user',
         password: configService.get('DB_PASSWORD'),
         database: 'trading',
         entities: [],
