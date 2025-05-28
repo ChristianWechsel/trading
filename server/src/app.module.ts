@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm'; // Import TypeORM if needed in the future
-import Joi from 'joi';
+import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -25,6 +25,7 @@ import { AppService } from './app.service';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'mysql',
         host: 'localhost',
