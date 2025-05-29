@@ -24,6 +24,18 @@ import { UsersModule } from './users/users.module';
             'string.pattern.base':
               'DB_PASSWORD must be at least 8 characters long and include uppercase, lowercase, number, and special character.',
           }),
+        JWT_SECRET: Joi.string()
+          .min(32)
+          .pattern(
+            new RegExp(
+              '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=[\\]{};:\'",.<>/?]).{32,}$',
+            ),
+          )
+          .required()
+          .messages({
+            'string.pattern.base':
+              'JWT_SECRET must be at least 32 characters long and include uppercase, lowercase, number, and special character.',
+          }),
       }),
     }),
     TypeOrmModule.forRootAsync({
