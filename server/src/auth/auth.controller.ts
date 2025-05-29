@@ -6,11 +6,10 @@ import {
   HttpStatus,
   Post,
   Request,
-  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
+import { Public } from './public.decorator';
 
 interface AuthDto {
   username: string;
@@ -24,6 +23,7 @@ export class AuthController {
     private readonly authService: AuthService,
   ) {}
 
+  @Public()
   @Post('register')
   async register(@Body() body: AuthDto) {
     const error = this.validateBody(body);
@@ -33,6 +33,7 @@ export class AuthController {
     return { userId: user.userId, username: user.username };
   }
 
+  @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async signIn(@Body() body: AuthDto) {
@@ -42,7 +43,6 @@ export class AuthController {
     return await this.authService.signIn(body.username, body.password);
   }
 
-  @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@Request() req: { user: string }) {
     return req.user;
