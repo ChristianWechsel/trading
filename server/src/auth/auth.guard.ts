@@ -50,3 +50,16 @@ export class AuthGuard implements CanActivate {
     return type === 'Bearer' ? token : undefined;
   }
 }
+
+@Injectable()
+export class AdminGuard implements CanActivate {
+  canActivate(context: ExecutionContext): boolean {
+    const request = context.switchToHttp().getRequest<Request>();
+    const params = request.params;
+
+    if (params && params.username === 'admin') {
+      return true;
+    }
+    throw new UnauthorizedException('Only admin can access this endpoint');
+  }
+}

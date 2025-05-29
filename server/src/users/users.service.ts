@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
+import { randomBytes } from 'crypto';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 
@@ -21,5 +22,19 @@ export class UsersService {
       password: hashedPassword,
     });
     return this.usersRepository.save(user);
+  }
+
+  async createAdminUserIfNotExists(): Promise<{
+    username: string;
+    password: string;
+  } | null> {
+    const adminUsername = 'admin';
+    const existingAdmin = await this.findOne(adminUsername);
+    if (!existingAdmin) {
+      const randomPassword = randomBytes(16).toString('base64url');
+      await this.create(adminUsername, randomPassword);
+      return { username: adminUsername, password: randomPassword };
+    }
+    return null;
   }
 }
