@@ -4,6 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm'; // Import TypeORM if needed in 
 import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+import { User } from './users/user.entity';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -33,10 +36,12 @@ import { AppService } from './app.service';
         username: 'trading_user',
         password: configService.get('DB_PASSWORD'),
         database: 'trading',
-        entities: [],
-        synchronize: false,
+        entities: [User],
+        synchronize: false, // Temporär true für die Tabellenerstellung,
       }),
     }),
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
