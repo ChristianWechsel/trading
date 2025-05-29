@@ -37,11 +37,13 @@ ok  HTTPS aktivieren:
     Aktuell läuft der Server auf HTTP.
     Für den Betrieb im Internet unbedingt HTTPS mit gültigem Zertifikat (z.B. Let's Encrypt) einrichten.
 
+ok
 CORS:
 Aktuell keine CORS-Konfiguration sichtbar.
 Für öffentliche APIs CORS gezielt konfigurieren.
 
-ok Datenvalidierung:
+ok
+Datenvalidierung:
 Die Validierung der Nutzereingaben ist aktuell sehr einfach (nur auf Vorhandensein von username und password).
 Nutze class-validator und DTOs für eine robuste Validierung (z.B. Mindestlänge, erlaubte Zeichen).
 
@@ -56,12 +58,13 @@ Für Produktion Logging (z.B. mit Winston oder Pino) aktivieren und sensible Dat
 Datenbankzugang:
 Die Datenbank ist auf localhost beschränkt – das ist gut.
 Für Produktion:
-
 Starke Passwörter
 Keine unnötigen Rechte für den DB-User
 Zugriff ggf. auf interne Netzwerke beschränken
-JWT-Token-Handling:
+=> Shell script zur Installation von MySQL erstellen
 
+ok
+JWT-Token-Handling:
 Token-Lifetime ist 1h, das ist ok.
 Optional: Refresh-Token-Mechanismus für längere Sessions.
 Logout:
@@ -75,14 +78,16 @@ Für Entwicklung praktisch, aber in Produktion ggf. absichern oder deaktivieren.
 Brute-Force-Schutz:
 Rate-Limiting ist aktiv, aber ggf. weitere Mechanismen (z.B. Captcha) bei Login überlegen.
 
+ok
 User-Registrierung:
 Aktuell kann sich jeder registrieren.
 Für öffentliche Systeme:
-
 E-Mail-Bestätigung
 Captcha
 Admin-Freigabe
+
 Abhängigkeiten aktuell halten:
 Regelmäßig npm audit und Updates durchführen.
 
+ok
 SQL Injection
