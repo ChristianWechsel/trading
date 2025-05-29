@@ -84,3 +84,5 @@ Captcha
 Admin-Freigabe
 Abhängigkeiten aktuell halten:
 Regelmäßig npm audit und Updates durchführen.
+
+SQL Injection

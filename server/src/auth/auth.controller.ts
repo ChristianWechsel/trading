@@ -8,13 +8,9 @@ import {
   Request,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
+import { AuthDto } from './auth.dto';
 import { AuthService } from './auth.service';
 import { Public } from './public.decorator';
-
-interface AuthDto {
-  username: string;
-  password: string;
-}
 
 @Controller('auth')
 export class AuthController {
