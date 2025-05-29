@@ -26,7 +26,7 @@ export class AuthController {
     if (error) return error;
 
     const user = await this.usersService.create(body.username, body.password);
-    return { userId: user.userId, username: user.username };
+    return user;
   }
 
   @Public()

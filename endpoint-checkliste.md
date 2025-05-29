@@ -70,6 +70,30 @@
 
 - [ ] Endpoint, Request/Response und Besonderheiten dokumentieren
 
+## 13. Serialization/Sensible Felder schützen
+
+- [ ] Sensible Felder (z.B. Passwort) in Entities mit `@Exclude()` aus `class-transformer` markieren
+  - Beispiel:
+    ```typescript
+    import { Exclude } from 'class-transformer';
+    // ...
+    @Exclude()
+    password: string;
+    ```
+- [ ] `ClassSerializerInterceptor` global aktivieren, z.B. in `main.ts`:
+  ```typescript
+  import { ClassSerializerInterceptor } from "@nestjs/common";
+  import { Reflector } from "@nestjs/core";
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  ```
+- [ ] **Beim Rückgeben von Entities an den Client immer serialisieren, z.B.:**
+  ```typescript
+  import { instanceToPlain } from "class-transformer";
+  // ...
+  return instanceToPlain(user);
+  ```
+- [ ] Sicherstellen, dass sensible Felder nicht im Response enthalten sind
+
 ---
 
 **Tipp:**
