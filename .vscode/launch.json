@@ -5,11 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Attach to Chrome",
-            "port": 9222,
+            "name": "Attach",
+            "port": 9229,
             "request": "attach",
-            "type": "chrome",
-            "webRoot": "${workspaceFolder}"
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
         }
     ]
 }
