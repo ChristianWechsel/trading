@@ -6,8 +6,10 @@ import {
   HttpStatus,
   Post,
   Request,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
+import { AdminGuard } from './admin.guard';
 import { AuthDto } from './auth.dto';
 import { AuthService } from './auth.service';
 import { Public } from './public.decorator';
@@ -20,6 +22,7 @@ export class AuthController {
   ) {}
 
   @Public()
+  @UseGuards(AdminGuard)
   @Post('register')
   async register(@Body() body: AuthDto) {
     const error = this.validateBody(body);
