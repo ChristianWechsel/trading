@@ -41,7 +41,7 @@ CORS:
 Aktuell keine CORS-Konfiguration sichtbar.
 Für öffentliche APIs CORS gezielt konfigurieren.
 
-Datenvalidierung:
+ok Datenvalidierung:
 Die Validierung der Nutzereingaben ist aktuell sehr einfach (nur auf Vorhandensein von username und password).
 Nutze class-validator und DTOs für eine robuste Validierung (z.B. Mindestlänge, erlaubte Zeichen).
 
