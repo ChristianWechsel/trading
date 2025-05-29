@@ -1,5 +1,15 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
+import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 
 interface AuthDto {
@@ -30,6 +40,12 @@ export class AuthController {
     if (error) return error;
 
     return await this.authService.signIn(body.username, body.password);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('profile')
+  getProfile(@Request() req: { user: string }) {
+    return req.user;
   }
 
   private validateBody(body: AuthDto) {

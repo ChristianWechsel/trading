@@ -17,6 +17,7 @@ import { AuthService } from './auth.service';
         signOptions: { expiresIn: '1h' },
       }),
     }),
+    ConfigModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],
