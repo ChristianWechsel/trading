@@ -33,9 +33,9 @@ Keine sensiblen Daten im Repo:
 .env ist in .gitignore eingetragen.
 
 Verbesserungspotenzial / Hinweise für Produktion:
-HTTPS aktivieren:
-Aktuell läuft der Server auf HTTP.
-Für den Betrieb im Internet unbedingt HTTPS mit gültigem Zertifikat (z.B. Let's Encrypt) einrichten.
+ok  HTTPS aktivieren:
+    Aktuell läuft der Server auf HTTP.
+    Für den Betrieb im Internet unbedingt HTTPS mit gültigem Zertifikat (z.B. Let's Encrypt) einrichten.
 
 CORS:
 Aktuell keine CORS-Konfiguration sichtbar.
