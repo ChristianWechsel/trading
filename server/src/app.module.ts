@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm'; // Import TypeORM if needed in the future
 import * as Joi from 'joi';
 import { AppController } from './app.controller';
@@ -54,8 +56,17 @@ import { UsersModule } from './users/users.module';
     }),
     AuthModule,
     UsersModule,
+    ThrottlerModule.forRoot({
+      throttlers: [{ ttl: 60, limit: 5 }],
+    }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}
