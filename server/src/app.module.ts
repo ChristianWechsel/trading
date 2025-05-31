@@ -12,11 +12,11 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CalendarEvent } from './calendar-event/calendar-event.entity';
 import { CalendarEventModule } from './calendar-event/calendar-event.module';
+import { DataAggregationModule } from './data-aggregation/data-aggregation.module';
 import { NotificationModule } from './notification/notification.module';
 import { PushSubscription } from './notification/push-subscription.entity';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
-import { DataAggregationModule } from './data-aggregation/data-aggregation.module';
 
 @Module({
   imports: [
@@ -58,6 +58,10 @@ import { DataAggregationModule } from './data-aggregation/data-aggregation.modul
           'any.required':
             'VAPID_MAIL is required. Please add a valid mail address to the .env file.',
           'string.email': 'VAPID_MAIL must be a valid email address.',
+        }),
+        EODHD_API_KEY: Joi.string().required().messages({
+          'any.required':
+            'EODHD_API_KEY is required. Please add your End Of Day Historical Data API key to the .env file.',
         }),
       }),
     }),
