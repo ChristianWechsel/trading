@@ -1,15 +1,17 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm'; // Import TypeORM if needed in the future
 import * as Joi from 'joi';
+import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { NotificationModule } from './notification/notification.module';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
-import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -61,6 +63,10 @@ import { NotificationModule } from './notification/notification.module';
       throttlers: [{ ttl: 60, limit: 5 }],
     }),
     NotificationModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/static/',
+    }),
   ],
   controllers: [AppController],
   providers: [

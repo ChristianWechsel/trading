@@ -4,22 +4,9 @@ html
     title Benachrichtigungs-Registrierung
     meta(charset="utf-8")
     meta(name="viewport", content="width=device-width, initial-scale=1")
-    style.
-      body { font-family: Arial, sans-serif; margin: 2em; }
-      .container { max-width: 400px; margin: auto; }
-      label { display: block; margin-top: 1em; }
-      button { margin-top: 1.5em; padding: 0.5em 1em; }
+    link(rel="stylesheet", href="/static/css/register-notification.css")
   body
     .container
-      h1 Benachrichtigung registrieren
-      form#notification-form(method="POST", action="/notifications/register")
-        label(for="email") E-Mail für Benachrichtigungen:
-        input#email(type="email", name="email", required, placeholder="deine@email.de")
-        button(type="submit") Registrierung absenden
-      hr
-      button#confirm-btn(type="button" onclick="confirmRegistration()") Registrierung bestätigen
-
-    script.
-      function confirmRegistration() {
-        alert('Registrierung bestätigt! (Hier könnte ein echter Bestätigungs-Request abgesetzt werden)');
-      }
+      h1 Benachrichtigung aktivieren
+      button#notify-btn(type="button") Benachrichtigung bestätigen
+    script(src="/static/js/register-notification.js")
