@@ -1,14 +1,17 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { TypeOrmModule } from '@nestjs/typeorm'; // Import TypeORM if needed in the future
+import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { CalendarEvent } from './calendar-event/calendar-event.entity';
+import { CalendarEventModule } from './calendar-event/calendar-event.module';
 import { NotificationModule } from './notification/notification.module';
 import { PushSubscription } from './notification/push-subscription.entity';
 import { User } from './users/user.entity';
@@ -67,16 +70,18 @@ import { UsersModule } from './users/users.module';
         username: 'trading_user',
         password: configService.get('DB_PASSWORD'),
         database: 'trading',
-        entities: [User, PushSubscription],
+        entities: [User, PushSubscription, CalendarEvent],
         synchronize: false, // Temporär true für die Tabellenerstellung,
       }),
     }),
+    ScheduleModule.forRoot(),
     AuthModule,
     UsersModule,
     ThrottlerModule.forRoot({
       throttlers: [{ ttl: 60, limit: 5 }],
     }),
     NotificationModule,
+    CalendarEventModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/static/',

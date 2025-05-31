@@ -70,3 +70,57 @@ curl -k https://localhost:3000/auth/profile \
 
 - Die Registrierung ist jetzt nur noch für eingeloggte Admins möglich!
 - Das `-k`-Flag ist nur für selbstsignierte Zertifikate nötig.
+
+---
+
+# Kalender- und Benachrichtigungs-Testplan
+
+## 1. Admin-Login (Token erhalten)
+
+```bash
+curl -k -X POST https://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "<ADMIN_PASSWORT>"}'
+```
+
+## 2. Kalender-Event für die nächste Minute anlegen
+
+```bash
+# Beispiel: Event in 1 Minute (Zeit anpassen!)
+EVENT_TIME=$(date -u -d "+1 minute" +"%Y-%m-%dT%H:%M:00.000Z")
+curl -k -X POST https://localhost:3000/calendar-events \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <ADMIN_ACCESS_TOKEN>" \
+  -d '{
+    "title": "Test-Event Benachrichtigung",
+    "description": "Dies ist ein Test für die Push-Benachrichtigung.",
+    "eventDate": "'"$EVENT_TIME"'",
+    "recurring": false
+  }'
+```
+
+## 3. Alle Kalender-Events anzeigen
+
+```bash
+curl -k https://localhost:3000/calendar-events
+```
+
+## 4. Einzelnes Event anzeigen
+
+```bash
+curl -k https://localhost:3000/calendar-events/1
+```
+
+## 5. Event löschen
+
+```bash
+curl -k -X DELETE https://localhost:3000/calendar-events/1 \
+  -H "Authorization: Bearer <ADMIN_ACCESS_TOKEN>"
+```
+
+## Hinweise zum Testen der Benachrichtigung
+
+- Stelle sicher, dass du im Browser für Push-Benachrichtigungen registriert bist.
+- Nach dem Anlegen eines Events für die nächste Minute sollte nach maximal 1 Minute eine Push-Benachrichtigung erscheinen.
+- Die Zeitangabe für das Event muss im UTC-Format erfolgen.
+- Der Cronjob prüft jede Minute auf anstehende Events.
