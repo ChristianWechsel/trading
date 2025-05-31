@@ -36,17 +36,6 @@ export class CalendarEventService {
   async notifyUpcomingEvents() {
     const now = new Date();
     const nextTenMinutes = new Date(now.getTime() + 10 * 60 * 1000);
-    // Finde Events, die in den nächsten 10 Minuten stattfinden
-    // const events = await this.eventRepo
-    //   .createQueryBuilder('event')
-    //   .where('event.eventDate >= :now AND event.eventDate < :nextTenMinutes', {
-    //     now: now.toISOString().slice(0, 19).replace('T', ' '),
-    //     nextTenMinutes: nextTenMinutes
-    //       .toISOString()
-    //       .slice(0, 19)
-    //       .replace('T', ' '),
-    //   })
-    //   .getMany();
 
     const events = await this.eventRepo.find({
       where: {
