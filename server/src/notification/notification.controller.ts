@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
+import { Public } from 'src/auth/public.decorator';
 import { NotificationService } from './notification.service';
 import { PushSubscriptionDto } from './push-subscription.dto';
 
@@ -20,18 +21,21 @@ export class NotificationController {
     private readonly configService: ConfigService,
   ) {}
 
+  @Public()
   @Get('register')
   @Render('register-notification')
   registerNotification() {
     return {}; // Placeholder for template data; update with specific view data if needed
   }
 
+  @Public()
   @Get('vapid-public-key')
   getVapidPublicKey(@Res() res: Response) {
     const key = this.configService.get<string>('VAPID_PUBLIC_KEY');
     res.type('text/plain').send(key);
   }
 
+  @Public()
   @Post('subscribe')
   @HttpCode(HttpStatus.CREATED)
   async subscribe(@Body() subscription: PushSubscriptionDto) {
