@@ -10,6 +10,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { NotificationModule } from './notification/notification.module';
+import { PushSubscription } from './notification/push-subscription.entity';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
 
@@ -66,7 +67,7 @@ import { UsersModule } from './users/users.module';
         username: 'trading_user',
         password: configService.get('DB_PASSWORD'),
         database: 'trading',
-        entities: [User],
+        entities: [User, PushSubscription],
         synchronize: false, // Temporär true für die Tabellenerstellung,
       }),
     }),

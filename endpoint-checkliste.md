@@ -136,6 +136,58 @@
 
 ---
 
+# Checkliste: Datenbankmigration mit TypeORM
+
+1. **Entität(en) anlegen oder ändern**
+
+   - Neue Entity-Klasse(n) in `src/` anlegen oder bestehende anpassen.
+
+2. **DataSource konfigurieren**
+
+   - Datei `src/data-source.ts` anlegen oder prüfen.
+   - Entities und Migrations korrekt eintragen.
+
+3. **Migration generieren**
+
+   - Projekt bauen: `npm run build` (damit dist/data-source.js aktuell ist)
+   - Migration generieren:
+     ```bash
+     npx typeorm migration:generate -d dist/data-source.js src/migrations/<MigrationName>
+     ```
+   - Beispiel: `npx typeorm migration:generate -d dist/data-source.js src/migrations/CreatePushSubscription`
+
+4. **Migration prüfen**
+
+   - Die neue Datei erscheint unter `src/migrations/`.
+   - Prüfe, ob die SQL-Befehle korrekt sind.
+
+5. **Migration anwenden**
+
+   - Migration ausführen:
+     ```bash
+     npx typeorm migration:run -d dist/data-source.js
+     ```
+
+6. **Ergebnis kontrollieren**
+
+   - Prüfe in der Datenbank, ob die Tabelle(n) und Spalten wie gewünscht angelegt wurden.
+
+7. **(Optional) Migration rückgängig machen**
+   - Falls nötig:
+     ```bash
+     npx typeorm migration:revert -d dist/data-source.js
+     ```
+
+---
+
+**Hinweise:**
+
+- `synchronize: false` in der DataSource belassen, damit nur Migrationen die DB-Struktur ändern.
+- Migrationen versionieren (z.B. mit Git).
+- Bei Fehlern: Migrationen und Entity-Definitionen abgleichen.
+
+---
+
 **Tipp:**
 
 - Nutze `nest g <type> <name>` für schnelles Generieren von Boilerplate-Code.
