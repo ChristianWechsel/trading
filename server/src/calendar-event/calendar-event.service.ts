@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { NotificationService } from '../notification/notification.service';
 import { CreateCalendarEventDto } from './calendar-event.dto';
 import { CalendarEvent } from './calendar-event.entity';
@@ -50,10 +50,9 @@ export class CalendarEventService {
 
     const events = await this.eventRepo.find({
       where: {
-        eventDate: {
-          $gte: new Date('2025-01-01'),
-          $lte: nextTenMinutes,
-        },
+        eventDate:
+          MoreThanOrEqual(new Date('2025-01-01')) &&
+          LessThanOrEqual(nextTenMinutes),
       },
     });
     for (const event of events) {
