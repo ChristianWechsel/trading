@@ -41,6 +41,14 @@ import { UsersModule } from './users/users.module';
             'string.pattern.base':
               'JWT_SECRET must be at least 32 characters long and include uppercase, lowercase, number, and special character.',
           }),
+        VAPID_PUBLIC_KEY: Joi.string().required().messages({
+          'any.required':
+            'VAPID_PUBLIC_KEY is required. Please generate it using create_vapid_keys.sh and add it to the .env file.',
+        }),
+        VAPID_PRIVATE_KEY: Joi.string().required().messages({
+          'any.required':
+            'VAPID_PRIVATE_KEY is required. Bitte mit create_vapid_keys.sh generieren und in .env eintragen.',
+        }),
       }),
     }),
     TypeOrmModule.forRootAsync({
