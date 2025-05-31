@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Render } from '@nestjs/common';
 import { Public } from 'src/auth/public.decorator';
 import { NotificationService } from './notification.service';
 
@@ -8,7 +8,8 @@ export class NotificationController {
 
   @Public()
   @Get('register')
+  @Render('register-notification')
   registerNotification() {
-    return this.notificationService.registerNotification();
+    return {}; // Placeholder for template data; update with specific view data if needed
   }
 }

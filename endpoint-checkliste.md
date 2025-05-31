@@ -23,6 +23,27 @@
   - Befehl: `nest generate service <name>`
 - [ ] Datenbankzugriff über Repository/TypeORM (CRUD)
 
+## 3a. (Optional) Template Engine für Views nutzen
+
+- [ ] Template Engine (z.B. Pug) installieren
+  - Befehl: `npm install pug`
+- [ ] In `main.ts` konfigurieren:
+  ```typescript
+  app.setBaseViewsDir(join(__dirname, "../views"));
+  app.setViewEngine("pug");
+  ```
+- [ ] Controller-Methoden mit `@Render('template-name')` dekorieren
+  - Beispiel:
+    ```typescript
+    @Get('route')
+    @Render('template-name')
+    handler() {
+      return { /* Daten für das Template */ };
+    }
+    ```
+- [ ] Templates im `views`-Verzeichnis anlegen (z.B. `views/register-notification.pug`)
+- [ ] Keine Benutzereingaben ungefiltert im Template ausgeben (XSS-Schutz beachten)
+
 ## 4. DTO mit Validierung
 
 - [ ] DTO-Klasse für Request-Body anlegen
