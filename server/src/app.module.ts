@@ -16,6 +16,7 @@ import { NotificationModule } from './notification/notification.module';
 import { PushSubscription } from './notification/push-subscription.entity';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
+import { DataAggregationModule } from './data-aggregation/data-aggregation.module';
 
 @Module({
   imports: [
@@ -86,6 +87,7 @@ import { UsersModule } from './users/users.module';
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/static/',
     }),
+    DataAggregationModule,
   ],
   controllers: [AppController],
   providers: [
