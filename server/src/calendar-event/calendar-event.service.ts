@@ -31,17 +31,15 @@ export class CalendarEventService {
     return this.eventRepo.delete(id);
   }
 
-  // Cronjob: prüft alle 10 Minuten auf anstehende Events und benachrichtigt
-  @Cron(CronExpression.EVERY_MINUTE)
+  // Cronjob: prüft jede Stunde auf anstehende Events und benachrichtigt
+  @Cron(CronExpression.EVERY_HOUR)
   async notifyUpcomingEvents() {
     const now = new Date();
-    const nextTenMinutes = new Date(now.getTime() + 10 * 60 * 1000);
+    const nextHour = new Date(now.getTime() + 60 * 60 * 1000);
 
     const events = await this.eventRepo.find({
       where: {
-        eventDate:
-          MoreThanOrEqual(new Date('2025-01-01')) &&
-          LessThanOrEqual(nextTenMinutes),
+        eventDate: MoreThanOrEqual(now) && LessThanOrEqual(nextHour),
       },
     });
     for (const event of events) {
