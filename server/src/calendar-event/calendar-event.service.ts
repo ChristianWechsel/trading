@@ -31,19 +31,31 @@ export class CalendarEventService {
     return this.eventRepo.delete(id);
   }
 
-  // Cronjob: prüft jede Minute auf anstehende Events und benachrichtigt
+  // Cronjob: prüft alle 10 Minuten auf anstehende Events und benachrichtigt
   @Cron(CronExpression.EVERY_MINUTE)
   async notifyUpcomingEvents() {
     const now = new Date();
-    const nextMinute = new Date(now.getTime() + 60 * 1000);
-    // Finde Events, die in der nächsten Minute stattfinden
-    const events = await this.eventRepo
-      .createQueryBuilder('event')
-      .where('event.eventDate >= :now AND event.eventDate < :nextMinute', {
-        now: now.toISOString().slice(0, 19).replace('T', ' '),
-        nextMinute: nextMinute.toISOString().slice(0, 19).replace('T', ' '),
-      })
-      .getMany();
+    const nextTenMinutes = new Date(now.getTime() + 10 * 60 * 1000);
+    // Finde Events, die in den nächsten 10 Minuten stattfinden
+    // const events = await this.eventRepo
+    //   .createQueryBuilder('event')
+    //   .where('event.eventDate >= :now AND event.eventDate < :nextTenMinutes', {
+    //     now: now.toISOString().slice(0, 19).replace('T', ' '),
+    //     nextTenMinutes: nextTenMinutes
+    //       .toISOString()
+    //       .slice(0, 19)
+    //       .replace('T', ' '),
+    //   })
+    //   .getMany();
+
+    const events = await this.eventRepo.find({
+      where: {
+        eventDate: {
+          $gte: new Date('2025-01-01'),
+          $lte: nextTenMinutes,
+        },
+      },
+    });
     for (const event of events) {
       await this.notificationService.sendNotificationToAll({
         title: `Kalenderereignis: ${event.title}`,

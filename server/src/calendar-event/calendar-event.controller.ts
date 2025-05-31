@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
-import { AdminGuard } from '../auth/admin.guard';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CreateCalendarEventDto } from './calendar-event.dto';
 import { CalendarEventService } from './calendar-event.service';
 
@@ -15,7 +6,6 @@ import { CalendarEventService } from './calendar-event.service';
 export class CalendarEventController {
   constructor(private readonly calendarEventService: CalendarEventService) {}
 
-  @UseGuards(AdminGuard)
   @Post()
   create(@Body() dto: CreateCalendarEventDto) {
     return this.calendarEventService.create(dto);
@@ -31,7 +21,6 @@ export class CalendarEventController {
     return this.calendarEventService.findOne(Number(id));
   }
 
-  @UseGuards(AdminGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.calendarEventService.remove(Number(id));

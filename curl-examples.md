@@ -102,7 +102,8 @@ curl -k -X POST https://localhost:3000/calendar-events \
 ## 3. Alle Kalender-Events anzeigen
 
 ```bash
-curl -k https://localhost:3000/calendar-events
+curl -k https://localhost:3000/calendar-events \
+  -H "Authorization: Bearer <ADMIN_ACCESS_TOKEN>"
 ```
 
 ## 4. Einzelnes Event anzeigen

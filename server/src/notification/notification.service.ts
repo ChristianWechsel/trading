@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { sendNotification, setVapidDetails } from 'web-push';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PushSubscription } from './push-subscription.entity';
+import { sendNotification, setVapidDetails } from 'web-push';
+import { PayloadDto } from './payload.dto';
 import { PushSubscriptionDto } from './push-subscription.dto';
+import { PushSubscription } from './push-subscription.entity';
 
 @Injectable()
 export class NotificationService {
@@ -34,16 +35,8 @@ export class NotificationService {
     }
   }
 
-  async sendNotificationToAll(payload: {
-    title: string;
-    body: string;
-    url?: string;
-  }): Promise<void> {
-    const notificationPayload = JSON.stringify({
-      title: payload.title,
-      body: payload.body,
-      url: payload.url,
-    });
+  async sendNotificationToAll(payload: PayloadDto): Promise<void> {
+    const notificationPayload = JSON.stringify(payload);
     const allSubs = await this.subscriptionRepo.find();
     for (const sub of allSubs) {
       try {
