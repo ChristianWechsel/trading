@@ -1,5 +1,6 @@
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { readFileSync } from 'fs';
 import helmet from 'helmet';
 import { join } from 'path';
@@ -11,10 +12,15 @@ async function bootstrap() {
     key: readFileSync(join(__dirname, '../certificates/localhost.key')),
     cert: readFileSync(join(__dirname, '../certificates/localhost.cert')),
   };
-  const app = await NestFactory.create(AppModule, { httpsOptions });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    httpsOptions,
+  });
   app.use(helmet());
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
+  app.setBaseViewsDir(join(__dirname, '../views'));
+  app.setViewEngine('pug');
 
   const usersService = app.get(UsersService);
   const newAdmin = await usersService.createAdminUserIfNotExists();

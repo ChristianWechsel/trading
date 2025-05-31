@@ -55,6 +55,14 @@
 - [ ] CORS-Konfiguration prüfen/anpassen
 - [ ] Helmet für HTTP-Header nutzen
 - [ ] HTTPS verwenden
+- [ ] **XSS (Cross-Site Scripting) vermeiden**
+  - [ ] Keine Benutzereingaben ungefiltert im Response ausgeben
+  - [ ] Output-Encoding im Frontend sicherstellen
+  - [ ] Content-Security-Policy (CSP) Header setzen (z.B. via Helmet)
+- [ ] **CSRF (Cross-Site Request Forgery) vermeiden**
+  - [ ] CSRF-Schutz für stateful Auth aktivieren (z.B. mit `csurf`-Middleware)
+  - [ ] Bei stateless JWT-Auth: CORS und SameSite-Cookies korrekt konfigurieren
+  - [ ] Nur notwendige HTTP-Methoden zulassen (z.B. `GET`, `POST`)
 
 ## 10. OpenAPI/Swagger (optional)
 
