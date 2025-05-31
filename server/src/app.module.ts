@@ -47,7 +47,12 @@ import { UsersModule } from './users/users.module';
         }),
         VAPID_PRIVATE_KEY: Joi.string().required().messages({
           'any.required':
-            'VAPID_PRIVATE_KEY is required. Bitte mit create_vapid_keys.sh generieren und in .env eintragen.',
+            'VAPID_PRIVATE_KEY is required. Please generate it using create_vapid_keys.sh and add it to the .env file.',
+        }),
+        VAPID_MAIL: Joi.string().email().required().messages({
+          'any.required':
+            'VAPID_MAIL is required. Please add a valid mail address to the .env file.',
+          'string.email': 'VAPID_MAIL must be a valid email address.',
         }),
       }),
     }),

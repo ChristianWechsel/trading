@@ -12,7 +12,7 @@ async function registerServiceWorkerAndSubscribe() {
         return;
     }
     // Service Worker registrieren
-    const reg = await navigator.serviceWorker.register('/sw.js');
+    const reg = await navigator.serviceWorker.register('/static/sw.js');
     // VAPID Public Key vom Server holen
     const vapidKey = await fetch('/notification/vapid-public-key').then(r => r.text());
     // Push Subscription anlegen

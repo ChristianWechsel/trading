@@ -1,23 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { sendNotification, setVapidDetails } from 'web-push';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { PushSubscription } from './push-subscription.entity';
 import { PushSubscriptionDto } from './push-subscription.dto';
 
 @Injectable()
 export class NotificationService {
-  private subscriptions: PushSubscriptionDto[] = [];
-
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    @InjectRepository(PushSubscription)
+    private readonly subscriptionRepo: Repository<PushSubscription>,
+  ) {
     const publicKey = this.configService.get<string>('VAPID_PUBLIC_KEY');
     const privateKey = this.configService.get<string>('VAPID_PRIVATE_KEY');
-    if (publicKey && privateKey) {
-      setVapidDetails('mailto:admin@example.com', publicKey, privateKey);
+    const mail = this.configService.get<string>('VAPID_MAIL');
+    if (publicKey && privateKey && mail) {
+      setVapidDetails(`mailto:${mail}`, publicKey, privateKey);
     }
   }
 
-  addSubscription(subscription: PushSubscriptionDto) {
-    if (!this.subscriptions.find((s) => s.endpoint === subscription.endpoint)) {
-      this.subscriptions.push(subscription);
+  async addSubscription(subscription: PushSubscriptionDto) {
+    const exists = await this.subscriptionRepo.findOne({
+      where: { endpoint: subscription.endpoint },
+    });
+    if (!exists) {
+      await this.subscriptionRepo.save({
+        endpoint: subscription.endpoint,
+        p256dh: subscription.keys.p256dh,
+        auth: subscription.keys.auth,
+      });
     }
   }
 
@@ -31,13 +44,18 @@ export class NotificationService {
       body: payload.body,
       url: payload.url,
     });
-    for (const sub of this.subscriptions) {
+    const allSubs = await this.subscriptionRepo.find();
+    for (const sub of allSubs) {
       try {
-        await sendNotification(sub, notificationPayload);
-      } catch {
-        this.subscriptions = this.subscriptions.filter(
-          (s) => s.endpoint !== sub.endpoint,
+        await sendNotification(
+          {
+            endpoint: sub.endpoint,
+            keys: { p256dh: sub.p256dh, auth: sub.auth },
+          },
+          notificationPayload,
         );
+      } catch {
+        await this.subscriptionRepo.delete({ endpoint: sub.endpoint });
       }
     }
   }
