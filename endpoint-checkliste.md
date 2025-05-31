@@ -1,18 +1,35 @@
 # Checkliste: Neuen Endpoint in NestJS erstellen
 
-## 1. Endpoint/Controller anlegen
+## 1. Modul anlegen
+
+- [ ] Modul erstellen
+  - Befehl: `nest generate module <name>`
+
+## 2. Endpoint/Controller anlegen
 
 - [ ] Controller/Route erstellen
   - Befehl: `nest generate controller <name>`
 - [ ] Passende HTTP-Methode wählen (`@Get`, `@Post`, ...)
 
-## 2. DTO mit Validierung
+### 2a. Zugriffsschutz/Öffentlichkeit festlegen
+
+- [ ] Prüfen, ob Endpoint öffentlich zugänglich sein soll
+  - Falls ja: mit `@Public()` dekorieren
+  - Falls nein: keinen `@Public()`-Decorator setzen (AuthGuard schützt dann automatisch)
+
+## 3. Service/Business-Logik
+
+- [ ] Service anlegen/für Logik nutzen
+  - Befehl: `nest generate service <name>`
+- [ ] Datenbankzugriff über Repository/TypeORM (CRUD)
+
+## 4. DTO mit Validierung
 
 - [ ] DTO-Klasse für Request-Body anlegen
   - Befehl: `nest generate class <name>.dto`
 - [ ] Felder mit `class-validator` dekorieren (`@IsString()`, `@MinLength()`, ...)
 
-## 3. ValidationPipe aktivieren (global oder lokal)
+## 5. ValidationPipe aktivieren (global oder lokal)
 
 - [ ] In `main.ts` prüfen/ergänzen:
   ```typescript
@@ -21,13 +38,7 @@
   );
   ```
 
-## 4. Service/Business-Logik
-
-- [ ] Service anlegen/für Logik nutzen
-  - Befehl: `nest generate service <name>`
-- [ ] Datenbankzugriff über Repository/TypeORM (CRUD)
-
-## 5. Guards/Security
+## 6. Guards/Security
 
 - [ ] Guard für Authentifizierung/Autorisierung erstellen
   - Befehl: `nest generate guard <name>`
@@ -35,22 +46,22 @@
 - [ ] Bei Session-Cookies: CSRF-Schutz aktivieren/bedenken
 - [ ] Bei JWT: Token-Validierung und ggf. Rollen prüfen
 
-## 6. Rate-Limiting
+## 7. Rate-Limiting
 
 - [ ] Rate-Limit für Endpoint prüfen/ausnehmen
   - Standard: global über ThrottlerGuard
   - Ausnahme: `@SkipThrottle()` setzen
 
-## 7. Fehlerbehandlung
+## 8. Fehlerbehandlung
 
 - [ ] Fehler abfangen und sinnvolle HTTP-Statuscodes/Fehlermeldungen zurückgeben
 - [ ] Keine sensiblen Daten in Fehlermeldungen
 
-## 8. Logging
+## 9. Logging
 
 - [ ] Wichtige Aktionen/Fehler loggen (z.B. mit Winston/Pino)
 
-## 9. CORS/Sicherheit
+## 10. CORS/Sicherheit
 
 - [ ] CORS-Konfiguration prüfen/anpassen
 - [ ] Helmet für HTTP-Header nutzen
@@ -64,21 +75,21 @@
   - [ ] Bei stateless JWT-Auth: CORS und SameSite-Cookies korrekt konfigurieren
   - [ ] Nur notwendige HTTP-Methoden zulassen (z.B. `GET`, `POST`)
 
-## 10. OpenAPI/Swagger (optional)
+## 11. OpenAPI/Swagger (optional)
 
 - [ ] Endpoint mit Swagger-Dekoratoren dokumentieren
   - Befehl: `npm install --save @nestjs/swagger swagger-ui-express`
 
-## 11. Tests
+## 12. Tests
 
 - [ ] Unit- und/oder E2E-Tests für Endpoint schreiben
   - Befehl: `nest generate spec <name>`
 
-## 12. Dokumentation
+## 13. Dokumentation
 
 - [ ] Endpoint, Request/Response und Besonderheiten dokumentieren
 
-## 13. Serialization/Sensible Felder schützen
+## 14. Serialization/Sensible Felder schützen
 
 - [ ] Sensible Felder (z.B. Passwort) in Entities mit `@Exclude()` aus `class-transformer` markieren
   - Beispiel:

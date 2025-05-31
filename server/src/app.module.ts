@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { UsersModule } from './users/users.module';
     ThrottlerModule.forRoot({
       throttlers: [{ ttl: 60, limit: 5 }],
     }),
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [
