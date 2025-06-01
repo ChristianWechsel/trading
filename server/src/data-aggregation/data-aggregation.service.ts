@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { firstValueFrom } from 'rxjs';
 import { Repository } from 'typeorm';
+import { TickerDto } from './data-aggregation.dto';
 import { EodPrice } from './eod-price.entity';
 import { Security } from './security.entity';
 
@@ -18,10 +19,7 @@ export class DataAggregationService {
     private readonly eodPriceRepo: Repository<EodPrice>,
   ) {}
 
-  async importAndSaveData(
-    symbol: string,
-    exchange: string,
-  ): Promise<{ message: string }> {
+  async importAndSaveData(dto: TickerDto): Promise<{ message: string }> {
     // Beispiel: symbol = 'MCD', exchange = 'US'
 
     const apiKey = this.configService.get<string>('EODHD_API_KEY');
@@ -31,10 +29,13 @@ export class DataAggregationService {
     }
     // 1. Security suchen oder anlegen
     let security = await this.securityRepo.findOne({
-      where: { symbol, exchangeId: exchange },
+      where: { symbol: dto.symbol, exchangeId: dto.exchange },
     });
     if (!security) {
-      security = this.securityRepo.create({ symbol, exchangeId: exchange });
+      security = this.securityRepo.create({
+        symbol: dto.symbol,
+        exchangeId: dto.exchange,
+      });
       security = await this.securityRepo.save(security);
     }
     // 2. Daten von API holen
@@ -50,7 +51,7 @@ export class DataAggregationService {
           volume: number;
         }[]
       >(
-        `https://eodhd.com/api/eod/${symbol}.${exchange}?api_token=${apiKey}&fmt=json&period=monthly`,
+        `https://eodhd.com/api/eod/${dto.symbol}.${dto.exchange}?api_token=${apiKey}&fmt=json&period=monthly`,
       ),
     );
     // 3. Daten transformieren und upserten
@@ -68,6 +69,8 @@ export class DataAggregationService {
     );
     // Upsert: nach PK (securityId, priceDate)
     await this.eodPriceRepo.upsert(priceEntities, ['securityId', 'priceDate']);
-    return { message: `Data imported and saved for ${symbol}.${exchange}` };
+    return {
+      message: `Data imported and saved for ${dto.symbol}.${dto.exchange}`,
+    };
   }
 }

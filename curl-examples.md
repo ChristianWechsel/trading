@@ -109,7 +109,8 @@ curl -k https://localhost:3000/calendar-events \
 ## 4. Einzelnes Event anzeigen
 
 ```bash
-curl -k https://localhost:3000/calendar-events/1
+curl -k https://localhost:3000/calendar-events/1 \
+  -H "Authorization: Bearer <ADMIN_ACCESS_TOKEN>"
 ```
 
 ## 5. Event löschen
@@ -124,4 +125,43 @@ curl -k -X DELETE https://localhost:3000/calendar-events/1 \
 - Stelle sicher, dass du im Browser für Push-Benachrichtigungen registriert bist.
 - Nach dem Anlegen eines Events für die nächste Minute sollte nach maximal 1 Minute eine Push-Benachrichtigung erscheinen.
 - Die Zeitangabe für das Event muss im UTC-Format erfolgen.
-- Der Cronjob prüft jede Minute auf anstehende Events.
+- Der Cronjob prüft jede Stunde auf anstehende Events.
+
+---
+
+# Push-Benachrichtigungen testen
+
+## 1. Browser registrieren (Frontend)
+
+- Öffne im Browser: `https://localhost:3000/notification/register`
+- Folge der Anleitung, um Push-Benachrichtigungen zu aktivieren.
+
+## 2. Test-Benachrichtigung an alle senden (Admin-Token erforderlich)
+
+```bash
+curl -k -X POST https://localhost:3000/notification/send \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <ADMIN_ACCESS_TOKEN>" \
+  -d '{"title": "Test", "body": "Dies ist eine Testnachricht.", "url": "https://example.com"}'
+```
+
+---
+
+# Datenimport (EOD API)
+
+## 1. Daten für ein Symbol importieren (Admin-Token erforderlich)
+
+```bash
+curl -k -X POST https://localhost:3000/data-aggregation/import \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <ADMIN_ACCESS_TOKEN>" \
+  -d '{"symbol": "MCD", "exchange": "US"}'
+```
+
+---
+
+**Hinweise:**
+
+- Alle Endpunkte (außer `/auth/login` und `/notification/register`, `/notification/vapid-public-key`, `/notification/subscribe`) sind durch Authentifizierung geschützt.
+- Für Admin-geschützte Endpunkte ist ein gültiges Admin-JWT im Header erforderlich.
+- Das `-k`-Flag ist nur für selbstsignierte Zertifikate nötig.
