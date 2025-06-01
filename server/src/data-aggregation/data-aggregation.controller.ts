@@ -1,4 +1,4 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Post, Query } from '@nestjs/common';
 import { DataAggregationService } from './data-aggregation.service';
 
 @Controller('data-aggregation')
@@ -8,7 +8,10 @@ export class DataAggregationController {
   ) {}
 
   @Post('import')
-  async importData() {
+  async importData(
+    @Query('symbol') symbol: string,
+    @Query('exchange') exchange: string,
+  ): Promise<{ message: string }> {
     // Als Parameter kann {SYMBOL_NAME}.{EXCHANGE_ID}übergeben werden,
     // Beispiel:  AAPL.US, TSLA.US, VTI.US, AMZN.US, BTC-USD.CC and EURUSD.FOREX
     // MCD.US consists of two parts: {SYMBOL_NAME}.{EXCHANGE_ID}, then you can use, for example,
@@ -21,7 +24,7 @@ export class DataAggregationController {
     // und durch die neuen Daten zu ersetzen oder die neuen Daten sind zu den bisherigen Daten hinzuzufügen.
     // In diesem Fall ist es besser, die neuen Daten zu den bisherigen Daten hinzuzufügen.
 
-    // Die Tabellenstruktur muss entwicklet werden: Vielleicht iste eine Aufteilung nach Börse, Firma,
+    // Die Tabellenstruktur muss entwicklet werden: Vielleicht istimport eine Aufteilung nach Börse, Firma,
     // Datensatz sinnvoll.
     // Datentabellen partitionieren, z.B. nach Jahr, um die Performance zu verbessern.
 
@@ -34,6 +37,6 @@ export class DataAggregationController {
     // Darstellung der Daten mit
     //   https://tradingview.github.io/lightweight-charts/
 
-    return await this.dataAggregationService.importAndSaveData();
+    return this.dataAggregationService.importAndSaveData(symbol, exchange);
   }
 }

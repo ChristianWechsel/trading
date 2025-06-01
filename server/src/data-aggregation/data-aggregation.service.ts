@@ -1,22 +1,43 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
 import { firstValueFrom } from 'rxjs';
+import { Repository } from 'typeorm';
+import { EodPrice } from './eod-price.entity';
+import { Security } from './security.entity';
 
 @Injectable()
 export class DataAggregationService {
   constructor(
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
+    @InjectRepository(Security)
+    private readonly securityRepo: Repository<Security>,
+    @InjectRepository(EodPrice)
+    private readonly eodPriceRepo: Repository<EodPrice>,
   ) {}
-  async importAndSaveData() {
-    // 1. Daten von externer API holen
+
+  async importAndSaveData(
+    symbol: string,
+    exchange: string,
+  ): Promise<{ message: string }> {
+    // Beispiel: symbol = 'MCD', exchange = 'US'
+
     const apiKey = this.configService.get<string>('EODHD_API_KEY');
 
     if (!apiKey) {
       return { message: 'API Key fehlt' };
     }
-
+    // 1. Security suchen oder anlegen
+    let security = await this.securityRepo.findOne({
+      where: { symbol, exchangeId: exchange },
+    });
+    if (!security) {
+      security = this.securityRepo.create({ symbol, exchangeId: exchange });
+      security = await this.securityRepo.save(security);
+    }
+    // 2. Daten von API holen
     const { data } = await firstValueFrom(
       this.httpService.get<
         {
@@ -29,15 +50,24 @@ export class DataAggregationService {
           volume: number;
         }[]
       >(
-        `https://eodhd.com/api/eod/MCD.US?api_token=${apiKey}&fmt=json&period=monthly`,
+        `https://eodhd.com/api/eod/${symbol}.${exchange}?api_token=${apiKey}&fmt=json&period=monthly`,
       ),
     );
-    console.log('Daten von API:', data);
-    // 2. Daten validieren/transformieren (optional)
-
-    // 3. In die Datenbank speichern (Repository verwenden)
-    // Beispiel: await this.repo.save(data);
-
-    return { message: 'Data imported and saved successfully' };
+    // 3. Daten transformieren und upserten
+    const priceEntities = data.map((item) =>
+      this.eodPriceRepo.create({
+        securityId: security.securityId,
+        priceDate: item.date,
+        openPrice: item.open,
+        highPrice: item.high,
+        lowPrice: item.low,
+        closePrice: item.close,
+        adjustedClosePrice: item.adjusted_close,
+        volume: item.volume,
+      }),
+    );
+    // Upsert: nach PK (securityId, priceDate)
+    await this.eodPriceRepo.upsert(priceEntities, ['securityId', 'priceDate']);
+    return { message: `Data imported and saved for ${symbol}.${exchange}` };
   }
 }
