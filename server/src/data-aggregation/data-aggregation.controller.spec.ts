@@ -27,4 +27,18 @@ describe('DataAggregationController', () => {
     expect(service.importAndSaveData).toHaveBeenCalledWith(dto);
     expect(result).toEqual({ message: 'ok' });
   });
+
+  it('should throw if service throws', async () => {
+    const dto: TickerDto = { symbol: 'AAPL', exchange: 'US' };
+    service.importAndSaveData.mockRejectedValue(new Error('fail'));
+    await expect(controller.importData(dto)).rejects.toThrow('fail');
+  });
+
+  it('should handle empty dto', async () => {
+    service.importAndSaveData.mockResolvedValue({ message: 'ok' });
+    // @ts-expect-error purposely incomplete dto
+    const result = await controller.importData({});
+    expect(service.importAndSaveData).toHaveBeenCalled();
+    expect(result).toEqual({ message: 'ok' });
+  });
 });
