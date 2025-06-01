@@ -1,0 +1,369 @@
+Titel: Softwarearchitektur für Trend- und Pivot-Punkt-Analyse in TypeScript
+
+Einführung:
+Diese Dokument beschreibt eine Softwarearchitektur zur Identifizierung von Trendlinien und lokalen Hoch-/Tiefpunkten (Pivot-Punkten) in Zeitreihendaten, wie beispielsweise Aktienkursen. Die Implementierung erfolgt in TypeScript und legt Wert auf Modularität, Testbarkeit und klare Verantwortlichkeiten.
+
+Grundlagen der Analyse:
+
+1. Mathematische Definition der Trends:
+   - Annahme: Zeitreihe mit N Datenpunkten, jeder mit Tiefstpreis (L_i) und Höchstpreis (H_i).
+   - Ziel: Identifizierung von Sequenzen (Mindestlänge z.B. 3 Punkte) mit stetig steigenden/fallenden Hochs/Tiefs.
+
+   a) Trends basierend auf Tiefstpreisen (L):
+      - Aufwärtstrend (Steigende Tiefs): L_k < L_{k+1} für alle Punkte k in der Sequenz.
+      - Abwärtstrend (Fallende Tiefs): L_k > L_{k+1} für alle Punkte k in der Sequenz.
+
+   b) Trends basierend auf Höchstpreisen (H):
+      - Aufwärtstrend (Steigende Hochs): H_k < H_{k+1} für alle Punkte k in der Sequenz.
+      - Abwärtstrend (Fallende Hochs): H_k > H_{k+1} für alle Punkte k in der Sequenz.
+
+2. Algorithmus zur Identifizierung der Trends (Beispiel: Steigende Tiefs):
+   - Initialisierung:
+     - `minLength` für Trend definieren.
+     - Leere Listen für `identified_uptrend_lows` und `current_potential_trend_points`.
+   - Iteration: Datenpunkte von i=0 bis N-2 vergleichen.
+   - Prüfung der Trendbedingung (L_i < L_{i+1}):
+     - Wenn erfüllt: Punkt zu `current_potential_trend_points` hinzufügen.
+     - Wenn nicht erfüllt: Prüfen, ob `current_potential_trend_points` `minLength` erreicht. Wenn ja, speichern. `current_potential_trend_points` zurücksetzen.
+   - Abschluss: Letzten potenziellen Trend prüfen und ggf. speichern.
+   - Anpassung für andere Trendtypen: Bedingungen und Preisart (Hochs/Tiefs) entsprechend ändern.
+
+3. Methode zur Erkennung von lokalen Tiefs und Hochs (Pivot Points):
+   - Definition Lokales Tief (Swing Low): L_{i-1} > L_i UND L_i < L_{i+1}.
+   - Definition Lokales Hoch (Swing High): H_{i-1} < H_i UND H_i > H_{i+1}.
+   - Algorithmisches Vorgehen:
+     - Daten (lowPrice, highPrice) vorbereiten.
+     - Iterieren (außer erster und letzter Punkt).
+     - Bedingungen für jeden Punkt prüfen und ggf. als Hoch/Tief markieren.
+   - Überlegungen: Umgang mit Endpunkten, Plateaus (gleiche Werte), optionale Fenstergröße (n-Perioden) und Mindeständerung (Threshold).
+
+Softwarearchitektur in TypeScript:
+
+Die Architektur gliedert sich in:
+   - Datentypen (Interfaces/Enums)
+   - Analyse-Module (Klassen)
+   - Konfiguration
+   - Orchestrierung (Hauptlogik)
+
+1. Datentypen (`src/types.ts`):
+
+   // src/types.ts
+
+   /**
+    * Repräsentiert einen einzelnen Datenpunkt der Zeitreihe.
+    */
+   export interface PriceDataPoint {
+     priceDate: Date;
+     openPrice: number;
+     highPrice: number;
+     lowPrice: number;
+     closePrice: number;
+     adjustedClosePrice?: number;
+     volume?: number;
+     id?: string | number;
+   }
+
+   /**
+    * Typ eines identifizierten Pivot-Punktes.
+    */
+   export enum PointType {
+     High = 'HIGH',
+     Low = 'LOW',
+   }
+
+   /**
+    * Repräsentiert einen identifizierten lokalen Hoch- oder Tiefpunkt.
+    */
+   export interface IdentifiedPoint extends PriceDataPoint {
+     pointType: PointType;
+   }
+
+   /**
+    * Typ eines erkannten Trends.
+    */
+   export enum TrendType {
+     RisingLows = 'RISING_LOWS',
+     FallingLows = 'FALLING_LOWS',
+     RisingHighs = 'RISING_HIGHS',
+     FallingHighs = 'FALLING_HIGHS',
+   }
+
+   /**
+    * Repräsentiert einen erkannten Trend.
+    */
+   export interface Trend {
+     trendType: TrendType;
+     points: PriceDataPoint[];
+     startDate: Date;
+     endDate: Date;
+     startPrice: number;
+     endPrice: number;
+   }
+
+   /**
+    * Konfigurationsoptionen für die Analyse.
+    */
+   export interface AnalysisOptions {
+     pivotPointWindowSize?: number;
+     minTrendLength?: number;
+   }
+
+2. Analyse-Module:
+
+   a) Pivot-Punkt-Analyse (`src/analysis/PivotPointAnalyzer.ts`):
+
+      // src/analysis/PivotPointAnalyzer.ts
+      import { PriceDataPoint, IdentifiedPoint, PointType } from '../types';
+
+      export class PivotPointAnalyzer {
+        private windowSize: number;
+
+        constructor(windowSize: number = 1) {
+          this.windowSize = Math.max(1, windowSize);
+        }
+
+        public findHighs(data: PriceDataPoint[]): IdentifiedPoint[] {
+          const highs: IdentifiedPoint[] = [];
+          if (data.length < (2 * this.windowSize + 1)) {
+            return highs;
+          }
+          for (let i = this.windowSize; i < data.length - this.windowSize; i++) {
+            let isHigh = true;
+            for (let k = 1; k <= this.windowSize; k++) {
+              if (data[i].highPrice <= data[i - k].highPrice || data[i].highPrice <= data[i + k].highPrice) {
+                isHigh = false;
+                break;
+              }
+            }
+            if (isHigh) {
+              highs.push({ ...data[i], pointType: PointType.High });
+            }
+          }
+          return highs;
+        }
+
+        public findLows(data: PriceDataPoint[]): IdentifiedPoint[] {
+          const lows: IdentifiedPoint[] = [];
+          if (data.length < (2 * this.windowSize + 1)) {
+            return lows;
+          }
+          for (let i = this.windowSize; i < data.length - this.windowSize; i++) {
+            let isLow = true;
+            for (let k = 1; k <= this.windowSize; k++) {
+              if (data[i].lowPrice >= data[i - k].lowPrice || data[i].lowPrice >= data[i + k].lowPrice) {
+                isLow = false;
+                break;
+              }
+            }
+            if (isLow) {
+              lows.push({ ...data[i], pointType: PointType.Low });
+            }
+          }
+          return lows;
+        }
+
+        public findPivotPoints(data: PriceDataPoint[]): IdentifiedPoint[] {
+          return [...this.findHighs(data), ...this.findLows(data)].sort(
+            (a, b) => a.priceDate.getTime() - b.priceDate.getTime()
+          );
+        }
+      }
+
+   b) Trend-Analyse (`src/analysis/TrendDetector.ts`):
+
+      // src/analysis/TrendDetector.ts
+      import { PriceDataPoint, Trend, TrendType } from '../types';
+
+      export class TrendDetector {
+        private minLength: number;
+
+        constructor(minLength: number = 3) {
+          this.minLength = Math.max(2, minLength);
+        }
+
+        public findRisingLows(data: PriceDataPoint[]): Trend[] {
+          return this.findSpecificTrend(
+            data,
+            TrendType.RisingLows,
+            (p1, p2) => p1.lowPrice < p2.lowPrice,
+            dp => dp.lowPrice
+          );
+        }
+
+        public findFallingLows(data: PriceDataPoint[]): Trend[] {
+           return this.findSpecificTrend(
+            data,
+            TrendType.FallingLows,
+            (p1, p2) => p1.lowPrice > p2.lowPrice,
+            dp => dp.lowPrice
+          );
+        }
+
+        public findRisingHighs(data: PriceDataPoint[]): Trend[] {
+          return this.findSpecificTrend(
+            data,
+            TrendType.RisingHighs,
+            (p1, p2) => p1.highPrice < p2.highPrice,
+            dp => dp.highPrice
+          );
+        }
+
+        public findFallingHighs(data: PriceDataPoint[]): Trend[] {
+          return this.findSpecificTrend(
+            data,
+            TrendType.FallingHighs,
+            (p1, p2) => p1.highPrice > p2.highPrice,
+            dp => dp.highPrice
+          );
+        }
+
+        private findSpecificTrend(
+          data: PriceDataPoint[],
+          trendType: TrendType,
+          compareFn: (p1: PriceDataPoint, p2: PriceDataPoint) => boolean,
+          getPriceFn: (p: PriceDataPoint) => number
+        ): Trend[] {
+          const identifiedTrends: Trend[] = [];
+          if (data.length < this.minLength) {
+            return identifiedTrends;
+          }
+
+          let currentTrendPoints: PriceDataPoint[] = [];
+
+          for (let i = 0; i < data.length; i++) {
+            if (currentTrendPoints.length === 0) {
+              currentTrendPoints.push(data[i]);
+            } else {
+              const lastPointInTrend = currentTrendPoints[currentTrendPoints.length - 1];
+              if (compareFn(lastPointInTrend, data[i])) {
+                currentTrendPoints.push(data[i]);
+              } else {
+                if (currentTrendPoints.length >= this.minLength) {
+                  identifiedTrends.push({
+                    trendType,
+                    points: [...currentTrendPoints],
+                    startDate: currentTrendPoints[0].priceDate,
+                    endDate: lastPointInTrend.priceDate,
+                    startPrice: getPriceFn(currentTrendPoints[0]),
+                    endPrice: getPriceFn(lastPointInTrend),
+                  });
+                }
+                currentTrendPoints = [data[i]]; // Neustart des Trends mit dem aktuellen Punkt
+                                                // (Verfeinerung für 2-Punkt-Start bei Bedarf)
+              }
+            }
+          }
+
+          if (currentTrendPoints.length >= this.minLength) {
+            identifiedTrends.push({
+              trendType,
+              points: [...currentTrendPoints],
+              startDate: currentTrendPoints[0].priceDate,
+              endDate: currentTrendPoints[currentTrendPoints.length - 1].priceDate,
+              startPrice: getPriceFn(currentTrendPoints[0]),
+              endPrice: getPriceFn(currentTrendPoints[currentTrendPoints.length - 1]),
+            });
+          }
+          return identifiedTrends;
+        }
+
+        public findAllTrends(data: PriceDataPoint[]): Trend[] {
+          return [
+            ...this.findRisingLows(data),
+            ...this.findFallingLows(data),
+            ...this.findRisingHighs(data),
+            ...this.findFallingHighs(data),
+          ].sort((a,b) => a.startDate.getTime() - b.startDate.getTime());
+        }
+      }
+
+3. Konfiguration (`src/config.ts`):
+
+   // src/config.ts
+   import { AnalysisOptions } from "./types";
+
+   export const DEFAULT_ANALYSIS_OPTIONS: Required<AnalysisOptions> = {
+     pivotPointWindowSize: 1,
+     minTrendLength: 3,
+   };
+
+4. Orchestrierung / Haupt-Service (`src/FinancialAnalyzer.ts`):
+
+   // src/FinancialAnalyzer.ts
+   import { PriceDataPoint, IdentifiedPoint, Trend, AnalysisOptions } from './types';
+   import { PivotPointAnalyzer } from './analysis/PivotPointAnalyzer';
+   import { TrendDetector } from './analysis/TrendDetector';
+   import { DEFAULT_ANALYSIS_OPTIONS } from './config';
+
+   export interface AnalysisResults {
+     pivotPoints: IdentifiedPoint[];
+     trends: Trend[];
+   }
+
+   export class FinancialAnalyzer {
+     private pivotAnalyzer: PivotPointAnalyzer;
+     private trendDetector: TrendDetector;
+     private options: Required<AnalysisOptions>;
+
+     constructor(options?: AnalysisOptions) {
+       this.options = { ...DEFAULT_ANALYSIS_OPTIONS, ...options };
+       this.pivotAnalyzer = new PivotPointAnalyzer(this.options.pivotPointWindowSize);
+       this.trendDetector = new TrendDetector(this.options.minTrendLength);
+     }
+
+     public analyze(data: PriceDataPoint[]): AnalysisResults {
+       const sortedData = [...data].sort((a, b) => a.priceDate.getTime() - b.priceDate.getTime());
+       const pivotPoints = this.pivotAnalyzer.findPivotPoints(sortedData);
+       const trends = this.trendDetector.findAllTrends(sortedData);
+       return {
+         pivotPoints,
+         trends,
+       };
+     }
+   }
+
+5. Beispielverwendung (`src/index.ts`):
+
+   // src/index.ts
+   import { FinancialAnalyzer } from './FinancialAnalyzer';
+   import { PriceDataPoint } from './types';
+
+   // Annahme: Ihre Rohdaten sind in 'yourRawData' als Array von Objekten
+   // declare const yourRawData: any[]; // Deklarieren Sie dies entsprechend Ihrer Datenquelle
+
+   // Beispiel: Konvertieren Sie Ihre Eingabedaten in das PriceDataPoint-Format
+   /*
+   const eodPriceData: PriceDataPoint[] = yourRawData.map(d => ({
+       // securityId: d.securityId, // falls benötigt
+       priceDate: new Date(d.priceDate), // Wichtig: String-Datum in Date-Objekt umwandeln
+       openPrice: parseFloat(d.openPrice),
+       highPrice: parseFloat(d.highPrice),
+       lowPrice: parseFloat(d.lowPrice),
+       closePrice: parseFloat(d.closePrice),
+       adjustedClosePrice: parseFloat(d.adjustedClosePrice), // falls vorhanden
+       volume: parseInt(d.volume) // falls vorhanden
+   }));
+   */
+   
+   // Beispielhafte leere Daten, um Code lauffähig zu machen. Ersetzen mit echten Daten.
+   const eodPriceData: PriceDataPoint[] = [];
+
+
+   const analyzer = new FinancialAnalyzer({
+     pivotPointWindowSize: 1,
+     minTrendLength: 3,
+   });
+
+   const results = analyzer.analyze(eodPriceData);
+
+   console.log("Identifizierte Pivot-Punkte:", results.pivotPoints);
+   console.log("Erkannte Trends:", results.trends);
+
+Zusammenfassung der Architektur:
+   - Stark typisiert: Klare Definitionen durch Interfaces und Enums.
+   - Modular: Gekapselte Logik in `PivotPointAnalyzer` und `TrendDetector`.
+   - Konfigurierbar: `AnalysisOptions` zur Anpassung der Algorithmen.
+   - Zentrale Orchestrierung: `FinancialAnalyzer` steuert den Prozess.
+   - Testbarkeit: Einzelne Komponenten sind isoliert testbar.
+
+Diese Architektur bildet eine solide Basis für Erweiterungen und Verfeinerungen.
