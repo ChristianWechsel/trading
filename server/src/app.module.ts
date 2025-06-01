@@ -19,6 +19,7 @@ import { NotificationModule } from './notification/notification.module';
 import { PushSubscription } from './notification/push-subscription.entity';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
+import { FinancialAnalysisModule } from './financial-analysis/financial-analysis.module';
 
 @Module({
   imports: [
@@ -94,6 +95,7 @@ import { UsersModule } from './users/users.module';
       serveRoot: '/static/',
     }),
     DataAggregationModule,
+    FinancialAnalysisModule,
   ],
   controllers: [AppController],
   providers: [
