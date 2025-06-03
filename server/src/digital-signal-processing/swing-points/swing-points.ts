@@ -1,4 +1,5 @@
 import { DataPoint } from '../digital-signal-processing.interface';
+import { MAX_THRESHOLD, MIN_THRESHOLD } from './comparable-number';
 import { SwingPointData } from './swing-points.interface';
 
 export class SwingPoints {
@@ -14,7 +15,10 @@ export class SwingPoints {
     private options: { relativeThreshold: number },
   ) {
     const { relativeThreshold } = options;
-    if (relativeThreshold < 0 || relativeThreshold > 1) {
+    if (
+      relativeThreshold < MIN_THRESHOLD ||
+      relativeThreshold > MAX_THRESHOLD
+    ) {
       throw new Error('relativeThreshold must be between 0 and 1');
     }
     this.relativeThreshold = relativeThreshold;
