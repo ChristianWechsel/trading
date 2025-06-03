@@ -22,6 +22,26 @@ export class SwingPoints {
           swingPointType: 'swingLow',
           point: curr,
         });
+      } else if (this.isHighPlateau(curr, prev, next)) {
+        swingPointDataList.push({
+          swingPointType: 'highPlateau',
+          point: curr,
+        });
+      } else if (this.isLowPlateau(curr, prev, next)) {
+        swingPointDataList.push({
+          swingPointType: 'lowPlateau',
+          point: curr,
+        });
+      } else if (this.isPlateauHigh(curr, prev, next)) {
+        swingPointDataList.push({
+          swingPointType: 'plateauHigh',
+          point: curr,
+        });
+      } else if (this.isPlateauLow(curr, prev, next)) {
+        swingPointDataList.push({
+          swingPointType: 'plateauLow',
+          point: curr,
+        });
       }
       idx++;
     }
@@ -29,10 +49,26 @@ export class SwingPoints {
   }
 
   private isSwingLow(curr: DataPoint, prev: DataPoint, next: DataPoint) {
-    return curr.y < prev.y && curr.y < next.y;
+    return prev.y > curr.y && curr.y < next.y;
   }
 
   private isSwingHigh(curr: DataPoint, prev: DataPoint, next: DataPoint) {
-    return curr.y > prev.y && curr.y > next.y;
+    return prev.y < curr.y && curr.y > next.y;
+  }
+
+  private isPlateauHigh(curr: DataPoint, prev: DataPoint, next: DataPoint) {
+    return prev.y === curr.y && curr.y < next.y;
+  }
+
+  private isPlateauLow(curr: DataPoint, prev: DataPoint, next: DataPoint) {
+    return prev.y === curr.y && curr.y > next.y;
+  }
+
+  private isHighPlateau(curr: DataPoint, prev: DataPoint, next: DataPoint) {
+    return prev.y > curr.y && curr.y === next.y;
+  }
+
+  private isLowPlateau(curr: DataPoint, prev: DataPoint, next: DataPoint) {
+    return prev.y < curr.y && curr.y === next.y;
   }
 }
