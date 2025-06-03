@@ -1,14 +1,19 @@
 import { DataPoint } from '../digital-signal-processing.interface';
-import { MAX_THRESHOLD, MIN_THRESHOLD } from './comparable-number';
+import {
+  ComparableNumber,
+  MAX_THRESHOLD,
+  MIN_THRESHOLD,
+} from './comparable-number';
 import { SwingPointData } from './swing-points.interface';
 
 export class SwingPoints {
-  private relativeThreshold: number;
-
   /**
    * Creates an instance of SwingPoints.
    * @param data - Array of data points to analyze for swing points.
    * @param options - Object containing options for the SwingPoints instance.
+   *   - relativeThreshold: A number between 0 and 1 that determines the sensitivity
+   *     when comparing data points. A higher value makes the swing point detection
+   *     less sensitive to small fluctuations, while a lower value increases sensitivity.
    */
   constructor(
     private data: DataPoint[],
@@ -19,48 +24,98 @@ export class SwingPoints {
       relativeThreshold < MIN_THRESHOLD ||
       relativeThreshold > MAX_THRESHOLD
     ) {
-      throw new Error('relativeThreshold must be between 0 and 1');
+      throw new Error(
+        `relativeThreshold must be between ${MIN_THRESHOLD} and ${MAX_THRESHOLD}`,
+      );
     }
-    this.relativeThreshold = relativeThreshold;
   }
 
   getSwingPoints(): SwingPointData[] {
     const swingPointDataList: SwingPointData[] = [];
     let idx = 1;
     while (idx < this.data.length - 1) {
-      const prev = this.data[idx - 1];
-      const curr = this.data[idx];
-      const next = this.data[idx + 1];
+      const previousPoint = this.data[idx - 1];
+      const currentPoint = this.data[idx];
+      const nextPoint = this.data[idx + 1];
 
-      if (this.isSwingHigh(curr, prev, next)) {
+      const previousComparableValue = new ComparableNumber(
+        previousPoint.y,
+        this.options.relativeThreshold,
+      );
+      const currentComparableNumber = new ComparableNumber(
+        currentPoint.y,
+        this.options.relativeThreshold,
+      );
+      const nextComparableNumber = new ComparableNumber(
+        nextPoint.y,
+        this.options.relativeThreshold,
+      );
+
+      if (
+        this.isSwingHigh(
+          currentComparableNumber,
+          previousComparableValue,
+          nextComparableNumber,
+        )
+      ) {
         swingPointDataList.push({
           swingPointType: 'swingHigh',
-          point: curr,
+          point: currentPoint,
         });
-      } else if (this.isSwingLow(curr, prev, next)) {
+      } else if (
+        this.isSwingLow(
+          currentComparableNumber,
+          previousComparableValue,
+          nextComparableNumber,
+        )
+      ) {
         swingPointDataList.push({
           swingPointType: 'swingLow',
-          point: curr,
+          point: currentPoint,
         });
-      } else if (this.isDownwardToPlateau(curr, prev, next)) {
+      } else if (
+        this.isDownwardToPlateau(
+          currentComparableNumber,
+          previousComparableValue,
+          nextComparableNumber,
+        )
+      ) {
         swingPointDataList.push({
           swingPointType: 'downwardToPlateau',
-          point: curr,
+          point: currentPoint,
         });
-      } else if (this.isUpwardToPlateau(curr, prev, next)) {
+      } else if (
+        this.isUpwardToPlateau(
+          currentComparableNumber,
+          previousComparableValue,
+          nextComparableNumber,
+        )
+      ) {
         swingPointDataList.push({
           swingPointType: 'upwardToPlateau',
-          point: curr,
+          point: currentPoint,
         });
-      } else if (this.isPlateauToUpward(curr, prev, next)) {
+      } else if (
+        this.isPlateauToUpward(
+          currentComparableNumber,
+          previousComparableValue,
+          nextComparableNumber,
+        )
+      ) {
         swingPointDataList.push({
           swingPointType: 'plateauToUpward',
-          point: curr,
+          point: currentPoint,
         });
-      } else if (this.isPlateauToDownward(curr, prev, next)) {
+      } else if (
+        this.isPlateauToDownward(
+          currentComparableNumber,
+          previousComparableValue,
+          nextComparableNumber,
+        )
+      ) {
         swingPointDataList.push({
           swingPointType: 'plateauToDownward',
-          point: curr,
+          point: currentPoint,
         });
       }
       idx++;
@@ -68,35 +123,57 @@ export class SwingPoints {
     return swingPointDataList;
   }
 
-  private isSwingLow(curr: DataPoint, prev: DataPoint, next: DataPoint) {
-    return prev.y > curr.y && curr.y < next.y;
+  private isSwingLow(
+    curr: ComparableNumber,
+    prev: ComparableNumber,
+    next: ComparableNumber,
+  ) {
+    return (
+      prev.isSignificantlyHigherThan(curr) &&
+      curr.isSignificantlyLowerThan(next)
+    );
   }
 
-  private isSwingHigh(curr: DataPoint, prev: DataPoint, next: DataPoint) {
-    return prev.y < curr.y && curr.y > next.y;
+  private isSwingHigh(
+    curr: ComparableNumber,
+    prev: ComparableNumber,
+    next: ComparableNumber,
+  ) {
+    return (
+      prev.isSignificantlyLowerThan(curr) &&
+      curr.isSignificantlyHigherThan(next)
+    );
   }
 
-  private isPlateauToUpward(curr: DataPoint, prev: DataPoint, next: DataPoint) {
-    return prev.y === curr.y && curr.y < next.y;
+  private isPlateauToUpward(
+    curr: ComparableNumber,
+    prev: ComparableNumber,
+    next: ComparableNumber,
+  ) {
+    return prev.isCloseEnough(curr) && curr.isSignificantlyLowerThan(next);
   }
 
   private isPlateauToDownward(
-    curr: DataPoint,
-    prev: DataPoint,
-    next: DataPoint,
+    curr: ComparableNumber,
+    prev: ComparableNumber,
+    next: ComparableNumber,
   ) {
-    return prev.y === curr.y && curr.y > next.y;
+    return prev.isCloseEnough(curr) && curr.isSignificantlyHigherThan(next);
   }
 
   private isDownwardToPlateau(
-    curr: DataPoint,
-    prev: DataPoint,
-    next: DataPoint,
+    curr: ComparableNumber,
+    prev: ComparableNumber,
+    next: ComparableNumber,
   ) {
-    return prev.y > curr.y && curr.y === next.y;
+    return prev.isSignificantlyHigherThan(curr) && curr.isCloseEnough(next);
   }
 
-  private isUpwardToPlateau(curr: DataPoint, prev: DataPoint, next: DataPoint) {
-    return prev.y < curr.y && curr.y === next.y;
+  private isUpwardToPlateau(
+    curr: ComparableNumber,
+    prev: ComparableNumber,
+    next: ComparableNumber,
+  ) {
+    return prev.isSignificantlyLowerThan(curr) && curr.isCloseEnough(next);
   }
 }

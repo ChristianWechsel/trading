@@ -52,7 +52,7 @@ describe('SwingPoints', () => {
   ];
 
   it.each(cases)('$name', ({ data }) => {
-    const swingPoints = new SwingPoints(data.data, { relativeThreshold: 0 });
+    const swingPoints = new SwingPoints(data.data, { relativeThreshold: 0.1 });
     expect(swingPoints.getSwingPoints()).toEqual(data.result);
   });
 

@@ -7,7 +7,9 @@ export class ComparableNumber {
     private threshold: number,
   ) {
     if (this.threshold < MIN_THRESHOLD || this.threshold > MAX_THRESHOLD) {
-      throw new Error('Relative threshold must be between 0 and 1');
+      throw new Error(
+        `relativeThreshold must be between ${MIN_THRESHOLD} and ${MAX_THRESHOLD}`,
+      );
     }
   }
 
