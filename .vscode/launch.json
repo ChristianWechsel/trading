@@ -12,6 +12,29 @@
                 "<node_internals>/**"
             ],
             "type": "node"
+        },
+        {
+            "name": "debug test",
+            "request": "launch",
+            "type": "node",
+            "program": "${workspaceFolder}/server/node_modules/.bin/jest",
+            "args": [
+                "--runInBand",
+                "--colors",
+                "--runTestsByPath",
+                "${relativeFile}",
+                "--testPathPattern",
+                "${fileDirname}",
+                "--collectCoverage=false",
+                "--config",
+                "${workspaceFolder}/server/jest.config.json"
+            ],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "env": {
+                "NODE_ENV": "test"
+            }
         }
     ]
 }
