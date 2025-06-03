@@ -22,24 +22,24 @@ export class SwingPoints {
           swingPointType: 'swingLow',
           point: curr,
         });
-      } else if (this.isHighPlateau(curr, prev, next)) {
+      } else if (this.isDownwardToPlateau(curr, prev, next)) {
         swingPointDataList.push({
-          swingPointType: 'highPlateau',
+          swingPointType: 'downwardToPlateau',
           point: curr,
         });
-      } else if (this.isLowPlateau(curr, prev, next)) {
+      } else if (this.isUpwardToPlateau(curr, prev, next)) {
         swingPointDataList.push({
-          swingPointType: 'lowPlateau',
+          swingPointType: 'upwardToPlateau',
           point: curr,
         });
-      } else if (this.isPlateauHigh(curr, prev, next)) {
+      } else if (this.isPlateauToUpward(curr, prev, next)) {
         swingPointDataList.push({
-          swingPointType: 'plateauHigh',
+          swingPointType: 'plateauToUpward',
           point: curr,
         });
-      } else if (this.isPlateauLow(curr, prev, next)) {
+      } else if (this.isPlateauToDownward(curr, prev, next)) {
         swingPointDataList.push({
-          swingPointType: 'plateauLow',
+          swingPointType: 'plateauToDownward',
           point: curr,
         });
       }
@@ -56,19 +56,27 @@ export class SwingPoints {
     return prev.y < curr.y && curr.y > next.y;
   }
 
-  private isPlateauHigh(curr: DataPoint, prev: DataPoint, next: DataPoint) {
+  private isPlateauToUpward(curr: DataPoint, prev: DataPoint, next: DataPoint) {
     return prev.y === curr.y && curr.y < next.y;
   }
 
-  private isPlateauLow(curr: DataPoint, prev: DataPoint, next: DataPoint) {
+  private isPlateauToDownward(
+    curr: DataPoint,
+    prev: DataPoint,
+    next: DataPoint,
+  ) {
     return prev.y === curr.y && curr.y > next.y;
   }
 
-  private isHighPlateau(curr: DataPoint, prev: DataPoint, next: DataPoint) {
+  private isDownwardToPlateau(
+    curr: DataPoint,
+    prev: DataPoint,
+    next: DataPoint,
+  ) {
     return prev.y > curr.y && curr.y === next.y;
   }
 
-  private isLowPlateau(curr: DataPoint, prev: DataPoint, next: DataPoint) {
+  private isUpwardToPlateau(curr: DataPoint, prev: DataPoint, next: DataPoint) {
     return prev.y < curr.y && curr.y === next.y;
   }
 }

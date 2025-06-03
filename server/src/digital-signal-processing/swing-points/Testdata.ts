@@ -89,44 +89,44 @@ export class TestDataSwingPoints {
     };
   }
 
-  plateauHigh(): SwingPointAnalysis {
+  plateauToUpward(): SwingPointAnalysis {
     return {
       data: [
         { x: 1, y: 2 },
         { x: 2, y: 2 },
         { x: 3, y: 3 },
       ],
-      result: [{ point: { x: 2, y: 2 }, swingPointType: 'plateauHigh' }],
+      result: [{ point: { x: 2, y: 2 }, swingPointType: 'plateauToUpward' }],
     };
   }
-  plateauLow(): SwingPointAnalysis {
+  plateauToDownward(): SwingPointAnalysis {
     return {
       data: [
         { x: 1, y: 2 },
         { x: 2, y: 2 },
         { x: 3, y: 1 },
       ],
-      result: [{ point: { x: 2, y: 2 }, swingPointType: 'plateauLow' }],
+      result: [{ point: { x: 2, y: 2 }, swingPointType: 'plateauToDownward' }],
     };
   }
-  lowPlateau(): SwingPointAnalysis {
+  upwardToPlateau(): SwingPointAnalysis {
     return {
       data: [
         { x: 1, y: 1 },
         { x: 2, y: 2 },
         { x: 3, y: 2 },
       ],
-      result: [{ point: { x: 2, y: 2 }, swingPointType: 'lowPlateau' }],
+      result: [{ point: { x: 2, y: 2 }, swingPointType: 'upwardToPlateau' }],
     };
   }
-  highPlateau(): SwingPointAnalysis {
+  downwardToPlateau(): SwingPointAnalysis {
     return {
       data: [
         { x: 1, y: 3 },
         { x: 2, y: 2 },
         { x: 3, y: 2 },
       ],
-      result: [{ point: { x: 2, y: 2 }, swingPointType: 'highPlateau' }],
+      result: [{ point: { x: 2, y: 2 }, swingPointType: 'downwardToPlateau' }],
     };
   }
 }

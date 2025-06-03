@@ -31,19 +31,19 @@ describe('SwingPoints', () => {
     },
     {
       name: 'detect plateau high',
-      data: testData.plateauHigh(),
+      data: testData.plateauToUpward(),
     },
     {
       name: 'detect plateau low',
-      data: testData.plateauLow(),
+      data: testData.plateauToDownward(),
     },
     {
       name: 'detect high plateau',
-      data: testData.highPlateau(),
+      data: testData.downwardToPlateau(),
     },
     {
       name: 'detect low plateau',
-      data: testData.lowPlateau(),
+      data: testData.upwardToPlateau(),
     },
   ];
 
