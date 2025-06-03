@@ -48,7 +48,21 @@ describe('SwingPoints', () => {
   ];
 
   it.each(cases)('$name', ({ data }) => {
-    const swingPoints = new SwingPoints(data.data);
+    const swingPoints = new SwingPoints(data.data, 0);
     expect(swingPoints.getSwingPoints()).toEqual(data.result);
   });
+
+  it.each([0, 0.5, 1])(
+    'does not throw for relativeThreshold=%p',
+    (threshold) => {
+      expect(() => new SwingPoints([], threshold)).not.toThrow();
+    },
+  );
+
+  it.each([-0.1, -1, 1.01, 2])(
+    'throws error for out-of-bounds relativeThreshold=%p',
+    (threshold) => {
+      expect(() => new SwingPoints([], threshold)).toThrow();
+    },
+  );
 });

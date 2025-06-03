@@ -1,8 +1,23 @@
 import { DataPoint } from '../digital-signal-processing.interface';
 import { SwingPointData } from './swing-points.interface';
 
+const MIN_THRESHOLD = 0;
+const MAX_THRESHOLD = 1;
+
 export class SwingPoints {
-  constructor(private data: DataPoint[]) {}
+  private relativeThreshold: number;
+  constructor(
+    private data: DataPoint[],
+    relativeThreshold: number,
+  ) {
+    if (
+      relativeThreshold < MIN_THRESHOLD ||
+      relativeThreshold > MAX_THRESHOLD
+    ) {
+      throw new Error('Relative threshold must be between 0 and 1');
+    }
+    this.relativeThreshold = relativeThreshold;
+  }
 
   getSwingPoints(): SwingPointData[] {
     const swingPointDataList: SwingPointData[] = [];

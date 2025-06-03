@@ -99,6 +99,7 @@ export class TestDataSwingPoints {
       result: [{ point: { x: 2, y: 2 }, swingPointType: 'plateauToUpward' }],
     };
   }
+
   plateauToDownward(): SwingPointAnalysis {
     return {
       data: [
@@ -109,6 +110,7 @@ export class TestDataSwingPoints {
       result: [{ point: { x: 2, y: 2 }, swingPointType: 'plateauToDownward' }],
     };
   }
+
   upwardToPlateau(): SwingPointAnalysis {
     return {
       data: [
@@ -119,6 +121,7 @@ export class TestDataSwingPoints {
       result: [{ point: { x: 2, y: 2 }, swingPointType: 'upwardToPlateau' }],
     };
   }
+
   downwardToPlateau(): SwingPointAnalysis {
     return {
       data: [
