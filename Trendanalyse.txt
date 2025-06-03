@@ -24,7 +24,8 @@ Grundlagen der Analyse:
    - Iteration: Datenpunkte von i=0 bis N-2 vergleichen.
    - Prüfung der Trendbedingung (L_i < L_{i+1}):
      - Wenn erfüllt: Punkt zu `current_potential_trend_points` hinzufügen.
-     - Wenn nicht erfüllt: Prüfen, ob `current_potential_trend_points` `minLength` erreicht. Wenn ja, speichern. `current_potential_trend_points` zurücksetzen.
+     - Wenn nicht erfüllt: Prüfen, ob `current_potential_trend_points` `minLength` erreicht. Wenn ja, speichern. 
+      `current_potential_trend_points` zurücksetzen.
    - Abschluss: Letzten potenziellen Trend prüfen und ggf. speichern.
    - Anpassung für andere Trendtypen: Bedingungen und Preisart (Hochs/Tiefs) entsprechend ändern.
 
@@ -35,7 +36,8 @@ Grundlagen der Analyse:
      - Daten (lowPrice, highPrice) vorbereiten.
      - Iterieren (außer erster und letzter Punkt).
      - Bedingungen für jeden Punkt prüfen und ggf. als Hoch/Tief markieren.
-   - Überlegungen: Umgang mit Endpunkten, Plateaus (gleiche Werte), optionale Fenstergröße (n-Perioden) und Mindeständerung (Threshold).
+   - Überlegungen: Umgang mit Endpunkten, Plateaus (gleiche Werte), optionale Fenstergröße (n-Perioden) und 
+    Mindeständerung (Threshold).
 
 Softwarearchitektur in TypeScript:
 

@@ -20,6 +20,7 @@ import { PushSubscription } from './notification/push-subscription.entity';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
 import { FinancialAnalysisModule } from './financial-analysis/financial-analysis.module';
+import { DigitalSignalProcessingModule } from './digital-signal-processing/digital-signal-processing.module';
 
 @Module({
   imports: [
@@ -96,6 +97,7 @@ import { FinancialAnalysisModule } from './financial-analysis/financial-analysis
     }),
     DataAggregationModule,
     FinancialAnalysisModule,
+    DigitalSignalProcessingModule,
   ],
   controllers: [AppController],
   providers: [
