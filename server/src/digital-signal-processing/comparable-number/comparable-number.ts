@@ -1,5 +1,4 @@
-export const MIN_THRESHOLD = 0;
-export const MAX_THRESHOLD = 1;
+import { MAX_THRESHOLD, MIN_THRESHOLD } from './parameters';
 
 export class ComparableNumber {
   constructor(

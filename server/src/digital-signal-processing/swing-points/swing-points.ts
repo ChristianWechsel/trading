@@ -1,10 +1,12 @@
+import { ComparableNumber } from '../comparable-number/comparable-number';
+import { MAX_THRESHOLD, MIN_THRESHOLD } from '../comparable-number/parameters';
 import { DataPoint } from '../digital-signal-processing.interface';
-import {
-  ComparableNumber,
-  MAX_THRESHOLD,
-  MIN_THRESHOLD,
-} from './comparable-number';
 import { SwingPointData } from './swing-points.interface';
+
+// window einführen, um mehrere benachbarte Punkte zu prüfen
+// Prüfungen, ob genügend Datensätze vorhanden sind, um wenigstens einen Swing
+// Point zu erkennen
+// siehe letzten EIntrag in Gemeni Chat "Umkehrpunkte in Zettreihen erkennen"
 
 export class SwingPoints {
   /**
