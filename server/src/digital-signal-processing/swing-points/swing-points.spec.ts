@@ -1,5 +1,5 @@
 import { SwingPoints } from './swing-points';
-import { TestDataSwingPoints } from './Testdata';
+import { TestDataSwingPoints } from './testdata';
 
 describe('SwingPoints', () => {
   const testData = new TestDataSwingPoints();
@@ -18,8 +18,12 @@ describe('SwingPoints', () => {
       data: testData.multipleSwingPoints(),
     },
     {
-      name: 'detect no swing points - flatline',
-      data: testData.noSwingPoint_FlatLine(),
+      name: 'detect no swing points - flatline - equal values',
+      data: testData.noSwingPoint_FlatLine_equalValues(),
+    },
+    {
+      name: 'detect no swing points - flatline - close values',
+      data: testData.noSwingPoint_FlatLine_closeValues(),
     },
     {
       name: 'detect no swing points - ascending',
@@ -48,21 +52,25 @@ describe('SwingPoints', () => {
   ];
 
   it.each(cases)('$name', ({ data }) => {
-    const swingPoints = new SwingPoints(data.data, 0);
+    const swingPoints = new SwingPoints(data.data, { relativeThreshold: 0 });
     expect(swingPoints.getSwingPoints()).toEqual(data.result);
   });
 
   it.each([0, 0.5, 1])(
     'does not throw for relativeThreshold=%p',
     (threshold) => {
-      expect(() => new SwingPoints([], threshold)).not.toThrow();
+      expect(
+        () => new SwingPoints([], { relativeThreshold: threshold }),
+      ).not.toThrow();
     },
   );
 
   it.each([-0.1, -1, 1.01, 2])(
     'throws error for out-of-bounds relativeThreshold=%p',
     (threshold) => {
-      expect(() => new SwingPoints([], threshold)).toThrow();
+      expect(
+        () => new SwingPoints([], { relativeThreshold: threshold }),
+      ).toThrow();
     },
   );
 });

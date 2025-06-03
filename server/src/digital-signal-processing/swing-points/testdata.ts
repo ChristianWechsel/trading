@@ -56,12 +56,23 @@ export class TestDataSwingPoints {
     };
   }
 
-  noSwingPoint_FlatLine(): SwingPointAnalysis {
+  noSwingPoint_FlatLine_equalValues(): SwingPointAnalysis {
     return {
       data: [
         { x: 1, y: 1 },
         { x: 2, y: 1 },
         { x: 3, y: 1 },
+      ],
+      result: [],
+    };
+  }
+
+  noSwingPoint_FlatLine_closeValues(): SwingPointAnalysis {
+    return {
+      data: [
+        { x: 1, y: 1 },
+        { x: 2, y: 1.09 },
+        { x: 3, y: 0.92 },
       ],
       result: [],
     };
