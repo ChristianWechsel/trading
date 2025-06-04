@@ -268,4 +268,68 @@ export class TestDataSwingPoints {
       windowSize: 3,
     };
   }
+
+  swingHighWindow3_centeredPeak(): SwingPointAnalysis {
+    return {
+      data: [
+        { x: 1, y: 1 },
+        { x: 2, y: 2 },
+        { x: 3, y: 3 },
+        { x: 4, y: 10 }, // swing high
+        { x: 5, y: 3 },
+        { x: 6, y: 2 },
+        { x: 7, y: 1 },
+      ],
+      result: [{ swingPointType: 'swingHigh', point: { x: 4, y: 10 } }],
+      windowSize: 3,
+    };
+  }
+
+  swingLowWindow3_centeredValley(): SwingPointAnalysis {
+    return {
+      data: [
+        { x: 1, y: 10 },
+        { x: 2, y: 7 },
+        { x: 3, y: 5 },
+        { x: 4, y: 1 }, // swing low
+        { x: 5, y: 5 },
+        { x: 6, y: 7 },
+        { x: 7, y: 10 },
+      ],
+      result: [{ swingPointType: 'swingLow', point: { x: 4, y: 1 } }],
+      windowSize: 3,
+    };
+  }
+
+  swingHighWindow3_noPeak(): SwingPointAnalysis {
+    return {
+      data: [
+        { x: 1, y: 1 },
+        { x: 2, y: 2 },
+        { x: 3, y: 4 },
+        { x: 4, y: 3.1 }, // not highest
+        { x: 5, y: 3 },
+        { x: 6, y: 2 },
+        { x: 7, y: 1 },
+      ],
+      result: [],
+      windowSize: 3,
+    };
+  }
+
+  swingLowWindow3_noValley(): SwingPointAnalysis {
+    return {
+      data: [
+        { x: 1, y: 10 },
+        { x: 2, y: 7 },
+        { x: 3, y: 5 },
+        { x: 4, y: 4.9 }, // not lowest
+        { x: 5, y: 4.8 },
+        { x: 6, y: 7 },
+        { x: 7, y: 10 },
+      ],
+      result: [],
+      windowSize: 3,
+    };
+  }
 }

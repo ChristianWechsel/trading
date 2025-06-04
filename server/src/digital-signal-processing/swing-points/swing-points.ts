@@ -53,32 +53,39 @@ export class SwingPoints {
     const swingPointDataList: SwingPointData[] = [];
     let idx = this.options.windowSize;
     while (idx < this.data.length - this.options.windowSize) {
-      const previousPoint = this.data[idx - 1];
-      const currentPoint = this.data[idx];
-      const nextPoint = this.data[idx + 1];
+      const previousPoints = new Array<ComparableNumber>(
+        this.options.windowSize,
+      );
+      const nextPoints = new Array<ComparableNumber>(this.options.windowSize);
 
-      const previousComparableValue =
-        this.createComparableNumber(previousPoint);
+      let idxWindowSize = 0;
+      while (idxWindowSize < this.options.windowSize) {
+        previousPoints[idxWindowSize] = this.createComparableNumber(
+          this.data[idx - this.options.windowSize + idxWindowSize],
+        );
+        nextPoints[idxWindowSize] = this.createComparableNumber(
+          this.data[idx + idxWindowSize + 1],
+        );
+        idxWindowSize++;
+      }
+
+      const previousPoint = previousPoints[previousPoints.length - 1];
+      const currentPoint = this.data[idx];
+      const nextPoint = nextPoints[0];
+
+      const previousComparableValue = previousPoint;
       const currentComparableNumber = this.createComparableNumber(currentPoint);
-      const nextComparableNumber = this.createComparableNumber(nextPoint);
+      const nextComparableNumber = nextPoint;
 
       if (
-        this.isSwingHigh(
-          currentComparableNumber,
-          previousComparableValue,
-          nextComparableNumber,
-        )
+        this.isSwingHigh(previousPoints, currentComparableNumber, nextPoints)
       ) {
         swingPointDataList.push({
           swingPointType: 'swingHigh',
           point: currentPoint,
         });
       } else if (
-        this.isSwingLow(
-          currentComparableNumber,
-          previousComparableValue,
-          nextComparableNumber,
-        )
+        this.isSwingLow(previousPoints, currentComparableNumber, nextPoints)
       ) {
         swingPointDataList.push({
           swingPointType: 'swingLow',
@@ -138,26 +145,40 @@ export class SwingPoints {
     return new ComparableNumber(dataPoint.y, this.options.relativeThreshold);
   }
 
-  private isSwingLow(
+  private isSwingHigh(
+    previousPoints: ComparableNumber[],
     curr: ComparableNumber,
-    prev: ComparableNumber,
-    next: ComparableNumber,
+    nextPoints: ComparableNumber[],
   ) {
-    return (
-      prev.isSignificantlyHigherThan(curr) &&
-      curr.isSignificantlyLowerThan(next)
-    );
+    for (const previousPoint of previousPoints) {
+      if (!previousPoint.isSignificantlyLowerThan(curr)) {
+        return false;
+      }
+    }
+    for (const nextPoint of nextPoints) {
+      if (!nextPoint.isSignificantlyLowerThan(curr)) {
+        return false;
+      }
+    }
+    return true;
   }
 
-  private isSwingHigh(
+  private isSwingLow(
+    previousPoints: ComparableNumber[],
     curr: ComparableNumber,
-    prev: ComparableNumber,
-    next: ComparableNumber,
+    nextPoints: ComparableNumber[],
   ) {
-    return (
-      prev.isSignificantlyLowerThan(curr) &&
-      curr.isSignificantlyHigherThan(next)
-    );
+    for (const previousPoint of previousPoints) {
+      if (!previousPoint.isSignificantlyHigherThan(curr)) {
+        return false;
+      }
+    }
+    for (const nextPoint of nextPoints) {
+      if (!nextPoint.isSignificantlyHigherThan(curr)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private isPlateauToUpward(
