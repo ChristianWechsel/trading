@@ -51,24 +51,16 @@ export class SwingPoints {
 
   getSwingPoints(): SwingPointData[] {
     const swingPointDataList: SwingPointData[] = [];
-    let idx = 1;
-    while (idx < this.data.length - 1) {
+    let idx = this.options.windowSize;
+    while (idx < this.data.length - this.options.windowSize) {
       const previousPoint = this.data[idx - 1];
       const currentPoint = this.data[idx];
       const nextPoint = this.data[idx + 1];
 
-      const previousComparableValue = new ComparableNumber(
-        previousPoint.y,
-        this.options.relativeThreshold,
-      );
-      const currentComparableNumber = new ComparableNumber(
-        currentPoint.y,
-        this.options.relativeThreshold,
-      );
-      const nextComparableNumber = new ComparableNumber(
-        nextPoint.y,
-        this.options.relativeThreshold,
-      );
+      const previousComparableValue =
+        this.createComparableNumber(previousPoint);
+      const currentComparableNumber = this.createComparableNumber(currentPoint);
+      const nextComparableNumber = this.createComparableNumber(nextPoint);
 
       if (
         this.isSwingHigh(
@@ -140,6 +132,10 @@ export class SwingPoints {
       idx++;
     }
     return swingPointDataList;
+  }
+
+  private createComparableNumber(dataPoint: DataPoint) {
+    return new ComparableNumber(dataPoint.y, this.options.relativeThreshold);
   }
 
   private isSwingLow(
