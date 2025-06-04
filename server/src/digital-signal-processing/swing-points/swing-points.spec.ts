@@ -76,7 +76,10 @@ describe('SwingPoints', () => {
   ];
 
   it.each(cases)('$name', ({ data }) => {
-    const swingPoints = new SwingPoints(data.data, { relativeThreshold: 0.1 });
+    const swingPoints = new SwingPoints(data.data, {
+      relativeThreshold: 0.1,
+      windowSize: 1,
+    });
     expect(swingPoints.getSwingPoints()).toEqual(data.result);
   });
 
@@ -84,7 +87,8 @@ describe('SwingPoints', () => {
     'does not throw for relativeThreshold=%p',
     (threshold) => {
       expect(
-        () => new SwingPoints([], { relativeThreshold: threshold }),
+        () =>
+          new SwingPoints([], { relativeThreshold: threshold, windowSize: 1 }),
       ).not.toThrow();
     },
   );
@@ -93,7 +97,26 @@ describe('SwingPoints', () => {
     'throws error for out-of-bounds relativeThreshold=%p',
     (threshold) => {
       expect(
-        () => new SwingPoints([], { relativeThreshold: threshold }),
+        () =>
+          new SwingPoints([], { relativeThreshold: threshold, windowSize: 1 }),
+      ).toThrow();
+    },
+  );
+
+  it.each([1, 2, 10])(
+    'does not throw for valid windowSize=%p',
+    (windowSize) => {
+      expect(
+        () => new SwingPoints([], { relativeThreshold: 0.1, windowSize }),
+      ).not.toThrow();
+    },
+  );
+
+  it.each([0, -1, -5, 1.5, 2.7, 0.99])(
+    'throws error for invalid windowSize=%p',
+    (windowSize) => {
+      expect(
+        () => new SwingPoints([], { relativeThreshold: 0.1, windowSize }),
       ).toThrow();
     },
   );

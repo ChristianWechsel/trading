@@ -1,5 +1,9 @@
 import { ComparableNumber } from '../comparable-number/comparable-number';
-import { MAX_THRESHOLD, MIN_THRESHOLD } from '../comparable-number/parameters';
+import {
+  MAX_THRESHOLD,
+  MIN_THRESHOLD,
+  MIN_WINDOW_SIZE,
+} from '../comparable-number/parameters';
 import { DataPoint } from '../digital-signal-processing.interface';
 import { SwingPointData } from './swing-points.interface';
 
@@ -19,15 +23,20 @@ export class SwingPoints {
    */
   constructor(
     private data: DataPoint[],
-    private options: { relativeThreshold: number },
+    private options: { relativeThreshold: number; windowSize: number },
   ) {
-    const { relativeThreshold } = options;
+    const { relativeThreshold, windowSize } = options;
     if (
       relativeThreshold < MIN_THRESHOLD ||
       relativeThreshold > MAX_THRESHOLD
     ) {
       throw new Error(
         `relativeThreshold must be between ${MIN_THRESHOLD} and ${MAX_THRESHOLD}`,
+      );
+    }
+    if (!Number.isInteger(windowSize) || windowSize < MIN_WINDOW_SIZE) {
+      throw new Error(
+        `windowSize must be a natural number >= ${MIN_WINDOW_SIZE}`,
       );
     }
   }
