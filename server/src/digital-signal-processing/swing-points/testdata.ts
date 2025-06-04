@@ -332,4 +332,133 @@ export class TestDataSwingPoints {
       windowSize: 3,
     };
   }
+  // -------------------------------------------- //
+
+  upwardToPlateau_window2(): SwingPointAnalysis {
+    return {
+      data: [
+        { x: 0, y: 5 },
+        { x: 1, y: 6 },
+        { x: 2, y: 10 },
+        { x: 3, y: 12 },
+        { x: 4, y: 15 },
+        { x: 5, y: 15.05 },
+        { x: 6, y: 14.95 },
+        { x: 7, y: 18 },
+        { x: 8, y: 19 },
+      ],
+      result: [{ swingPointType: 'upwardToPlateau', point: { x: 4, y: 15 } }],
+      windowSize: 2,
+    };
+  }
+
+  downwardToPlateau_window2(): SwingPointAnalysis {
+    return {
+      data: [
+        { x: 0, y: 25 },
+        { x: 1, y: 24 },
+        { x: 2, y: 20 },
+        { x: 3, y: 18 },
+        { x: 4, y: 15 },
+        { x: 5, y: 15.05 },
+        { x: 6, y: 14.95 },
+        { x: 7, y: 12 },
+        { x: 8, y: 11 },
+      ],
+      result: [{ swingPointType: 'downwardToPlateau', point: { x: 4, y: 15 } }],
+      windowSize: 2,
+    };
+  }
+
+  plateauToUpward_window2(): SwingPointAnalysis {
+    return {
+      data: [
+        { x: 0, y: 5 },
+        { x: 1, y: 6 },
+        { x: 2, y: 9.95 },
+        { x: 3, y: 10.05 },
+        { x: 4, y: 10 },
+        { x: 5, y: 12 },
+        { x: 6, y: 14 },
+        { x: 7, y: 18 },
+        { x: 8, y: 19 },
+      ],
+      result: [
+        { swingPointType: 'upwardToPlateau', point: { x: 2, y: 9.95 } },
+        { swingPointType: 'plateauToUpward', point: { x: 4, y: 10 } },
+      ],
+      windowSize: 2,
+    };
+  }
+
+  plateauToDownward_window2(): SwingPointAnalysis {
+    return {
+      data: [
+        { x: 0, y: 20 },
+        { x: 1, y: 19 },
+        { x: 2, y: 15.05 },
+        { x: 3, y: 14.95 },
+        { x: 4, y: 15 },
+        { x: 5, y: 13 },
+        { x: 6, y: 11 },
+        { x: 7, y: 8 },
+        { x: 8, y: 7 },
+      ],
+      result: [{ swingPointType: 'plateauToDownward', point: { x: 4, y: 15 } }],
+      windowSize: 2,
+    };
+  }
+
+  upwardToPlateau_window2_trendFail(): SwingPointAnalysis {
+    return {
+      data: [
+        { x: 0, y: 5 },
+        { x: 1, y: 6 },
+        { x: 2, y: 11.5 },
+        { x: 3, y: 12 },
+        { x: 4, y: 15 },
+        { x: 5, y: 15.05 },
+        { x: 6, y: 14.95 },
+        { x: 7, y: 18 },
+        { x: 8, y: 19 },
+      ],
+      result: [],
+      windowSize: 2,
+    };
+  }
+
+  upwardToPlateau_window2_plateauFail(): SwingPointAnalysis {
+    return {
+      data: [
+        { x: 0, y: 5 },
+        { x: 1, y: 6 },
+        { x: 2, y: 10 },
+        { x: 3, y: 12 },
+        { x: 4, y: 15 },
+        { x: 5, y: 15.05 },
+        { x: 6, y: 17 },
+        { x: 7, y: 18 },
+        { x: 8, y: 19 },
+      ],
+      result: [],
+      windowSize: 2,
+    };
+  }
+
+  plateauToUpward_window1_but_fails_window2(): SwingPointAnalysis {
+    return {
+      data: [
+        { x: 0, y: 1 },
+        { x: 1, y: 1.5 },
+        { x: 2, y: 2 },
+        { x: 3, y: 2 },
+        { x: 4, y: 3 },
+        { x: 5, y: 4 },
+        { x: 6, y: 5 },
+      ],
+      result: [],
+
+      windowSize: 2,
+    };
+  }
 }

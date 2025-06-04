@@ -94,6 +94,34 @@ describe('SwingPoints', () => {
       name: 'no swing low with windowSize=3 (valley not low enough)',
       data: testData.swingLowWindow3_noValley(),
     },
+    {
+      name: 'detect upwardToPlateau with windowSize=2',
+      data: testData.upwardToPlateau_window2(),
+    },
+    {
+      name: 'detect downwardToPlateau with windowSize=2',
+      data: testData.downwardToPlateau_window2(),
+    },
+    {
+      name: 'detect plateauToUpward with windowSize=2',
+      data: testData.plateauToUpward_window2(),
+    },
+    {
+      name: 'detect plateauToDownward with windowSize=2',
+      data: testData.plateauToDownward_window2(),
+    },
+    {
+      name: 'fail upwardToPlateau with windowSize=2 (trend fail)',
+      data: testData.upwardToPlateau_window2_trendFail(),
+    },
+    {
+      name: 'fail upwardToPlateau with windowSize=2 (plateau fail)',
+      data: testData.upwardToPlateau_window2_plateauFail(),
+    },
+    {
+      name: 'fail plateauToUpward with windowSize=2 (trend fail)',
+      data: testData.plateauToUpward_window1_but_fails_window2(),
+    },
   ];
 
   it.each(cases)('$name', ({ data }) => {
