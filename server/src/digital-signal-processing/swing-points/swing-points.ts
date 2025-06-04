@@ -7,11 +7,6 @@ import {
 import { DataPoint } from '../digital-signal-processing.interface';
 import { SwingPointData } from './swing-points.interface';
 
-// window einführen, um mehrere benachbarte Punkte zu prüfen
-// Prüfungen, ob genügend Datensätze vorhanden sind, um wenigstens einen Swing
-// Point zu erkennen
-// siehe letzten EIntrag in Gemeni Chat "Umkehrpunkte in Zettreihen erkennen"
-
 export class SwingPoints {
   /**
    * Creates an instance of SwingPoints.
