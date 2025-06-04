@@ -53,29 +53,9 @@ export class SwingPoints {
     const swingPointDataList: SwingPointData[] = [];
     let idx = this.options.windowSize;
     while (idx < this.data.length - this.options.windowSize) {
-      const previousPoints = new Array<ComparableNumber>(
-        this.options.windowSize,
-      );
-      const nextPoints = new Array<ComparableNumber>(this.options.windowSize);
-
-      let idxWindowSize = 0;
-      while (idxWindowSize < this.options.windowSize) {
-        previousPoints[idxWindowSize] = this.createComparableNumber(
-          this.data[idx - this.options.windowSize + idxWindowSize],
-        );
-        nextPoints[idxWindowSize] = this.createComparableNumber(
-          this.data[idx + idxWindowSize + 1],
-        );
-        idxWindowSize++;
-      }
-
-      const previousPoint = previousPoints[previousPoints.length - 1];
+      const { previousPoints, nextPoints } = this.getSurroundingPoints(idx);
       const currentPoint = this.data[idx];
-      const nextPoint = nextPoints[0];
-
-      const previousComparableValue = previousPoint;
       const currentComparableNumber = this.createComparableNumber(currentPoint);
-      const nextComparableNumber = nextPoint;
 
       if (
         this.isSwingHigh(previousPoints, currentComparableNumber, nextPoints)
@@ -93,9 +73,9 @@ export class SwingPoints {
         });
       } else if (
         this.isDownwardToPlateau(
+          previousPoints,
           currentComparableNumber,
-          previousComparableValue,
-          nextComparableNumber,
+          nextPoints,
         )
       ) {
         swingPointDataList.push({
@@ -104,9 +84,9 @@ export class SwingPoints {
         });
       } else if (
         this.isUpwardToPlateau(
+          previousPoints,
           currentComparableNumber,
-          previousComparableValue,
-          nextComparableNumber,
+          nextPoints,
         )
       ) {
         swingPointDataList.push({
@@ -115,9 +95,9 @@ export class SwingPoints {
         });
       } else if (
         this.isPlateauToUpward(
+          previousPoints,
           currentComparableNumber,
-          previousComparableValue,
-          nextComparableNumber,
+          nextPoints,
         )
       ) {
         swingPointDataList.push({
@@ -126,9 +106,9 @@ export class SwingPoints {
         });
       } else if (
         this.isPlateauToDownward(
+          previousPoints,
           currentComparableNumber,
-          previousComparableValue,
-          nextComparableNumber,
+          nextPoints,
         )
       ) {
         swingPointDataList.push({
@@ -139,6 +119,23 @@ export class SwingPoints {
       idx++;
     }
     return swingPointDataList;
+  }
+
+  private getSurroundingPoints(idx: number) {
+    const previousPoints = new Array<ComparableNumber>(this.options.windowSize);
+    const nextPoints = new Array<ComparableNumber>(this.options.windowSize);
+
+    let idxWindowSize = 0;
+    while (idxWindowSize < this.options.windowSize) {
+      previousPoints[idxWindowSize] = this.createComparableNumber(
+        this.data[idx - this.options.windowSize + idxWindowSize],
+      );
+      nextPoints[idxWindowSize] = this.createComparableNumber(
+        this.data[idx + idxWindowSize + 1],
+      );
+      idxWindowSize++;
+    }
+    return { previousPoints, nextPoints };
   }
 
   private createComparableNumber(dataPoint: DataPoint) {
@@ -182,34 +179,98 @@ export class SwingPoints {
   }
 
   private isPlateauToUpward(
+    previousPoints: ComparableNumber[],
     curr: ComparableNumber,
-    prev: ComparableNumber,
-    next: ComparableNumber,
+    nextPoints: ComparableNumber[],
   ) {
-    return prev.isCloseEnough(curr) && curr.isSignificantlyLowerThan(next);
+    // return prev.isCloseEnough(curr) && curr.isSignificantlyLowerThan(next);
+    for (const previousPoint of previousPoints) {
+      if (!previousPoint.isCloseEnough(curr)) {
+        return false;
+      }
+    }
+    // Fallback for windowSize = 1
+    if (nextPoints.length === 1) {
+      return curr.isSignificantlyLowerThan(nextPoints[0]);
+    }
+    return this.isUpwardTrend([curr, ...nextPoints]);
   }
 
   private isPlateauToDownward(
+    previousPoints: ComparableNumber[],
     curr: ComparableNumber,
-    prev: ComparableNumber,
-    next: ComparableNumber,
+    nextPoints: ComparableNumber[],
   ) {
-    return prev.isCloseEnough(curr) && curr.isSignificantlyHigherThan(next);
+    // return prev.isCloseEnough(curr) && curr.isSignificantlyHigherThan(next);
+    for (const previousPoint of previousPoints) {
+      if (!previousPoint.isCloseEnough(curr)) {
+        return false;
+      }
+    }
+    // Fallback for windowSize = 1
+    if (nextPoints.length === 1) {
+      return curr.isSignificantlyHigherThan(nextPoints[0]);
+    }
+    return this.isDownwardTrend([curr, ...nextPoints]);
   }
 
   private isDownwardToPlateau(
+    previousPoints: ComparableNumber[],
     curr: ComparableNumber,
-    prev: ComparableNumber,
-    next: ComparableNumber,
+    nextPoints: ComparableNumber[],
   ) {
-    return prev.isSignificantlyHigherThan(curr) && curr.isCloseEnough(next);
+    // return prev.isSignificantlyHigherThan(curr) && curr.isCloseEnough(next);
+    for (const nextPoint of nextPoints) {
+      if (!nextPoint.isCloseEnough(curr)) {
+        return false;
+      }
+    }
+    // Fallback for windowSize = 1
+    if (previousPoints.length === 1) {
+      return previousPoints[0].isSignificantlyHigherThan(curr);
+    }
+    return this.isDownwardTrend([...previousPoints, curr]);
   }
 
   private isUpwardToPlateau(
+    previousPoints: ComparableNumber[],
     curr: ComparableNumber,
-    prev: ComparableNumber,
-    next: ComparableNumber,
+    nextPoints: ComparableNumber[],
   ) {
-    return prev.isSignificantlyLowerThan(curr) && curr.isCloseEnough(next);
+    // return prev.isSignificantlyLowerThan(curr) && curr.isCloseEnough(next);
+    for (const nextPoint of nextPoints) {
+      if (!nextPoint.isCloseEnough(curr)) {
+        return false;
+      }
+    }
+    // Fallback for windowSize = 1
+    if (previousPoints.length === 1) {
+      return previousPoints[0].isSignificantlyLowerThan(curr);
+    }
+    return this.isUpwardTrend([...previousPoints, curr]);
+  }
+
+  private isUpwardTrend(points: ComparableNumber[]) {
+    return points.reduce((isTrendConfirmed, point, idx, points) => {
+      if (idx < points.length - 1 && isTrendConfirmed) {
+        const nextPoint = points[idx + 1];
+        if (!point.isSignificantlyLowerThan(nextPoint)) {
+          return false;
+        }
+      }
+      return isTrendConfirmed;
+    }, true);
+  }
+
+  private isDownwardTrend(points: ComparableNumber[]) {
+    return points.reduce((isTrendConfirmed, point, idx, points) => {
+      if (idx < points.length - 1 && isTrendConfirmed) {
+        const nextPoint = points[idx + 1];
+        if (!point.isSignificantlyHigherThan(nextPoint)) {
+          return false;
+        }
+      }
+      return isTrendConfirmed;
+    }, true);
   }
 }
