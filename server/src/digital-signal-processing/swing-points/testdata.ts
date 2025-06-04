@@ -4,6 +4,7 @@ import { SwingPointData } from './swing-points.interface';
 type SwingPointAnalysis = {
   data: DataPoint[];
   result: SwingPointData[];
+  windowSize: number;
 };
 
 export class TestDataSwingPoints {
@@ -20,6 +21,7 @@ export class TestDataSwingPoints {
           point: { x: 2, y: 3 },
         },
       ],
+      windowSize: 1,
     };
   }
 
@@ -31,6 +33,7 @@ export class TestDataSwingPoints {
         { x: 3, y: 2 },
       ],
       result: [],
+      windowSize: 1,
     };
   }
 
@@ -47,6 +50,7 @@ export class TestDataSwingPoints {
           point: { x: 2, y: 3 },
         },
       ],
+      windowSize: 1,
     };
   }
 
@@ -63,6 +67,7 @@ export class TestDataSwingPoints {
           point: { x: 2, y: 2 },
         },
       ],
+      windowSize: 1,
     };
   }
 
@@ -74,6 +79,7 @@ export class TestDataSwingPoints {
         { x: 3, y: 3 },
       ],
       result: [],
+      windowSize: 1,
     };
   }
 
@@ -90,6 +96,7 @@ export class TestDataSwingPoints {
           point: { x: 2, y: 1.5 },
         },
       ],
+      windowSize: 1,
     };
   }
 
@@ -107,6 +114,7 @@ export class TestDataSwingPoints {
         { swingPointType: 'swingLow', point: { x: 3, y: 2 } },
         { swingPointType: 'swingHigh', point: { x: 4, y: 4 } },
       ],
+      windowSize: 1,
     };
   }
 
@@ -120,6 +128,7 @@ export class TestDataSwingPoints {
         { x: 5, y: 1.05 }, // close to 1.08
       ],
       result: [],
+      windowSize: 1,
     };
   }
 
@@ -137,6 +146,7 @@ export class TestDataSwingPoints {
         { swingPointType: 'swingLow', point: { x: 3, y: 1 } },
         { swingPointType: 'swingHigh', point: { x: 4, y: 4 } },
       ],
+      windowSize: 1,
     };
   }
 
@@ -148,6 +158,7 @@ export class TestDataSwingPoints {
         { x: 3, y: 1 },
       ],
       result: [],
+      windowSize: 1,
     };
   }
 
@@ -159,6 +170,7 @@ export class TestDataSwingPoints {
         { x: 3, y: 0.99 },
       ],
       result: [],
+      windowSize: 1,
     };
   }
 
@@ -170,6 +182,7 @@ export class TestDataSwingPoints {
         { x: 3, y: 3 },
       ],
       result: [],
+      windowSize: 1,
     };
   }
 
@@ -181,6 +194,7 @@ export class TestDataSwingPoints {
         { x: 3, y: 1 },
       ],
       result: [],
+      windowSize: 1,
     };
   }
 
@@ -192,6 +206,7 @@ export class TestDataSwingPoints {
         { x: 3, y: 3 },
       ],
       result: [{ point: { x: 2, y: 2 }, swingPointType: 'plateauToUpward' }],
+      windowSize: 1,
     };
   }
 
@@ -203,6 +218,7 @@ export class TestDataSwingPoints {
         { x: 3, y: 1 },
       ],
       result: [{ point: { x: 2, y: 2 }, swingPointType: 'plateauToDownward' }],
+      windowSize: 1,
     };
   }
 
@@ -214,6 +230,7 @@ export class TestDataSwingPoints {
         { x: 3, y: 2 },
       ],
       result: [{ point: { x: 2, y: 2 }, swingPointType: 'upwardToPlateau' }],
+      windowSize: 1,
     };
   }
 
@@ -225,6 +242,30 @@ export class TestDataSwingPoints {
         { x: 3, y: 2 },
       ],
       result: [{ point: { x: 2, y: 2 }, swingPointType: 'downwardToPlateau' }],
+      windowSize: 1,
+    };
+  }
+
+  singleSwingHighWindow(): SwingPointAnalysis {
+    return {
+      data: [
+        { x: 1, y: 6 },
+        { x: 2, y: 2 },
+        { x: 3, y: 4 },
+        { x: 4, y: 2 },
+        { x: 5, y: 5 },
+        { x: 6, y: 2 },
+        { x: 7, y: 3 },
+        { x: 8, y: 4 },
+        { x: 9, y: 2 },
+      ],
+      result: [
+        {
+          swingPointType: 'swingHigh',
+          point: { x: 5, y: 5 },
+        },
+      ],
+      windowSize: 3,
     };
   }
 }

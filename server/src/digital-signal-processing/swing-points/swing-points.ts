@@ -20,6 +20,9 @@ export class SwingPoints {
    *   - relativeThreshold: A number between 0 and 1 that determines the sensitivity
    *     when comparing data points. A higher value makes the swing point detection
    *     less sensitive to small fluctuations, while a lower value increases sensitivity.
+   *   - windowSize: A natural number >= 1. windowSize defines the range in which to search
+   *     for a swingHigh or swingLow. This helps to smooth out small spikes and only detect
+   *     significant turning points within a larger neighborhood.
    */
   constructor(
     private data: DataPoint[],
@@ -37,6 +40,11 @@ export class SwingPoints {
     if (!Number.isInteger(windowSize) || windowSize < MIN_WINDOW_SIZE) {
       throw new Error(
         `windowSize must be a natural number >= ${MIN_WINDOW_SIZE}`,
+      );
+    }
+    if (data.length < 2 * windowSize + 1) {
+      throw new Error(
+        `data must have at least ${2 * windowSize + 1} points for windowSize=${windowSize}`,
       );
     }
   }

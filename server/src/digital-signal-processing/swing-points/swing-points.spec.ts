@@ -1,3 +1,4 @@
+import { DataPoint } from '../digital-signal-processing.interface';
 import { SwingPoints } from './swing-points';
 import { TestDataSwingPoints } from './testdata';
 
@@ -73,12 +74,16 @@ describe('SwingPoints', () => {
       name: 'detect low plateau',
       data: testData.upwardToPlateau(),
     },
+    {
+      name: 'detect swing high with window size',
+      data: testData.singleSwingHighWindow(),
+    },
   ];
 
   it.each(cases)('$name', ({ data }) => {
     const swingPoints = new SwingPoints(data.data, {
       relativeThreshold: 0.1,
-      windowSize: 1,
+      windowSize: data.windowSize,
     });
     expect(swingPoints.getSwingPoints()).toEqual(data.result);
   });
@@ -88,7 +93,10 @@ describe('SwingPoints', () => {
     (threshold) => {
       expect(
         () =>
-          new SwingPoints([], { relativeThreshold: threshold, windowSize: 1 }),
+          new SwingPoints(new Array<DataPoint>(25).fill({ x: 1, y: 1 }), {
+            relativeThreshold: threshold,
+            windowSize: 1,
+          }),
       ).not.toThrow();
     },
   );
@@ -98,7 +106,10 @@ describe('SwingPoints', () => {
     (threshold) => {
       expect(
         () =>
-          new SwingPoints([], { relativeThreshold: threshold, windowSize: 1 }),
+          new SwingPoints(new Array<DataPoint>(25).fill({ x: 1, y: 1 }), {
+            relativeThreshold: threshold,
+            windowSize: 1,
+          }),
       ).toThrow();
     },
   );
@@ -107,7 +118,11 @@ describe('SwingPoints', () => {
     'does not throw for valid windowSize=%p',
     (windowSize) => {
       expect(
-        () => new SwingPoints([], { relativeThreshold: 0.1, windowSize }),
+        () =>
+          new SwingPoints(new Array<DataPoint>(25).fill({ x: 1, y: 1 }), {
+            relativeThreshold: 0.1,
+            windowSize,
+          }),
       ).not.toThrow();
     },
   );
@@ -116,7 +131,38 @@ describe('SwingPoints', () => {
     'throws error for invalid windowSize=%p',
     (windowSize) => {
       expect(
-        () => new SwingPoints([], { relativeThreshold: 0.1, windowSize }),
+        () =>
+          new SwingPoints(new Array<DataPoint>(25).fill({ x: 1, y: 1 }), {
+            relativeThreshold: 0.1,
+            windowSize,
+          }),
+      ).toThrow();
+    },
+  );
+
+  it.each([
+    { windowSize: 1, dataLength: 3 },
+    { windowSize: 2, dataLength: 5 },
+  ])(
+    'does not throw for minimum valid data length (windowSize=$windowSize, dataLength=$dataLength)',
+    ({ windowSize, dataLength }) => {
+      const data = new Array<DataPoint>(dataLength).fill({ x: 1, y: 1 });
+
+      expect(
+        () => new SwingPoints(data, { relativeThreshold: 0.1, windowSize }),
+      ).not.toThrow();
+    },
+  );
+
+  it.each([
+    { windowSize: 1, dataLength: 2 },
+    { windowSize: 2, dataLength: 4 },
+  ])(
+    'throws error for too short data (windowSize=$windowSize, dataLength=$dataLength)',
+    ({ windowSize, dataLength }) => {
+      const data = new Array<DataPoint>(dataLength).fill({ x: 1, y: 1 });
+      expect(
+        () => new SwingPoints(data, { relativeThreshold: 0.1, windowSize }),
       ).toThrow();
     },
   );
