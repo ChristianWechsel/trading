@@ -27,6 +27,7 @@ export class Trend {
     // Der erste SwingPoint im Fenster bestimmt potenziellen Trend: Aufwärts oder Abwärts
     // Der zweite SwingPoint muss gegenteilig zum ersten SwingPoint sein
     // Der dritte SwingPoint muss wieder wie der erste SwingPojnt sein
+    // Der dritte SwingPoint muss höher/niedriger wie erste SwingPoint sein
 
     // Wird diese Bedingung erfüllt, dann wird ein Trend begonnen
     // Wird diese Bedingung nicht erfüllt, dann gehe zum nächsten SwingPoint, richte das Fenster neu ein
@@ -45,6 +46,12 @@ export class Trend {
 
     // Randbedingung: ein begonnener Trend wird in jedem Fall bis zum Ende der Datenreihe fortgesetzt,
     // falls kein Trendbruch vorher erkannt wird
+
+    // Annahme: wenn kein Aufwärts- oder Abwärtstrend erkannt wird,
+    // dann handelt es sich um einen Seitwärtstrend
+    // Wahrscheinlich muss hier auch eine Toleranz eingeführt werden, da die Hochs und Tiefs
+    // nicht exakt gleich sind, aber trotzdem ähnlich genug sind, um als Seitwärtstrend zu gelten
+
     const trends: TrendData[] = [];
     let idxSwingPoint = 0;
     while (idxSwingPoint <= this.swingPoints.length - MIN_SWING_POINTS) {
@@ -81,7 +88,8 @@ export class Trend {
     return (
       swingPoint1.swingPointType === 'swingLow' &&
       swingPoint2.swingPointType === 'swingHigh' &&
-      swingPoint3.swingPointType === 'swingLow'
+      swingPoint3.swingPointType === 'swingLow' &&
+      swingPoint1.point.y < swingPoint3.point.y
     );
   }
 
@@ -93,7 +101,8 @@ export class Trend {
     return (
       swingPoint1.swingPointType === 'swingHigh' &&
       swingPoint2.swingPointType === 'swingLow' &&
-      swingPoint3.swingPointType === 'swingHigh'
+      swingPoint3.swingPointType === 'swingHigh' &&
+      swingPoint1.point.y > swingPoint3.point.y
     );
   }
 }

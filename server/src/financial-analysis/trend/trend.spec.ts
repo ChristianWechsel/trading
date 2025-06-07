@@ -62,17 +62,21 @@ describe('Trend', () => {
   });
 
   describe('detectTrends', () => {
-    it('should detect upward trend', () => {
-      const { swingPoints, data, result } = testData.upwardTrend();
+    it.each([
+      ['upward trend', testData.upwardTrend()],
+      ['downward trend', testData.downwardTrend()],
+      ['upward trend not confirmed', testData.upwardTrendNotConfirmed()],
+      ['downward trend not confirmed', testData.downwardTrendNotConfirmed()],
+      [
+        'upward trend not confirmed edge case',
+        testData.upwardTrendNotConfirmedEdgeCase(),
+      ],
+      [
+        'downward trend not confirmed edge case',
+        testData.downwardTrendNotConfirmedEdgeCase(),
+      ],
+    ])('should detect %s', (_desc, { swingPoints, data, result }) => {
       const trend = new Trend(swingPoints, data);
-
-      expect(trend.detectTrends()).toEqual(result);
-    });
-
-    it('should detect downward trend', () => {
-      const { swingPoints, data, result } = testData.downwardTrend();
-      const trend = new Trend(swingPoints, data);
-
       expect(trend.detectTrends()).toEqual(result);
     });
   });

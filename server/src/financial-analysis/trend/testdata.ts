@@ -122,4 +122,87 @@ export class TrendTestData {
       ],
     };
   }
+
+  // Aufwärtstrend hat sich nicht bestätigt
+  upwardTrendNotConfirmed(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingLow', point: { x: 1, y: 2 } },
+        { swingPointType: 'swingHigh', point: { x: 2, y: 3 } },
+        { swingPointType: 'swingLow', point: { x: 3, y: 1 } },
+      ],
+      data: [
+        { x: 1, y: 2 },
+        { x: 2, y: 3 },
+        { x: 3, y: 1 },
+      ],
+      result: [],
+    };
+  }
+
+  // Abwärtstrend hat sich nicht bestätigt
+  downwardTrendNotConfirmed(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingHigh', point: { x: 1, y: 3 } },
+        { swingPointType: 'swingLow', point: { x: 2, y: 2 } },
+        { swingPointType: 'swingHigh', point: { x: 3, y: 4 } },
+      ],
+      data: [
+        { x: 1, y: 3 },
+        { x: 2, y: 2 },
+        { x: 3, y: 4 },
+      ],
+      result: [],
+    };
+  }
+  // Aufwärtstrend hat sich nicht bestätigt - Grenzfall
+  upwardTrendNotConfirmedEdgeCase(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingLow', point: { x: 1, y: 2 } },
+        { swingPointType: 'swingHigh', point: { x: 2, y: 3 } },
+        { swingPointType: 'swingLow', point: { x: 3, y: 2 } },
+      ],
+      data: [
+        { x: 1, y: 2 },
+        { x: 2, y: 3 },
+        { x: 3, y: 2 },
+      ],
+      result: [],
+    };
+  }
+
+  // Abwärtstrend hat sich nicht bestätigt - Grenzfall
+  downwardTrendNotConfirmedEdgeCase(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingHigh', point: { x: 1, y: 3 } },
+        { swingPointType: 'swingLow', point: { x: 2, y: 2 } },
+        { swingPointType: 'swingHigh', point: { x: 3, y: 3 } },
+      ],
+      data: [
+        { x: 1, y: 3 },
+        { x: 2, y: 2 },
+        { x: 3, y: 3 },
+      ],
+      result: [],
+    };
+  }
 }
