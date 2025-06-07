@@ -1,6 +1,7 @@
 import { DataPoint } from '../../digital-signal-processing/digital-signal-processing.interface';
 import { SwingPointData } from '../../digital-signal-processing/swing-points/swing-points.interface';
 import { MIN_SWING_POINTS } from './parameters';
+import { TrendData } from './trend.interface';
 
 export class Trend {
   constructor(
@@ -19,5 +20,7 @@ export class Trend {
     }
   }
 
-  detectTrends(): void {}
+  detectTrends(): TrendData[] {
+    return [];
+  }
 }

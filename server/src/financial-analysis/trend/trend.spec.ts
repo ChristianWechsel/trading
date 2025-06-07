@@ -60,4 +60,20 @@ describe('Trend', () => {
       ).not.toThrow();
     });
   });
+
+  describe('detectTrends', () => {
+    it('should detect upward trend', () => {
+      const { swingPoints, data, result } = testData.upwardTrend();
+      const trend = new Trend(swingPoints, data);
+
+      expect(trend.detectTrends()).toEqual(result);
+    });
+
+    it('should detect downward trend', () => {
+      const { swingPoints, data, result } = testData.downwardTrend();
+      const trend = new Trend(swingPoints, data);
+
+      expect(trend.detectTrends()).toEqual(result);
+    });
+  });
 });

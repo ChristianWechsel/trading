@@ -1,5 +1,6 @@
 import { DataPoint } from '../../digital-signal-processing/digital-signal-processing.interface';
 import { SwingPointData } from '../../digital-signal-processing/swing-points/swing-points.interface';
+import { TrendData } from './trend.interface';
 
 export class TrendTestData {
   /**
@@ -66,5 +67,59 @@ export class TrendTestData {
       { x: 1, y: 1 },
       { x: 2, y: 2 },
     ];
+  }
+
+  // Aufwärtstrend
+  upwardTrend(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingLow', point: { x: 1, y: 1 } },
+        { swingPointType: 'swingHigh', point: { x: 2, y: 2 } },
+        { swingPointType: 'swingLow', point: { x: 3, y: 3 } },
+      ],
+      data: [
+        { x: 1, y: 1 },
+        { x: 2, y: 2 },
+        { x: 3, y: 3 },
+      ],
+      result: [
+        {
+          trendType: 'upward',
+          startPoint: { x: 1, y: 1 },
+          endPoint: { x: 3, y: 3 },
+        },
+      ],
+    };
+  }
+
+  // Abwärtstrend
+  downwardTrend(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingHigh', point: { x: 1, y: 3 } },
+        { swingPointType: 'swingLow', point: { x: 2, y: 2 } },
+        { swingPointType: 'swingHigh', point: { x: 3, y: 1 } },
+      ],
+      data: [
+        { x: 1, y: 3 },
+        { x: 2, y: 2 },
+        { x: 3, y: 1 },
+      ],
+      result: [
+        {
+          trendType: 'downward',
+          startPoint: { x: 1, y: 3 },
+          endPoint: { x: 3, y: 1 },
+        },
+      ],
+    };
   }
 }
