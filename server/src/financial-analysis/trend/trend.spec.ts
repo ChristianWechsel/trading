@@ -75,6 +75,8 @@ describe('Trend', () => {
         'downward trend not confirmed edge case',
         testData.downwardTrendNotConfirmedEdgeCase(),
       ],
+      ['upward trend infinite', testData.upwardTrendInfinite()],
+      ['downward trend infinite', testData.downwardTrendInfinite()],
     ])('should detect %s', (_desc, { swingPoints, data, result }) => {
       const trend = new Trend(swingPoints, data);
       expect(trend.detectTrends()).toEqual(result);

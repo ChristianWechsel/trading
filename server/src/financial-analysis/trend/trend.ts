@@ -4,6 +4,8 @@ import { MIN_SWING_POINTS } from './parameters';
 import { TrendData } from './trend.interface';
 
 export class Trend {
+  private trends: TrendData[];
+
   constructor(
     private swingPoints: SwingPointData[],
     private data: DataPoint[],
@@ -18,6 +20,8 @@ export class Trend {
         `data must be an array with at least ${MIN_SWING_POINTS} elements`,
       );
     }
+
+    this.trends = [];
   }
 
   detectTrends(): TrendData[] {
@@ -52,7 +56,6 @@ export class Trend {
     // Wahrscheinlich muss hier auch eine Toleranz eingeführt werden, da die Hochs und Tiefs
     // nicht exakt gleich sind, aber trotzdem ähnlich genug sind, um als Seitwärtstrend zu gelten
 
-    const trends: TrendData[] = [];
     let idxSwingPoint = 0;
     while (idxSwingPoint <= this.swingPoints.length - MIN_SWING_POINTS) {
       const swingPoint1 = this.swingPoints[idxSwingPoint];
@@ -60,15 +63,15 @@ export class Trend {
       const swingPoint3 = this.swingPoints[idxSwingPoint + 2];
 
       if (this.isUpwardTrend(swingPoint1, swingPoint2, swingPoint3)) {
-        trends.push({
+        this.trends.push({
           startPoint: swingPoint1.point,
-          endPoint: swingPoint3.point,
+          endPoint: this.getLastPointOfTrend(),
           trendType: 'upward',
         });
       } else if (this.isDownwardTrend(swingPoint1, swingPoint2, swingPoint3)) {
-        trends.push({
+        this.trends.push({
           startPoint: swingPoint1.point,
-          endPoint: swingPoint3.point,
+          endPoint: this.getLastPointOfTrend(),
           trendType: 'downward',
         });
       } else {
@@ -77,7 +80,7 @@ export class Trend {
 
       idxSwingPoint++;
     }
-    return trends;
+    return this.trends;
   }
 
   private isUpwardTrend(
@@ -104,5 +107,9 @@ export class Trend {
       swingPoint3.swingPointType === 'swingHigh' &&
       swingPoint1.point.y > swingPoint3.point.y
     );
+  }
+
+  private getLastPointOfTrend() {
+    return this.data[this.data.length - 1];
   }
 }

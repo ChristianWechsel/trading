@@ -205,4 +205,66 @@ export class TrendTestData {
       result: [],
     };
   }
+
+  // Aufwärtstrend bis Ende Datenreihe
+  upwardTrendInfinite(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingLow', point: { x: 1, y: 1 } },
+        { swingPointType: 'swingHigh', point: { x: 2, y: 2 } },
+        { swingPointType: 'swingLow', point: { x: 3, y: 3 } },
+      ],
+      data: [
+        { x: 1, y: 1 },
+        { x: 2, y: 2 },
+        { x: 3, y: 3 },
+        { x: 4, y: 4 },
+        { x: 5, y: 5 },
+        { x: 6, y: 6 },
+        { x: 7, y: 7 },
+      ],
+      result: [
+        {
+          trendType: 'upward',
+          startPoint: { x: 1, y: 1 },
+          endPoint: { x: 7, y: 7 },
+        },
+      ],
+    };
+  }
+
+  // Abwärtstrend bis Ende Datenreihe
+  downwardTrendInfinite(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingHigh', point: { x: 1, y: 3 } },
+        { swingPointType: 'swingLow', point: { x: 2, y: 2 } },
+        { swingPointType: 'swingHigh', point: { x: 3, y: 1 } },
+      ],
+      data: [
+        { x: 1, y: 3 },
+        { x: 2, y: 2 },
+        { x: 3, y: 1 },
+        { x: 4, y: 4 },
+        { x: 5, y: 5 },
+        { x: 6, y: 6 },
+        { x: 7, y: 7 },
+      ],
+      result: [
+        {
+          trendType: 'downward',
+          startPoint: { x: 1, y: 3 },
+          endPoint: { x: 7, y: 7 },
+        },
+      ],
+    };
+  }
 }
