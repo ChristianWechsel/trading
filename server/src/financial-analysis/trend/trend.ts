@@ -65,13 +65,13 @@ export class Trend {
       if (this.isUpwardTrend(swingPoint1, swingPoint2, swingPoint3)) {
         this.trends.push({
           startPoint: swingPoint1.point,
-          endPoint: this.getLastPointOfTrend(),
+          endPoint: this.getLastPointOfInfiniteTrend(),
           trendType: 'upward',
         });
       } else if (this.isDownwardTrend(swingPoint1, swingPoint2, swingPoint3)) {
         this.trends.push({
           startPoint: swingPoint1.point,
-          endPoint: this.getLastPointOfTrend(),
+          endPoint: this.getLastPointOfInfiniteTrend(),
           trendType: 'downward',
         });
       } else {
@@ -109,7 +109,7 @@ export class Trend {
     );
   }
 
-  private getLastPointOfTrend() {
+  private getLastPointOfInfiniteTrend() {
     return this.data[this.data.length - 1];
   }
 }
