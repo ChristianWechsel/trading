@@ -21,6 +21,79 @@ export class Trend {
   }
 
   detectTrends(): TrendData[] {
-    return [];
+    // Ein Trend wird durch Abfolge von drei SwingPoints gestartet
+    // Es muss ein Fenster von drei SwingPunkten über die Liste von SwingPoints laufen
+
+    // Der erste SwingPoint im Fenster bestimmt potenziellen Trend: Aufwärts oder Abwärts
+    // Der zweite SwingPoint muss gegenteilig zum ersten SwingPoint sein
+    // Der dritte SwingPoint muss wieder wie der erste SwingPojnt sein
+
+    // Wird diese Bedingung erfüllt, dann wird ein Trend begonnen
+    // Wird diese Bedingung nicht erfüllt, dann gehe zum nächsten SwingPoint, richte das Fenster neu ein
+    // und wiederhole das Vorgehen
+
+    // Existiert ein laufender Trend, dann muss als nächstes das Ende eines Trend gefunden werden
+    // Warnungen erkennen, wann ein Trend möglicherweise zu Ende geht
+    // Bei Trendbruch Toleranzen einügen, ob Fehlausbrüche zu ignorieren
+    // Toleranzen parameterisierbar machen, um Feintuning zu ermöglichen
+
+    // Ist Trend beendet, dann die ganze Prüfung wieder von vorne beginnen
+
+    // Bei einem begonnen Trend den Trendkanal bestimmen
+
+    // Ggf. erkennen, ob es sich um langfristigen, mittelfristigen oder kurzfristigen Trend handelt
+
+    // Randbedingung: ein begonnener Trend wird in jedem Fall bis zum Ende der Datenreihe fortgesetzt,
+    // falls kein Trendbruch vorher erkannt wird
+    const trends: TrendData[] = [];
+    let idxSwingPoint = 0;
+    while (idxSwingPoint <= this.swingPoints.length - MIN_SWING_POINTS) {
+      const swingPoint1 = this.swingPoints[idxSwingPoint];
+      const swingPoint2 = this.swingPoints[idxSwingPoint + 1];
+      const swingPoint3 = this.swingPoints[idxSwingPoint + 2];
+
+      if (this.isUpwardTrend(swingPoint1, swingPoint2, swingPoint3)) {
+        trends.push({
+          startPoint: swingPoint1.point,
+          endPoint: swingPoint3.point,
+          trendType: 'upward',
+        });
+      } else if (this.isDownwardTrend(swingPoint1, swingPoint2, swingPoint3)) {
+        trends.push({
+          startPoint: swingPoint1.point,
+          endPoint: swingPoint3.point,
+          trendType: 'downward',
+        });
+      } else {
+        // kein Trend erkannt, gehe zum nächsten SwingPoint
+      }
+
+      idxSwingPoint++;
+    }
+    return trends;
+  }
+
+  private isUpwardTrend(
+    swingPoint1: SwingPointData,
+    swingPoint2: SwingPointData,
+    swingPoint3: SwingPointData,
+  ): boolean {
+    return (
+      swingPoint1.swingPointType === 'swingLow' &&
+      swingPoint2.swingPointType === 'swingHigh' &&
+      swingPoint3.swingPointType === 'swingLow'
+    );
+  }
+
+  private isDownwardTrend(
+    swingPoint1: SwingPointData,
+    swingPoint2: SwingPointData,
+    swingPoint3: SwingPointData,
+  ): boolean {
+    return (
+      swingPoint1.swingPointType === 'swingHigh' &&
+      swingPoint2.swingPointType === 'swingLow' &&
+      swingPoint3.swingPointType === 'swingHigh'
+    );
   }
 }
