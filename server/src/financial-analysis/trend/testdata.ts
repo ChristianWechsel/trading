@@ -267,4 +267,138 @@ export class TrendTestData {
       ],
     };
   }
+
+  // Fortgesetzter Aufwärtstrend ohne Endpunkt (Resultat ohne Endpunkt)
+  upwardTrendContinuesWithoutEndpoint(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingLow', point: { x: 1, y: 1 } },
+        { swingPointType: 'swingHigh', point: { x: 2, y: 2 } },
+        { swingPointType: 'swingLow', point: { x: 3, y: 3 } },
+        { swingPointType: 'swingHigh', point: { x: 4, y: 4 } },
+        { swingPointType: 'swingLow', point: { x: 5, y: 4 } },
+        { swingPointType: 'swingHigh', point: { x: 6, y: 5 } },
+        // Trend läuft weiter, kein bestätigendes Ende
+      ],
+      data: [
+        { x: 1, y: 1 },
+        { x: 2, y: 2 },
+        { x: 3, y: 3 },
+        { x: 4, y: 4 },
+        { x: 5, y: 4 },
+        { x: 6, y: 5 },
+      ],
+      result: [
+        {
+          trendType: 'upward',
+          startPoint: { x: 1, y: 1 },
+          endPoint: { x: 6, y: 5 },
+        },
+      ],
+    };
+  }
+
+  // Fortgesetzter Aufwärtstrend, der mit tieferem Tief und tieferem Hoch endet
+  upwardTrendBreaksWithLowerLowAndLowerHigh(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingLow', point: { x: 1, y: 1 } },
+        { swingPointType: 'swingHigh', point: { x: 2, y: 2 } },
+        { swingPointType: 'swingLow', point: { x: 3, y: 3 } },
+        { swingPointType: 'swingHigh', point: { x: 4, y: 4 } },
+        { swingPointType: 'swingLow', point: { x: 5, y: 2 } }, // tieferes Tief
+        { swingPointType: 'swingHigh', point: { x: 6, y: 3 } }, // tieferes Hoch
+      ],
+      data: [
+        { x: 1, y: 1 },
+        { x: 2, y: 2 },
+        { x: 3, y: 3 },
+        { x: 4, y: 4 },
+        { x: 5, y: 2 },
+        { x: 6, y: 3 },
+      ],
+      result: [
+        {
+          trendType: 'upward',
+          startPoint: { x: 1, y: 1 },
+          endPoint: { x: 4, y: 4 },
+        },
+      ],
+    };
+  }
+
+  // Fortgesetzter Abwärtstrend ohne Endpunkt (Trend läuft weiter, kein bestätigendes Ende)
+  downwardTrendContinuesWithoutEndpoint(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingHigh', point: { x: 1, y: 7 } },
+        { swingPointType: 'swingLow', point: { x: 2, y: 6 } },
+        { swingPointType: 'swingHigh', point: { x: 3, y: 5 } },
+        { swingPointType: 'swingLow', point: { x: 4, y: 4 } },
+        { swingPointType: 'swingHigh', point: { x: 5, y: 3 } },
+        { swingPointType: 'swingLow', point: { x: 6, y: 2 } },
+        // Trend läuft weiter, kein bestätigendes Ende
+      ],
+      data: [
+        { x: 1, y: 7 },
+        { x: 2, y: 6 },
+        { x: 3, y: 5 },
+        { x: 4, y: 4 },
+        { x: 5, y: 3 },
+        { x: 6, y: 2 },
+      ],
+      result: [
+        {
+          trendType: 'downward',
+          startPoint: { x: 1, y: 7 },
+          endPoint: { x: 6, y: 2 },
+        },
+      ],
+    };
+  }
+
+  // Fortgesetzter Abwärtstrend, der mit höherem Hoch und höherem Tief endet (Trend bricht)
+  downwardTrendBreaksWithHigherHighAndHigherLow(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingHigh', point: { x: 1, y: 7 } },
+        { swingPointType: 'swingLow', point: { x: 2, y: 6 } },
+        { swingPointType: 'swingHigh', point: { x: 3, y: 5 } },
+        { swingPointType: 'swingLow', point: { x: 4, y: 4 } },
+        { swingPointType: 'swingHigh', point: { x: 5, y: 6 } }, // höheres Hoch
+        { swingPointType: 'swingLow', point: { x: 6, y: 5 } }, // höheres Tief
+      ],
+      data: [
+        { x: 1, y: 7 },
+        { x: 2, y: 6 },
+        { x: 3, y: 5 },
+        { x: 4, y: 4 },
+        { x: 5, y: 6 },
+        { x: 6, y: 5 },
+      ],
+      result: [
+        {
+          trendType: 'downward',
+          startPoint: { x: 1, y: 7 },
+          endPoint: { x: 4, y: 4 },
+        },
+      ],
+    };
+  }
 }

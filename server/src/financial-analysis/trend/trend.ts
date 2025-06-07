@@ -1,10 +1,10 @@
 import { DataPoint } from '../../digital-signal-processing/digital-signal-processing.interface';
 import { SwingPointData } from '../../digital-signal-processing/swing-points/swing-points.interface';
 import { MIN_SWING_POINTS } from './parameters';
-import { TrendData } from './trend.interface';
+import { TrendData, WrappedTrendData } from './trend.interface';
 
 export class Trend {
-  private trends: TrendData[];
+  private trends: WrappedTrendData[];
 
   constructor(
     private swingPoints: SwingPointData[],
@@ -56,6 +56,36 @@ export class Trend {
     // Wahrscheinlich muss hier auch eine Toleranz eingeführt werden, da die Hochs und Tiefs
     // nicht exakt gleich sind, aber trotzdem ähnlich genug sind, um als Seitwärtstrend zu gelten
 
+    // Überlegungen zum Algorithmus
+    // Der erste SwingPoint (idx) bestimmt durch seine Ausprägung den potenziell nächsten Trend
+    //      SwingHigh => Abwärtstrend
+    //      SwingLow => Aufwärtstrend
+    //      state wird auf not confirmed gesetzt
+    //      startPoint wird auf Wert des SwingPoints gesetzt
+    // Überprüfung der nächten SwingPoints:
+    // Fall Trend wird bestätigt
+    //      iteration zum nächsten SwingPoint idx + 1
+    //      SwingPoint muss gegenteilig zum ersten SwingPoint sein
+    //      iteration zum nächsten SwingPoint idx + 2
+    //      SwingPoint muss wie der erste SwingPoint sein
+    //      SwingPoint muss höher/niedriger wie der erste SwingPoint sein
+    // => state wird auf confirmed gesetzt
+    // Fall Trend wird nicht bestätigt
+    //      sobald ein SwingPoint nicht den Bedingungen entspricht wird Prozess
+    //      abgebrochen und zum nächsten SwingPoint iteriert idx++
+    //      und der Prozess beginnt von vorne
+
+    // Bei einem bestätigem Trend wird jetzt immer weiter zum nächsten
+    // Swingpoint iteriert und dieser mit dem vorheirgen SwingPoint vom gleichen
+    // Typ verglichen, ob der Wert steigend/fallend ist. Dies wird bis zum
+    // Ende der Datenreihe durchgeführt.
+    // Falls der erste SwingPoint diesen Bedingungen nicht entspricht,
+    // dann wird warningAt mit dem DataPoint der "Verletzung" gefüllt und state auf warning gesetzt.
+
+    // Fallunterscheidung nächster SwingPoint
+    // Falls der nächste SwingPoint ebenfalls den Bedingungen verletzt, wird state auf broken gesetzt
+    // und der endpoint auf das DatPoint des letzten SwingPoints gesetzt
+    // Falls der SwingPoint den Bedingungen entspricht, wird state auf confirmed gesetzt und warningAt geleert.
     let idxSwingPoint = 0;
     while (idxSwingPoint <= this.swingPoints.length - MIN_SWING_POINTS) {
       const swingPoint1 = this.swingPoints[idxSwingPoint];
