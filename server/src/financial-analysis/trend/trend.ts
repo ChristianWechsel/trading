@@ -3,7 +3,7 @@ import { SwingPointData } from '../../digital-signal-processing/swing-points/swi
 import { MIN_SWING_POINTS } from './parameters';
 import {
   DownwardTrendConfirmed,
-  startState,
+  getStartState,
   UpwardTrendConfirmed,
 } from './states';
 import { TrendStateMachine } from './trend-state-machine';
@@ -92,22 +92,24 @@ export class Trend {
     // Falls der nächste SwingPoint ebenfalls den Bedingungen verletzt, wird state auf broken gesetzt
     // und der endpoint auf das DatPoint des letzten SwingPoints gesetzt
     // Falls der SwingPoint den Bedingungen entspricht, wird state auf confirmed gesetzt und warningAt geleert.
-    const stateMachine = new TrendStateMachine(startState, (state) => {
-      console.log(`Transitioned to state: ${state.constructor.name}`);
-      if (state instanceof UpwardTrendConfirmed) {
-        this.trends.push({
-          trendType: 'upward',
-          startPoint: this.swingPoints[0].point,
-          endPoint: this.swingPoints[this.swingPoints.length - 1].point,
-        });
-      } else if (state instanceof DownwardTrendConfirmed) {
-        this.trends.push({
-          trendType: 'downward',
-          startPoint: this.swingPoints[0].point,
-          endPoint: this.swingPoints[this.swingPoints.length - 1].point,
-        });
-      }
-    });
+    const stateMachine = new TrendStateMachine(
+      getStartState((state) => {
+        console.log(`Transitioned to state: ${state.constructor.name}`);
+        if (state instanceof UpwardTrendConfirmed) {
+          this.trends.push({
+            trendType: 'upward',
+            startPoint: this.swingPoints[0].point,
+            endPoint: this.swingPoints[this.swingPoints.length - 1].point,
+          });
+        } else if (state instanceof DownwardTrendConfirmed) {
+          this.trends.push({
+            trendType: 'downward',
+            startPoint: this.swingPoints[0].point,
+            endPoint: this.swingPoints[this.swingPoints.length - 1].point,
+          });
+        }
+      }),
+    );
 
     let idxSwingPoint = 0;
     while (idxSwingPoint < this.swingPoints.length) {
