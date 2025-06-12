@@ -43,10 +43,10 @@ class SwingLowTransistion implements Transistion {
 class StartState extends State {}
 class UpwardTrendFirstCheck extends State {}
 class UpwardTrendSecondCheck extends State {}
-class UpwardTrendConfirmed extends State {}
+export class UpwardTrendConfirmed extends State {}
 class DownwardTrendFirstCheck extends State {}
 class DownwardTrendSecondCheck extends State {}
-class DownwardTrendConfirmed extends State {}
+export class DownwardTrendConfirmed extends State {}
 
 export const startState = new StartState();
 const upwardTrendFirstCheck = new UpwardTrendFirstCheck();
