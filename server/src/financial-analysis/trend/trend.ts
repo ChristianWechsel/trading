@@ -1,10 +1,12 @@
 import { DataPoint } from '../../digital-signal-processing/digital-signal-processing.interface';
 import { SwingPointData } from '../../digital-signal-processing/swing-points/swing-points.interface';
 import { MIN_SWING_POINTS } from './parameters';
-import { TrendData, WrappedTrendData } from './trend.interface';
+import { startState } from './states';
+import { TrendStateMachine } from './trend-state-machine';
+import { TrendData } from './trend.interface';
 
 export class Trend {
-  private trends: WrappedTrendData[];
+  private trends: TrendData[];
 
   constructor(
     private swingPoints: SwingPointData[],
@@ -86,60 +88,15 @@ export class Trend {
     // Falls der nächste SwingPoint ebenfalls den Bedingungen verletzt, wird state auf broken gesetzt
     // und der endpoint auf das DatPoint des letzten SwingPoints gesetzt
     // Falls der SwingPoint den Bedingungen entspricht, wird state auf confirmed gesetzt und warningAt geleert.
+    const stateMachine = new TrendStateMachine(startState, (state) => {
+      console.log(`Transitioned to state: ${state.constructor.name}`);
+    });
+
     let idxSwingPoint = 0;
-    while (idxSwingPoint <= this.swingPoints.length - MIN_SWING_POINTS) {
-      const swingPoint1 = this.swingPoints[idxSwingPoint];
-      const swingPoint2 = this.swingPoints[idxSwingPoint + 1];
-      const swingPoint3 = this.swingPoints[idxSwingPoint + 2];
-
-      if (this.isUpwardTrend(swingPoint1, swingPoint2, swingPoint3)) {
-        this.trends.push({
-          startPoint: swingPoint1.point,
-          endPoint: this.getLastPointOfInfiniteTrend(),
-          trendType: 'upward',
-        });
-      } else if (this.isDownwardTrend(swingPoint1, swingPoint2, swingPoint3)) {
-        this.trends.push({
-          startPoint: swingPoint1.point,
-          endPoint: this.getLastPointOfInfiniteTrend(),
-          trendType: 'downward',
-        });
-      } else {
-        // kein Trend erkannt, gehe zum nächsten SwingPoint
-      }
-
+    while (idxSwingPoint < this.swingPoints.length) {
+      stateMachine.process(this.swingPoints[idxSwingPoint]);
       idxSwingPoint++;
     }
     return this.trends;
-  }
-
-  private isUpwardTrend(
-    swingPoint1: SwingPointData,
-    swingPoint2: SwingPointData,
-    swingPoint3: SwingPointData,
-  ): boolean {
-    return (
-      swingPoint1.swingPointType === 'swingLow' &&
-      swingPoint2.swingPointType === 'swingHigh' &&
-      swingPoint3.swingPointType === 'swingLow' &&
-      swingPoint1.point.y < swingPoint3.point.y
-    );
-  }
-
-  private isDownwardTrend(
-    swingPoint1: SwingPointData,
-    swingPoint2: SwingPointData,
-    swingPoint3: SwingPointData,
-  ): boolean {
-    return (
-      swingPoint1.swingPointType === 'swingHigh' &&
-      swingPoint2.swingPointType === 'swingLow' &&
-      swingPoint3.swingPointType === 'swingHigh' &&
-      swingPoint1.point.y > swingPoint3.point.y
-    );
-  }
-
-  private getLastPointOfInfiniteTrend() {
-    return this.data[this.data.length - 1];
   }
 }
