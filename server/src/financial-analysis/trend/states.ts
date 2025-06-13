@@ -1,15 +1,16 @@
 import { SwingPointData } from 'src/digital-signal-processing/swing-points/swing-points.interface';
 import { Memory } from './memory';
+import { TrendAnalysisPoint } from './trend.interface';
 
 interface Transistion {
-  isApplicable(swingPointStore: Memory<SwingPointData>): boolean;
+  isApplicable(trendAnalysisPoints: Memory<TrendAnalysisPoint>): boolean;
 }
 
 export abstract class State {
   protected connections: { transistion: Transistion; state: State }[] = [];
 
   constructor(
-    private swingPointStore: Memory<SwingPointData>,
+    protected trendAnalysisPoints: Memory<TrendAnalysisPoint>,
     private onTransition: (state: State) => void,
   ) {}
 
@@ -20,7 +21,7 @@ export abstract class State {
   }
 
   process(swingPoint: SwingPointData): State {
-    this.swingPointStore.add(swingPoint);
+    this.trendAnalysisPoints.add({ characteristic: 'none', swingPoint });
     this.onState();
     return this.onExit();
   }
@@ -28,7 +29,7 @@ export abstract class State {
   protected abstract onState(): void;
   protected onExit(): State {
     for (const { transistion, state } of this.connections) {
-      if (transistion.isApplicable(this.swingPointStore)) {
+      if (transistion.isApplicable(this.trendAnalysisPoints)) {
         this.onTransition(state);
         return state;
       }
@@ -37,32 +38,29 @@ export abstract class State {
   }
 }
 
-class Always implements Transistion {
-  isApplicable(): boolean {
-    return true;
-  }
-}
-
 class SwingHighTransistion implements Transistion {
-  isApplicable(swingPointStore: Memory<SwingPointData>): boolean {
-    return swingPointStore.getLast()?.swingPointType === 'swingHigh';
+  isApplicable(trendAnalysisPoints: Memory<TrendAnalysisPoint>): boolean {
+    return (
+      trendAnalysisPoints.getLast()?.swingPoint.swingPointType === 'swingHigh'
+    );
   }
 }
 
 class SwingLowTransistion implements Transistion {
-  isApplicable(swingPointStore: Memory<SwingPointData>): boolean {
-    return swingPointStore.getLast()?.swingPointType === 'swingLow';
+  isApplicable(trendAnalysisPoints: Memory<TrendAnalysisPoint>): boolean {
+    return (
+      trendAnalysisPoints.getLast()?.swingPoint.swingPointType === 'swingLow'
+    );
   }
 }
 
 class StartState extends State {
-  protected onState(): void {}
-}
-class UpwardTrendStart extends State {
-  protected onState(): void {}
-}
-class DownwardTrendStart extends State {
-  protected onState(): void {}
+  protected onState(): void {
+    const latestSwingPoint = this.trendAnalysisPoints.getLast();
+    if (latestSwingPoint) {
+      latestSwingPoint.characteristic = 'start-trend';
+    }
+  }
 }
 class UpwardTrendFirstCheck extends State {
   protected onState(): void {}
@@ -84,35 +82,31 @@ export class DownwardTrendConfirmed extends State {
 }
 
 export function getStartState(onTransition: (state: State) => void): State {
-  const swingPointStore = new Memory<SwingPointData>();
-  const startState = new StartState(swingPointStore, onTransition);
-  const upwardTrendStart = new UpwardTrendStart(swingPointStore, onTransition);
-  const downwardTrendStart = new DownwardTrendStart(
-    swingPointStore,
-    onTransition,
-  );
+  const trendAnalysisPoints = new Memory<TrendAnalysisPoint>();
+  const startState = new StartState(trendAnalysisPoints, onTransition);
+
   const upwardTrendFirstCheck = new UpwardTrendFirstCheck(
-    swingPointStore,
+    trendAnalysisPoints,
     onTransition,
   );
   const upwardTrendSecondCheck = new UpwardTrendSecondCheck(
-    swingPointStore,
+    trendAnalysisPoints,
     onTransition,
   );
   const upwardTrendConfirmed = new UpwardTrendConfirmed(
-    swingPointStore,
+    trendAnalysisPoints,
     onTransition,
   );
   const downwardTrendFirstCheck = new DownwardTrendFirstCheck(
-    swingPointStore,
+    trendAnalysisPoints,
     onTransition,
   );
   const downwardTrendSecondCheck = new DownwardTrendSecondCheck(
-    swingPointStore,
+    trendAnalysisPoints,
     onTransition,
   );
   const downwardTrendConfirmed = new DownwardTrendConfirmed(
-    swingPointStore,
+    trendAnalysisPoints,
     onTransition,
   );
   // const warningState = new WarningState();
@@ -129,8 +123,6 @@ export function getStartState(onTransition: (state: State) => void): State {
     },
   ]);
 
-  upwardTrendStart.setConnections([]);
-
   upwardTrendFirstCheck.setConnections([
     {
       transistion: new SwingHighTransistion(),
@@ -143,8 +135,6 @@ export function getStartState(onTransition: (state: State) => void): State {
     { transistion: new SwingLowTransistion(), state: upwardTrendConfirmed },
     { transistion: new SwingHighTransistion(), state: startState },
   ]);
-
-  downwardTrendStart.setConnections([]);
 
   downwardTrendFirstCheck.setConnections([
     { transistion: new SwingLowTransistion(), state: downwardTrendSecondCheck },
