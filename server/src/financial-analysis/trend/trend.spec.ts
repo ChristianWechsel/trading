@@ -105,6 +105,18 @@ describe('Trend', () => {
         'downward trend recovers after warning',
         testData.downwardTrendRecoversAfterWarning(),
       ],
+      [
+        'upward trend followed by downward trend',
+        testData.upwardTrendFollowedByDownwardTrend(),
+      ],
+      [
+        'downward trend followed by upward trend',
+        testData.downwardTrendFollowedByUpwardTrend(),
+      ],
+      [
+        'trend followed by choppy period then new trend',
+        testData.trendFollowedByChoppyPeriodThenNewTrend(),
+      ],
     ])('should detect %s', (_desc, { swingPoints, data, result }) => {
       const trend = new Trend(swingPoints, data).detectTrends();
       expect(trend).toEqual(result);

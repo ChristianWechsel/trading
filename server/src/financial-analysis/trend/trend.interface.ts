@@ -13,7 +13,6 @@ export type TrendData = {
 
 export type TrendAnalysisPoint = {
   swingPoint: SwingPointData;
-  characteristic: 'start-trend' | 'end-trend' | 'none';
 };
 
 export type TransitionCallback = (values: {

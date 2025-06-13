@@ -515,4 +515,148 @@ export class TrendTestData {
       ],
     };
   }
+
+  /**
+   * Ein sauberer Aufwärtstrend wird von einem sauberen Abwärtstrend gefolgt.
+   */
+  upwardTrendFollowedByDownwardTrend(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        // 1. Aufwärtstrend wird etabliert
+        { swingPointType: 'swingLow', point: { x: 1, y: 10 } }, // Start Up
+        { swingPointType: 'swingHigh', point: { x: 2, y: 20 } },
+        { swingPointType: 'swingLow', point: { x: 3, y: 12 } }, // Confirmed Up
+        { swingPointType: 'swingHigh', point: { x: 4, y: 22 } }, // Peak des Aufwärtstrends
+
+        // 2. Bruch des Aufwärtstrends & Start des Abwärtstrends
+        { swingPointType: 'swingLow', point: { x: 5, y: 11 } }, // Warning Up & Teil des Down-Musters
+        { swingPointType: 'swingHigh', point: { x: 6, y: 18 } }, // Broken Up & Confirmed Down
+
+        // 3. Fortsetzung des Abwärtstrends
+        { swingPointType: 'swingLow', point: { x: 7, y: 9 } },
+      ],
+      data: [
+        { x: 1, y: 10 },
+        { x: 2, y: 20 },
+        { x: 3, y: 12 },
+        { x: 4, y: 22 },
+        { x: 5, y: 11 },
+        { x: 6, y: 18 },
+        { x: 7, y: 9 },
+      ],
+      result: [
+        {
+          trendType: 'upward',
+          startPoint: { x: 1, y: 10 },
+          endPoint: { x: 4, y: 22 }, // Der Trend endet am letzten gültigen Hoch
+        },
+        {
+          trendType: 'downward',
+          startPoint: { x: 4, y: 22 }, // Der neue Trend startet am Ende des alten
+          endPoint: { x: 7, y: 9 }, // Und läuft bis zum Ende der Daten
+        },
+      ],
+    };
+  }
+
+  /**
+   * Ein sauberer Abwärtstrend wird von einem sauberen Aufwärtstrend gefolgt.
+   */
+  downwardTrendFollowedByUpwardTrend(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        // 1. Abwärtstrend wird etabliert
+        { swingPointType: 'swingHigh', point: { x: 1, y: 30 } }, // Start Down
+        { swingPointType: 'swingLow', point: { x: 2, y: 20 } },
+        { swingPointType: 'swingHigh', point: { x: 3, y: 28 } }, // Confirmed Down
+        { swingPointType: 'swingLow', point: { x: 4, y: 18 } }, // Talsohle des Abwärtstrends
+
+        // 2. Bruch des Abwärtstrends & Start des Aufwärtstrends
+        { swingPointType: 'swingHigh', point: { x: 5, y: 29 } }, // Warning Down & Teil des Up-Musters
+        { swingPointType: 'swingLow', point: { x: 6, y: 21 } }, // Broken Down & Confirmed Up
+
+        // 3. Fortsetzung des Aufwärtstrends
+        { swingPointType: 'swingHigh', point: { x: 7, y: 32 } },
+      ],
+      data: [
+        { x: 1, y: 30 },
+        { x: 2, y: 20 },
+        { x: 3, y: 28 },
+        { x: 4, y: 18 },
+        { x: 5, y: 29 },
+        { x: 6, y: 21 },
+        { x: 7, y: 32 },
+      ],
+      result: [
+        {
+          trendType: 'downward',
+          startPoint: { x: 1, y: 30 },
+          endPoint: { x: 4, y: 18 }, // Der Trend endet am letzten gültigen Tief
+        },
+        {
+          trendType: 'upward',
+          startPoint: { x: 4, y: 18 }, // Der neue Trend startet am Ende des alten
+          endPoint: { x: 7, y: 32 }, // Und läuft bis zum Ende der Daten
+        },
+      ],
+    };
+  }
+
+  /**
+   * Ein Trend bricht, aber es folgt eine unklare "Seitwärtsphase",
+   * bevor ein neuer Trend beginnt.
+   */
+  trendFollowedByChoppyPeriodThenNewTrend(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        // 1. Aufwärtstrend
+        { swingPointType: 'swingLow', point: { x: 1, y: 10 } },
+        { swingPointType: 'swingHigh', point: { x: 2, y: 20 } },
+        { swingPointType: 'swingLow', point: { x: 3, y: 12 } }, // Confirmed Up
+
+        // 2. Unklare Phase (bricht den Aufwärtstrend, etabliert aber keinen neuen)
+        { swingPointType: 'swingHigh', point: { x: 4, y: 15 } }, // kein höheres Hoch
+        { swingPointType: 'swingLow', point: { x: 5, y: 13 } }, // kein höheres Tief
+
+        // 3. Neuer Abwärtstrend beginnt
+        { swingPointType: 'swingHigh', point: { x: 6, y: 16 } }, // Start Down
+        { swingPointType: 'swingLow', point: { x: 7, y: 5 } },
+        { swingPointType: 'swingHigh', point: { x: 8, y: 14 } }, // Confirmed Down
+      ],
+      data: [
+        { x: 1, y: 10 },
+        { x: 2, y: 20 },
+        { x: 3, y: 12 },
+        { x: 4, y: 15 },
+        { x: 5, y: 13 },
+        { x: 6, y: 16 },
+        { x: 7, y: 5 },
+        { x: 8, y: 14 },
+      ],
+      result: [
+        {
+          trendType: 'upward',
+          startPoint: { x: 1, y: 10 },
+          endPoint: { x: 3, y: 12 }, // Endet nach der Bestätigung, da er danach bricht
+        },
+        {
+          trendType: 'downward',
+          startPoint: { x: 6, y: 16 },
+          endPoint: { x: 8, y: 14 },
+        },
+      ],
+    };
+  }
 }

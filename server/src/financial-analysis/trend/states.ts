@@ -19,27 +19,27 @@ export abstract class State {
 export class StartState extends State {
   process(swingPoint: SwingPointData): State {
     if (swingPoint.swingPointType === 'swingLow') {
-      this.memory.add({ swingPoint, characteristic: 'start-trend' });
+      this.memory.add({ swingPoint });
       return this.transitionTo(
         new UpwardTrendFirstCheck(this.memory, this.onTransition),
       );
     }
 
     if (swingPoint.swingPointType === 'swingHigh') {
-      this.memory.add({ swingPoint, characteristic: 'start-trend' });
+      this.memory.add({ swingPoint });
       return this.transitionTo(
         new DownwardTrendFirstCheck(this.memory, this.onTransition),
       );
     }
 
-    this.memory.add({ swingPoint, characteristic: 'none' });
+    this.memory.add({ swingPoint });
     return this;
   }
 }
 
 class UpwardTrendFirstCheck extends State {
   process(swingPoint: SwingPointData): State {
-    this.memory.add({ swingPoint, characteristic: 'none' });
+    this.memory.add({ swingPoint });
     if (swingPoint.swingPointType === 'swingHigh') {
       return this.transitionTo(
         new UpwardTrendSecondCheck(this.memory, this.onTransition),
@@ -51,7 +51,7 @@ class UpwardTrendFirstCheck extends State {
 
 class UpwardTrendSecondCheck extends State {
   process(swingPoint: SwingPointData): State {
-    this.memory.add({ swingPoint, characteristic: 'none' });
+    this.memory.add({ swingPoint });
 
     if (swingPoint.swingPointType === 'swingLow') {
       const lastThreePoints = this.memory.getLatest(3);
@@ -71,7 +71,7 @@ class UpwardTrendSecondCheck extends State {
 
 export class UpwardTrendConfirmed extends State {
   process(swingPoint: SwingPointData): State {
-    this.memory.add({ swingPoint, characteristic: 'none' });
+    this.memory.add({ swingPoint });
 
     const [secondLatest, _latest, current] = this.memory.getLatest(3);
     if (
@@ -91,7 +91,7 @@ export class UpwardTrendConfirmed extends State {
 
 class DownwardTrendFirstCheck extends State {
   process(swingPoint: SwingPointData): State {
-    this.memory.add({ swingPoint, characteristic: 'none' });
+    this.memory.add({ swingPoint });
     if (swingPoint.swingPointType === 'swingLow') {
       return this.transitionTo(
         new DownwardTrendSecondCheck(this.memory, this.onTransition),
@@ -103,7 +103,7 @@ class DownwardTrendFirstCheck extends State {
 
 class DownwardTrendSecondCheck extends State {
   process(swingPoint: SwingPointData): State {
-    this.memory.add({ swingPoint, characteristic: 'none' });
+    this.memory.add({ swingPoint });
 
     if (swingPoint.swingPointType === 'swingHigh') {
       const lastThreePoints = this.memory.getLatest(3);
@@ -123,7 +123,7 @@ class DownwardTrendSecondCheck extends State {
 
 export class DownwardTrendConfirmed extends State {
   process(swingPoint: SwingPointData): State {
-    this.memory.add({ swingPoint, characteristic: 'none' });
+    this.memory.add({ swingPoint });
     const [secondLatest, _latest, current] = this.memory.getLatest(3);
     if (
       ((secondLatest.swingPoint.swingPointType === 'swingLow' &&
@@ -142,7 +142,7 @@ export class DownwardTrendConfirmed extends State {
 
 class UpwardTrendWarning extends State {
   process(swingPoint: SwingPointData): State {
-    this.memory.add({ swingPoint, characteristic: 'none' });
+    this.memory.add({ swingPoint });
     const [secondLatest, _latest, current] = this.memory.getLatest(3);
 
     if (
@@ -163,7 +163,7 @@ class UpwardTrendWarning extends State {
 
 class DownwardTrendWarning extends State {
   process(swingPoint: SwingPointData): State {
-    this.memory.add({ swingPoint, characteristic: 'none' });
+    this.memory.add({ swingPoint });
     const [secondLatest, _latest, current] = this.memory.getLatest(3);
 
     if (
@@ -184,7 +184,7 @@ class DownwardTrendWarning extends State {
 
 export class TrendBroken extends State {
   process(swingPoint: SwingPointData): State {
-    this.memory.add({ swingPoint, characteristic: 'end-trend' });
+    this.memory.add({ swingPoint });
     return this.transitionTo(new StartState(this.memory, this.onTransition));
   }
 }
