@@ -93,19 +93,24 @@ export class Trend {
     // und der endpoint auf das DatPoint des letzten SwingPoints gesetzt
     // Falls der SwingPoint den Bedingungen entspricht, wird state auf confirmed gesetzt und warningAt geleert.
     const stateMachine = new TrendStateMachine(
-      getStartState((state) => {
+      getStartState(({ state, trendAnalysisPoints }) => {
         console.log(`Transitioned to state: ${state.constructor.name}`);
         if (state instanceof UpwardTrendConfirmed) {
+          const latestTrendPoints = trendAnalysisPoints.getLatest(3);
+
           this.trends.push({
             trendType: 'upward',
-            startPoint: this.swingPoints[0].point,
-            endPoint: this.swingPoints[this.swingPoints.length - 1].point,
+            startPoint: latestTrendPoints[0].swingPoint.point,
+            endPoint:
+              latestTrendPoints[latestTrendPoints.length - 1].swingPoint.point,
           });
         } else if (state instanceof DownwardTrendConfirmed) {
+          const latestTrendPoints = trendAnalysisPoints.getLatest(3);
           this.trends.push({
             trendType: 'downward',
-            startPoint: this.swingPoints[0].point,
-            endPoint: this.swingPoints[this.swingPoints.length - 1].point,
+            startPoint: latestTrendPoints[0].swingPoint.point,
+            endPoint:
+              latestTrendPoints[latestTrendPoints.length - 1].swingPoint.point,
           });
         }
       }),

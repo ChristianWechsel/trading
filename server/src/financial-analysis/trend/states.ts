@@ -11,7 +11,10 @@ export abstract class State {
 
   constructor(
     protected trendAnalysisPoints: Memory<TrendAnalysisPoint>,
-    private onTransition: (state: State) => void,
+    private onTransition: (values: {
+      state: State;
+      trendAnalysisPoints: Memory<TrendAnalysisPoint>;
+    }) => void,
   ) {}
 
   setConnections(
@@ -30,7 +33,10 @@ export abstract class State {
   protected onExit(): State {
     for (const { transistion, state } of this.connections) {
       if (transistion.isApplicable(this.trendAnalysisPoints)) {
-        this.onTransition(state);
+        this.onTransition({
+          state,
+          trendAnalysisPoints: this.trendAnalysisPoints,
+        });
         return state;
       }
     }
@@ -81,7 +87,12 @@ export class DownwardTrendConfirmed extends State {
   protected onState(): void {}
 }
 
-export function getStartState(onTransition: (state: State) => void): State {
+export function getStartState(
+  onTransition: (values: {
+    state: State;
+    trendAnalysisPoints: Memory<TrendAnalysisPoint>;
+  }) => void,
+): State {
   const trendAnalysisPoints = new Memory<TrendAnalysisPoint>();
   const startState = new StartState(trendAnalysisPoints, onTransition);
 

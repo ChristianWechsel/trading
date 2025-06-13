@@ -34,4 +34,18 @@ describe('Memory', () => {
     stringMemory.clear();
     expect(stringMemory.getLast()).toBeUndefined();
   });
+
+  it('should return the latest n items with getLatest', () => {
+    memory.add(1);
+    memory.add(2);
+    memory.add(3);
+    expect(memory.getLatest(2)).toEqual([2, 3]);
+    expect(memory.getLatest(1)).toEqual([3]);
+    expect(memory.getLatest(5)).toEqual([1, 2, 3]);
+    expect(memory.getLatest(0)).toEqual([]);
+  });
+
+  it('should return an empty array if getLatest is called on empty memory', () => {
+    expect(memory.getLatest(3)).toEqual([]);
+  });
 });

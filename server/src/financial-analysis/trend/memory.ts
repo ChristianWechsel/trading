@@ -12,4 +12,7 @@ export class Memory<T> {
       ? this.memory[this.memory.length - 1]
       : undefined;
   }
+  getLatest(n: number): T[] {
+    return this.memory.slice(Math.max(this.memory.length - n, 0));
+  }
 }
