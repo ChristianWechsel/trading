@@ -1,160 +1,116 @@
 import { SwingPointData } from 'src/digital-signal-processing/swing-points/swing-points.interface';
 import { Memory } from './memory';
-import { TrendAnalysisPoint } from './trend.interface';
-
-interface Transistion {
-  isApplicable(trendAnalysisPoints: Memory<TrendAnalysisPoint>): boolean;
-}
+import { TransitionCallback, TrendAnalysisPoint } from './trend.interface';
 
 export abstract class State {
-  protected connections: { transistion: Transistion; state: State }[] = [];
-
   constructor(
-    protected trendAnalysisPoints: Memory<TrendAnalysisPoint>,
-    private onTransition: (values: {
-      state: State;
-      trendAnalysisPoints: Memory<TrendAnalysisPoint>;
-    }) => void,
+    protected memory: Memory<TrendAnalysisPoint>,
+    protected onTransition: TransitionCallback,
   ) {}
 
-  setConnections(
-    connections: { transistion: Transistion; state: State }[],
-  ): void {
-    this.connections = connections;
-  }
+  abstract process(swingPoint: SwingPointData): State;
 
+  protected transitionTo(newState: State): State {
+    this.onTransition({ state: newState, memory: this.memory });
+    return newState;
+  }
+}
+
+export class StartState extends State {
   process(swingPoint: SwingPointData): State {
-    this.trendAnalysisPoints.add({ characteristic: 'none', swingPoint });
-    this.onState();
-    return this.onExit();
-  }
-
-  protected abstract onState(): void;
-  protected onExit(): State {
-    for (const { transistion, state } of this.connections) {
-      if (transistion.isApplicable(this.trendAnalysisPoints)) {
-        this.onTransition({
-          state,
-          trendAnalysisPoints: this.trendAnalysisPoints,
-        });
-        return state;
-      }
+    if (swingPoint.swingPointType === 'swingLow') {
+      this.memory.add({ swingPoint, characteristic: 'start-trend' });
+      return this.transitionTo(
+        new UpwardTrendFirstCheck(this.memory, this.onTransition),
+      );
     }
+
+    if (swingPoint.swingPointType === 'swingHigh') {
+      this.memory.add({ swingPoint, characteristic: 'start-trend' });
+      return this.transitionTo(
+        new DownwardTrendFirstCheck(this.memory, this.onTransition),
+      );
+    }
+
+    this.memory.add({ swingPoint, characteristic: 'none' });
     return this;
   }
 }
 
-class SwingHighTransistion implements Transistion {
-  isApplicable(trendAnalysisPoints: Memory<TrendAnalysisPoint>): boolean {
-    return (
-      trendAnalysisPoints.getLast()?.swingPoint.swingPointType === 'swingHigh'
-    );
-  }
-}
-
-class SwingLowTransistion implements Transistion {
-  isApplicable(trendAnalysisPoints: Memory<TrendAnalysisPoint>): boolean {
-    return (
-      trendAnalysisPoints.getLast()?.swingPoint.swingPointType === 'swingLow'
-    );
-  }
-}
-
-class StartState extends State {
-  protected onState(): void {
-    const latestSwingPoint = this.trendAnalysisPoints.getLast();
-    if (latestSwingPoint) {
-      latestSwingPoint.characteristic = 'start-trend';
-    }
-  }
-}
 class UpwardTrendFirstCheck extends State {
-  protected onState(): void {}
+  process(swingPoint: SwingPointData): State {
+    this.memory.add({ swingPoint, characteristic: 'none' });
+    if (swingPoint.swingPointType === 'swingHigh') {
+      return this.transitionTo(
+        new UpwardTrendSecondCheck(this.memory, this.onTransition),
+      );
+    }
+    return this.transitionTo(new StartState(this.memory, this.onTransition));
+  }
 }
+
 class UpwardTrendSecondCheck extends State {
-  protected onState(): void {}
+  process(swingPoint: SwingPointData): State {
+    this.memory.add({ swingPoint, characteristic: 'none' });
+
+    if (swingPoint.swingPointType === 'swingLow') {
+      const lastThreePoints = this.memory.getLatest(3);
+
+      const previousLow = lastThreePoints[0];
+      const newLow = swingPoint;
+
+      if (newLow.point.y > previousLow.swingPoint.point.y) {
+        return this.transitionTo(
+          new UpwardTrendConfirmed(this.memory, this.onTransition),
+        );
+      }
+    }
+    return this.transitionTo(new StartState(this.memory, this.onTransition));
+  }
 }
+
 export class UpwardTrendConfirmed extends State {
-  protected onState(): void {}
+  process(swingPoint: SwingPointData): State {
+    this.memory.add({ swingPoint, characteristic: 'none' });
+    return this;
+  }
 }
+
 class DownwardTrendFirstCheck extends State {
-  protected onState(): void {}
+  process(swingPoint: SwingPointData): State {
+    this.memory.add({ swingPoint, characteristic: 'none' });
+    if (swingPoint.swingPointType === 'swingLow') {
+      return this.transitionTo(
+        new DownwardTrendSecondCheck(this.memory, this.onTransition),
+      );
+    }
+    return this.transitionTo(new StartState(this.memory, this.onTransition));
+  }
 }
+
 class DownwardTrendSecondCheck extends State {
-  protected onState(): void {}
+  process(swingPoint: SwingPointData): State {
+    this.memory.add({ swingPoint, characteristic: 'none' });
+
+    if (swingPoint.swingPointType === 'swingHigh') {
+      const lastThreePoints = this.memory.getLatest(3);
+
+      const previousHigh = lastThreePoints[0];
+      const newHigh = swingPoint;
+
+      if (previousHigh.swingPoint.point.y > newHigh.point.y) {
+        return this.transitionTo(
+          new DownwardTrendConfirmed(this.memory, this.onTransition),
+        );
+      }
+    }
+    return this.transitionTo(new StartState(this.memory, this.onTransition));
+  }
 }
+
 export class DownwardTrendConfirmed extends State {
-  protected onState(): void {}
-}
-
-export function getStartState(
-  onTransition: (values: {
-    state: State;
-    trendAnalysisPoints: Memory<TrendAnalysisPoint>;
-  }) => void,
-): State {
-  const trendAnalysisPoints = new Memory<TrendAnalysisPoint>();
-  const startState = new StartState(trendAnalysisPoints, onTransition);
-
-  const upwardTrendFirstCheck = new UpwardTrendFirstCheck(
-    trendAnalysisPoints,
-    onTransition,
-  );
-  const upwardTrendSecondCheck = new UpwardTrendSecondCheck(
-    trendAnalysisPoints,
-    onTransition,
-  );
-  const upwardTrendConfirmed = new UpwardTrendConfirmed(
-    trendAnalysisPoints,
-    onTransition,
-  );
-  const downwardTrendFirstCheck = new DownwardTrendFirstCheck(
-    trendAnalysisPoints,
-    onTransition,
-  );
-  const downwardTrendSecondCheck = new DownwardTrendSecondCheck(
-    trendAnalysisPoints,
-    onTransition,
-  );
-  const downwardTrendConfirmed = new DownwardTrendConfirmed(
-    trendAnalysisPoints,
-    onTransition,
-  );
-  // const warningState = new WarningState();
-  // const brokenState = new BrokenState();
-
-  startState.setConnections([
-    {
-      transistion: new SwingLowTransistion(),
-      state: upwardTrendFirstCheck,
-    },
-    {
-      transistion: new SwingHighTransistion(),
-      state: downwardTrendFirstCheck,
-    },
-  ]);
-
-  upwardTrendFirstCheck.setConnections([
-    {
-      transistion: new SwingHighTransistion(),
-      state: upwardTrendSecondCheck,
-    },
-    { transistion: new SwingLowTransistion(), state: startState },
-  ]);
-
-  upwardTrendSecondCheck.setConnections([
-    { transistion: new SwingLowTransistion(), state: upwardTrendConfirmed },
-    { transistion: new SwingHighTransistion(), state: startState },
-  ]);
-
-  downwardTrendFirstCheck.setConnections([
-    { transistion: new SwingLowTransistion(), state: downwardTrendSecondCheck },
-    { transistion: new SwingHighTransistion(), state: startState },
-  ]);
-
-  downwardTrendSecondCheck.setConnections([
-    { transistion: new SwingHighTransistion(), state: downwardTrendConfirmed },
-    { transistion: new SwingLowTransistion(), state: startState },
-  ]);
-  return startState;
+  process(swingPoint: SwingPointData): State {
+    this.memory.add({ swingPoint, characteristic: 'none' });
+    return this;
+  }
 }

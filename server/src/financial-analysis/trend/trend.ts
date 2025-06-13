@@ -1,11 +1,7 @@
 import { DataPoint } from '../../digital-signal-processing/digital-signal-processing.interface';
 import { SwingPointData } from '../../digital-signal-processing/swing-points/swing-points.interface';
 import { MIN_SWING_POINTS } from './parameters';
-import {
-  DownwardTrendConfirmed,
-  getStartState,
-  UpwardTrendConfirmed,
-} from './states';
+import { DownwardTrendConfirmed, UpwardTrendConfirmed } from './states';
 import { TrendStateMachine } from './trend-state-machine';
 import { TrendData } from './trend.interface';
 
@@ -92,29 +88,25 @@ export class Trend {
     // Falls der nächste SwingPoint ebenfalls den Bedingungen verletzt, wird state auf broken gesetzt
     // und der endpoint auf das DatPoint des letzten SwingPoints gesetzt
     // Falls der SwingPoint den Bedingungen entspricht, wird state auf confirmed gesetzt und warningAt geleert.
-    const stateMachine = new TrendStateMachine(
-      getStartState(({ state, trendAnalysisPoints }) => {
-        console.log(`Transitioned to state: ${state.constructor.name}`);
-        if (state instanceof UpwardTrendConfirmed) {
-          const latestTrendPoints = trendAnalysisPoints.getLatest(3);
+    const stateMachine = new TrendStateMachine(({ state, memory }) => {
+      if (state instanceof UpwardTrendConfirmed) {
+        const trendDefiningPoints = memory.getLatest(3);
 
-          this.trends.push({
-            trendType: 'upward',
-            startPoint: latestTrendPoints[0].swingPoint.point,
-            endPoint:
-              latestTrendPoints[latestTrendPoints.length - 1].swingPoint.point,
-          });
-        } else if (state instanceof DownwardTrendConfirmed) {
-          const latestTrendPoints = trendAnalysisPoints.getLatest(3);
-          this.trends.push({
-            trendType: 'downward',
-            startPoint: latestTrendPoints[0].swingPoint.point,
-            endPoint:
-              latestTrendPoints[latestTrendPoints.length - 1].swingPoint.point,
-          });
-        }
-      }),
-    );
+        this.trends.push({
+          trendType: 'upward',
+          startPoint: trendDefiningPoints[0].swingPoint.point,
+          endPoint: trendDefiningPoints[2].swingPoint.point,
+        });
+      } else if (state instanceof DownwardTrendConfirmed) {
+        const trendDefiningPoints = memory.getLatest(3);
+
+        this.trends.push({
+          trendType: 'downward',
+          startPoint: trendDefiningPoints[0].swingPoint.point,
+          endPoint: trendDefiningPoints[2].swingPoint.point,
+        });
+      }
+    });
 
     let idxSwingPoint = 0;
     while (idxSwingPoint < this.swingPoints.length) {
