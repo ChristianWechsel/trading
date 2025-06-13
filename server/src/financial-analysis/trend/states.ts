@@ -136,3 +136,21 @@ export class DownwardTrendConfirmed extends State {
     return this.transitionTo(new StartState(this.memory, this.onTransition));
   }
 }
+
+class UpwardTrendWarning extends State {
+  process(swingPoint: SwingPointData): State {
+    throw new Error('Method not implemented.');
+  }
+}
+
+class DownwardTrendWarning extends State {
+  process(swingPoint: SwingPointData): State {
+    throw new Error('Method not implemented.');
+  }
+}
+
+class TrendBroken extends State {
+  process(swingPoint: SwingPointData): State {
+    throw new Error('Method not implemented.');
+  }
+}

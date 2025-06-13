@@ -401,4 +401,118 @@ export class TrendTestData {
       ],
     };
   }
+
+  /**
+   * Ein Aufwärtstrend wird verletzt (Warning), erholt sich aber wieder.
+   */
+  upwardTrendRecoversAfterWarning(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingLow', point: { x: 1, y: 10 } }, // Start
+        { swingPointType: 'swingHigh', point: { x: 2, y: 20 } },
+        { swingPointType: 'swingLow', point: { x: 3, y: 12 } }, // Confirmed
+        { swingPointType: 'swingHigh', point: { x: 4, y: 22 } },
+        { swingPointType: 'swingLow', point: { x: 5, y: 11 } }, // WARNING: tieferes Tief
+        { swingPointType: 'swingHigh', point: { x: 6, y: 25 } }, // RECOVER: höheres Hoch
+        { swingPointType: 'swingLow', point: { x: 7, y: 15 } }, // Fortsetzung
+      ],
+      data: [
+        { x: 1, y: 10 },
+        { x: 2, y: 20 },
+        { x: 3, y: 12 },
+        { x: 4, y: 22 },
+        { x: 5, y: 11 },
+        { x: 6, y: 25 },
+        { x: 7, y: 15 },
+      ],
+      result: [
+        {
+          trendType: 'upward',
+          startPoint: { x: 1, y: 10 },
+          // Der Trend wurde nie gebrochen und läuft bis zum Ende
+          endPoint: { x: 7, y: 15 },
+        },
+      ],
+    };
+  }
+
+  /**
+   * Ein Abwärtstrend wird verletzt (Warning), bricht dann aber endgültig.
+   * Dieser Test existiert im Grunde schon: downwardTrendBreaksWithHigherHighAndHigherLow
+   * Wir benennen ihn hier explizit, um die Logik klarer zu machen.
+   */
+  downwardTrendBreaksAfterWarning(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingHigh', point: { x: 1, y: 20 } }, // Start
+        { swingPointType: 'swingLow', point: { x: 2, y: 10 } },
+        { swingPointType: 'swingHigh', point: { x: 3, y: 18 } }, // Confirmed
+        { swingPointType: 'swingLow', point: { x: 4, y: 8 } },
+        { swingPointType: 'swingHigh', point: { x: 5, y: 19 } }, // WARNING: höheres Hoch
+        { swingPointType: 'swingLow', point: { x: 6, y: 9 } }, // BROKEN: höheres Tief
+      ],
+      data: [
+        { x: 1, y: 20 },
+        { x: 2, y: 10 },
+        { x: 3, y: 18 },
+        { x: 4, y: 8 },
+        { x: 5, y: 19 },
+        { x: 6, y: 9 },
+      ],
+      result: [
+        {
+          trendType: 'downward',
+          startPoint: { x: 1, y: 20 },
+          // Der Trend endet beim letzten gültigen Punkt VOR der ersten Warnung
+          endPoint: { x: 4, y: 8 },
+        },
+      ],
+    };
+  }
+
+  /**
+   * Ein Abwärtstrend wird verletzt (Warning), erholt sich aber wieder.
+   */
+  downwardTrendRecoversAfterWarning(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingHigh', point: { x: 1, y: 20 } }, // Start
+        { swingPointType: 'swingLow', point: { x: 2, y: 10 } },
+        { swingPointType: 'swingHigh', point: { x: 3, y: 18 } }, // Confirmed
+        { swingPointType: 'swingLow', point: { x: 4, y: 8 } },
+        { swingPointType: 'swingHigh', point: { x: 5, y: 19 } }, // WARNING: höheres Hoch
+        { swingPointType: 'swingLow', point: { x: 6, y: 5 } }, // RECOVER: tieferes Tief
+        { swingPointType: 'swingHigh', point: { x: 7, y: 15 } }, // Fortsetzung
+      ],
+      data: [
+        { x: 1, y: 20 },
+        { x: 2, y: 10 },
+        { x: 3, y: 18 },
+        { x: 4, y: 8 },
+        { x: 5, y: 19 },
+        { x: 6, y: 5 },
+        { x: 7, y: 15 },
+      ],
+      result: [
+        {
+          trendType: 'downward',
+          startPoint: { x: 1, y: 20 },
+          // Der Trend wurde nie gebrochen und läuft bis zum Ende
+          endPoint: { x: 7, y: 15 },
+        },
+      ],
+    };
+  }
 }

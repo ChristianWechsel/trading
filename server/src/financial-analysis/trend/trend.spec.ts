@@ -93,6 +93,18 @@ describe('Trend', () => {
         'downward trend breaks with higher high and higher low',
         testData.downwardTrendBreaksWithHigherHighAndHigherLow(),
       ],
+      [
+        'upward trend recovers after warning',
+        testData.upwardTrendRecoversAfterWarning(),
+      ],
+      [
+        'downward trend breaks after warning',
+        testData.downwardTrendBreaksAfterWarning(),
+      ],
+      [
+        'downward trend recovers after warning',
+        testData.downwardTrendRecoversAfterWarning(),
+      ],
     ])('should detect %s', (_desc, { swingPoints, data, result }) => {
       const trend = new Trend(swingPoints, data).detectTrends();
       expect(trend).toEqual(result);
