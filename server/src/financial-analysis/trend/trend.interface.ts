@@ -16,6 +16,7 @@ export type TrendAnalysisPoint = {
 };
 
 export type TransitionCallback = (values: {
-  state: State;
+  newState: State;
+  oldState?: State;
   memory: Memory<TrendAnalysisPoint>;
 }) => void;

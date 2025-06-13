@@ -11,22 +11,23 @@ export abstract class State {
   abstract process(swingPoint: SwingPointData): State;
 
   protected transitionTo(newState: State): State {
-    this.onTransition({ state: newState, memory: this.memory });
+    this.onTransition({ newState, oldState: this, memory: this.memory });
     return newState;
   }
 }
 
 export class StartState extends State {
   process(swingPoint: SwingPointData): State {
+    this.memory.clear();
+    this.memory.add({ swingPoint });
+
     if (swingPoint.swingPointType === 'swingLow') {
-      this.memory.add({ swingPoint });
       return this.transitionTo(
         new UpwardTrendFirstCheck(this.memory, this.onTransition),
       );
     }
 
     if (swingPoint.swingPointType === 'swingHigh') {
-      this.memory.add({ swingPoint });
       return this.transitionTo(
         new DownwardTrendFirstCheck(this.memory, this.onTransition),
       );
@@ -51,35 +52,35 @@ class UpwardTrendFirstCheck extends State {
 
 class UpwardTrendSecondCheck extends State {
   process(swingPoint: SwingPointData): State {
+    const lastRelevantPoint = this.memory.findLast(
+      (point) => point.swingPoint.swingPointType === 'swingLow',
+    );
     this.memory.add({ swingPoint });
 
-    if (swingPoint.swingPointType === 'swingLow') {
-      const lastThreePoints = this.memory.getLatest(3);
-
-      const previousLow = lastThreePoints[0];
-      const newLow = swingPoint;
-
-      if (previousLow.swingPoint.point.y < newLow.point.y) {
-        return this.transitionTo(
-          new UpwardTrendConfirmed(this.memory, this.onTransition),
-        );
-      }
+    if (
+      swingPoint.swingPointType === 'swingLow' &&
+      lastRelevantPoint &&
+      lastRelevantPoint.swingPoint.point.y < swingPoint.point.y
+    ) {
+      return this.transitionTo(
+        new UpwardTrendConfirmed(this.memory, this.onTransition),
+      );
     }
+
     return this.transitionTo(new StartState(this.memory, this.onTransition));
   }
 }
 
 export class UpwardTrendConfirmed extends State {
   process(swingPoint: SwingPointData): State {
+    const lastRelevantPoint = this.memory.findLast(
+      (point) => point.swingPoint.swingPointType === swingPoint.swingPointType,
+    );
     this.memory.add({ swingPoint });
 
-    const [secondLatest, _latest, current] = this.memory.getLatest(3);
     if (
-      ((secondLatest.swingPoint.swingPointType === 'swingLow' &&
-        current.swingPoint.swingPointType === 'swingLow') ||
-        (secondLatest.swingPoint.swingPointType === 'swingHigh' &&
-          current.swingPoint.swingPointType === 'swingHigh')) &&
-      secondLatest.swingPoint.point.y < current.swingPoint.point.y
+      lastRelevantPoint &&
+      lastRelevantPoint.swingPoint.point.y < swingPoint.point.y
     ) {
       return this;
     }
@@ -103,19 +104,19 @@ class DownwardTrendFirstCheck extends State {
 
 class DownwardTrendSecondCheck extends State {
   process(swingPoint: SwingPointData): State {
+    const lastRelevantPoint = this.memory.findLast(
+      (point) => point.swingPoint.swingPointType === 'swingHigh',
+    );
     this.memory.add({ swingPoint });
 
-    if (swingPoint.swingPointType === 'swingHigh') {
-      const lastThreePoints = this.memory.getLatest(3);
-
-      const previousHigh = lastThreePoints[0];
-      const newHigh = swingPoint;
-
-      if (previousHigh.swingPoint.point.y > newHigh.point.y) {
-        return this.transitionTo(
-          new DownwardTrendConfirmed(this.memory, this.onTransition),
-        );
-      }
+    if (
+      swingPoint.swingPointType === 'swingHigh' &&
+      lastRelevantPoint &&
+      lastRelevantPoint.swingPoint.point.y > swingPoint.point.y
+    ) {
+      return this.transitionTo(
+        new DownwardTrendConfirmed(this.memory, this.onTransition),
+      );
     }
     return this.transitionTo(new StartState(this.memory, this.onTransition));
   }
@@ -123,14 +124,14 @@ class DownwardTrendSecondCheck extends State {
 
 export class DownwardTrendConfirmed extends State {
   process(swingPoint: SwingPointData): State {
+    const lastRelevantPoint = this.memory.findLast(
+      (point) => point.swingPoint.swingPointType === swingPoint.swingPointType,
+    );
     this.memory.add({ swingPoint });
-    const [secondLatest, _latest, current] = this.memory.getLatest(3);
+
     if (
-      ((secondLatest.swingPoint.swingPointType === 'swingLow' &&
-        current.swingPoint.swingPointType === 'swingLow') ||
-        (secondLatest.swingPoint.swingPointType === 'swingHigh' &&
-          current.swingPoint.swingPointType === 'swingHigh')) &&
-      secondLatest.swingPoint.point.y > current.swingPoint.point.y
+      lastRelevantPoint &&
+      lastRelevantPoint.swingPoint.point.y > swingPoint.point.y
     ) {
       return this;
     }
@@ -142,15 +143,14 @@ export class DownwardTrendConfirmed extends State {
 
 class UpwardTrendWarning extends State {
   process(swingPoint: SwingPointData): State {
+    const lastRelevantPoint = this.memory.findLast(
+      (point) => point.swingPoint.swingPointType === swingPoint.swingPointType,
+    );
     this.memory.add({ swingPoint });
-    const [secondLatest, _latest, current] = this.memory.getLatest(3);
 
     if (
-      ((secondLatest.swingPoint.swingPointType === 'swingLow' &&
-        current.swingPoint.swingPointType === 'swingLow') ||
-        (secondLatest.swingPoint.swingPointType === 'swingHigh' &&
-          current.swingPoint.swingPointType === 'swingHigh')) &&
-      secondLatest.swingPoint.point.y < current.swingPoint.point.y
+      lastRelevantPoint &&
+      lastRelevantPoint.swingPoint.point.y < swingPoint.point.y
     ) {
       return this.transitionTo(
         new UpwardTrendConfirmed(this.memory, this.onTransition),
@@ -163,18 +163,17 @@ class UpwardTrendWarning extends State {
 
 class DownwardTrendWarning extends State {
   process(swingPoint: SwingPointData): State {
+    const lastRelevantPoint = this.memory.findLast(
+      (point) => point.swingPoint.swingPointType === swingPoint.swingPointType,
+    );
     this.memory.add({ swingPoint });
-    const [secondLatest, _latest, current] = this.memory.getLatest(3);
 
     if (
-      ((secondLatest.swingPoint.swingPointType === 'swingLow' &&
-        current.swingPoint.swingPointType === 'swingLow') ||
-        (secondLatest.swingPoint.swingPointType === 'swingHigh' &&
-          current.swingPoint.swingPointType === 'swingHigh')) &&
-      secondLatest.swingPoint.point.y > current.swingPoint.point.y
+      lastRelevantPoint &&
+      lastRelevantPoint.swingPoint.point.y > swingPoint.point.y
     ) {
       return this.transitionTo(
-        new UpwardTrendConfirmed(this.memory, this.onTransition),
+        new DownwardTrendConfirmed(this.memory, this.onTransition),
       );
     }
 

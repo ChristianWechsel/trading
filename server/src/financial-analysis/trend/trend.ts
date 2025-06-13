@@ -47,34 +47,36 @@ export class Trend {
 
     let currentUnbrokenTrend: TrendData | undefined;
 
-    const stateMachine = new TrendStateMachine(({ state, memory }) => {
-      if (state instanceof UpwardTrendConfirmed) {
-        const trendDefiningPoints = memory.getLatest(3);
+    const stateMachine = new TrendStateMachine(
+      ({ newState: state, memory }) => {
+        if (state instanceof UpwardTrendConfirmed) {
+          const trendDefiningPoints = memory.getLatest(3);
 
-        if (!currentUnbrokenTrend) {
-          currentUnbrokenTrend = {
-            trendType: 'upward',
-            startPoint: trendDefiningPoints[0].swingPoint.point,
-          };
-        }
-      } else if (state instanceof DownwardTrendConfirmed) {
-        const trendDefiningPoints = memory.getLatest(3);
+          if (!currentUnbrokenTrend) {
+            currentUnbrokenTrend = {
+              trendType: 'upward',
+              startPoint: trendDefiningPoints[0].swingPoint.point,
+            };
+          }
+        } else if (state instanceof DownwardTrendConfirmed) {
+          const trendDefiningPoints = memory.getLatest(3);
 
-        if (!currentUnbrokenTrend) {
-          currentUnbrokenTrend = {
-            trendType: 'downward',
-            startPoint: trendDefiningPoints[0].swingPoint.point,
-          };
+          if (!currentUnbrokenTrend) {
+            currentUnbrokenTrend = {
+              trendType: 'downward',
+              startPoint: trendDefiningPoints[0].swingPoint.point,
+            };
+          }
+        } else if (state instanceof TrendBroken) {
+          const lastPoint = memory.getLast();
+          if (currentUnbrokenTrend && lastPoint) {
+            currentUnbrokenTrend.endPoint = lastPoint.swingPoint.point;
+            this.trends.push(currentUnbrokenTrend);
+            currentUnbrokenTrend = undefined;
+          }
         }
-      } else if (state instanceof TrendBroken) {
-        const lastPoint = memory.getLast();
-        if (currentUnbrokenTrend && lastPoint) {
-          currentUnbrokenTrend.endPoint = lastPoint.swingPoint.point;
-          this.trends.push(currentUnbrokenTrend);
-          currentUnbrokenTrend = undefined;
-        }
-      }
-    });
+      },
+    );
 
     let idxSwingPoint = 0;
     while (idxSwingPoint < this.swingPoints.length) {
