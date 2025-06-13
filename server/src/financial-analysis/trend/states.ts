@@ -83,7 +83,9 @@ export class UpwardTrendConfirmed extends State {
     ) {
       return this;
     }
-    return this.transitionTo(new StartState(this.memory, this.onTransition));
+    return this.transitionTo(
+      new UpwardTrendWarning(this.memory, this.onTransition),
+    );
   }
 }
 
@@ -122,7 +124,6 @@ class DownwardTrendSecondCheck extends State {
 export class DownwardTrendConfirmed extends State {
   process(swingPoint: SwingPointData): State {
     this.memory.add({ swingPoint, characteristic: 'none' });
-
     const [secondLatest, _latest, current] = this.memory.getLatest(3);
     if (
       ((secondLatest.swingPoint.swingPointType === 'swingLow' &&
@@ -133,24 +134,57 @@ export class DownwardTrendConfirmed extends State {
     ) {
       return this;
     }
-    return this.transitionTo(new StartState(this.memory, this.onTransition));
+    return this.transitionTo(
+      new DownwardTrendWarning(this.memory, this.onTransition),
+    );
   }
 }
 
 class UpwardTrendWarning extends State {
   process(swingPoint: SwingPointData): State {
-    throw new Error('Method not implemented.');
+    this.memory.add({ swingPoint, characteristic: 'none' });
+    const [secondLatest, _latest, current] = this.memory.getLatest(3);
+
+    if (
+      ((secondLatest.swingPoint.swingPointType === 'swingLow' &&
+        current.swingPoint.swingPointType === 'swingLow') ||
+        (secondLatest.swingPoint.swingPointType === 'swingHigh' &&
+          current.swingPoint.swingPointType === 'swingHigh')) &&
+      secondLatest.swingPoint.point.y < current.swingPoint.point.y
+    ) {
+      return this.transitionTo(
+        new UpwardTrendConfirmed(this.memory, this.onTransition),
+      );
+    }
+
+    return this.transitionTo(new TrendBroken(this.memory, this.onTransition));
   }
 }
 
 class DownwardTrendWarning extends State {
   process(swingPoint: SwingPointData): State {
-    throw new Error('Method not implemented.');
+    this.memory.add({ swingPoint, characteristic: 'none' });
+    const [secondLatest, _latest, current] = this.memory.getLatest(3);
+
+    if (
+      ((secondLatest.swingPoint.swingPointType === 'swingLow' &&
+        current.swingPoint.swingPointType === 'swingLow') ||
+        (secondLatest.swingPoint.swingPointType === 'swingHigh' &&
+          current.swingPoint.swingPointType === 'swingHigh')) &&
+      secondLatest.swingPoint.point.y > current.swingPoint.point.y
+    ) {
+      return this.transitionTo(
+        new UpwardTrendConfirmed(this.memory, this.onTransition),
+      );
+    }
+
+    return this.transitionTo(new TrendBroken(this.memory, this.onTransition));
   }
 }
 
-class TrendBroken extends State {
+export class TrendBroken extends State {
   process(swingPoint: SwingPointData): State {
-    throw new Error('Method not implemented.');
+    this.memory.add({ swingPoint, characteristic: 'end-trend' });
+    return this.transitionTo(new StartState(this.memory, this.onTransition));
   }
 }

@@ -329,7 +329,7 @@ export class TrendTestData {
         {
           trendType: 'upward',
           startPoint: { x: 1, y: 1 },
-          endPoint: { x: 4, y: 4 },
+          endPoint: { x: 6, y: 3 },
         },
       ],
     };
@@ -396,7 +396,7 @@ export class TrendTestData {
         {
           trendType: 'downward',
           startPoint: { x: 1, y: 7 },
-          endPoint: { x: 4, y: 4 },
+          endPoint: { x: 6, y: 5 },
         },
       ],
     };
@@ -433,7 +433,6 @@ export class TrendTestData {
         {
           trendType: 'upward',
           startPoint: { x: 1, y: 10 },
-          // Der Trend wurde nie gebrochen und läuft bis zum Ende
           endPoint: { x: 7, y: 15 },
         },
       ],
@@ -466,13 +465,14 @@ export class TrendTestData {
         { x: 4, y: 8 },
         { x: 5, y: 19 },
         { x: 6, y: 9 },
+        { x: 7, y: 9 },
       ],
       result: [
         {
           trendType: 'downward',
           startPoint: { x: 1, y: 20 },
           // Der Trend endet beim letzten gültigen Punkt VOR der ersten Warnung
-          endPoint: { x: 4, y: 8 },
+          endPoint: { x: 6, y: 9 },
         },
       ],
     };
