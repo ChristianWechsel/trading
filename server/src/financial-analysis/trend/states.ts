@@ -59,7 +59,7 @@ class UpwardTrendSecondCheck extends State {
       const previousLow = lastThreePoints[0];
       const newLow = swingPoint;
 
-      if (newLow.point.y > previousLow.swingPoint.point.y) {
+      if (previousLow.swingPoint.point.y < newLow.point.y) {
         return this.transitionTo(
           new UpwardTrendConfirmed(this.memory, this.onTransition),
         );
@@ -72,7 +72,18 @@ class UpwardTrendSecondCheck extends State {
 export class UpwardTrendConfirmed extends State {
   process(swingPoint: SwingPointData): State {
     this.memory.add({ swingPoint, characteristic: 'none' });
-    return this;
+
+    const [secondLatest, _latest, current] = this.memory.getLatest(3);
+    if (
+      ((secondLatest.swingPoint.swingPointType === 'swingLow' &&
+        current.swingPoint.swingPointType === 'swingLow') ||
+        (secondLatest.swingPoint.swingPointType === 'swingHigh' &&
+          current.swingPoint.swingPointType === 'swingHigh')) &&
+      secondLatest.swingPoint.point.y < current.swingPoint.point.y
+    ) {
+      return this;
+    }
+    return this.transitionTo(new StartState(this.memory, this.onTransition));
   }
 }
 
@@ -111,6 +122,17 @@ class DownwardTrendSecondCheck extends State {
 export class DownwardTrendConfirmed extends State {
   process(swingPoint: SwingPointData): State {
     this.memory.add({ swingPoint, characteristic: 'none' });
-    return this;
+
+    const [secondLatest, _latest, current] = this.memory.getLatest(3);
+    if (
+      ((secondLatest.swingPoint.swingPointType === 'swingLow' &&
+        current.swingPoint.swingPointType === 'swingLow') ||
+        (secondLatest.swingPoint.swingPointType === 'swingHigh' &&
+          current.swingPoint.swingPointType === 'swingHigh')) &&
+      secondLatest.swingPoint.point.y > current.swingPoint.point.y
+    ) {
+      return this;
+    }
+    return this.transitionTo(new StartState(this.memory, this.onTransition));
   }
 }

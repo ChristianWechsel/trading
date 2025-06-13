@@ -88,23 +88,23 @@ export class Trend {
     // Falls der nächste SwingPoint ebenfalls den Bedingungen verletzt, wird state auf broken gesetzt
     // und der endpoint auf das DatPoint des letzten SwingPoints gesetzt
     // Falls der SwingPoint den Bedingungen entspricht, wird state auf confirmed gesetzt und warningAt geleert.
+    let currentUnbrokenTrend: TrendData | undefined;
+
     const stateMachine = new TrendStateMachine(({ state, memory }) => {
       if (state instanceof UpwardTrendConfirmed) {
         const trendDefiningPoints = memory.getLatest(3);
 
-        this.trends.push({
+        currentUnbrokenTrend = {
           trendType: 'upward',
           startPoint: trendDefiningPoints[0].swingPoint.point,
-          endPoint: trendDefiningPoints[2].swingPoint.point,
-        });
+        };
       } else if (state instanceof DownwardTrendConfirmed) {
         const trendDefiningPoints = memory.getLatest(3);
 
-        this.trends.push({
+        currentUnbrokenTrend = {
           trendType: 'downward',
           startPoint: trendDefiningPoints[0].swingPoint.point,
-          endPoint: trendDefiningPoints[2].swingPoint.point,
-        });
+        };
       }
     });
 
@@ -113,6 +113,11 @@ export class Trend {
       stateMachine.process(this.swingPoints[idxSwingPoint]);
       idxSwingPoint++;
     }
+    if (currentUnbrokenTrend) {
+      currentUnbrokenTrend.endPoint = this.data[this.data.length - 1];
+      this.trends.push(currentUnbrokenTrend);
+    }
+
     return this.trends;
   }
 }
