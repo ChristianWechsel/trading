@@ -311,25 +311,25 @@ export class TrendTestData {
     return {
       swingPoints: [
         { swingPointType: 'swingLow', point: { x: 1, y: 1 } },
-        { swingPointType: 'swingHigh', point: { x: 2, y: 2 } },
-        { swingPointType: 'swingLow', point: { x: 3, y: 3 } },
-        { swingPointType: 'swingHigh', point: { x: 4, y: 4 } },
-        { swingPointType: 'swingLow', point: { x: 5, y: 2 } }, // tieferes Tief
-        { swingPointType: 'swingHigh', point: { x: 6, y: 3 } }, // tieferes Hoch
+        { swingPointType: 'swingHigh', point: { x: 2, y: 3 } },
+        { swingPointType: 'swingLow', point: { x: 3, y: 2 } }, // Confirmed Up
+        { swingPointType: 'swingHigh', point: { x: 4, y: 4 } }, // Continuation (Peak)
+        { swingPointType: 'swingLow', point: { x: 5, y: 1 } }, // WARNING: tieferes Tief
+        { swingPointType: 'swingHigh', point: { x: 6, y: 3 } }, // BROKEN: tieferes Hoch
       ],
       data: [
         { x: 1, y: 1 },
-        { x: 2, y: 2 },
-        { x: 3, y: 3 },
+        { x: 2, y: 3 },
+        { x: 3, y: 2 },
         { x: 4, y: 4 },
-        { x: 5, y: 2 },
+        { x: 5, y: 1 },
         { x: 6, y: 3 },
       ],
       result: [
         {
           trendType: 'upward',
           startPoint: { x: 1, y: 1 },
-          endPoint: { x: 6, y: 3 },
+          endPoint: { x: 4, y: 4 },
         },
       ],
     };
@@ -378,25 +378,25 @@ export class TrendTestData {
     return {
       swingPoints: [
         { swingPointType: 'swingHigh', point: { x: 1, y: 7 } },
-        { swingPointType: 'swingLow', point: { x: 2, y: 6 } },
-        { swingPointType: 'swingHigh', point: { x: 3, y: 5 } },
-        { swingPointType: 'swingLow', point: { x: 4, y: 4 } },
-        { swingPointType: 'swingHigh', point: { x: 5, y: 6 } }, // höheres Hoch
-        { swingPointType: 'swingLow', point: { x: 6, y: 5 } }, // höheres Tief
+        { swingPointType: 'swingLow', point: { x: 2, y: 2 } },
+        { swingPointType: 'swingHigh', point: { x: 3, y: 6 } }, // Confirmed Down
+        { swingPointType: 'swingLow', point: { x: 4, y: 1 } }, // Continuation (Talsohle)
+        { swingPointType: 'swingHigh', point: { x: 5, y: 8 } }, // WARNING: höheres Hoch
+        { swingPointType: 'swingLow', point: { x: 6, y: 3 } }, // BROKEN: höheres Tief
       ],
       data: [
         { x: 1, y: 7 },
-        { x: 2, y: 6 },
-        { x: 3, y: 5 },
-        { x: 4, y: 4 },
-        { x: 5, y: 6 },
-        { x: 6, y: 5 },
+        { x: 2, y: 2 },
+        { x: 3, y: 6 },
+        { x: 4, y: 1 },
+        { x: 5, y: 8 },
+        { x: 6, y: 3 },
       ],
       result: [
         {
           trendType: 'downward',
           startPoint: { x: 1, y: 7 },
-          endPoint: { x: 6, y: 5 },
+          endPoint: { x: 4, y: 1 },
         },
       ],
     };
@@ -454,7 +454,7 @@ export class TrendTestData {
         { swingPointType: 'swingHigh', point: { x: 1, y: 20 } }, // Start
         { swingPointType: 'swingLow', point: { x: 2, y: 10 } },
         { swingPointType: 'swingHigh', point: { x: 3, y: 18 } }, // Confirmed
-        { swingPointType: 'swingLow', point: { x: 4, y: 8 } },
+        { swingPointType: 'swingLow', point: { x: 4, y: 8 } }, // Continuation (Talsohle)
         { swingPointType: 'swingHigh', point: { x: 5, y: 19 } }, // WARNING: höheres Hoch
         { swingPointType: 'swingLow', point: { x: 6, y: 9 } }, // BROKEN: höheres Tief
       ],
@@ -465,14 +465,12 @@ export class TrendTestData {
         { x: 4, y: 8 },
         { x: 5, y: 19 },
         { x: 6, y: 9 },
-        { x: 7, y: 9 },
       ],
       result: [
         {
           trendType: 'downward',
           startPoint: { x: 1, y: 20 },
-          // Der Trend endet beim letzten gültigen Punkt VOR der ersten Warnung
-          endPoint: { x: 6, y: 9 },
+          endPoint: { x: 4, y: 8 },
         },
       ],
     };
