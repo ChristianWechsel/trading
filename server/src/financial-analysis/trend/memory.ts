@@ -15,4 +15,8 @@ export class Memory<T> {
   getLatest(n: number): T[] {
     return this.memory.slice(Math.max(this.memory.length - n, 0));
   }
+
+  findLast(predicate: (item: T) => boolean): T | undefined {
+    return this.memory.slice().reverse().find(predicate);
+  }
 }

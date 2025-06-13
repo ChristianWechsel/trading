@@ -48,4 +48,48 @@ describe('Memory', () => {
   it('should return an empty array if getLatest is called on empty memory', () => {
     expect(memory.getLatest(3)).toEqual([]);
   });
+
+  describe('findLast', () => {
+    it('should return undefined if memory is empty', () => {
+      expect(memory.findLast((item) => item === 1)).toBeUndefined();
+    });
+
+    it('should return the last item that matches the predicate', () => {
+      memory.add(1);
+      memory.add(2);
+      memory.add(3);
+      memory.add(2);
+      expect(memory.findLast((item) => item === 2)).toBe(2);
+    });
+
+    it('should return the item if only one matches', () => {
+      memory.add(1);
+      memory.add(2);
+      memory.add(3);
+      expect(memory.findLast((item) => item === 3)).toBe(3);
+    });
+
+    it('should return undefined if no item matches the predicate', () => {
+      memory.add(1);
+      memory.add(2);
+      memory.add(3);
+      expect(memory.findLast((item) => item === 4)).toBeUndefined();
+    });
+
+    it('should work with complex objects and predicates', () => {
+      const objectMemory = new Memory<{ id: number; value: string }>();
+      objectMemory.add({ id: 1, value: 'a' });
+      objectMemory.add({ id: 2, value: 'b' });
+      objectMemory.add({ id: 1, value: 'c' });
+      expect(objectMemory.findLast((item) => item.id === 1)).toEqual({
+        id: 1,
+        value: 'c',
+      });
+      expect(objectMemory.findLast((item) => item.value === 'b')).toEqual({
+        id: 2,
+        value: 'b',
+      });
+      expect(objectMemory.findLast((item) => item.id === 3)).toBeUndefined();
+    });
+  });
 });
