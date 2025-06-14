@@ -10,5 +10,5 @@ export type SwingPointType =
 
 export type SwingPointData = {
   swingPointType: SwingPointType;
-  point: DataPoint;
+  point: DataPoint<number>;
 };

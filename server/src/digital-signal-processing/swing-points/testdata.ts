@@ -2,7 +2,7 @@ import { DataPoint } from '../digital-signal-processing.interface';
 import { SwingPointData } from './swing-points.interface';
 
 type SwingPointAnalysis = {
-  data: DataPoint[];
+  data: DataPoint<number>[];
   result: SwingPointData[];
   windowSize: number;
 };

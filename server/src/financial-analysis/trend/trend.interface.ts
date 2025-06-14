@@ -7,8 +7,8 @@ export type TrendType = 'upward' | 'downward' | 'sideways';
 
 export type TrendData = {
   trendType: TrendType;
-  startPoint: DataPoint;
-  endPoint?: DataPoint;
+  startPoint: DataPoint<number>;
+  endPoint?: DataPoint<number>;
 };
 
 export type TrendDataMetadata = {

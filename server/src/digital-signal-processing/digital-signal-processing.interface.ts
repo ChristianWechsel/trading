@@ -1,4 +1,4 @@
-export type DataPoint = {
-  x: number;
-  y: number;
+export type DataPoint<T> = {
+  x: T;
+  y: T;
 };

@@ -20,7 +20,7 @@ export class Trend {
 
   constructor(
     private swingPoints: SwingPointData[],
-    private data: DataPoint[],
+    private data: DataPoint<number>[],
     private options: { relativeThreshold: number },
   ) {
     const { relativeThreshold } = options;
@@ -47,19 +47,12 @@ export class Trend {
   }
 
   detectTrends(): TrendData[] {
-    // Existiert ein laufender Trend, dann muss als nächstes das Ende eines Trend gefunden werden
-    // Warnungen erkennen, wann ein Trend möglicherweise zu Ende geht
     // Bei Trendbruch Toleranzen einügen, ob Fehlausbrüche zu ignorieren
     // Toleranzen parameterisierbar machen, um Feintuning zu ermöglichen
 
     // Bei einem begonnen Trend den Trendkanal bestimmen
 
     // Ggf. erkennen, ob es sich um langfristigen, mittelfristigen oder kurzfristigen Trend handelt
-
-    // Annahme: wenn kein Aufwärts- oder Abwärtstrend erkannt wird,
-    // dann handelt es sich um einen Seitwärtstrend
-    // Wahrscheinlich muss hier auch eine Toleranz eingeführt werden, da die Hochs und Tiefs
-    // nicht exakt gleich sind, aber trotzdem ähnlich genug sind, um als Seitwärtstrend zu gelten
 
     const stateMachine = new TrendStateMachine(
       ({ newState, oldState, memory }) => {

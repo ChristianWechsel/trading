@@ -20,7 +20,7 @@ export class SwingPoints {
    *     significant turning points within a larger neighborhood.
    */
   constructor(
-    private data: DataPoint[],
+    private data: DataPoint<number>[],
     private options: { relativeThreshold: number; windowSize: number },
   ) {
     const { relativeThreshold, windowSize } = options;
@@ -133,7 +133,7 @@ export class SwingPoints {
     return { previousPoints, nextPoints };
   }
 
-  private createComparableNumber(dataPoint: DataPoint) {
+  private createComparableNumber(dataPoint: DataPoint<number>) {
     return new ComparableNumber(dataPoint.y, this.options.relativeThreshold);
   }
 

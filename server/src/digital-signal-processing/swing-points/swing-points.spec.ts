@@ -137,10 +137,13 @@ describe('SwingPoints', () => {
     (threshold) => {
       expect(
         () =>
-          new SwingPoints(new Array<DataPoint>(25).fill({ x: 1, y: 1 }), {
-            relativeThreshold: threshold,
-            windowSize: 1,
-          }),
+          new SwingPoints(
+            new Array<DataPoint<number>>(25).fill({ x: 1, y: 1 }),
+            {
+              relativeThreshold: threshold,
+              windowSize: 1,
+            },
+          ),
       ).not.toThrow();
     },
   );
@@ -150,10 +153,13 @@ describe('SwingPoints', () => {
     (threshold) => {
       expect(
         () =>
-          new SwingPoints(new Array<DataPoint>(25).fill({ x: 1, y: 1 }), {
-            relativeThreshold: threshold,
-            windowSize: 1,
-          }),
+          new SwingPoints(
+            new Array<DataPoint<number>>(25).fill({ x: 1, y: 1 }),
+            {
+              relativeThreshold: threshold,
+              windowSize: 1,
+            },
+          ),
       ).toThrow();
     },
   );
@@ -163,10 +169,13 @@ describe('SwingPoints', () => {
     (windowSize) => {
       expect(
         () =>
-          new SwingPoints(new Array<DataPoint>(25).fill({ x: 1, y: 1 }), {
-            relativeThreshold: 0.1,
-            windowSize,
-          }),
+          new SwingPoints(
+            new Array<DataPoint<number>>(25).fill({ x: 1, y: 1 }),
+            {
+              relativeThreshold: 0.1,
+              windowSize,
+            },
+          ),
       ).not.toThrow();
     },
   );
@@ -176,10 +185,13 @@ describe('SwingPoints', () => {
     (windowSize) => {
       expect(
         () =>
-          new SwingPoints(new Array<DataPoint>(25).fill({ x: 1, y: 1 }), {
-            relativeThreshold: 0.1,
-            windowSize,
-          }),
+          new SwingPoints(
+            new Array<DataPoint<number>>(25).fill({ x: 1, y: 1 }),
+            {
+              relativeThreshold: 0.1,
+              windowSize,
+            },
+          ),
       ).toThrow();
     },
   );
@@ -190,7 +202,10 @@ describe('SwingPoints', () => {
   ])(
     'does not throw for minimum valid data length (windowSize=$windowSize, dataLength=$dataLength)',
     ({ windowSize, dataLength }) => {
-      const data = new Array<DataPoint>(dataLength).fill({ x: 1, y: 1 });
+      const data = new Array<DataPoint<number>>(dataLength).fill({
+        x: 1,
+        y: 1,
+      });
 
       expect(
         () => new SwingPoints(data, { relativeThreshold: 0.1, windowSize }),
@@ -204,7 +219,10 @@ describe('SwingPoints', () => {
   ])(
     'throws error for too short data (windowSize=$windowSize, dataLength=$dataLength)',
     ({ windowSize, dataLength }) => {
-      const data = new Array<DataPoint>(dataLength).fill({ x: 1, y: 1 });
+      const data = new Array<DataPoint<number>>(dataLength).fill({
+        x: 1,
+        y: 1,
+      });
       expect(
         () => new SwingPoints(data, { relativeThreshold: 0.1, windowSize }),
       ).toThrow();
