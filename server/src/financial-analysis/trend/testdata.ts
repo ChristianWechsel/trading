@@ -610,7 +610,8 @@ export class TrendTestData {
 
   /**
    * Ein Trend bricht, aber es folgt eine unklare "Seitwärtsphase",
-   * bevor ein neuer Trend beginnt.
+   * bevor ein neuer Trend beginnt. Sonderfall, da der neue Trend exakt am
+   * bestätigtem Ende des alten Trend startet.
    */
   trendFollowedByChoppyPeriodThenNewTrend(): {
     swingPoints: SwingPointData<number>[];
@@ -653,6 +654,68 @@ export class TrendTestData {
           trendType: 'downward',
           startPoint: { x: 6, y: 16 },
           endPoint: { x: 8, y: 14 },
+        },
+      ],
+    };
+  }
+
+  /**
+   * Ein Trend bricht, gefolgt von einer unklaren "Lücke",
+   * bevor ein neuer Trend beginnt.
+   */
+  trendBreaksFollowedByGapThenNewTrend(): {
+    swingPoints: SwingPointData<number>[];
+    data: DataPoint<number>[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        // 1. Aufwärtstrend wird etabliert
+        { swingPointType: 'swingLow', point: { x: 1, y: 10 } },
+        { swingPointType: 'swingHigh', point: { x: 2, y: 20 } },
+        { swingPointType: 'swingLow', point: { x: 3, y: 12 } }, // Confirmed Up, Peak
+
+        // 2. Bruch des Aufwärtstrends
+        { swingPointType: 'swingHigh', point: { x: 4, y: 11 } }, // Warning
+        { swingPointType: 'swingLow', point: { x: 5, y: 8 } }, // Broken
+
+        // 3. "GAP": Unklare, chaotische Phase ohne klaren Trend
+        { swingPointType: 'swingHigh', point: { x: 6, y: 10 } },
+        { swingPointType: 'swingLow', point: { x: 7, y: 7 } },
+        { swingPointType: 'swingHigh', point: { x: 8, y: 19 } },
+        { swingPointType: 'swingLow', point: { x: 9, y: 6 } },
+
+        // 4. Ein neuer, sauberer Abwärtstrend beginnt hier
+        { swingPointType: 'swingHigh', point: { x: 10, y: 25 } }, // Start Down
+        { swingPointType: 'swingLow', point: { x: 11, y: 16 } },
+        { swingPointType: 'swingHigh', point: { x: 12, y: 22 } }, // Confirmed Down
+      ],
+      data: [
+        { x: 1, y: 10 },
+        { x: 2, y: 20 },
+        { x: 3, y: 12 },
+        { x: 4, y: 11 },
+        { x: 5, y: 8 },
+        { x: 6, y: 10 },
+        { x: 7, y: 7 },
+        { x: 8, y: 19 },
+        { x: 9, y: 6 },
+        { x: 10, y: 25 },
+        { x: 11, y: 16 },
+        { x: 12, y: 22 },
+      ],
+      result: [
+        {
+          trendType: 'upward',
+          startPoint: { x: 1, y: 10 },
+          // Der Trend endet am Gipfel VOR der ersten Verletzung
+          endPoint: { x: 3, y: 12 },
+        },
+        // Die Punkte 4-7 bilden keinen Trend und tauchen hier nicht auf.
+        {
+          trendType: 'downward',
+          startPoint: { x: 10, y: 25 },
+          endPoint: { x: 12, y: 22 },
         },
       ],
     };

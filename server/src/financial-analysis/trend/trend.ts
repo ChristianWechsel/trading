@@ -73,6 +73,13 @@ export class Trend {
 
     // Ggf. erkennen, ob es sich um langfristigen, mittelfristigen oder kurzfristigen Trend handelt
 
+    // trendFollowedByChoppyPeriodThenNewTrend() muss weiter untersucht werden. Es sit so, dass dies
+    // eine Art Spezialfall ist. Richtigerweise müsste nach jedem fehlgeschlagenem Trend die
+    // gleiche Logik angewendet werden, wie nach einem Trendbruch. Das heißt, die letzten
+    // im memory gespeicherten Werte durchlaufen und nach einem Trend suchen und dann erst mit den
+    // neuen SwingPoints weitermachen. Also das Szenario TrendBroken => BeginNewTrend
+    // Es sollte keine Verknüpfung mehr zu StartState geben.
+
     const stateMachine = new TrendStateMachine(
       ({ newState, oldState, memory }) => {
         // Erste Trendbestätigung

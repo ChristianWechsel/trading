@@ -179,8 +179,12 @@ describe('Trend', () => {
         testData.downwardTrendFollowedByUpwardTrend(),
       ],
       [
-        'trend followed by choppy period then new trend',
+        'trend followed by choppy period then new trend. Special Case.',
         testData.trendFollowedByChoppyPeriodThenNewTrend(),
+      ],
+      [
+        'trend followed by choppy period then new trend',
+        testData.trendBreaksFollowedByGapThenNewTrend(),
       ],
     ])('should detect %s', (_desc, { swingPoints, data, result }) => {
       const trend = new Trend(swingPoints, data, {
