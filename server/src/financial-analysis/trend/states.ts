@@ -61,7 +61,9 @@ class UpwardTrendSecondCheck extends State {
     if (
       swingPoint.swingPointType === 'swingLow' &&
       lastRelevantPoint &&
-      lastRelevantPoint.swingPoint.point.y < swingPoint.point.y
+      lastRelevantPoint.swingPoint.point.y.isSignificantlyLowerThan(
+        swingPoint.point.y,
+      )
     ) {
       return this.transitionTo(
         new UpwardTrendConfirmed(this.memory, this.onTransition),
@@ -81,7 +83,9 @@ export class UpwardTrendConfirmed extends State {
 
     if (
       lastRelevantPoint &&
-      lastRelevantPoint.swingPoint.point.y < swingPoint.point.y
+      lastRelevantPoint.swingPoint.point.y.isSignificantlyLowerThan(
+        swingPoint.point.y,
+      )
     ) {
       return this;
     }
@@ -113,7 +117,9 @@ class DownwardTrendSecondCheck extends State {
     if (
       swingPoint.swingPointType === 'swingHigh' &&
       lastRelevantPoint &&
-      lastRelevantPoint.swingPoint.point.y > swingPoint.point.y
+      lastRelevantPoint.swingPoint.point.y.isSignificantlyHigherThan(
+        swingPoint.point.y,
+      )
     ) {
       return this.transitionTo(
         new DownwardTrendConfirmed(this.memory, this.onTransition),
@@ -132,7 +138,9 @@ export class DownwardTrendConfirmed extends State {
 
     if (
       lastRelevantPoint &&
-      lastRelevantPoint.swingPoint.point.y > swingPoint.point.y
+      lastRelevantPoint.swingPoint.point.y.isSignificantlyHigherThan(
+        swingPoint.point.y,
+      )
     ) {
       return this;
     }
@@ -151,7 +159,9 @@ export class UpwardTrendWarning extends State {
 
     if (
       lastRelevantPoint &&
-      lastRelevantPoint.swingPoint.point.y < swingPoint.point.y
+      lastRelevantPoint.swingPoint.point.y.isSignificantlyLowerThan(
+        swingPoint.point.y,
+      )
     ) {
       return this.transitionTo(
         new UpwardTrendConfirmed(this.memory, this.onTransition),
