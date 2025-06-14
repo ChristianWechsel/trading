@@ -676,7 +676,9 @@ export class TrendTestData {
         { swingPointType: 'swingLow', point: { x: 3, y: 101 } },
       ],
       data: [
-        /* ... */
+        { x: 1, y: 100 },
+        { x: 2, y: 110 },
+        { x: 3, y: 101 },
       ],
       result: [], // Kein Trend wird erkannt.
     };
@@ -700,7 +702,9 @@ export class TrendTestData {
         { swingPointType: 'swingHigh', point: { x: 3, y: 99 } },
       ],
       data: [
-        /* ... */
+        { x: 1, y: 100 },
+        { x: 2, y: 90 },
+        { x: 3, y: 99 },
       ],
       result: [], // Kein Trend wird erkannt.
     };
@@ -727,7 +731,12 @@ export class TrendTestData {
         { swingPointType: 'swingHigh', point: { x: 6, y: 116 } },
       ],
       data: [
-        /* ... */
+        { x: 1, y: 100 },
+        { x: 2, y: 110 },
+        { x: 3, y: 105 },
+        { x: 4, y: 115 },
+        { x: 5, y: 108 },
+        { x: 6, y: 116 },
       ],
       result: [
         {
@@ -766,7 +775,12 @@ export class TrendTestData {
         { swingPointType: 'swingLow', point: { x: 6, y: 84 } },
       ],
       data: [
-        /* ... */
+        { x: 1, y: 100 },
+        { x: 2, y: 90 },
+        { x: 3, y: 95 },
+        { x: 4, y: 85 },
+        { x: 5, y: 92 },
+        { x: 6, y: 84 },
       ],
       result: [
         {
@@ -798,7 +812,10 @@ export class TrendTestData {
         { swingPointType: 'swingHigh', point: { x: 4, y: 102 } },
       ],
       data: [
-        /* ... */
+        { x: 1, y: 99 },
+        { x: 2, y: 101 },
+        { x: 3, y: 100 },
+        { x: 4, y: 102 },
       ],
       // Kein Aufwärts- oder Abwärtstrend wird erkannt.
       // Später könnte hier ein 'sideways' Trend erkannt werden.
