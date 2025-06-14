@@ -27,12 +27,12 @@ export class Trend {
     private options: { relativeThreshold: number },
   ) {
     const { relativeThreshold } = options;
-    if (this.swingPoints.length < MIN_SWING_POINTS) {
+    if (swingPoints.length < MIN_SWING_POINTS) {
       throw new Error(
         `swingPoints must be an array with at least ${MIN_SWING_POINTS} elements`,
       );
     }
-    if (this.data.length < MIN_SWING_POINTS) {
+    if (data.length < MIN_SWING_POINTS) {
       throw new Error(
         `data must be an array with at least ${MIN_SWING_POINTS} elements`,
       );
