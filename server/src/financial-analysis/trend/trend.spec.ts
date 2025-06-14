@@ -1,3 +1,7 @@
+import {
+  MAX_THRESHOLD,
+  MIN_THRESHOLD,
+} from '../../digital-signal-processing/comparable-number/parameters';
 import { MIN_SWING_POINTS } from './parameters';
 import { TrendTestData } from './testdata';
 import { Trend } from './trend';
@@ -12,6 +16,7 @@ describe('Trend', () => {
           new Trend(
             testData.lessThanMinSwingPoints(),
             testData.minDataPoints(),
+            { relativeThreshold: 0.1 },
           ),
       ).toThrow();
     });
@@ -22,6 +27,7 @@ describe('Trend', () => {
           new Trend(
             [testData.lessThanMinSwingPoints()[0]],
             testData.minDataPoints(),
+            { relativeThreshold: 0.1 },
           ),
       ).toThrow(
         `swingPoints must be an array with at least ${MIN_SWING_POINTS} elements`,
@@ -30,7 +36,10 @@ describe('Trend', () => {
 
     it('should not throw if at least 3 swing points are provided', () => {
       expect(
-        () => new Trend(testData.minSwingPoints(), testData.minDataPoints()),
+        () =>
+          new Trend(testData.minSwingPoints(), testData.minDataPoints(), {
+            relativeThreshold: 0.1,
+          }),
       ).not.toThrow();
     });
 
@@ -40,6 +49,7 @@ describe('Trend', () => {
           new Trend(
             testData.moreThanMinSwingPoints(),
             testData.moreThanMinDataPoints(),
+            { relativeThreshold: 0.1 },
           ),
       ).not.toThrow();
     });
@@ -47,7 +57,10 @@ describe('Trend', () => {
     it('should throw if data is less than MIN_SWING_POINTS', () => {
       const swingPoints = testData.minSwingPoints();
       expect(
-        () => new Trend(swingPoints, testData.lessThanMinDataPoints()),
+        () =>
+          new Trend(swingPoints, testData.lessThanMinDataPoints(), {
+            relativeThreshold: 0.1,
+          }),
       ).toThrow(
         `data must be an array with at least ${MIN_SWING_POINTS} elements`,
       );
@@ -56,7 +69,59 @@ describe('Trend', () => {
     it('should not throw if data is at least MIN_SWING_POINTS', () => {
       const swingPoints = testData.minSwingPoints();
       expect(
-        () => new Trend(swingPoints, testData.minDataPoints()),
+        () =>
+          new Trend(swingPoints, testData.minDataPoints(), {
+            relativeThreshold: 0.1,
+          }),
+      ).not.toThrow();
+    });
+
+    it('should throw if relativeThreshold is below the minimum threshold', () => {
+      expect(
+        () =>
+          new Trend(testData.minSwingPoints(), testData.minDataPoints(), {
+            relativeThreshold: -0.1, // Wert unter MIN_THRESHOLD (angenommen 0)
+          }),
+      ).toThrow(
+        `relativeThreshold must be between ${MIN_THRESHOLD} and ${MAX_THRESHOLD}`,
+      );
+    });
+
+    it('should throw if relativeThreshold is above the maximum threshold', () => {
+      expect(
+        () =>
+          new Trend(testData.minSwingPoints(), testData.minDataPoints(), {
+            relativeThreshold: 1.1, // Wert über MAX_THRESHOLD (angenommen 1)
+          }),
+      ).toThrow(
+        `relativeThreshold must be between ${MIN_THRESHOLD} and ${MAX_THRESHOLD}`,
+      );
+    });
+
+    it('should not throw if relativeThreshold is exactly at the minimum threshold', () => {
+      expect(
+        () =>
+          new Trend(testData.minSwingPoints(), testData.minDataPoints(), {
+            relativeThreshold: MIN_THRESHOLD, // Exakter Grenzwert
+          }),
+      ).not.toThrow();
+    });
+
+    it('should not throw if relativeThreshold is exactly at the maximum threshold', () => {
+      expect(
+        () =>
+          new Trend(testData.minSwingPoints(), testData.minDataPoints(), {
+            relativeThreshold: MAX_THRESHOLD, // Exakter Grenzwert
+          }),
+      ).not.toThrow();
+    });
+
+    it('should not throw if relativeThreshold is within the valid range', () => {
+      expect(
+        () =>
+          new Trend(testData.minSwingPoints(), testData.minDataPoints(), {
+            relativeThreshold: 0.05, // Gültiger Wert innerhalb der Grenzen
+          }),
       ).not.toThrow();
     });
   });
@@ -118,7 +183,9 @@ describe('Trend', () => {
         testData.trendFollowedByChoppyPeriodThenNewTrend(),
       ],
     ])('should detect %s', (_desc, { swingPoints, data, result }) => {
-      const trend = new Trend(swingPoints, data).detectTrends();
+      const trend = new Trend(swingPoints, data, {
+        relativeThreshold: 0.1,
+      }).detectTrends();
       expect(trend).toEqual(result);
     });
   });
@@ -153,10 +220,9 @@ describe('Trend', () => {
       ],
     ])('%s', (_desc, { swingPoints, data, result }) => {
       // Annahme: Der Threshold wird über den Konstruktor oder eine Methode gesetzt.
-      const trend = new Trend(
-        swingPoints,
-        data /*, threshold */,
-      ).detectTrends();
+      const trend = new Trend(swingPoints, data, {
+        relativeThreshold: 0.1,
+      }).detectTrends();
       expect(trend).toEqual(result);
     });
   });

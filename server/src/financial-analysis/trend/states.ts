@@ -1,4 +1,4 @@
-import { SwingPointData } from 'src/digital-signal-processing/swing-points/swing-points.interface';
+import { SwingPointData } from '../../digital-signal-processing/swing-points/swing-points.interface';
 import { Memory } from './memory';
 import { TransitionCallback, TrendAnalysisPoint } from './trend.interface';
 

@@ -1,3 +1,7 @@
+import {
+  MAX_THRESHOLD,
+  MIN_THRESHOLD,
+} from '../../digital-signal-processing/comparable-number/parameters';
 import { DataPoint } from '../../digital-signal-processing/digital-signal-processing.interface';
 import { SwingPointData } from '../../digital-signal-processing/swing-points/swing-points.interface';
 import { MIN_SWING_POINTS } from './parameters';
@@ -17,7 +21,9 @@ export class Trend {
   constructor(
     private swingPoints: SwingPointData[],
     private data: DataPoint[],
+    private options: { relativeThreshold: number },
   ) {
+    const { relativeThreshold } = options;
     if (this.swingPoints.length < MIN_SWING_POINTS) {
       throw new Error(
         `swingPoints must be an array with at least ${MIN_SWING_POINTS} elements`,
@@ -26,6 +32,14 @@ export class Trend {
     if (this.data.length < MIN_SWING_POINTS) {
       throw new Error(
         `data must be an array with at least ${MIN_SWING_POINTS} elements`,
+      );
+    }
+    if (
+      relativeThreshold < MIN_THRESHOLD ||
+      relativeThreshold > MAX_THRESHOLD
+    ) {
+      throw new Error(
+        `relativeThreshold must be between ${MIN_THRESHOLD} and ${MAX_THRESHOLD}`,
       );
     }
 
