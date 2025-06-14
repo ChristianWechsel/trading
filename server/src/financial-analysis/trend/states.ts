@@ -141,7 +141,7 @@ export class DownwardTrendConfirmed extends State {
   }
 }
 
-class UpwardTrendWarning extends State {
+export class UpwardTrendWarning extends State {
   process(swingPoint: SwingPointData): State {
     const lastRelevantPoint = this.memory.findLast(
       (point) => point.swingPoint.swingPointType === swingPoint.swingPointType,
@@ -161,7 +161,7 @@ class UpwardTrendWarning extends State {
   }
 }
 
-class DownwardTrendWarning extends State {
+export class DownwardTrendWarning extends State {
   process(swingPoint: SwingPointData): State {
     const lastRelevantPoint = this.memory.findLast(
       (point) => point.swingPoint.swingPointType === swingPoint.swingPointType,

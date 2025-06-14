@@ -3,14 +3,16 @@ import { SwingPointData } from '../../digital-signal-processing/swing-points/swi
 import { MIN_SWING_POINTS } from './parameters';
 import {
   DownwardTrendConfirmed,
+  DownwardTrendWarning,
   TrendBroken,
   UpwardTrendConfirmed,
+  UpwardTrendWarning,
 } from './states';
 import { TrendStateMachine } from './trend-state-machine';
-import { TrendData } from './trend.interface';
+import { TrendData, TrendDataMetadata } from './trend.interface';
 
 export class Trend {
-  private trends: TrendData[];
+  private trends: TrendDataMetadata[];
 
   constructor(
     private swingPoints: SwingPointData[],
@@ -45,35 +47,63 @@ export class Trend {
     // Wahrscheinlich muss hier auch eine Toleranz eingeführt werden, da die Hochs und Tiefs
     // nicht exakt gleich sind, aber trotzdem ähnlich genug sind, um als Seitwärtstrend zu gelten
 
-    let currentUnbrokenTrend: TrendData | undefined;
-
     const stateMachine = new TrendStateMachine(
-      ({ newState: state, memory }) => {
-        if (state instanceof UpwardTrendConfirmed) {
+      ({ newState, oldState, memory }) => {
+        // Erste Trendbestätigung
+        if (
+          (newState instanceof UpwardTrendConfirmed &&
+            !(
+              oldState instanceof UpwardTrendWarning ||
+              oldState instanceof UpwardTrendConfirmed
+            )) ||
+          (newState instanceof DownwardTrendConfirmed &&
+            !(
+              oldState instanceof DownwardTrendWarning ||
+              oldState instanceof DownwardTrendConfirmed
+            ))
+        ) {
           const trendDefiningPoints = memory.getLatest(3);
-
-          if (!currentUnbrokenTrend) {
-            currentUnbrokenTrend = {
-              trendType: 'upward',
+          this.trends.push({
+            trendData: {
+              trendType:
+                newState instanceof UpwardTrendConfirmed
+                  ? 'upward'
+                  : 'downward',
               startPoint: trendDefiningPoints[0].swingPoint.point,
-            };
+              endPoint: trendDefiningPoints[2].swingPoint.point, // Ende des Trends wird auf den letzten SwingPoint gesetzt
+            },
+            metaddata: { statusTrend: 'ongoing' },
+          });
+        } else if (
+          // erste Warnung stellt potenzielles Ende des Trends dar
+          (newState instanceof UpwardTrendWarning ||
+            newState instanceof DownwardTrendWarning) &&
+          (oldState instanceof UpwardTrendConfirmed ||
+            oldState instanceof DownwardTrendConfirmed)
+        ) {
+          const lastTrend = this.trends[this.trends.length - 1];
+          const [pointBeforeWarning] = memory.getLatest(2);
+          lastTrend.trendData.endPoint = pointBeforeWarning.swingPoint.point; // Ende wird auf letzten Punkt vor Warnung gesetzt
+        } else if (
+          // Warnung hat sich nicht bestätigt, Trend geht weiter.
+          (newState instanceof UpwardTrendConfirmed ||
+            newState instanceof DownwardTrendConfirmed) &&
+          (oldState instanceof UpwardTrendWarning ||
+            oldState instanceof DownwardTrendWarning)
+        ) {
+          const lastTrend = this.trends[this.trends.length - 1];
+          const currentPoint = memory.getLast();
+          if (currentPoint) {
+            lastTrend.trendData.endPoint = currentPoint.swingPoint.point; // Ende wird auf aktuellen Punkt gesetzt
           }
-        } else if (state instanceof DownwardTrendConfirmed) {
-          const trendDefiningPoints = memory.getLatest(3);
-
-          if (!currentUnbrokenTrend) {
-            currentUnbrokenTrend = {
-              trendType: 'downward',
-              startPoint: trendDefiningPoints[0].swingPoint.point,
-            };
-          }
-        } else if (state instanceof TrendBroken) {
-          const lastPoint = memory.getLast();
-          if (currentUnbrokenTrend && lastPoint) {
-            currentUnbrokenTrend.endPoint = lastPoint.swingPoint.point;
-            this.trends.push(currentUnbrokenTrend);
-            currentUnbrokenTrend = undefined;
-          }
+        } else if (
+          // Trendbruch eingetreten
+          newState instanceof TrendBroken &&
+          (oldState instanceof UpwardTrendWarning ||
+            oldState instanceof DownwardTrendWarning)
+        ) {
+          const lastTrend = this.trends[this.trends.length - 1];
+          lastTrend.metaddata.statusTrend = 'finished';
         }
       },
     );
@@ -83,11 +113,11 @@ export class Trend {
       stateMachine.process(this.swingPoints[idxSwingPoint]);
       idxSwingPoint++;
     }
-    if (currentUnbrokenTrend) {
-      currentUnbrokenTrend.endPoint = this.data[this.data.length - 1];
-      this.trends.push(currentUnbrokenTrend);
+    const lastTrend = this.trends[this.trends.length - 1];
+    if (lastTrend && lastTrend.metaddata.statusTrend === 'ongoing') {
+      lastTrend.trendData.endPoint = this.data[this.data.length - 1];
     }
 
-    return this.trends;
+    return this.trends.map((trend) => trend.trendData);
   }
 }

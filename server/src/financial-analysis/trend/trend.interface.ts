@@ -11,6 +11,11 @@ export type TrendData = {
   endPoint?: DataPoint;
 };
 
+export type TrendDataMetadata = {
+  trendData: TrendData;
+  metaddata: { statusTrend: 'ongoing' | 'finished' };
+};
+
 export type TrendAnalysisPoint = {
   swingPoint: SwingPointData;
 };
