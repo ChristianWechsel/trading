@@ -183,7 +183,35 @@ export class DownwardTrendWarning extends State {
 
 export class TrendBroken extends State {
   process(swingPoint: SwingPointData): State {
-    this.memory.add({ swingPoint });
-    return this.transitionTo(new StartState(this.memory, this.onTransition));
+    const relevantHistory = this.memory.getLatest(3);
+    const beginNewTrend = new BeginNewTrend(
+      this.memory,
+      this.onTransition,
+      relevantHistory,
+    );
+    return beginNewTrend.process(swingPoint);
+  }
+}
+
+class BeginNewTrend extends State {
+  private historyToProcess: TrendAnalysisPoint[];
+
+  constructor(
+    memory: Memory<TrendAnalysisPoint>,
+    onTransition: TransitionCallback,
+    historyToProcess: TrendAnalysisPoint[],
+  ) {
+    super(memory, onTransition);
+    this.historyToProcess = historyToProcess;
+  }
+
+  process(swingPoint: SwingPointData): State {
+    let currentState: State = new StartState(this.memory, this.onTransition);
+
+    for (const point of this.historyToProcess) {
+      currentState = currentState.process(point.swingPoint);
+    }
+
+    return currentState.process(swingPoint);
   }
 }
