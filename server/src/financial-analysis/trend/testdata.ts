@@ -625,8 +625,8 @@ export class TrendTestData {
         { swingPointType: 'swingLow', point: { x: 3, y: 12 } }, // Confirmed Up
 
         // 2. Unklare Phase (bricht den Aufwärtstrend, etabliert aber keinen neuen)
-        { swingPointType: 'swingHigh', point: { x: 4, y: 15 } }, // kein höheres Hoch
-        { swingPointType: 'swingLow', point: { x: 5, y: 13 } }, // kein höheres Tief
+        { swingPointType: 'swingHigh', point: { x: 4, y: 15 } }, // Warning: tieferes Hoch
+        { swingPointType: 'swingLow', point: { x: 5, y: 11 } }, // Broken: tieferes Tief
 
         // 3. Neuer Abwärtstrend beginnt
         { swingPointType: 'swingHigh', point: { x: 6, y: 16 } }, // Start Down
@@ -638,7 +638,7 @@ export class TrendTestData {
         { x: 2, y: 20 },
         { x: 3, y: 12 },
         { x: 4, y: 15 },
-        { x: 5, y: 13 },
+        { x: 5, y: 11 },
         { x: 6, y: 16 },
         { x: 7, y: 5 },
         { x: 8, y: 14 },
