@@ -44,8 +44,8 @@ export class SwingPoints {
     }
   }
 
-  getSwingPoints(): SwingPointData[] {
-    const swingPointDataList: SwingPointData[] = [];
+  getSwingPoints(): SwingPointData<number>[] {
+    const swingPointDataList: SwingPointData<number>[] = [];
     let idx = this.options.windowSize;
     while (idx < this.data.length - this.options.windowSize) {
       const { previousPoints, nextPoints } = this.getSurroundingPoints(idx);

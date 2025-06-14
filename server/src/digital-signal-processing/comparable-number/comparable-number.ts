@@ -36,4 +36,8 @@ export class ComparableNumber {
   isSignificantlyLowerThan(other: ComparableNumber): boolean {
     return this.value < other.value * (1 - this.threshold);
   }
+
+  getValue(): number {
+    return this.value;
+  }
 }

@@ -3,7 +3,7 @@ import { SwingPointData } from './swing-points.interface';
 
 type SwingPointAnalysis = {
   data: DataPoint<number>[];
-  result: SwingPointData[];
+  result: SwingPointData<number>[];
   windowSize: number;
 };
 

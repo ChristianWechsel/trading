@@ -6,7 +6,7 @@ export class TrendTestData {
   /**
    * Weniger als die Mindestanzahl an SwingPoints (z.B. 2)
    */
-  lessThanMinSwingPoints(): SwingPointData[] {
+  lessThanMinSwingPoints(): SwingPointData<number>[] {
     return [
       { swingPointType: 'swingHigh', point: { x: 1, y: 1 } },
       { swingPointType: 'swingLow', point: { x: 2, y: 2 } },
@@ -16,7 +16,7 @@ export class TrendTestData {
   /**
    * Genau die Mindestanzahl an SwingPoints (z.B. 3)
    */
-  minSwingPoints(): SwingPointData[] {
+  minSwingPoints(): SwingPointData<number>[] {
     return [
       { swingPointType: 'swingHigh', point: { x: 1, y: 1 } },
       { swingPointType: 'swingLow', point: { x: 2, y: 2 } },
@@ -27,7 +27,7 @@ export class TrendTestData {
   /**
    * Mehr als die Mindestanzahl an SwingPoints (z.B. 4)
    */
-  moreThanMinSwingPoints(): SwingPointData[] {
+  moreThanMinSwingPoints(): SwingPointData<number>[] {
     return [
       { swingPointType: 'swingHigh', point: { x: 1, y: 1 } },
       { swingPointType: 'swingLow', point: { x: 2, y: 2 } },
@@ -71,7 +71,7 @@ export class TrendTestData {
 
   // Aufwärtstrend
   upwardTrend(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -98,7 +98,7 @@ export class TrendTestData {
 
   // Abwärtstrend
   downwardTrend(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -125,7 +125,7 @@ export class TrendTestData {
 
   // Aufwärtstrend hat sich nicht bestätigt
   upwardTrendNotConfirmed(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -146,7 +146,7 @@ export class TrendTestData {
 
   // Abwärtstrend hat sich nicht bestätigt
   downwardTrendNotConfirmed(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -166,7 +166,7 @@ export class TrendTestData {
   }
   // Aufwärtstrend hat sich nicht bestätigt - Grenzfall
   upwardTrendNotConfirmedEdgeCase(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -187,7 +187,7 @@ export class TrendTestData {
 
   // Abwärtstrend hat sich nicht bestätigt - Grenzfall
   downwardTrendNotConfirmedEdgeCase(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -208,7 +208,7 @@ export class TrendTestData {
 
   // Aufwärtstrend bis Ende Datenreihe
   upwardTrendInfinite(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -239,7 +239,7 @@ export class TrendTestData {
 
   // Abwärtstrend bis Ende Datenreihe
   downwardTrendInfinite(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -270,7 +270,7 @@ export class TrendTestData {
 
   // Fortgesetzter Aufwärtstrend ohne Endpunkt (Resultat ohne Endpunkt)
   upwardTrendContinuesWithoutEndpoint(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -304,7 +304,7 @@ export class TrendTestData {
 
   // Fortgesetzter Aufwärtstrend, der mit tieferem Tief und tieferem Hoch endet
   upwardTrendBreaksWithLowerLowAndLowerHigh(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -337,7 +337,7 @@ export class TrendTestData {
 
   // Fortgesetzter Abwärtstrend ohne Endpunkt (Trend läuft weiter, kein bestätigendes Ende)
   downwardTrendContinuesWithoutEndpoint(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -371,7 +371,7 @@ export class TrendTestData {
 
   // Fortgesetzter Abwärtstrend, der mit höherem Hoch und höherem Tief endet (Trend bricht)
   downwardTrendBreaksWithHigherHighAndHigherLow(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -406,7 +406,7 @@ export class TrendTestData {
    * Ein Aufwärtstrend wird verletzt (Warning), erholt sich aber wieder.
    */
   upwardTrendRecoversAfterWarning(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -445,7 +445,7 @@ export class TrendTestData {
    * Wir benennen ihn hier explizit, um die Logik klarer zu machen.
    */
   downwardTrendBreaksAfterWarning(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -480,7 +480,7 @@ export class TrendTestData {
    * Ein Abwärtstrend wird verletzt (Warning), erholt sich aber wieder.
    */
   downwardTrendRecoversAfterWarning(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -518,7 +518,7 @@ export class TrendTestData {
    * Ein sauberer Aufwärtstrend wird von einem sauberen Abwärtstrend gefolgt.
    */
   upwardTrendFollowedByDownwardTrend(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -565,7 +565,7 @@ export class TrendTestData {
    * Ein sauberer Abwärtstrend wird von einem sauberen Aufwärtstrend gefolgt.
    */
   downwardTrendFollowedByUpwardTrend(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -613,7 +613,7 @@ export class TrendTestData {
    * bevor ein neuer Trend beginnt.
    */
   trendFollowedByChoppyPeriodThenNewTrend(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -664,7 +664,7 @@ export class TrendTestData {
    * Dies testet: isSignificantlyHigherThan()
    */
   upwardTrendFailsDueToInsufficientlyHigherLow(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -690,7 +690,7 @@ export class TrendTestData {
    * Dies testet: isSignificantlyLowerThan()
    */
   downwardTrendFailsDueToInsufficientlyLowerHigh(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -716,7 +716,7 @@ export class TrendTestData {
    * Dies testet die Fortsetzungslogik.
    */
   upwardTrendBreaksDueToStallingHigh(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -755,7 +755,7 @@ export class TrendTestData {
    * Dies testet die Fortsetzungslogik.
    */
   downwardTrendBreaksDueToStallingLow(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {
@@ -798,7 +798,7 @@ export class TrendTestData {
    * Dies testet: isCloseEnough()
    */
   sidewaysTrendRecognizedAsNoUpDownTrend(): {
-    swingPoints: SwingPointData[];
+    swingPoints: SwingPointData<number>[];
     data: DataPoint<number>[];
     result: TrendData[];
   } {

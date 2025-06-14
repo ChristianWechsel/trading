@@ -1,3 +1,4 @@
+import { ComparableNumber } from 'src/digital-signal-processing/comparable-number/comparable-number';
 import { SwingPointData } from 'src/digital-signal-processing/swing-points/swing-points.interface';
 import { Memory } from './memory';
 import { StartState, State } from './states';
@@ -12,7 +13,7 @@ export class TrendStateMachine {
     this.currentState = new StartState(this.memory, onTransition);
   }
 
-  process(swingPoint: SwingPointData): void {
+  process(swingPoint: SwingPointData<ComparableNumber>): void {
     this.currentState = this.currentState.process(swingPoint);
   }
 }

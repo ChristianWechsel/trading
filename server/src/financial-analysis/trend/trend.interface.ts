@@ -1,4 +1,5 @@
 import { SwingPointData } from 'src/digital-signal-processing/swing-points/swing-points.interface';
+import { ComparableNumber } from '../../digital-signal-processing/comparable-number/comparable-number';
 import { DataPoint } from '../../digital-signal-processing/digital-signal-processing.interface';
 import { Memory } from './memory';
 import { State } from './states';
@@ -17,7 +18,7 @@ export type TrendDataMetadata = {
 };
 
 export type TrendAnalysisPoint = {
-  swingPoint: SwingPointData;
+  swingPoint: SwingPointData<ComparableNumber>;
 };
 
 export type TransitionCallback = (values: {

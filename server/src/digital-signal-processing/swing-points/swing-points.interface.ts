@@ -8,7 +8,7 @@ export type SwingPointType =
   | 'upwardToPlateau' // previous < current == next
   | 'downwardToPlateau'; // previous > current == next;
 
-export type SwingPointData = {
+export type SwingPointData<T> = {
   swingPointType: SwingPointType;
-  point: DataPoint<number>;
+  point: DataPoint<T>;
 };

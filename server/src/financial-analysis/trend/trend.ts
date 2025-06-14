@@ -1,3 +1,4 @@
+import { ComparableNumber } from '../../digital-signal-processing/comparable-number/comparable-number';
 import {
   MAX_THRESHOLD,
   MIN_THRESHOLD,
@@ -17,10 +18,12 @@ import { TrendData, TrendDataMetadata } from './trend.interface';
 
 export class Trend {
   private trends: TrendDataMetadata[];
+  private swingPoints: SwingPointData<ComparableNumber>[];
+  private data: DataPoint<ComparableNumber>[];
 
   constructor(
-    private swingPoints: SwingPointData[],
-    private data: DataPoint<number>[],
+    swingPoints: SwingPointData<number>[],
+    data: DataPoint<number>[],
     private options: { relativeThreshold: number },
   ) {
     const { relativeThreshold } = options;
@@ -44,6 +47,22 @@ export class Trend {
     }
 
     this.trends = [];
+    this.swingPoints = swingPoints.map<SwingPointData<ComparableNumber>>(
+      (swingPoint) => {
+        const { point, swingPointType } = swingPoint;
+        return {
+          swingPointType,
+          point: {
+            x: new ComparableNumber(point.x, this.options.relativeThreshold),
+            y: new ComparableNumber(point.y, this.options.relativeThreshold),
+          },
+        };
+      },
+    );
+    this.data = data.map<DataPoint<ComparableNumber>>((point) => ({
+      x: new ComparableNumber(point.x, this.options.relativeThreshold),
+      y: new ComparableNumber(point.y, this.options.relativeThreshold),
+    }));
   }
 
   detectTrends(): TrendData[] {
@@ -76,8 +95,14 @@ export class Trend {
                 newState instanceof UpwardTrendConfirmed
                   ? 'upward'
                   : 'downward',
-              startPoint: trendDefiningPoints[0].swingPoint.point,
-              endPoint: trendDefiningPoints[2].swingPoint.point, // Ende des Trends wird auf den letzten SwingPoint gesetzt
+              startPoint: {
+                x: trendDefiningPoints[0].swingPoint.point.x.getValue(),
+                y: trendDefiningPoints[0].swingPoint.point.y.getValue(),
+              },
+              endPoint: {
+                x: trendDefiningPoints[2].swingPoint.point.x.getValue(),
+                y: trendDefiningPoints[2].swingPoint.point.y.getValue(),
+              },
             },
             metaddata: { statusTrend: 'ongoing' },
           });
@@ -90,7 +115,10 @@ export class Trend {
         ) {
           const lastTrend = this.trends[this.trends.length - 1];
           const [pointBeforeWarning] = memory.getLatest(2);
-          lastTrend.trendData.endPoint = pointBeforeWarning.swingPoint.point; // Ende wird auf letzten Punkt vor Warnung gesetzt
+          lastTrend.trendData.endPoint = {
+            x: pointBeforeWarning.swingPoint.point.x.getValue(),
+            y: pointBeforeWarning.swingPoint.point.y.getValue(),
+          }; // Ende wird auf letzten Punkt vor Warnung gesetzt
         } else if (
           // Warnung hat sich nicht bestätigt, Trend geht weiter.
           (newState instanceof UpwardTrendConfirmed ||
@@ -101,7 +129,10 @@ export class Trend {
           const lastTrend = this.trends[this.trends.length - 1];
           const currentPoint = memory.getLast();
           if (currentPoint) {
-            lastTrend.trendData.endPoint = currentPoint.swingPoint.point; // Ende wird auf aktuellen Punkt gesetzt
+            lastTrend.trendData.endPoint = {
+              x: currentPoint.swingPoint.point.x.getValue(),
+              y: currentPoint.swingPoint.point.y.getValue(),
+            }; // Ende wird auf aktuellen Punkt gesetzt
           }
         } else if (
           // Trendbruch eingetreten
@@ -122,7 +153,10 @@ export class Trend {
     }
     const lastTrend = this.trends[this.trends.length - 1];
     if (lastTrend && lastTrend.metaddata.statusTrend === 'ongoing') {
-      lastTrend.trendData.endPoint = this.data[this.data.length - 1];
+      lastTrend.trendData.endPoint = {
+        x: this.data[this.data.length - 1].x.getValue(),
+        y: this.data[this.data.length - 1].y.getValue(),
+      }; // Ende des Trends auf letzten Datenpunkt setzen
     }
 
     return this.trends.map((trend) => trend.trendData);

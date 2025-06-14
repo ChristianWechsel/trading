@@ -113,4 +113,24 @@ describe('ComparableNumber', () => {
       expect(a.isSignificantlyLowerThan(b)).toBe(true);
     });
   });
+
+  describe('getValue', () => {
+    it('should return the correct positive value', () => {
+      const number = 123.45;
+      const comparable = new ComparableNumber(number, 0.1);
+      expect(comparable.getValue()).toBe(number);
+    });
+
+    it('should return the correct negative value', () => {
+      const number = -50;
+      const comparable = new ComparableNumber(number, 0.1);
+      expect(comparable.getValue()).toBe(number);
+    });
+
+    it('should return the correct zero value', () => {
+      const number = 0;
+      const comparable = new ComparableNumber(number, 0.1);
+      expect(comparable.getValue()).toBe(number);
+    });
+  });
 });
