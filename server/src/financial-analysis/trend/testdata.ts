@@ -657,4 +657,152 @@ export class TrendTestData {
       ],
     };
   }
+
+  /**
+   * Ein Aufwärtstrend wird NICHT bestätigt, weil das zweite Tief
+   * zwar höher, aber nicht *signifikant* höher ist.
+   * Dies testet: isSignificantlyHigherThan()
+   */
+  upwardTrendFailsDueToInsufficientlyHigherLow(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingLow', point: { x: 1, y: 100 } },
+        { swingPointType: 'swingHigh', point: { x: 2, y: 110 } },
+        // 101 ist > 100, aber bei einer Schwelle von z.B. 2% nicht signifikant höher.
+        { swingPointType: 'swingLow', point: { x: 3, y: 101 } },
+      ],
+      data: [
+        /* ... */
+      ],
+      result: [], // Kein Trend wird erkannt.
+    };
+  }
+
+  /**
+   * Ein Abwärtstrend wird NICHT bestätigt, weil das zweite Hoch
+   * zwar tiefer, aber nicht *signifikant* tiefer ist.
+   * Dies testet: isSignificantlyLowerThan()
+   */
+  downwardTrendFailsDueToInsufficientlyLowerHigh(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingHigh', point: { x: 1, y: 100 } },
+        { swingPointType: 'swingLow', point: { x: 2, y: 90 } },
+        // 99 ist < 100, aber bei einer Schwelle von 2% nicht signifikant tiefer (bräuchte < 98).
+        { swingPointType: 'swingHigh', point: { x: 3, y: 99 } },
+      ],
+      data: [
+        /* ... */
+      ],
+      result: [], // Kein Trend wird erkannt.
+    };
+  }
+
+  /**
+   * Ein laufender Aufwärtstrend bricht, weil ein neues Hoch
+   * nicht signifikant höher ist (Stagnation).
+   * Dies testet die Fortsetzungslogik.
+   */
+  upwardTrendBreaksDueToStallingHigh(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingLow', point: { x: 1, y: 100 } },
+        { swingPointType: 'swingHigh', point: { x: 2, y: 110 } },
+        { swingPointType: 'swingLow', point: { x: 3, y: 105 } }, // Confirmed
+        { swingPointType: 'swingHigh', point: { x: 4, y: 115 } }, // Continuation, Peak
+        { swingPointType: 'swingLow', point: { x: 5, y: 108 } }, // Confirmed
+        // 116 ist nicht signifikant höher als 115. Momentum ist weg -> Warning/Break.
+        { swingPointType: 'swingHigh', point: { x: 6, y: 116 } },
+      ],
+      data: [
+        /* ... */
+      ],
+      result: [
+        {
+          trendType: 'upward',
+          startPoint: { x: 1, y: 100 },
+          // Der Trend endet am letzten validen Punkt VOR dem stagnierenden Hoch.
+          endPoint: { x: 5, y: 108 },
+        },
+      ],
+    };
+  }
+
+  /**
+   * Ein laufender Abwärtstrend bricht, weil ein neues Tief
+   * nicht signifikant tiefer ist (Stagnation).
+   * Dies testet die Fortsetzungslogik.
+   */
+  downwardTrendBreaksDueToStallingLow(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        // 1. Abwärtstrend wird etabliert
+        { swingPointType: 'swingHigh', point: { x: 1, y: 100 } },
+        { swingPointType: 'swingLow', point: { x: 2, y: 90 } },
+        { swingPointType: 'swingHigh', point: { x: 3, y: 95 } }, // Confirmed Down (95 < 100)
+
+        // 2. Trend wird fortgesetzt
+        { swingPointType: 'swingLow', point: { x: 4, y: 85 } }, // Continuation (Talsohle), da 85 < 90
+        { swingPointType: 'swingHigh', point: { x: 5, y: 92 } }, // Continuation, da 92 < 95
+
+        // 3. Bruch durch Stagnation
+        // 84 ist zwar < 85, aber nicht signifikant tiefer. Momentum ist weg -> Warning/Break.
+        { swingPointType: 'swingLow', point: { x: 6, y: 84 } },
+      ],
+      data: [
+        /* ... */
+      ],
+      result: [
+        {
+          trendType: 'downward',
+          startPoint: { x: 1, y: 100 },
+          // Der Trend endet am letzten validen Punkt VOR dem stagnierenden Tief.
+          endPoint: { x: 5, y: 92 },
+        },
+      ],
+    };
+  }
+
+  /**
+   * Ein Seitwärtstrend, bei dem Hochs und Tiefs nahe genug beieinander liegen.
+   * Dies testet: isCloseEnough()
+   */
+  sidewaysTrendRecognizedAsNoUpDownTrend(): {
+    swingPoints: SwingPointData[];
+    data: DataPoint[];
+    result: TrendData[];
+  } {
+    return {
+      swingPoints: [
+        { swingPointType: 'swingLow', point: { x: 1, y: 99 } },
+        { swingPointType: 'swingHigh', point: { x: 2, y: 101 } },
+        // 100 ist "close enough" zu 99
+        { swingPointType: 'swingLow', point: { x: 3, y: 100 } },
+        // 102 ist "close enough" zu 101
+        { swingPointType: 'swingHigh', point: { x: 4, y: 102 } },
+      ],
+      data: [
+        /* ... */
+      ],
+      // Kein Aufwärts- oder Abwärtstrend wird erkannt.
+      // Später könnte hier ein 'sideways' Trend erkannt werden.
+      result: [],
+    };
+  }
 }

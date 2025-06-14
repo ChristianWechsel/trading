@@ -122,4 +122,42 @@ describe('Trend', () => {
       expect(trend).toEqual(result);
     });
   });
+
+  describe('Trend with Thresholds', () => {
+    const testData = new TrendTestData();
+
+    // Hier müsstest du die Trend-Klasse so instanziieren,
+    // dass sie den Threshold-Wert verwendet.
+    // z.B. new Trend(swingPoints, data, { threshold: 0.02 })
+
+    it.each([
+      [
+        'should NOT confirm upward trend if low is not significantly higher',
+        testData.upwardTrendFailsDueToInsufficientlyHigherLow(),
+      ],
+      [
+        'should NOT confirm downward trend if high is not significantly lower',
+        testData.downwardTrendFailsDueToInsufficientlyLowerHigh(),
+      ],
+      [
+        'should BREAK upward trend if new high is not significantly higher',
+        testData.upwardTrendBreaksDueToStallingHigh(),
+      ],
+      [
+        'should BREAK downward trend if new low is not significantly lower',
+        testData.downwardTrendBreaksDueToStallingLow(),
+      ],
+      [
+        'should NOT detect up/down trend during sideways movement',
+        testData.sidewaysTrendRecognizedAsNoUpDownTrend(),
+      ],
+    ])('%s', (_desc, { swingPoints, data, result }) => {
+      // Annahme: Der Threshold wird über den Konstruktor oder eine Methode gesetzt.
+      const trend = new Trend(
+        swingPoints,
+        data /*, threshold */,
+      ).detectTrends();
+      expect(trend).toEqual(result);
+    });
+  });
 });
