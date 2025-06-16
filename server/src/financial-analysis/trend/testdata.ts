@@ -792,6 +792,7 @@ export class TrendTestData {
         { swingPointType: 'swingLow', point: { x: 5, y: 108 } }, // Confirmed
         // 116 ist nicht signifikant höher als 115. Momentum ist weg -> Warning/Break.
         { swingPointType: 'swingHigh', point: { x: 6, y: 116 } },
+        { swingPointType: 'swingLow', point: { x: 7, y: 109 } },
       ],
       data: [
         { x: 1, y: 100 },
@@ -800,6 +801,7 @@ export class TrendTestData {
         { x: 4, y: 115 },
         { x: 5, y: 108 },
         { x: 6, y: 116 },
+        { x: 7, y: 109 },
       ],
       result: [
         {
@@ -835,7 +837,8 @@ export class TrendTestData {
 
         // 3. Bruch durch Stagnation
         // 84 ist zwar < 85, aber nicht signifikant tiefer. Momentum ist weg -> Warning/Break.
-        { swingPointType: 'swingLow', point: { x: 6, y: 84 } },
+        { swingPointType: 'swingLow', point: { x: 6, y: 84.5 } },
+        { swingPointType: 'swingHigh', point: { x: 7, y: 91.5 } },
       ],
       data: [
         { x: 1, y: 100 },
@@ -844,6 +847,7 @@ export class TrendTestData {
         { x: 4, y: 85 },
         { x: 5, y: 92 },
         { x: 6, y: 84 },
+        { x: 7, y: 91 },
       ],
       result: [
         {
@@ -870,15 +874,15 @@ export class TrendTestData {
         { swingPointType: 'swingLow', point: { x: 1, y: 99 } },
         { swingPointType: 'swingHigh', point: { x: 2, y: 101 } },
         // 100 ist "close enough" zu 99
-        { swingPointType: 'swingLow', point: { x: 3, y: 100 } },
+        { swingPointType: 'swingLow', point: { x: 3, y: 99.8 } },
         // 102 ist "close enough" zu 101
-        { swingPointType: 'swingHigh', point: { x: 4, y: 102 } },
+        { swingPointType: 'swingHigh', point: { x: 4, y: 101.5 } },
       ],
       data: [
         { x: 1, y: 99 },
         { x: 2, y: 101 },
-        { x: 3, y: 100 },
-        { x: 4, y: 102 },
+        { x: 3, y: 99.8 },
+        { x: 4, y: 101.5 },
       ],
       // Kein Aufwärts- oder Abwärtstrend wird erkannt.
       // Später könnte hier ein 'sideways' Trend erkannt werden.

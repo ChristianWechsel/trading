@@ -188,7 +188,7 @@ describe('Trend', () => {
       ],
     ])('should detect %s', (_desc, { swingPoints, data, result }) => {
       const trend = new Trend(swingPoints, data, {
-        relativeThreshold: 0.1,
+        relativeThreshold: 0.01,
       }).detectTrends();
       expect(trend).toEqual(result);
     });
@@ -225,7 +225,7 @@ describe('Trend', () => {
     ])('%s', (_desc, { swingPoints, data, result }) => {
       // Annahme: Der Threshold wird über den Konstruktor oder eine Methode gesetzt.
       const trend = new Trend(swingPoints, data, {
-        relativeThreshold: 0.1,
+        relativeThreshold: 0.01,
       }).detectTrends();
       expect(trend).toEqual(result);
     });
