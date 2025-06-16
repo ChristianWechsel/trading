@@ -680,14 +680,14 @@ export class TrendTestData {
         { swingPointType: 'swingLow', point: { x: 5, y: 8 } }, // Broken
 
         // 3. "GAP": Unklare, chaotische Phase ohne klaren Trend
-        { swingPointType: 'swingHigh', point: { x: 6, y: 10 } },
+        { swingPointType: 'swingHigh', point: { x: 6, y: 11 } },
         { swingPointType: 'swingLow', point: { x: 7, y: 7 } },
         { swingPointType: 'swingHigh', point: { x: 8, y: 19 } },
-        { swingPointType: 'swingLow', point: { x: 9, y: 6 } },
+        { swingPointType: 'swingLow', point: { x: 9, y: 7 } },
 
         // 4. Ein neuer, sauberer Abwärtstrend beginnt hier
         { swingPointType: 'swingHigh', point: { x: 10, y: 25 } }, // Start Down
-        { swingPointType: 'swingLow', point: { x: 11, y: 16 } },
+        { swingPointType: 'swingLow', point: { x: 11, y: 7 } },
         { swingPointType: 'swingHigh', point: { x: 12, y: 22 } }, // Confirmed Down
       ],
       data: [
@@ -696,12 +696,12 @@ export class TrendTestData {
         { x: 3, y: 12 },
         { x: 4, y: 11 },
         { x: 5, y: 8 },
-        { x: 6, y: 10 },
+        { x: 6, y: 11 },
         { x: 7, y: 7 },
         { x: 8, y: 19 },
-        { x: 9, y: 6 },
+        { x: 9, y: 7 },
         { x: 10, y: 25 },
-        { x: 11, y: 16 },
+        { x: 11, y: 7 },
         { x: 12, y: 22 },
       ],
       result: [

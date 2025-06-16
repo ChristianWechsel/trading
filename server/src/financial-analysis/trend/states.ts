@@ -69,8 +69,10 @@ class UpwardTrendSecondCheck extends State {
         new UpwardTrendConfirmed(this.memory, this.onTransition),
       );
     }
-
-    return this.transitionTo(new StartState(this.memory, this.onTransition));
+    const relevantHistory = this.memory.getLatest(2);
+    return this.transitionTo(
+      new BeginNewTrend(this.memory, this.onTransition, relevantHistory),
+    );
   }
 }
 
@@ -125,7 +127,11 @@ class DownwardTrendSecondCheck extends State {
         new DownwardTrendConfirmed(this.memory, this.onTransition),
       );
     }
-    return this.transitionTo(new StartState(this.memory, this.onTransition));
+
+    const relevantHistory = this.memory.getLatest(2);
+    return this.transitionTo(
+      new BeginNewTrend(this.memory, this.onTransition, relevantHistory),
+    );
   }
 }
 
