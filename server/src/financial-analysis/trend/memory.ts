@@ -16,6 +16,10 @@ export class Memory<T> {
     return this.memory.slice(Math.max(this.memory.length - n, 0));
   }
 
+  getAll(): T[] {
+    return [...this.memory];
+  }
+
   findLast(predicate: (item: T) => boolean): T | undefined {
     return this.memory.slice().reverse().find(predicate);
   }

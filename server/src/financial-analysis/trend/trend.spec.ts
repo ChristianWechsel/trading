@@ -197,10 +197,6 @@ describe('Trend', () => {
   describe('Trend with Thresholds', () => {
     const testData = new TrendTestData();
 
-    // Hier müsstest du die Trend-Klasse so instanziieren,
-    // dass sie den Threshold-Wert verwendet.
-    // z.B. new Trend(swingPoints, data, { threshold: 0.02 })
-
     it.each([
       [
         'should NOT confirm upward trend if low is not significantly higher',

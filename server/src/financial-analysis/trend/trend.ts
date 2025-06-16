@@ -66,9 +66,6 @@ export class Trend {
   }
 
   detectTrends(): TrendData[] {
-    // Bei Trendbruch Toleranzen einügen, ob Fehlausbrüche zu ignorieren
-    // Toleranzen parameterisierbar machen, um Feintuning zu ermöglichen
-
     // Bei einem begonnen Trend den Trendkanal bestimmen
 
     // Ggf. erkennen, ob es sich um langfristigen, mittelfristigen oder kurzfristigen Trend handelt

@@ -49,6 +49,34 @@ describe('Memory', () => {
     expect(memory.getLatest(3)).toEqual([]);
   });
 
+  describe('getAll', () => {
+    it('should return an empty array if memory is empty', () => {
+      expect(memory.getAll()).toEqual([]);
+    });
+
+    it('should return all items in the memory', () => {
+      memory.add(1);
+      memory.add(2);
+      memory.add(3);
+      expect(memory.getAll()).toEqual([1, 2, 3]);
+    });
+
+    it('should return a copy of the memory, not a reference', () => {
+      memory.add(1);
+      memory.add(2);
+      const allItems = memory.getAll();
+      allItems.push(3); // Modify the returned array
+      expect(memory.getAll()).toEqual([1, 2]); // Original memory should be unchanged
+    });
+
+    it('should return items in the order they were added', () => {
+      memory.add(3);
+      memory.add(1);
+      memory.add(2);
+      expect(memory.getAll()).toEqual([3, 1, 2]);
+    });
+  });
+
   describe('findLast', () => {
     it('should return undefined if memory is empty', () => {
       expect(memory.findLast((item) => item === 1)).toBeUndefined();

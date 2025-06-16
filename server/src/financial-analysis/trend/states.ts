@@ -1,4 +1,4 @@
-import { ComparableNumber } from 'src/digital-signal-processing/comparable-number/comparable-number';
+import { ComparableNumber } from '../../digital-signal-processing/comparable-number/comparable-number';
 import { SwingPointData } from '../../digital-signal-processing/swing-points/swing-points.interface';
 import { Memory } from './memory';
 import { TransitionCallback, TrendAnalysisPoint } from './trend.interface';
