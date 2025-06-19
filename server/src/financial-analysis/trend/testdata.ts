@@ -79,29 +79,14 @@ export class TrendTestData {
           this.createEnrichedDataPoint({ x: 2, y: 2 }, 'swingLow'),
           this.createEnrichedDataPoint({ x: 3, y: 1 }, 'swingHigh'),
         ],
-        expectedTrend: [],
+        expectedTrend: [
+          { index: 0, type: 'downward' },
+          { index: 1, type: 'downward' },
+          { index: 2, type: 'downward' },
+        ],
         settings: { relativeThreshold: 0.01 },
       },
     };
-    // return {
-    //   swingPoints: [
-    //     { swingPointType: 'swingHigh', point: { x: 1, y: 3 } },
-    //     { swingPointType: 'swingLow', point: { x: 2, y: 2 } },
-    //     { swingPointType: 'swingHigh', point: { x: 3, y: 1 } },
-    //   ],
-    //   data: [
-    //     { x: 1, y: 3 },
-    //     { x: 2, y: 2 },
-    //     { x: 3, y: 1 },
-    //   ],
-    //   result: [
-    //     {
-    //       trendType: 'downward',
-    //       startPoint: { x: 1, y: 3 },
-    //       endPoint: { x: 3, y: 1 },
-    //     },
-    //   ],
-    // };
   }
 
   // Aufwärtstrend hat sich nicht bestätigt
@@ -118,19 +103,6 @@ export class TrendTestData {
         settings: { relativeThreshold: 0.01 },
       },
     };
-    // return {
-    //   swingPoints: [
-    //     { swingPointType: 'swingLow', point: { x: 1, y: 2 } },
-    //     { swingPointType: 'swingHigh', point: { x: 2, y: 3 } },
-    //     { swingPointType: 'swingLow', point: { x: 3, y: 1 } },
-    //   ],
-    //   data: [
-    //     { x: 1, y: 2 },
-    //     { x: 2, y: 3 },
-    //     { x: 3, y: 1 },
-    //   ],
-    //   result: [],
-    // };
   }
 
   // Abwärtstrend hat sich nicht bestätigt
@@ -147,19 +119,6 @@ export class TrendTestData {
         settings: { relativeThreshold: 0.01 },
       },
     };
-    // return {
-    //   swingPoints: [
-    //     { swingPointType: 'swingHigh', point: { x: 1, y: 3 } },
-    //     { swingPointType: 'swingLow', point: { x: 2, y: 2 } },
-    //     { swingPointType: 'swingHigh', point: { x: 3, y: 4 } },
-    //   ],
-    //   data: [
-    //     { x: 1, y: 3 },
-    //     { x: 2, y: 2 },
-    //     { x: 3, y: 4 },
-    //   ],
-    //   result: [],
-    // };
   }
   // Aufwärtstrend hat sich nicht bestätigt - Grenzfall
   upwardTrendNotConfirmedEdgeCase(): TrendTestCase {
@@ -175,19 +134,6 @@ export class TrendTestData {
         settings: { relativeThreshold: 0.01 },
       },
     };
-    // return {
-    //   swingPoints: [
-    //     { swingPointType: 'swingLow', point: { x: 1, y: 2 } },
-    //     { swingPointType: 'swingHigh', point: { x: 2, y: 3 } },
-    //     { swingPointType: 'swingLow', point: { x: 3, y: 2 } },
-    //   ],
-    //   data: [
-    //     { x: 1, y: 2 },
-    //     { x: 2, y: 3 },
-    //     { x: 3, y: 2 },
-    //   ],
-    //   result: [],
-    // };
   }
 
   // Abwärtstrend hat sich nicht bestätigt - Grenzfall
@@ -204,19 +150,6 @@ export class TrendTestData {
         settings: { relativeThreshold: 0.01 },
       },
     };
-    // return {
-    //   swingPoints: [
-    //     { swingPointType: 'swingHigh', point: { x: 1, y: 3 } },
-    //     { swingPointType: 'swingLow', point: { x: 2, y: 2 } },
-    //     { swingPointType: 'swingHigh', point: { x: 3, y: 3 } },
-    //   ],
-    //   data: [
-    //     { x: 1, y: 3 },
-    //     { x: 2, y: 2 },
-    //     { x: 3, y: 3 },
-    //   ],
-    //   result: [],
-    // };
   }
 
   // Aufwärtstrend bis Ende Datenreihe
@@ -233,33 +166,18 @@ export class TrendTestData {
           this.createEnrichedDataPoint({ x: 6, y: 6 }, null),
           this.createEnrichedDataPoint({ x: 7, y: 7 }, null),
         ],
-        expectedTrend: [],
+        expectedTrend: [
+          { index: 0, type: 'upward' },
+          { index: 1, type: 'upward' },
+          { index: 2, type: 'upward' },
+          { index: 3, type: 'upward' },
+          { index: 4, type: 'upward' },
+          { index: 5, type: 'upward' },
+          { index: 6, type: 'upward' },
+        ],
         settings: { relativeThreshold: 0.01 },
       },
     };
-    // return {
-    //   swingPoints: [
-    //     { swingPointType: 'swingLow', point: { x: 1, y: 1 } },
-    //     { swingPointType: 'swingHigh', point: { x: 2, y: 2 } },
-    //     { swingPointType: 'swingLow', point: { x: 3, y: 3 } },
-    //   ],
-    //   data: [
-    //     { x: 1, y: 1 },
-    //     { x: 2, y: 2 },
-    //     { x: 3, y: 3 },
-    //     { x: 4, y: 4 },
-    //     { x: 5, y: 5 },
-    //     { x: 6, y: 6 },
-    //     { x: 7, y: 7 },
-    //   ],
-    //   result: [
-    //     {
-    //       trendType: 'upward',
-    //       startPoint: { x: 1, y: 1 },
-    //       endPoint: { x: 7, y: 7 },
-    //     },
-    //   ],
-    // };
   }
 
   // Abwärtstrend bis Ende Datenreihe
@@ -276,33 +194,18 @@ export class TrendTestData {
           this.createEnrichedDataPoint({ x: 6, y: 6 }, null),
           this.createEnrichedDataPoint({ x: 7, y: 7 }, null),
         ],
-        expectedTrend: [],
+        expectedTrend: [
+          { index: 0, type: 'downward' },
+          { index: 1, type: 'downward' },
+          { index: 2, type: 'downward' },
+          { index: 3, type: 'downward' },
+          { index: 4, type: 'downward' },
+          { index: 5, type: 'downward' },
+          { index: 6, type: 'downward' },
+        ],
         settings: { relativeThreshold: 0.01 },
       },
     };
-    // return {
-    //   swingPoints: [
-    //     { swingPointType: 'swingHigh', point: { x: 1, y: 3 } },
-    //     { swingPointType: 'swingLow', point: { x: 2, y: 2 } },
-    //     { swingPointType: 'swingHigh', point: { x: 3, y: 1 } },
-    //   ],
-    //   data: [
-    //     { x: 1, y: 3 },
-    //     { x: 2, y: 2 },
-    //     { x: 3, y: 1 },
-    //     { x: 4, y: 4 },
-    //     { x: 5, y: 5 },
-    //     { x: 6, y: 6 },
-    //     { x: 7, y: 7 },
-    //   ],
-    //   result: [
-    //     {
-    //       trendType: 'downward',
-    //       startPoint: { x: 1, y: 3 },
-    //       endPoint: { x: 7, y: 7 },
-    //     },
-    //   ],
-    // };
   }
 
   // Fortgesetzter Aufwärtstrend ohne Endpunkt (Resultat ohne Endpunkt)
@@ -318,36 +221,17 @@ export class TrendTestData {
           this.createEnrichedDataPoint({ x: 5, y: 4 }, 'swingLow'),
           this.createEnrichedDataPoint({ x: 6, y: 5 }, 'swingHigh'),
         ],
-        expectedTrend: [],
+        expectedTrend: [
+          { index: 0, type: 'upward' },
+          { index: 1, type: 'upward' },
+          { index: 2, type: 'upward' },
+          { index: 3, type: 'upward' },
+          { index: 4, type: 'upward' },
+          { index: 5, type: 'upward' },
+        ],
         settings: { relativeThreshold: 0.01 },
       },
     };
-    // return {
-    //   swingPoints: [
-    //     { swingPointType: 'swingLow', point: { x: 1, y: 1 } },
-    //     { swingPointType: 'swingHigh', point: { x: 2, y: 2 } },
-    //     { swingPointType: 'swingLow', point: { x: 3, y: 3 } },
-    //     { swingPointType: 'swingHigh', point: { x: 4, y: 4 } },
-    //     { swingPointType: 'swingLow', point: { x: 5, y: 4 } },
-    //     { swingPointType: 'swingHigh', point: { x: 6, y: 5 } },
-    //     // Trend läuft weiter, kein bestätigendes Ende
-    //   ],
-    //   data: [
-    //     { x: 1, y: 1 },
-    //     { x: 2, y: 2 },
-    //     { x: 3, y: 3 },
-    //     { x: 4, y: 4 },
-    //     { x: 5, y: 4 },
-    //     { x: 6, y: 5 },
-    //   ],
-    //   result: [
-    //     {
-    //       trendType: 'upward',
-    //       startPoint: { x: 1, y: 1 },
-    //       endPoint: { x: 6, y: 5 },
-    //     },
-    //   ],
-    // };
   }
 
   // Fortgesetzter Aufwärtstrend, der mit tieferem Tief und tieferem Hoch endet
@@ -363,35 +247,15 @@ export class TrendTestData {
           this.createEnrichedDataPoint({ x: 5, y: 1 }, 'swingLow'), // WARNING: tieferes Tief
           this.createEnrichedDataPoint({ x: 6, y: 3 }, 'swingHigh'), // BROKEN: tieferes Hoch
         ],
-        expectedTrend: [],
+        expectedTrend: [
+          { index: 0, type: 'upward' },
+          { index: 1, type: 'upward' },
+          { index: 2, type: 'upward' },
+          { index: 3, type: 'upward' },
+        ],
         settings: { relativeThreshold: 0.01 },
       },
     };
-    // return {
-    //   swingPoints: [
-    //     { swingPointType: 'swingLow', point: { x: 1, y: 1 } },
-    //     { swingPointType: 'swingHigh', point: { x: 2, y: 3 } },
-    //     { swingPointType: 'swingLow', point: { x: 3, y: 2 } }, // Confirmed Up
-    //     { swingPointType: 'swingHigh', point: { x: 4, y: 4 } }, // Continuation (Peak)
-    //     { swingPointType: 'swingLow', point: { x: 5, y: 1 } }, // WARNING: tieferes Tief
-    //     { swingPointType: 'swingHigh', point: { x: 6, y: 3 } }, // BROKEN: tieferes Hoch
-    //   ],
-    //   data: [
-    //     { x: 1, y: 1 },
-    //     { x: 2, y: 3 },
-    //     { x: 3, y: 2 },
-    //     { x: 4, y: 4 },
-    //     { x: 5, y: 1 },
-    //     { x: 6, y: 3 },
-    //   ],
-    //   result: [
-    //     {
-    //       trendType: 'upward',
-    //       startPoint: { x: 1, y: 1 },
-    //       endPoint: { x: 4, y: 4 },
-    //     },
-    //   ],
-    // };
   }
 
   // Fortgesetzter Abwärtstrend ohne Endpunkt (Trend läuft weiter, kein bestätigendes Ende)
@@ -407,36 +271,17 @@ export class TrendTestData {
           this.createEnrichedDataPoint({ x: 5, y: 3 }, 'swingHigh'),
           this.createEnrichedDataPoint({ x: 6, y: 2 }, 'swingLow'),
         ],
-        expectedTrend: [],
+        expectedTrend: [
+          { index: 0, type: 'downward' },
+          { index: 1, type: 'downward' },
+          { index: 2, type: 'downward' },
+          { index: 3, type: 'downward' },
+          { index: 4, type: 'downward' },
+          { index: 5, type: 'downward' },
+        ],
         settings: { relativeThreshold: 0.01 },
       },
     };
-    // return {
-    //   swingPoints: [
-    //     { swingPointType: 'swingHigh', point: { x: 1, y: 7 } },
-    //     { swingPointType: 'swingLow', point: { x: 2, y: 6 } },
-    //     { swingPointType: 'swingHigh', point: { x: 3, y: 5 } },
-    //     { swingPointType: 'swingLow', point: { x: 4, y: 4 } },
-    //     { swingPointType: 'swingHigh', point: { x: 5, y: 3 } },
-    //     { swingPointType: 'swingLow', point: { x: 6, y: 2 } },
-    //     // Trend läuft weiter, kein bestätigendes Ende
-    //   ],
-    //   data: [
-    //     { x: 1, y: 7 },
-    //     { x: 2, y: 6 },
-    //     { x: 3, y: 5 },
-    //     { x: 4, y: 4 },
-    //     { x: 5, y: 3 },
-    //     { x: 6, y: 2 },
-    //   ],
-    //   result: [
-    //     {
-    //       trendType: 'downward',
-    //       startPoint: { x: 1, y: 7 },
-    //       endPoint: { x: 6, y: 2 },
-    //     },
-    //   ],
-    // };
   }
 
   // Fortgesetzter Abwärtstrend, der mit höherem Hoch und höherem Tief endet (Trend bricht)
@@ -452,35 +297,15 @@ export class TrendTestData {
           this.createEnrichedDataPoint({ x: 5, y: 8 }, 'swingHigh'), // WARNING: höheres Hoch
           this.createEnrichedDataPoint({ x: 6, y: 3 }, 'swingLow'), // BROKEN: höheres Tief
         ],
-        expectedTrend: [],
+        expectedTrend: [
+          { index: 0, type: 'downward' },
+          { index: 1, type: 'downward' },
+          { index: 2, type: 'downward' },
+          { index: 3, type: 'downward' },
+        ],
         settings: { relativeThreshold: 0.01 },
       },
     };
-    // return {
-    //   swingPoints: [
-    //     { swingPointType: 'swingHigh', point: { x: 1, y: 7 } },
-    //     { swingPointType: 'swingLow', point: { x: 2, y: 2 } },
-    //     { swingPointType: 'swingHigh', point: { x: 3, y: 6 } }, // Confirmed Down
-    //     { swingPointType: 'swingLow', point: { x: 4, y: 1 } }, // Continuation (Talsohle)
-    //     { swingPointType: 'swingHigh', point: { x: 5, y: 8 } }, // WARNING: höheres Hoch
-    //     { swingPointType: 'swingLow', point: { x: 6, y: 3 } }, // BROKEN: höheres Tief
-    //   ],
-    //   data: [
-    //     { x: 1, y: 7 },
-    //     { x: 2, y: 2 },
-    //     { x: 3, y: 6 },
-    //     { x: 4, y: 1 },
-    //     { x: 5, y: 8 },
-    //     { x: 6, y: 3 },
-    //   ],
-    //   result: [
-    //     {
-    //       trendType: 'downward',
-    //       startPoint: { x: 1, y: 7 },
-    //       endPoint: { x: 4, y: 1 },
-    //     },
-    //   ],
-    // };
   }
 
   /**
@@ -499,37 +324,18 @@ export class TrendTestData {
           this.createEnrichedDataPoint({ x: 6, y: 25 }, 'swingHigh'), // RECOVER: höheres Hoch
           this.createEnrichedDataPoint({ x: 7, y: 15 }, 'swingLow'), // Fortsetzung
         ],
-        expectedTrend: [],
+        expectedTrend: [
+          { index: 0, type: 'upward' },
+          { index: 1, type: 'upward' },
+          { index: 2, type: 'upward' },
+          { index: 3, type: 'upward' },
+          { index: 4, type: 'upward' },
+          { index: 5, type: 'upward' },
+          { index: 6, type: 'upward' },
+        ],
         settings: { relativeThreshold: 0.01 },
       },
     };
-    // return {
-    //   swingPoints: [
-    //     { swingPointType: 'swingLow', point: { x: 1, y: 10 } }, // Start
-    //     { swingPointType: 'swingHigh', point: { x: 2, y: 20 } },
-    //     { swingPointType: 'swingLow', point: { x: 3, y: 12 } }, // Confirmed
-    //     { swingPointType: 'swingHigh', point: { x: 4, y: 22 } },
-    //     { swingPointType: 'swingLow', point: { x: 5, y: 11 } }, // WARNING: tieferes Tief
-    //     { swingPointType: 'swingHigh', point: { x: 6, y: 25 } }, // RECOVER: höheres Hoch
-    //     { swingPointType: 'swingLow', point: { x: 7, y: 15 } }, // Fortsetzung
-    //   ],
-    //   data: [
-    //     { x: 1, y: 10 },
-    //     { x: 2, y: 20 },
-    //     { x: 3, y: 12 },
-    //     { x: 4, y: 22 },
-    //     { x: 5, y: 11 },
-    //     { x: 6, y: 25 },
-    //     { x: 7, y: 15 },
-    //   ],
-    //   result: [
-    //     {
-    //       trendType: 'upward',
-    //       startPoint: { x: 1, y: 10 },
-    //       endPoint: { x: 7, y: 15 },
-    //     },
-    //   ],
-    // };
   }
 
   /**
@@ -549,35 +355,15 @@ export class TrendTestData {
           this.createEnrichedDataPoint({ x: 5, y: 19 }, 'swingHigh'), // WARNING: höheres Hoch
           this.createEnrichedDataPoint({ x: 6, y: 9 }, 'swingLow'), // BROKEN: höheres Tief
         ],
-        expectedTrend: [],
+        expectedTrend: [
+          { index: 0, type: 'downward' },
+          { index: 1, type: 'downward' },
+          { index: 2, type: 'downward' },
+          { index: 3, type: 'downward' },
+        ],
         settings: { relativeThreshold: 0.01 },
       },
     };
-    // return {
-    //   swingPoints: [
-    //     { swingPointType: 'swingHigh', point: { x: 1, y: 20 } }, // Start
-    //     { swingPointType: 'swingLow', point: { x: 2, y: 10 } },
-    //     { swingPointType: 'swingHigh', point: { x: 3, y: 18 } }, // Confirmed
-    //     { swingPointType: 'swingLow', point: { x: 4, y: 8 } }, // Continuation (Talsohle)
-    //     { swingPointType: 'swingHigh', point: { x: 5, y: 19 } }, // WARNING: höheres Hoch
-    //     { swingPointType: 'swingLow', point: { x: 6, y: 9 } }, // BROKEN: höheres Tief
-    //   ],
-    //   data: [
-    //     { x: 1, y: 20 },
-    //     { x: 2, y: 10 },
-    //     { x: 3, y: 18 },
-    //     { x: 4, y: 8 },
-    //     { x: 5, y: 19 },
-    //     { x: 6, y: 9 },
-    //   ],
-    //   result: [
-    //     {
-    //       trendType: 'downward',
-    //       startPoint: { x: 1, y: 20 },
-    //       endPoint: { x: 4, y: 8 },
-    //     },
-    //   ],
-    // };
   }
 
   /**
@@ -596,38 +382,18 @@ export class TrendTestData {
           this.createEnrichedDataPoint({ x: 6, y: 5 }, 'swingLow'), // RECOVER: tieferes Tief
           this.createEnrichedDataPoint({ x: 7, y: 15 }, 'swingHigh'), // Fortsetzung
         ],
-        expectedTrend: [],
+        expectedTrend: [
+          { index: 0, type: 'downward' },
+          { index: 1, type: 'downward' },
+          { index: 2, type: 'downward' },
+          { index: 3, type: 'downward' },
+          { index: 4, type: 'downward' },
+          { index: 5, type: 'downward' },
+          { index: 6, type: 'downward' },
+        ],
         settings: { relativeThreshold: 0.01 },
       },
     };
-    // return {
-    //   swingPoints: [
-    //     { swingPointType: 'swingHigh', point: { x: 1, y: 20 } }, // Start
-    //     { swingPointType: 'swingLow', point: { x: 2, y: 10 } },
-    //     { swingPointType: 'swingHigh', point: { x: 3, y: 18 } }, // Confirmed
-    //     { swingPointType: 'swingLow', point: { x: 4, y: 8 } },
-    //     { swingPointType: 'swingHigh', point: { x: 5, y: 19 } }, // WARNING: höheres Hoch
-    //     { swingPointType: 'swingLow', point: { x: 6, y: 5 } }, // RECOVER: tieferes Tief
-    //     { swingPointType: 'swingHigh', point: { x: 7, y: 15 } }, // Fortsetzung
-    //   ],
-    //   data: [
-    //     { x: 1, y: 20 },
-    //     { x: 2, y: 10 },
-    //     { x: 3, y: 18 },
-    //     { x: 4, y: 8 },
-    //     { x: 5, y: 19 },
-    //     { x: 6, y: 5 },
-    //     { x: 7, y: 15 },
-    //   ],
-    //   result: [
-    //     {
-    //       trendType: 'downward',
-    //       startPoint: { x: 1, y: 20 },
-    //       // Der Trend wurde nie gebrochen und läuft bis zum Ende
-    //       endPoint: { x: 7, y: 15 },
-    //     },
-    //   ],
-    // };
   }
 
   /**
@@ -646,25 +412,19 @@ export class TrendTestData {
           this.createEnrichedDataPoint({ x: 6, y: 18 }, 'swingHigh'),
           this.createEnrichedDataPoint({ x: 7, y: 9 }, 'swingLow'),
         ],
-        expectedTrend: [],
+        expectedTrend: [
+          { index: 0, type: 'upward' },
+          { index: 1, type: 'downward' },
+          { index: 2, type: 'downward' },
+          { index: 3, type: 'downward' },
+          { index: 4, type: 'downward' },
+          { index: 5, type: 'downward' },
+          { index: 6, type: 'downward' },
+        ],
         settings: { relativeThreshold: 0.01 },
       },
     };
-    // return {
-    //   swingPoints: [
-    //     // 1. Aufwärtstrend wird etabliert
-    //     { swingPointType: 'swingLow', point: { x: 1, y: 10 } }, // Start Up
-    //     { swingPointType: 'swingHigh', point: { x: 2, y: 20 } },
-    //     { swingPointType: 'swingLow', point: { x: 3, y: 12 } }, // Confirmed Up
-    //     { swingPointType: 'swingHigh', point: { x: 4, y: 22 } }, // Peak des Aufwärtstrends
 
-    //     // 2. Bruch des Aufwärtstrends & Start des Abwärtstrends
-    //     { swingPointType: 'swingLow', point: { x: 5, y: 11 } }, // Warning Up & Teil des Down-Musters
-    //     { swingPointType: 'swingHigh', point: { x: 6, y: 18 } }, // Broken Up & Confirmed Down
-
-    //     // 3. Fortsetzung des Abwärtstrends
-    //     { swingPointType: 'swingLow', point: { x: 7, y: 9 } },
-    //   ],
     //   data: [
     //     { x: 1, y: 10 },
     //     { x: 2, y: 20 },

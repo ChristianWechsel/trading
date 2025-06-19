@@ -102,7 +102,7 @@ describe('Trend', () => {
   });
 
   describe('detectTrends', () => {
-    it.only.each([
+    it.each([
       testData.upwardTrend(),
       testData.downwardTrend(),
       testData.upwardTrendNotConfirmed(),
