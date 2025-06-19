@@ -22,51 +22,50 @@ export class TestDataSwingPoints {
     };
   }
 
-  // singleSwingHigh_close(): SwingPointAnalysis {
-  //   return {
-  //     data: [
-  //       new EnrichedDataPoint({ x: 1, y: 2 }),
-  //       new EnrichedDataPoint({ x: 2, y: 2.09 }), // close to 2
-  //       new EnrichedDataPoint({ x: 3, y: 2 }),
-  //     ],
-  //     result: [],
-  //     windowSize: 1,
-  //   };
-  // }
+  singleSwingHigh_close(): SwingPointTestCase {
+    return {
+      name: 'detect swing high (close values)',
+      testcase: {
+        data: [
+          this.createEnrichedDataPoint({ x: 1, y: 2 }),
+          this.createEnrichedDataPoint({ x: 2, y: 2.09 }), // close to 2
+          this.createEnrichedDataPoint({ x: 3, y: 2 }),
+        ],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
 
-  // singleSwingHigh_significant(): SwingPointAnalysis {
-  //   return {
-  //     data: [
-  //       new EnrichedDataPoint({ x: 1, y: 2 }),
-  //       new EnrichedDataPoint({ x: 2, y: 3 }),
-  //       new EnrichedDataPoint({ x: 3, y: 1.5 }),
-  //     ],
-  //     result: [
-  //       {
-  //         swingPointType: 'swingHigh',
-  //         point: { x: 2, y: 3 },
-  //       },
-  //     ],
-  //     windowSize: 1,
-  //   };
-  // }
+  singleSwingHigh_significant(): SwingPointTestCase {
+    return {
+      name: 'detect swing high (significant difference)',
+      testcase: {
+        data: [
+          this.createEnrichedDataPoint({ x: 1, y: 2 }),
+          this.createEnrichedDataPoint({ x: 2, y: 3 }),
+          this.createEnrichedDataPoint({ x: 3, y: 1.5 }),
+        ],
+        expectedSwingPoints: [{ index: 1, type: 'swingHigh' }],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
 
-  // singleSwingLow(): SwingPointAnalysis {
-  //   return {
-  //     data: [
-  //       new EnrichedDataPoint({ x: 1, y: 3 }),
-  //       new EnrichedDataPoint({ x: 2, y: 2 }),
-  //       new EnrichedDataPoint({ x: 3, y: 3 }),
-  //     ],
-  //     result: [
-  //       {
-  //         swingPointType: 'swingLow',
-  //         point: { x: 2, y: 2 },
-  //       },
-  //     ],
-  //     windowSize: 1,
-  //   };
-  // }
+  singleSwingLow(): SwingPointTestCase {
+    return {
+      name: 'detect swing low',
+      testcase: {
+        data: [
+          this.createEnrichedDataPoint({ x: 1, y: 3 }),
+          this.createEnrichedDataPoint({ x: 2, y: 2 }),
+          this.createEnrichedDataPoint({ x: 3, y: 3 }),
+        ],
+        expectedSwingPoints: [{ index: 1, type: 'swingLow' }],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
 
   // singleSwingLow_close(): SwingPointAnalysis {
   //   return {

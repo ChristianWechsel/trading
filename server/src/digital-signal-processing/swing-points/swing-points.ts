@@ -50,10 +50,7 @@ export class SwingPoints {
       } else if (
         this.isSwingLow(previousPoints, currentComparableNumber, nextPoints)
       ) {
-        swingPointDataList.push({
-          swingPointType: 'swingLow',
-          point: currentPoint,
-        });
+        currentPoint.setSwingPointType('swingLow');
       } else if (
         this.isDownwardToPlateau(
           previousPoints,
@@ -101,7 +98,7 @@ export class SwingPoints {
       }
       idx++;
     }
-    // return swingPointDataList;
+
     return this.data;
   }
 

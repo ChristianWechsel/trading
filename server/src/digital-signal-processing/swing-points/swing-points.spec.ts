@@ -22,18 +22,10 @@ describe('SwingPoints', () => {
 
   const cases = [
     testData.singleSwingHigh(),
-    // {
-    //   name: 'detect swing high (close values)',
-    //   data: testData.singleSwingHigh_close(),
-    // },
-    // {
-    //   name: 'detect swing high (significant difference)',
-    //   data: testData.singleSwingHigh_significant(),
-    // },
-    // {
-    //   name: 'detect swing low',
-    //   data: testData.singleSwingLow(),
-    // },
+    testData.singleSwingHigh_close(),
+    testData.singleSwingHigh_significant(),
+    testData.singleSwingLow(),
+
     // {
     //   name: 'detect swing low (close values)',
     //   data: testData.singleSwingLow_close(),
