@@ -35,66 +35,21 @@ describe('SwingPoints', () => {
     testData.noSwingPoint_Ascending(),
     testData.noSwingPoint_Descending(),
     testData.plateauToUpward(),
-    // {
-    //   name: 'detect plateau low',
-    //   data: testData.plateauToDownward(),
-    // },
-    // {
-    //   name: 'detect high plateau',
-    //   data: testData.downwardToPlateau(),
-    // },
-    // {
-    //   name: 'detect low plateau',
-    //   data: testData.upwardToPlateau(),
-    // },
-    // {
-    //   name: 'detect swing high with window size',
-    //   data: testData.singleSwingHighWindow(),
-    // },
-    // {
-    //   name: 'detect swing high with windowSize=3 (centered peak)',
-    //   data: testData.swingHighWindow3_centeredPeak(),
-    // },
-    // {
-    //   name: 'detect swing low with windowSize=3 (centered valley)',
-    //   data: testData.swingLowWindow3_centeredValley(),
-    // },
-    // {
-    //   name: 'no swing high with windowSize=3 (peak not high enough)',
-    //   data: testData.swingHighWindow3_noPeak(),
-    // },
-    // {
-    //   name: 'no swing low with windowSize=3 (valley not low enough)',
-    //   data: testData.swingLowWindow3_noValley(),
-    // },
-    // {
-    //   name: 'detect upwardToPlateau with windowSize=2',
-    //   data: testData.upwardToPlateau_window2(),
-    // },
-    // {
-    //   name: 'detect downwardToPlateau with windowSize=2',
-    //   data: testData.downwardToPlateau_window2(),
-    // },
-    // {
-    //   name: 'detect plateauToUpward with windowSize=2',
-    //   data: testData.plateauToUpward_window2(),
-    // },
-    // {
-    //   name: 'detect plateauToDownward with windowSize=2',
-    //   data: testData.plateauToDownward_window2(),
-    // },
-    // {
-    //   name: 'fail upwardToPlateau with windowSize=2 (trend fail)',
-    //   data: testData.upwardToPlateau_window2_trendFail(),
-    // },
-    // {
-    //   name: 'fail upwardToPlateau with windowSize=2 (plateau fail)',
-    //   data: testData.upwardToPlateau_window2_plateauFail(),
-    // },
-    // {
-    //   name: 'fail plateauToUpward with windowSize=2 (trend fail)',
-    //   data: testData.plateauToUpward_window1_but_fails_window2(),
-    // },
+    testData.plateauToDownward(),
+    testData.upwardToPlateau(),
+    testData.downwardToPlateau(),
+    testData.singleSwingHighWindow(),
+    testData.swingHighWindow3_centeredPeak(),
+    testData.swingLowWindow3_centeredValley(),
+    testData.swingHighWindow3_noPeak(),
+    testData.swingLowWindow3_noValley(),
+    testData.upwardToPlateau_window2(),
+    testData.downwardToPlateau_window2(),
+    testData.plateauToUpward_window2(),
+    testData.plateauToDownward_window2(),
+    testData.upwardToPlateau_window2_trendFail(),
+    testData.upwardToPlateau_window2_plateauFail(),
+    testData.plateauToUpward_window1_but_fails_window2(),
   ];
 
   it.each(cases)('$name', ({ testcase }) => {

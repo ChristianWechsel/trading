@@ -5,7 +5,6 @@ import {
   MIN_WINDOW_SIZE,
 } from '../comparable-number/parameters';
 import { EnrichedDataPoint } from '../dto/enriched-data-point/enriched-data-point';
-import { SwingPointData } from './swing-points.interface';
 
 export class SwingPoints {
   constructor(
@@ -34,7 +33,6 @@ export class SwingPoints {
   }
 
   getSwingPoints(): EnrichedDataPoint[] {
-    const swingPointDataList: SwingPointData<number>[] = [];
     let idx = this.options.windowSize;
     while (idx < this.data.length - this.options.windowSize) {
       const { previousPoints, nextPoints } = this.getSurroundingPoints(idx);
@@ -58,10 +56,7 @@ export class SwingPoints {
           nextPoints,
         )
       ) {
-        swingPointDataList.push({
-          swingPointType: 'downwardToPlateau',
-          point: currentPoint,
-        });
+        currentPoint.setSwingPointType('downwardToPlateau');
       } else if (
         this.isUpwardToPlateau(
           previousPoints,
@@ -69,10 +64,7 @@ export class SwingPoints {
           nextPoints,
         )
       ) {
-        swingPointDataList.push({
-          swingPointType: 'upwardToPlateau',
-          point: currentPoint,
-        });
+        currentPoint.setSwingPointType('upwardToPlateau');
       } else if (
         this.isPlateauToUpward(
           previousPoints,
@@ -88,10 +80,7 @@ export class SwingPoints {
           nextPoints,
         )
       ) {
-        swingPointDataList.push({
-          swingPointType: 'plateauToDownward',
-          point: currentPoint,
-        });
+        currentPoint.setSwingPointType('plateauToDownward');
       }
       idx++;
     }
