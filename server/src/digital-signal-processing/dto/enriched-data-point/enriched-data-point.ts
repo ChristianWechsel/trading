@@ -1,5 +1,6 @@
 import { DataPoint } from 'src/digital-signal-processing/digital-signal-processing.interface';
 
+// entferne export, da dieser Typ nur in EnrichedDataPoint verwendet werden soll
 export type SwingPointType =
   | 'swingHigh' // previous < current > next
   | 'swingLow' // previous > current < next

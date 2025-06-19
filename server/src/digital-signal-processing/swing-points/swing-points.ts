@@ -45,7 +45,7 @@ export class SwingPoints {
     }
   }
 
-  getSwingPoints(): EnrichedDataPoint[][] {
+  getSwingPoints(): EnrichedDataPoint[] {
     const swingPointDataList: SwingPointData<number>[] = [];
     let idx = this.options.windowSize;
     while (idx < this.data.length - this.options.windowSize) {
@@ -114,7 +114,8 @@ export class SwingPoints {
       }
       idx++;
     }
-    return swingPointDataList;
+    // return swingPointDataList;
+    return [];
   }
 
   private getSurroundingPoints(idx: number) {
