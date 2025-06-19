@@ -4,22 +4,10 @@ import {
   MIN_THRESHOLD,
   MIN_WINDOW_SIZE,
 } from '../comparable-number/parameters';
-import { DataPoint } from '../digital-signal-processing.interface';
 import { EnrichedDataPoint } from '../dto/enriched-data-point/enriched-data-point';
 import { SwingPointData } from './swing-points.interface';
 
 export class SwingPoints {
-  /**
-   * Creates an instance of SwingPoints.
-   * @param data - Array of data points to analyze for swing points.
-   * @param options - Object containing options for the SwingPoints instance.
-   *   - relativeThreshold: A number between 0 and 1 that determines the sensitivity
-   *     when comparing data points. A higher value makes the swing point detection
-   *     less sensitive to small fluctuations, while a lower value increases sensitivity.
-   *   - windowSize: A natural number >= 1. windowSize defines the range in which to search
-   *     for a swingHigh or swingLow. This helps to smooth out small spikes and only detect
-   *     significant turning points within a larger neighborhood.
-   */
   constructor(
     private data: EnrichedDataPoint[],
     private options: { relativeThreshold: number; windowSize: number },
@@ -51,15 +39,14 @@ export class SwingPoints {
     while (idx < this.data.length - this.options.windowSize) {
       const { previousPoints, nextPoints } = this.getSurroundingPoints(idx);
       const currentPoint = this.data[idx];
-      const currentComparableNumber = this.createComparableNumber(currentPoint);
+      const currentComparableNumber = this.createComparableNumber(
+        currentPoint.y,
+      );
 
       if (
         this.isSwingHigh(previousPoints, currentComparableNumber, nextPoints)
       ) {
-        swingPointDataList.push({
-          swingPointType: 'swingHigh',
-          point: currentPoint,
-        });
+        currentPoint.setSwingPointType('swingHigh');
       } else if (
         this.isSwingLow(previousPoints, currentComparableNumber, nextPoints)
       ) {
@@ -115,7 +102,7 @@ export class SwingPoints {
       idx++;
     }
     // return swingPointDataList;
-    return [];
+    return this.data;
   }
 
   private getSurroundingPoints(idx: number) {
@@ -125,18 +112,18 @@ export class SwingPoints {
     let idxWindowSize = 0;
     while (idxWindowSize < this.options.windowSize) {
       previousPoints[idxWindowSize] = this.createComparableNumber(
-        this.data[idx - this.options.windowSize + idxWindowSize],
+        this.data[idx - this.options.windowSize + idxWindowSize].y,
       );
       nextPoints[idxWindowSize] = this.createComparableNumber(
-        this.data[idx + idxWindowSize + 1],
+        this.data[idx + idxWindowSize + 1].y,
       );
       idxWindowSize++;
     }
     return { previousPoints, nextPoints };
   }
 
-  private createComparableNumber(dataPoint: DataPoint<number>) {
-    return new ComparableNumber(dataPoint.y, this.options.relativeThreshold);
+  private createComparableNumber(value: number) {
+    return new ComparableNumber(value, this.options.relativeThreshold);
   }
 
   private isSwingHigh(
