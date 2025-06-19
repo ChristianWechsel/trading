@@ -1,13 +1,4 @@
-import { DataPoint } from 'src/digital-signal-processing/digital-signal-processing.interface';
-
-// entferne export, da dieser Typ nur in EnrichedDataPoint verwendet werden soll
-export type SwingPointType =
-  | 'swingHigh' // previous < current > next
-  | 'swingLow' // previous > current < next
-  | 'plateauToUpward' // previous == current < next
-  | 'plateauToDownward' // previous == current > next
-  | 'upwardToPlateau' // previous < current == next
-  | 'downwardToPlateau'; // previous > current == next;
+import { DataPoint } from '../../digital-signal-processing.interface';
 
 export class EnrichedDataPoint {
   private swingPointType: SwingPointType | null = null;
@@ -30,3 +21,11 @@ export class EnrichedDataPoint {
     this.swingPointType = type;
   }
 }
+
+export type SwingPointType =
+  | 'swingHigh' // previous < current > next
+  | 'swingLow' // previous > current < next
+  | 'plateauToUpward' // previous == current < next
+  | 'plateauToDownward' // previous == current > next
+  | 'upwardToPlateau' // previous < current == next
+  | 'downwardToPlateau'; // previous > current == next;

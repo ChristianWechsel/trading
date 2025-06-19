@@ -1,38 +1,54 @@
 import { DataPoint } from '../../digital-signal-processing/digital-signal-processing.interface';
+import {
+  EnrichedDataPoint,
+  SwingPointType,
+} from '../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
 import { SwingPointData } from '../../digital-signal-processing/swing-points/swing-points.interface';
 import { TrendData } from './trend.interface';
 
 export class TrendTestData {
+  private createEnrichedDataPoint(
+    dataPoint: DataPoint<number>,
+    type: SwingPointType | null,
+  ) {
+    const enrichedDataPoint = new EnrichedDataPoint(dataPoint);
+    if (type) {
+      enrichedDataPoint.setSwingPointType(type);
+    }
+    return enrichedDataPoint;
+  }
   /**
    * Weniger als die Mindestanzahl an SwingPoints (z.B. 2)
    */
-  lessThanMinSwingPoints(): SwingPointData<number>[] {
+  lessThanMinSwingPoints(): EnrichedDataPoint[] {
     return [
-      { swingPointType: 'swingHigh', point: { x: 1, y: 1 } },
-      { swingPointType: 'swingLow', point: { x: 2, y: 2 } },
+      this.createEnrichedDataPoint({ x: 1, y: 1 }, 'swingHigh'),
+      this.createEnrichedDataPoint({ x: 2, y: 2 }, 'swingLow'),
+      this.createEnrichedDataPoint({ x: 3, y: 3 }, null),
     ];
   }
 
   /**
    * Genau die Mindestanzahl an SwingPoints (z.B. 3)
    */
-  minSwingPoints(): SwingPointData<number>[] {
+  minSwingPoints(): EnrichedDataPoint[] {
     return [
-      { swingPointType: 'swingHigh', point: { x: 1, y: 1 } },
-      { swingPointType: 'swingLow', point: { x: 2, y: 2 } },
-      { swingPointType: 'swingHigh', point: { x: 3, y: 3 } },
+      this.createEnrichedDataPoint({ x: 1, y: 1 }, 'swingHigh'),
+      this.createEnrichedDataPoint({ x: 2, y: 2 }, 'swingLow'),
+      this.createEnrichedDataPoint({ x: 3, y: 3 }, 'swingHigh'),
+      this.createEnrichedDataPoint({ x: 4, y: 4 }, null),
     ];
   }
 
   /**
    * Mehr als die Mindestanzahl an SwingPoints (z.B. 4)
    */
-  moreThanMinSwingPoints(): SwingPointData<number>[] {
+  moreThanMinSwingPoints(): EnrichedDataPoint[] {
     return [
-      { swingPointType: 'swingHigh', point: { x: 1, y: 1 } },
-      { swingPointType: 'swingLow', point: { x: 2, y: 2 } },
-      { swingPointType: 'swingHigh', point: { x: 3, y: 3 } },
-      { swingPointType: 'swingLow', point: { x: 4, y: 4 } },
+      this.createEnrichedDataPoint({ x: 1, y: 1 }, 'swingHigh'),
+      this.createEnrichedDataPoint({ x: 2, y: 2 }, 'swingLow'),
+      this.createEnrichedDataPoint({ x: 3, y: 3 }, 'swingHigh'),
+      this.createEnrichedDataPoint({ x: 4, y: 4 }, 'swingLow'),
     ];
   }
 

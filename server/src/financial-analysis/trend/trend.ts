@@ -4,6 +4,7 @@ import {
   MIN_THRESHOLD,
 } from '../../digital-signal-processing/comparable-number/parameters';
 import { DataPoint } from '../../digital-signal-processing/digital-signal-processing.interface';
+import { EnrichedDataPoint } from '../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
 import { SwingPointData } from '../../digital-signal-processing/swing-points/swing-points.interface';
 import { MIN_SWING_POINTS } from './parameters';
 import {
@@ -22,19 +23,16 @@ export class Trend {
   private data: DataPoint<ComparableNumber>[];
 
   constructor(
-    swingPoints: SwingPointData<number>[],
-    data: DataPoint<number>[],
+    data: EnrichedDataPoint[],
     private options: { relativeThreshold: number },
   ) {
     const { relativeThreshold } = options;
+    const swingPoints = data.filter(
+      (datum) => datum.getSwingPointType() !== null,
+    );
     if (swingPoints.length < MIN_SWING_POINTS) {
       throw new Error(
-        `swingPoints must be an array with at least ${MIN_SWING_POINTS} elements`,
-      );
-    }
-    if (data.length < MIN_SWING_POINTS) {
-      throw new Error(
-        `data must be an array with at least ${MIN_SWING_POINTS} elements`,
+        `data must be an array with at least ${MIN_SWING_POINTS} swing points`,
       );
     }
     if (
@@ -47,18 +45,18 @@ export class Trend {
     }
 
     this.trends = [];
-    this.swingPoints = swingPoints.map<SwingPointData<ComparableNumber>>(
-      (swingPoint) => {
-        const { point, swingPointType } = swingPoint;
-        return {
-          swingPointType,
-          point: {
-            x: new ComparableNumber(point.x, this.options.relativeThreshold),
-            y: new ComparableNumber(point.y, this.options.relativeThreshold),
-          },
-        };
-      },
-    );
+    // this.swingPoints = swingPoints.map<SwingPointData<ComparableNumber>>(
+    //   (swingPoint) => {
+    //     const { point, swingPointType } = swingPoint;
+    //     return {
+    //       swingPointType,
+    //       point: {
+    //         x: new ComparableNumber(point.x, this.options.relativeThreshold),
+    //         y: new ComparableNumber(point.y, this.options.relativeThreshold),
+    //       },
+    //     };
+    //   },
+    // );
     this.data = data.map<DataPoint<ComparableNumber>>((point) => ({
       x: new ComparableNumber(point.x, this.options.relativeThreshold),
       y: new ComparableNumber(point.y, this.options.relativeThreshold),
