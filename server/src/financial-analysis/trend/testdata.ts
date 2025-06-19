@@ -52,39 +52,6 @@ export class TrendTestData {
     ];
   }
 
-  /**
-   * Datenpunkte für die Tests (mindestens MIN_SWING_POINTS)
-   */
-  minDataPoints(): DataPoint<number>[] {
-    return [
-      { x: 1, y: 1 },
-      { x: 2, y: 2 },
-      { x: 3, y: 3 },
-    ];
-  }
-
-  /**
-   * Datenpunkte für die Tests (mehr als MIN_SWING_POINTS)
-   */
-  moreThanMinDataPoints(): DataPoint<number>[] {
-    return [
-      { x: 1, y: 1 },
-      { x: 2, y: 2 },
-      { x: 3, y: 3 },
-      { x: 4, y: 4 },
-    ];
-  }
-
-  /**
-   * Zu wenige Datenpunkte (weniger als MIN_SWING_POINTS)
-   */
-  lessThanMinDataPoints(): DataPoint<number>[] {
-    return [
-      { x: 1, y: 1 },
-      { x: 2, y: 2 },
-    ];
-  }
-
   // Aufwärtstrend
   upwardTrend(): {
     swingPoints: SwingPointData<number>[];
