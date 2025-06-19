@@ -131,10 +131,19 @@ describe('Trend', () => {
           (expected) => expected.index === idxResult,
         );
         if (idxExpectedTrend > -1) {
-          return (
-            elementResult.getTrend() ===
-            testcase.expectedTrend[idxExpectedTrend].type
-          );
+          const expectedTrendType =
+            testcase.expectedTrend[idxExpectedTrend].type;
+          const actualTrendType = elementResult.getTrend();
+          if (
+            Array.isArray(expectedTrendType) &&
+            Array.isArray(actualTrendType) &&
+            expectedTrendType.length === actualTrendType.length
+          ) {
+            return expectedTrendType.every(
+              (trend, index) => trend === actualTrendType[index],
+            );
+          }
+          return actualTrendType === expectedTrendType;
         }
         return elementResult.getTrend() === null;
       });
