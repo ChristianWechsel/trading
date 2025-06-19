@@ -33,11 +33,24 @@ describe('EnrichedDataPoint', () => {
 
     enrichedDataPoint.setTrend('upward');
     expect(enrichedDataPoint.getTrend()).toBe('upward');
+  });
 
+  it('should set and get the trend correctly - double tap', () => {
+    const mockDataPoint: DataPoint<number> = { x: 10, y: 20 };
+    const enrichedDataPoint = new EnrichedDataPoint(mockDataPoint);
+
+    enrichedDataPoint.setTrend('upward');
     enrichedDataPoint.setTrend('downward');
-    expect(enrichedDataPoint.getTrend()).toBe('downward');
+    expect(enrichedDataPoint.getTrend()).toEqual(['upward', 'downward']);
+  });
 
-    enrichedDataPoint.setTrend(null);
-    expect(enrichedDataPoint.getTrend()).toBeNull();
+  it('should set and get the trend correctly - triple tap', () => {
+    const mockDataPoint: DataPoint<number> = { x: 10, y: 20 };
+    const enrichedDataPoint = new EnrichedDataPoint(mockDataPoint);
+
+    enrichedDataPoint.setTrend('upward');
+    enrichedDataPoint.setTrend('downward');
+    enrichedDataPoint.setTrend('upward');
+    expect(enrichedDataPoint.getTrend()).toEqual(['upward', 'downward']);
   });
 });

@@ -26,8 +26,12 @@ export class EnrichedDataPoint {
     return this.trend;
   }
 
-  setTrend(trend: TrendType): void {
-    this.trend = trend;
+  setTrend(trend: TrendElement): void {
+    if (this.trend === null) {
+      this.trend = trend;
+    } else if (!Array.isArray(this.trend)) {
+      this.trend = [this.trend, trend];
+    }
   }
 }
 
@@ -40,4 +44,5 @@ export type SwingPointType =
   | 'downwardToPlateau' // previous > current == next;
   | null; // no swing point detected
 
-export type TrendType = 'upward' | 'downward' | null;
+type TrendElement = 'upward' | 'downward';
+export type TrendType = TrendElement | [TrendElement, TrendElement] | null;

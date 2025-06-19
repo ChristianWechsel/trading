@@ -414,8 +414,9 @@ export class TrendTestData {
         ],
         expectedTrend: [
           { index: 0, type: 'upward' },
-          { index: 1, type: 'downward' },
-          { index: 2, type: 'downward' },
+          { index: 1, type: 'upward' },
+          { index: 2, type: 'upward' },
+          { index: 3, type: 'upward' },
           { index: 3, type: 'downward' },
           { index: 4, type: 'downward' },
           { index: 5, type: 'downward' },
