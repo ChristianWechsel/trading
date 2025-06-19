@@ -2,8 +2,21 @@ import {
   MAX_THRESHOLD,
   MIN_THRESHOLD,
 } from '../../digital-signal-processing/comparable-number/parameters';
+import { EnrichedDataPoint } from '../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
 import { TrendTestData } from './testdata';
 import { Trend } from './trend';
+
+export type TrendTestCase = {
+  name: string;
+  testcase: {
+    data: EnrichedDataPoint[];
+    expectedSwingPoints: { index: number; type: SwingPointType }[];
+    settings: {
+      relativeThreshold: number;
+      windowSize: number;
+    };
+  };
+};
 
 describe('Trend', () => {
   const testData = new TrendTestData();
