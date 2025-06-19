@@ -1,8 +1,8 @@
 import { DataPoint } from '../../digital-signal-processing.interface';
 
 export class EnrichedDataPoint {
-  private swingPointType: SwingPointType | null = null;
-  private trend: TrendType | null = null;
+  private swingPointType: SwingPointType = null;
+  private trend: TrendType = null;
 
   constructor(private dataPoint: DataPoint<number>) {}
 
@@ -14,7 +14,7 @@ export class EnrichedDataPoint {
     return this.dataPoint.y;
   }
 
-  getSwingPointType(): SwingPointType | null {
+  getSwingPointType(): SwingPointType {
     return this.swingPointType;
   }
 
@@ -22,11 +22,11 @@ export class EnrichedDataPoint {
     this.swingPointType = type;
   }
 
-  getTrend(): TrendType | null {
+  getTrend(): TrendType {
     return this.trend;
   }
 
-  setTrend(trend: TrendType | null): void {
+  setTrend(trend: TrendType): void {
     this.trend = trend;
   }
 }
@@ -37,6 +37,7 @@ export type SwingPointType =
   | 'plateauToUpward' // previous == current < next
   | 'plateauToDownward' // previous == current > next
   | 'upwardToPlateau' // previous < current == next
-  | 'downwardToPlateau'; // previous > current == next;
+  | 'downwardToPlateau' // previous > current == next;
+  | null; // no swing point detected
 
-export type TrendType = 'upward' | 'downward';
+export type TrendType = 'upward' | 'downward' | null;

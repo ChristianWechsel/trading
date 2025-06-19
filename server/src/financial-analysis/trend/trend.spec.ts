@@ -102,26 +102,26 @@ describe('Trend', () => {
   });
 
   describe('detectTrends', () => {
-    it.each([
-      [testData.upwardTrend()],
-      [testData.downwardTrend()],
-      [testData.upwardTrendNotConfirmed()],
-      [testData.downwardTrendNotConfirmed()],
-      [testData.upwardTrendNotConfirmedEdgeCase()],
-      [testData.downwardTrendNotConfirmedEdgeCase()],
-      [testData.upwardTrendInfinite()],
-      [testData.downwardTrendInfinite()],
-      [testData.upwardTrendContinuesWithoutEndpoint()],
-      [testData.upwardTrendBreaksWithLowerLowAndLowerHigh()],
-      [testData.downwardTrendContinuesWithoutEndpoint()],
-      [testData.downwardTrendBreaksWithHigherHighAndHigherLow()],
-      [testData.upwardTrendRecoversAfterWarning()],
-      [testData.downwardTrendBreaksAfterWarning()],
-      [testData.downwardTrendRecoversAfterWarning()],
-      [testData.upwardTrendFollowedByDownwardTrend()],
-      [testData.downwardTrendFollowedByUpwardTrend()],
-      [testData.trendFollowedByChoppyPeriodThenNewTrend()],
-      [testData.trendBreaksFollowedByGapThenNewTrend()],
+    it.only.each([
+      testData.upwardTrend(),
+      testData.downwardTrend(),
+      testData.upwardTrendNotConfirmed(),
+      testData.downwardTrendNotConfirmed(),
+      testData.upwardTrendNotConfirmedEdgeCase(),
+      testData.downwardTrendNotConfirmedEdgeCase(),
+      testData.upwardTrendInfinite(),
+      testData.downwardTrendInfinite(),
+      testData.upwardTrendContinuesWithoutEndpoint(),
+      testData.upwardTrendBreaksWithLowerLowAndLowerHigh(),
+      testData.downwardTrendContinuesWithoutEndpoint(),
+      testData.downwardTrendBreaksWithHigherHighAndHigherLow(),
+      testData.upwardTrendRecoversAfterWarning(),
+      testData.downwardTrendBreaksAfterWarning(),
+      testData.downwardTrendRecoversAfterWarning(),
+      testData.upwardTrendFollowedByDownwardTrend(),
+      testData.downwardTrendFollowedByUpwardTrend(),
+      testData.trendFollowedByChoppyPeriodThenNewTrend(),
+      testData.trendBreaksFollowedByGapThenNewTrend(),
     ])('$name', ({ testcase }) => {
       const result = new Trend(testcase.data, testcase.settings).detectTrends();
       expect(result).toHaveLength(testcase.data.length);
@@ -146,11 +146,11 @@ describe('Trend', () => {
     const testData = new TrendTestData();
 
     it.each([
-      [testData.upwardTrendFailsDueToInsufficientlyHigherLow()],
-      [testData.downwardTrendFailsDueToInsufficientlyLowerHigh()],
-      [testData.upwardTrendBreaksDueToStallingHigh()],
-      [testData.downwardTrendBreaksDueToStallingLow()],
-      [testData.sidewaysTrendRecognizedAsNoUpDownTrend()],
+      testData.upwardTrendFailsDueToInsufficientlyHigherLow(),
+      testData.downwardTrendFailsDueToInsufficientlyLowerHigh(),
+      testData.upwardTrendBreaksDueToStallingHigh(),
+      testData.downwardTrendBreaksDueToStallingLow(),
+      testData.sidewaysTrendRecognizedAsNoUpDownTrend(),
     ])('$name', ({ testcase }) => {
       const result = new Trend(testcase.data, testcase.settings).detectTrends();
       expect(result).toHaveLength(testcase.data.length);

@@ -23,7 +23,7 @@ export class Trend {
   private data: DataPoint<ComparableNumber>[];
 
   constructor(
-    dataRaw: EnrichedDataPoint[],
+    private dataRaw: EnrichedDataPoint[],
     private options: { relativeThreshold: number },
   ) {
     const { relativeThreshold } = options;
@@ -86,7 +86,7 @@ export class Trend {
           const trendDefiningPoints = memory.getLatest(3);
           this.trends.push({
             trendData: {
-              trendType:
+              type:
                 newState instanceof UpwardTrendConfirmed
                   ? 'upward'
                   : 'downward',
@@ -155,6 +155,28 @@ export class Trend {
     }
 
     // return this.trends.map((trend) => trend.trendData);
-    return [];
+    this.enrichDataPoint();
+    return this.dataRaw;
+  }
+
+  private enrichDataPoint() {
+    for (const trend of this.trends) {
+      const idxRawDataStartPoint = this.dataRaw.findIndex(
+        (datum) => datum.x === trend.trendData.startPoint.x,
+      );
+      const idxPossibleRawDataEndPoint = this.dataRaw.findIndex(
+        (datum) => datum.x === trend.trendData.endPoint?.x,
+      );
+      const idxRawDataEndPoint =
+        idxPossibleRawDataEndPoint > -1
+          ? idxPossibleRawDataEndPoint
+          : this.dataRaw.length - 1;
+
+      let idxDataRaw = idxRawDataStartPoint;
+      while (idxDataRaw <= idxRawDataEndPoint) {
+        this.dataRaw[idxDataRaw].setTrend(trend.trendData.type);
+        idxDataRaw++;
+      }
+    }
   }
 }

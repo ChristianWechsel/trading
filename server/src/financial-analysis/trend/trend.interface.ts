@@ -1,13 +1,12 @@
-import { SwingPointData } from 'src/digital-signal-processing/swing-points/swing-points.interface';
 import { ComparableNumber } from '../../digital-signal-processing/comparable-number/comparable-number';
 import { DataPoint } from '../../digital-signal-processing/digital-signal-processing.interface';
+import { TrendType } from '../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
+import { SwingPointData } from '../../digital-signal-processing/swing-points/swing-points.interface';
 import { Memory } from './memory';
 import { State } from './states';
 
-export type TrendType = 'upward' | 'downward' | 'sideways';
-
 export type TrendData = {
-  trendType: TrendType;
+  type: TrendType;
   startPoint: DataPoint<number>;
   endPoint?: DataPoint<number>;
 };
