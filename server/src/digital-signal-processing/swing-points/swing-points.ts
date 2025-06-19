@@ -5,6 +5,7 @@ import {
   MIN_WINDOW_SIZE,
 } from '../comparable-number/parameters';
 import { DataPoint } from '../digital-signal-processing.interface';
+import { EnrichedDataPoint } from '../dto/enriched-data-point/enriched-data-point';
 import { SwingPointData } from './swing-points.interface';
 
 export class SwingPoints {
@@ -20,7 +21,7 @@ export class SwingPoints {
    *     significant turning points within a larger neighborhood.
    */
   constructor(
-    private data: DataPoint<number>[],
+    private data: EnrichedDataPoint[],
     private options: { relativeThreshold: number; windowSize: number },
   ) {
     const { relativeThreshold, windowSize } = options;
@@ -44,7 +45,7 @@ export class SwingPoints {
     }
   }
 
-  getSwingPoints(): SwingPointData<number>[] {
+  getSwingPoints(): EnrichedDataPoint[][] {
     const swingPointDataList: SwingPointData<number>[] = [];
     let idx = this.options.windowSize;
     while (idx < this.data.length - this.options.windowSize) {

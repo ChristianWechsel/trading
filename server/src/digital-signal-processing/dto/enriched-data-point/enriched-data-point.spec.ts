@@ -15,4 +15,15 @@ describe('EnrichedDataPoint', () => {
 
     expect(enrichedDataPoint.y).toBe(20);
   });
+
+  it('should set and get the swingPointType correctly', () => {
+    const mockDataPoint: DataPoint<number> = { x: 10, y: 20 };
+    const enrichedDataPoint = new EnrichedDataPoint(mockDataPoint);
+
+    enrichedDataPoint.setSwingPointType('swingHigh');
+    expect(enrichedDataPoint.getSwingPointType()).toBe('swingHigh');
+
+    enrichedDataPoint.setSwingPointType('swingLow');
+    expect(enrichedDataPoint.getSwingPointType()).toBe('swingLow');
+  });
 });
