@@ -2,7 +2,10 @@ import {
   MAX_THRESHOLD,
   MIN_THRESHOLD,
 } from '../../digital-signal-processing/comparable-number/parameters';
-import { EnrichedDataPoint } from '../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
+import {
+  EnrichedDataPoint,
+  TrendType,
+} from '../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
 import { TrendTestData } from './testdata';
 import { Trend } from './trend';
 
@@ -10,10 +13,9 @@ export type TrendTestCase = {
   name: string;
   testcase: {
     data: EnrichedDataPoint[];
-    expectedSwingPoints: { index: number; type: SwingPointType }[];
+    expectedTrend: { index: number; type: TrendType }[];
     settings: {
       relativeThreshold: number;
-      windowSize: number;
     };
   };
 };
@@ -101,102 +103,71 @@ describe('Trend', () => {
 
   describe('detectTrends', () => {
     it.each([
-      ['upward trend', testData.upwardTrend()],
-      // ['downward trend', testData.downwardTrend()],
-      // ['upward trend not confirmed', testData.upwardTrendNotConfirmed()],
-      // ['downward trend not confirmed', testData.downwardTrendNotConfirmed()],
-      // [
-      //   'upward trend not confirmed edge case',
-      //   testData.upwardTrendNotConfirmedEdgeCase(),
-      // ],
-      // [
-      //   'downward trend not confirmed edge case',
-      //   testData.downwardTrendNotConfirmedEdgeCase(),
-      // ],
-      // ['upward trend infinite', testData.upwardTrendInfinite()],
-      // ['downward trend infinite', testData.downwardTrendInfinite()],
-      // [
-      //   'upward trend continues without endpoint',
-      //   testData.upwardTrendContinuesWithoutEndpoint(),
-      // ],
-      // [
-      //   'upward trend breaks with lower low and lower high',
-      //   testData.upwardTrendBreaksWithLowerLowAndLowerHigh(),
-      // ],
-      // [
-      //   'downward trend continues without endpoint',
-      //   testData.downwardTrendContinuesWithoutEndpoint(),
-      // ],
-      // [
-      //   'downward trend breaks with higher high and higher low',
-      //   testData.downwardTrendBreaksWithHigherHighAndHigherLow(),
-      // ],
-      // [
-      //   'upward trend recovers after warning',
-      //   testData.upwardTrendRecoversAfterWarning(),
-      // ],
-      // [
-      //   'downward trend breaks after warning',
-      //   testData.downwardTrendBreaksAfterWarning(),
-      // ],
-      // [
-      //   'downward trend recovers after warning',
-      //   testData.downwardTrendRecoversAfterWarning(),
-      // ],
-      // [
-      //   'upward trend followed by downward trend',
-      //   testData.upwardTrendFollowedByDownwardTrend(),
-      // ],
-      // [
-      //   'downward trend followed by upward trend',
-      //   testData.downwardTrendFollowedByUpwardTrend(),
-      // ],
-      // [
-      //   'trend followed by choppy period then new trend. Special Case.',
-      //   testData.trendFollowedByChoppyPeriodThenNewTrend(),
-      // ],
-      // [
-      //   'trend followed by choppy period then new trend',
-      //   testData.trendBreaksFollowedByGapThenNewTrend(),
-      // ],
-    ])('should detect %s', (_desc, { swingPoints, data, result }) => {
-      const trend = new Trend(swingPoints, data, {
-        relativeThreshold: 0.01,
-      }).detectTrends();
-      expect(trend).toEqual(result);
+      [testData.upwardTrend()],
+      [testData.downwardTrend()],
+      [testData.upwardTrendNotConfirmed()],
+      [testData.downwardTrendNotConfirmed()],
+      [testData.upwardTrendNotConfirmedEdgeCase()],
+      [testData.downwardTrendNotConfirmedEdgeCase()],
+      [testData.upwardTrendInfinite()],
+      [testData.downwardTrendInfinite()],
+      [testData.upwardTrendContinuesWithoutEndpoint()],
+      [testData.upwardTrendBreaksWithLowerLowAndLowerHigh()],
+      [testData.downwardTrendContinuesWithoutEndpoint()],
+      [testData.downwardTrendBreaksWithHigherHighAndHigherLow()],
+      [testData.upwardTrendRecoversAfterWarning()],
+      [testData.downwardTrendBreaksAfterWarning()],
+      [testData.downwardTrendRecoversAfterWarning()],
+      [testData.upwardTrendFollowedByDownwardTrend()],
+      [testData.downwardTrendFollowedByUpwardTrend()],
+      [testData.trendFollowedByChoppyPeriodThenNewTrend()],
+      [testData.trendBreaksFollowedByGapThenNewTrend()],
+    ])('$name', ({ testcase }) => {
+      const result = new Trend(testcase.data, testcase.settings).detectTrends();
+      expect(result).toHaveLength(testcase.data.length);
+
+      const areTrendsAsExpected = result.every((elementResult, idxResult) => {
+        const idxExpectedTrend = testcase.expectedTrend.findIndex(
+          (expected) => expected.index === idxResult,
+        );
+        if (idxExpectedTrend > -1) {
+          return (
+            elementResult.getTrend() ===
+            testcase.expectedTrend[idxExpectedTrend].type
+          );
+        }
+        return elementResult.getTrend() === null;
+      });
+      expect(areTrendsAsExpected).toBe(true);
     });
   });
 
-  // describe('Trend with Thresholds', () => {
-  //   const testData = new TrendTestData();
+  describe('Trend with Thresholds', () => {
+    const testData = new TrendTestData();
 
-  //   it.each([
-  //     [
-  //       'should NOT confirm upward trend if low is not significantly higher',
-  //       testData.upwardTrendFailsDueToInsufficientlyHigherLow(),
-  //     ],
-  //     [
-  //       'should NOT confirm downward trend if high is not significantly lower',
-  //       testData.downwardTrendFailsDueToInsufficientlyLowerHigh(),
-  //     ],
-  //     [
-  //       'should BREAK upward trend if new high is not significantly higher',
-  //       testData.upwardTrendBreaksDueToStallingHigh(),
-  //     ],
-  //     [
-  //       'should BREAK downward trend if new low is not significantly lower',
-  //       testData.downwardTrendBreaksDueToStallingLow(),
-  //     ],
-  //     [
-  //       'should NOT detect up/down trend during sideways movement',
-  //       testData.sidewaysTrendRecognizedAsNoUpDownTrend(),
-  //     ],
-  //   ])('%s', (_desc, { swingPoints, data, result }) => {
-  //     // Annahme: Der Threshold wird über den Konstruktor oder eine Methode gesetzt.
-  //     const trend = new Trend(swingPoints, data, {
-  //       relativeThreshold: 0.01,
-  //     }).detectTrends();
-  //     expect(trend).toEqual(result);
-  //   });
-  // });
+    it.each([
+      [testData.upwardTrendFailsDueToInsufficientlyHigherLow()],
+      [testData.downwardTrendFailsDueToInsufficientlyLowerHigh()],
+      [testData.upwardTrendBreaksDueToStallingHigh()],
+      [testData.downwardTrendBreaksDueToStallingLow()],
+      [testData.sidewaysTrendRecognizedAsNoUpDownTrend()],
+    ])('$name', ({ testcase }) => {
+      const result = new Trend(testcase.data, testcase.settings).detectTrends();
+      expect(result).toHaveLength(testcase.data.length);
+
+      const areTrendsAsExpected = result.every((elementResult, idxResult) => {
+        const idxExpectedTrend = testcase.expectedTrend.findIndex(
+          (expected) => expected.index === idxResult,
+        );
+        if (idxExpectedTrend > -1) {
+          return (
+            elementResult.getTrend() ===
+            testcase.expectedTrend[idxExpectedTrend].type
+          );
+        }
+        return elementResult.getTrend() === null;
+      });
+      expect(areTrendsAsExpected).toBe(true);
+    });
+  });
 });

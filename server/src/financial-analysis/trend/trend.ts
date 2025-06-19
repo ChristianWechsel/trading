@@ -15,7 +15,7 @@ import {
   UpwardTrendWarning,
 } from './states';
 import { TrendStateMachine } from './trend-state-machine';
-import { TrendData, TrendDataMetadata } from './trend.interface';
+import { TrendDataMetadata } from './trend.interface';
 
 export class Trend {
   private trends: TrendDataMetadata[];
@@ -63,7 +63,7 @@ export class Trend {
     }));
   }
 
-  detectTrends(): TrendData[] {
+  detectTrends(): EnrichedDataPoint[] {
     // Bei einem begonnen Trend den Trendkanal bestimmen
 
     // Ggf. erkennen, ob es sich um langfristigen, mittelfristigen oder kurzfristigen Trend handelt
@@ -154,6 +154,7 @@ export class Trend {
       }; // Ende des Trends auf letzten Datenpunkt setzen
     }
 
-    return this.trends.map((trend) => trend.trendData);
+    // return this.trends.map((trend) => trend.trendData);
+    return [];
   }
 }
