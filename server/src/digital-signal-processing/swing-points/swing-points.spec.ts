@@ -20,7 +20,7 @@ export type SwingPointTestCase = {
 describe('SwingPoints', () => {
   const testData = new TestDataSwingPoints();
 
-  const cases = [
+  it.each([
     testData.singleSwingHigh(),
     testData.singleSwingHigh_close(),
     testData.singleSwingHigh_significant(),
@@ -50,9 +50,7 @@ describe('SwingPoints', () => {
     testData.upwardToPlateau_window2_trendFail(),
     testData.upwardToPlateau_window2_plateauFail(),
     testData.plateauToUpward_window1_but_fails_window2(),
-  ];
-
-  it.each(cases)('$name', ({ testcase }) => {
+  ])('$name', ({ testcase }) => {
     const swingPoints = new SwingPoints(testcase.data, testcase.settings);
     const result = swingPoints.getSwingPoints();
     expect(result).toHaveLength(testcase.data.length);
@@ -75,100 +73,106 @@ describe('SwingPoints', () => {
     expect(areSwingPointsAsExpected).toEqual(true);
   });
 
-  // it.each([0, 0.5, 1])(
-  //   'does not throw for relativeThreshold=%p',
-  //   (threshold) => {
-  //     expect(
-  //       () =>
-  //         new SwingPoints(
-  //           new Array<DataPoint<number>>(25).fill({ x: 1, y: 1 }),
-  //           {
-  //             relativeThreshold: threshold,
-  //             windowSize: 1,
-  //           },
-  //         ),
-  //     ).not.toThrow();
-  //   },
-  // );
+  it.each([0, 0.5, 1])(
+    'does not throw for relativeThreshold=%p',
+    (threshold) => {
+      expect(
+        () =>
+          new SwingPoints(
+            new Array<EnrichedDataPoint>(25).fill(
+              new EnrichedDataPoint({ x: 1, y: 1 }),
+            ),
+            {
+              relativeThreshold: threshold,
+              windowSize: 1,
+            },
+          ),
+      ).not.toThrow();
+    },
+  );
 
-  // it.each([-0.1, -1, 1.01, 2])(
-  //   'throws error for out-of-bounds relativeThreshold=%p',
-  //   (threshold) => {
-  //     expect(
-  //       () =>
-  //         new SwingPoints(
-  //           new Array<DataPoint<number>>(25).fill({ x: 1, y: 1 }),
-  //           {
-  //             relativeThreshold: threshold,
-  //             windowSize: 1,
-  //           },
-  //         ),
-  //     ).toThrow();
-  //   },
-  // );
+  it.each([-0.1, -1, 1.01, 2])(
+    'throws error for out-of-bounds relativeThreshold=%p',
+    (threshold) => {
+      expect(
+        () =>
+          new SwingPoints(
+            new Array<EnrichedDataPoint>(25).fill(
+              new EnrichedDataPoint({ x: 1, y: 1 }),
+            ),
+            {
+              relativeThreshold: threshold,
+              windowSize: 1,
+            },
+          ),
+      ).toThrow();
+    },
+  );
 
-  // it.each([1, 2, 10])(
-  //   'does not throw for valid windowSize=%p',
-  //   (windowSize) => {
-  //     expect(
-  //       () =>
-  //         new SwingPoints(
-  //           new Array<DataPoint<number>>(25).fill({ x: 1, y: 1 }),
-  //           {
-  //             relativeThreshold: 0.1,
-  //             windowSize,
-  //           },
-  //         ),
-  //     ).not.toThrow();
-  //   },
-  // );
+  it.each([1, 2, 10])(
+    'does not throw for valid windowSize=%p',
+    (windowSize) => {
+      expect(
+        () =>
+          new SwingPoints(
+            new Array<EnrichedDataPoint>(25).fill(
+              new EnrichedDataPoint({ x: 1, y: 1 }),
+            ),
+            {
+              relativeThreshold: 0.1,
+              windowSize,
+            },
+          ),
+      ).not.toThrow();
+    },
+  );
 
-  // it.each([0, -1, -5, 1.5, 2.7, 0.99])(
-  //   'throws error for invalid windowSize=%p',
-  //   (windowSize) => {
-  //     expect(
-  //       () =>
-  //         new SwingPoints(
-  //           new Array<DataPoint<number>>(25).fill({ x: 1, y: 1 }),
-  //           {
-  //             relativeThreshold: 0.1,
-  //             windowSize,
-  //           },
-  //         ),
-  //     ).toThrow();
-  //   },
-  // );
+  it.each([0, -1, -5, 1.5, 2.7, 0.99])(
+    'throws error for invalid windowSize=%p',
+    (windowSize) => {
+      expect(
+        () =>
+          new SwingPoints(
+            new Array<EnrichedDataPoint>(25).fill(
+              new EnrichedDataPoint({ x: 1, y: 1 }),
+            ),
+            {
+              relativeThreshold: 0.1,
+              windowSize,
+            },
+          ),
+      ).toThrow();
+    },
+  );
 
-  // it.each([
-  //   { windowSize: 1, dataLength: 3 },
-  //   { windowSize: 2, dataLength: 5 },
-  // ])(
-  //   'does not throw for minimum valid data length (windowSize=$windowSize, dataLength=$dataLength)',
-  //   ({ windowSize, dataLength }) => {
-  //     const data = new Array<DataPoint<number>>(dataLength).fill({
-  //       x: 1,
-  //       y: 1,
-  //     });
+  it.each([
+    { windowSize: 1, dataLength: 3 },
+    { windowSize: 2, dataLength: 5 },
+  ])(
+    'does not throw for minimum valid data length (windowSize=$windowSize, dataLength=$dataLength)',
+    ({ windowSize, dataLength }) => {
+      const data = new Array<EnrichedDataPoint>(dataLength).fill(
+        new EnrichedDataPoint({ x: 1, y: 1 }),
+      );
 
-  //     expect(
-  //       () => new SwingPoints(data, { relativeThreshold: 0.1, windowSize }),
-  //     ).not.toThrow();
-  //   },
-  // );
+      expect(
+        () => new SwingPoints(data, { relativeThreshold: 0.1, windowSize }),
+      ).not.toThrow();
+    },
+  );
 
-  // it.each([
-  //   { windowSize: 1, dataLength: 2 },
-  //   { windowSize: 2, dataLength: 4 },
-  // ])(
-  //   'throws error for too short data (windowSize=$windowSize, dataLength=$dataLength)',
-  //   ({ windowSize, dataLength }) => {
-  //     const data = new Array<DataPoint<number>>(dataLength).fill({
-  //       x: 1,
-  //       y: 1,
-  //     });
-  //     expect(
-  //       () => new SwingPoints(data, { relativeThreshold: 0.1, windowSize }),
-  //     ).toThrow();
-  //   },
-  // );
+  it.each([
+    { windowSize: 1, dataLength: 2 },
+    { windowSize: 2, dataLength: 4 },
+  ])(
+    'throws error for too short data (windowSize=$windowSize, dataLength=$dataLength)',
+    ({ windowSize, dataLength }) => {
+      const data = new Array<EnrichedDataPoint>(dataLength).fill(
+        new EnrichedDataPoint({ x: 1, y: 1 }),
+      );
+      expect(
+        () => new SwingPoints(data, { relativeThreshold: 0.1, windowSize }),
+      ).toThrow();
+    },
+  );
 });
