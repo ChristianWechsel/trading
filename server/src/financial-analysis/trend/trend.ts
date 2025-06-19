@@ -23,18 +23,10 @@ export class Trend {
   private data: DataPoint<ComparableNumber>[];
 
   constructor(
-    data: EnrichedDataPoint[],
+    dataRaw: EnrichedDataPoint[],
     private options: { relativeThreshold: number },
   ) {
     const { relativeThreshold } = options;
-    const swingPoints = data.filter(
-      (datum) => datum.getSwingPointType() !== null,
-    );
-    if (swingPoints.length < MIN_SWING_POINTS) {
-      throw new Error(
-        `data must be an array with at least ${MIN_SWING_POINTS} swing points`,
-      );
-    }
     if (
       relativeThreshold < MIN_THRESHOLD ||
       relativeThreshold > MAX_THRESHOLD
@@ -44,30 +36,38 @@ export class Trend {
       );
     }
 
-    this.trends = [];
-    // this.swingPoints = swingPoints.map<SwingPointData<ComparableNumber>>(
-    //   (swingPoint) => {
-    //     const { point, swingPointType } = swingPoint;
-    //     return {
-    //       swingPointType,
-    //       point: {
-    //         x: new ComparableNumber(point.x, this.options.relativeThreshold),
-    //         y: new ComparableNumber(point.y, this.options.relativeThreshold),
-    //       },
-    //     };
-    //   },
-    // );
-    this.data = data.map<DataPoint<ComparableNumber>>((point) => ({
+    this.swingPoints = dataRaw
+      .filter((datum) => datum.getSwingPointType() !== null)
+      .map<SwingPointData<ComparableNumber>>((enrichedDataPoint) => {
+        return {
+          swingPointType: enrichedDataPoint.getSwingPointType()!,
+          point: {
+            x: new ComparableNumber(
+              enrichedDataPoint.x,
+              this.options.relativeThreshold,
+            ),
+            y: new ComparableNumber(
+              enrichedDataPoint.y,
+              this.options.relativeThreshold,
+            ),
+          },
+        };
+      });
+    if (this.swingPoints.length < MIN_SWING_POINTS) {
+      throw new Error(
+        `data must be an array with at least ${MIN_SWING_POINTS} swing points`,
+      );
+    }
+
+    this.data = dataRaw.map<DataPoint<ComparableNumber>>((point) => ({
       x: new ComparableNumber(point.x, this.options.relativeThreshold),
       y: new ComparableNumber(point.y, this.options.relativeThreshold),
     }));
+
+    this.trends = [];
   }
 
   detectTrends(): EnrichedDataPoint[] {
-    // Bei einem begonnen Trend den Trendkanal bestimmen
-
-    // Ggf. erkennen, ob es sich um langfristigen, mittelfristigen oder kurzfristigen Trend handelt
-
     const stateMachine = new TrendStateMachine(
       ({ newState, oldState, memory }) => {
         // Erste Trendbestätigung
