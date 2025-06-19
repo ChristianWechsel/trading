@@ -25,47 +25,16 @@ describe('SwingPoints', () => {
     testData.singleSwingHigh_close(),
     testData.singleSwingHigh_significant(),
     testData.singleSwingLow(),
-
-    // {
-    //   name: 'detect swing low (close values)',
-    //   data: testData.singleSwingLow_close(),
-    // },
-    // {
-    //   name: 'detect swing low (significant difference)',
-    //   data: testData.singleSwingLow_significant(),
-    // },
-    // {
-    //   name: 'detect multiple swing points',
-    //   data: testData.multipleSwingPoints(),
-    // },
-    // {
-    //   name: 'detect multiple swing points (close values)',
-    //   data: testData.multipleSwingPoints_close(),
-    // },
-    // {
-    //   name: 'detect multiple swing points (significant difference)',
-    //   data: testData.multipleSwingPoints_significant(),
-    // },
-    // {
-    //   name: 'detect no swing points - flatline - equal values',
-    //   data: testData.noSwingPoint_FlatLine_equalValues(),
-    // },
-    // {
-    //   name: 'detect no swing points - flatline - close values',
-    //   data: testData.noSwingPoint_FlatLine_closeValues(),
-    // },
-    // {
-    //   name: 'detect no swing points - ascending',
-    //   data: testData.noSwingPoint_Ascending(),
-    // },
-    // {
-    //   name: 'detect no swing points - descending',
-    //   data: testData.noSwingPoint_Descending(),
-    // },
-    // {
-    //   name: 'detect plateau high',
-    //   data: testData.plateauToUpward(),
-    // },
+    testData.singleSwingLow_close(),
+    testData.singleSwingLow_significant(),
+    testData.multipleSwingPoints(),
+    testData.multipleSwingPoints_close(),
+    testData.multipleSwingPoints_significant(),
+    testData.noSwingPoint_FlatLine_equalValues(),
+    testData.noSwingPoint_FlatLine_closeValues(),
+    testData.noSwingPoint_Ascending(),
+    testData.noSwingPoint_Descending(),
+    testData.plateauToUpward(),
     // {
     //   name: 'detect plateau low',
     //   data: testData.plateauToDownward(),

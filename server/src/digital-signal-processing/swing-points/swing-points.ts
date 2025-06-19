@@ -80,10 +80,7 @@ export class SwingPoints {
           nextPoints,
         )
       ) {
-        swingPointDataList.push({
-          swingPointType: 'plateauToUpward',
-          point: currentPoint,
-        });
+        currentPoint.setSwingPointType('plateauToUpward');
       } else if (
         this.isPlateauToDownward(
           previousPoints,

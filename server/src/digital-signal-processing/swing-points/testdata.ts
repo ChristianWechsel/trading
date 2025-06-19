@@ -67,145 +67,183 @@ export class TestDataSwingPoints {
     };
   }
 
-  // singleSwingLow_close(): SwingPointAnalysis {
-  //   return {
-  //     data: [
-  //       new EnrichedDataPoint({ x: 1, y: 3 }),
-  //       new EnrichedDataPoint({ x: 2, y: 2.91 }), // close to 3
-  //       new EnrichedDataPoint({ x: 3, y: 3 }),
-  //     ],
-  //     result: [],
-  //     windowSize: 1,
-  //   };
-  // }
+  singleSwingLow_close(): SwingPointTestCase {
+    return {
+      name: 'detect swing low (close values)',
+      testcase: {
+        data: [
+          this.createEnrichedDataPoint({ x: 1, y: 3 }),
+          this.createEnrichedDataPoint({ x: 2, y: 2.91 }), // close to 3
+          this.createEnrichedDataPoint({ x: 3, y: 3 }),
+        ],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
 
-  // singleSwingLow_significant(): SwingPointAnalysis {
-  //   return {
-  //     data: [
-  //       new EnrichedDataPoint({ x: 1, y: 3 }),
-  //       new EnrichedDataPoint({ x: 2, y: 1.5 }),
-  //       new EnrichedDataPoint({ x: 3, y: 3 }),
-  //     ],
-  //     result: [
-  //       {
-  //         swingPointType: 'swingLow',
-  //         point: { x: 2, y: 1.5 },
-  //       },
-  //     ],
-  //     windowSize: 1,
-  //   };
-  // }
+  singleSwingLow_significant(): SwingPointTestCase {
+    return {
+      name: 'detect swing low (significant difference)',
+      testcase: {
+        data: [
+          this.createEnrichedDataPoint({ x: 1, y: 3 }),
+          this.createEnrichedDataPoint({ x: 2, y: 1.5 }),
+          this.createEnrichedDataPoint({ x: 3, y: 3 }),
+        ],
+        expectedSwingPoints: [
+          {
+            index: 1,
+            type: 'swingLow',
+          },
+        ],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
+  multipleSwingPoints(): SwingPointTestCase {
+    return {
+      name: 'detect multiple swing points',
+      testcase: {
+        data: [
+          this.createEnrichedDataPoint({ x: 1, y: 1 }),
+          this.createEnrichedDataPoint({ x: 2, y: 3 }),
+          this.createEnrichedDataPoint({ x: 3, y: 2 }),
+          this.createEnrichedDataPoint({ x: 4, y: 4 }),
+          this.createEnrichedDataPoint({ x: 5, y: 3 }),
+        ],
+        expectedSwingPoints: [
+          { index: 1, type: 'swingHigh' },
+          { index: 2, type: 'swingLow' },
+          { index: 3, type: 'swingHigh' },
+        ],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
 
-  // multipleSwingPoints(): SwingPointAnalysis {
-  //   return {
-  //     data: [
-  //       new EnrichedDataPoint({ x: 1, y: 1 }),
-  //       new EnrichedDataPoint({ x: 2, y: 3 }),
-  //       new EnrichedDataPoint({ x: 3, y: 2 }),
-  //       new EnrichedDataPoint({ x: 4, y: 4 }),
-  //       new EnrichedDataPoint({ x: 5, y: 3 }),
-  //     ],
-  //     result: [
-  //       { swingPointType: 'swingHigh', point: { x: 2, y: 3 } },
-  //       { swingPointType: 'swingLow', point: { x: 3, y: 2 } },
-  //       { swingPointType: 'swingHigh', point: { x: 4, y: 4 } },
-  //     ],
-  //     windowSize: 1,
-  //   };
-  // }
+  multipleSwingPoints_close(): SwingPointTestCase {
+    return {
+      name: 'detect multiple swing points (close values)',
+      testcase: {
+        data: [
+          new EnrichedDataPoint({ x: 1, y: 1 }),
+          new EnrichedDataPoint({ x: 2, y: 1.09 }), // close to 1
+          new EnrichedDataPoint({ x: 3, y: 1.01 }), // close to 1.09
+          new EnrichedDataPoint({ x: 4, y: 1.08 }), // close to 1.01
+          new EnrichedDataPoint({ x: 5, y: 1.05 }), // close to 1.08
+        ],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
+  multipleSwingPoints_significant(): SwingPointTestCase {
+    return {
+      name: 'detect multiple swing points (significant difference)',
+      testcase: {
+        data: [
+          new EnrichedDataPoint({ x: 1, y: 1 }),
+          new EnrichedDataPoint({ x: 2, y: 3 }),
+          new EnrichedDataPoint({ x: 3, y: 1 }),
+          new EnrichedDataPoint({ x: 4, y: 4 }),
+          new EnrichedDataPoint({ x: 5, y: 1 }),
+        ],
+        expectedSwingPoints: [
+          { index: 1, type: 'swingHigh' },
+          { index: 2, type: 'swingLow' },
+          { index: 3, type: 'swingHigh' },
+        ],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
 
-  // multipleSwingPoints_close(): SwingPointAnalysis {
-  //   return {
-  //     data: [
-  //       new EnrichedDataPoint({ x: 1, y: 1 }),
-  //       new EnrichedDataPoint({ x: 2, y: 1.09 }), // close to 1
-  //       new EnrichedDataPoint({ x: 3, y: 1.01 }), // close to 1.09
-  //       new EnrichedDataPoint({ x: 4, y: 1.08 }), // close to 1.01
-  //       new EnrichedDataPoint({ x: 5, y: 1.05 }), // close to 1.08
-  //     ],
-  //     result: [],
-  //     windowSize: 1,
-  //   };
-  // }
+  noSwingPoint_FlatLine_equalValues(): SwingPointTestCase {
+    return {
+      name: 'detect no swing points - flatline - equal values',
+      testcase: {
+        data: [
+          new EnrichedDataPoint({ x: 1, y: 1 }),
+          new EnrichedDataPoint({ x: 2, y: 1 }),
+          new EnrichedDataPoint({ x: 3, y: 1 }),
+        ],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
 
-  // multipleSwingPoints_significant(): SwingPointAnalysis {
-  //   return {
-  //     data: [
-  //       new EnrichedDataPoint({ x: 1, y: 1 }),
-  //       new EnrichedDataPoint({ x: 2, y: 3 }),
-  //       new EnrichedDataPoint({ x: 3, y: 1 }),
-  //       new EnrichedDataPoint({ x: 4, y: 4 }),
-  //       new EnrichedDataPoint({ x: 5, y: 1 }),
-  //     ],
-  //     result: [
-  //       { swingPointType: 'swingHigh', point: { x: 2, y: 3 } },
-  //       { swingPointType: 'swingLow', point: { x: 3, y: 1 } },
-  //       { swingPointType: 'swingHigh', point: { x: 4, y: 4 } },
-  //     ],
-  //     windowSize: 1,
-  //   };
-  // }
+  noSwingPoint_FlatLine_closeValues(): SwingPointTestCase {
+    return {
+      name: 'detect no swing points - flatline - close values',
+      testcase: {
+        data: [
+          new EnrichedDataPoint({ x: 1, y: 1 }),
+          new EnrichedDataPoint({ x: 2, y: 1.01 }),
+          new EnrichedDataPoint({ x: 3, y: 0.99 }),
+        ],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
 
-  // noSwingPoint_FlatLine_equalValues(): SwingPointAnalysis {
-  //   return {
-  //     data: [
-  //       new EnrichedDataPoint({ x: 1, y: 1 }),
-  //       new EnrichedDataPoint({ x: 2, y: 1 }),
-  //       new EnrichedDataPoint({ x: 3, y: 1 }),
-  //     ],
-  //     result: [],
-  //     windowSize: 1,
-  //   };
-  // }
+  noSwingPoint_Ascending(): SwingPointTestCase {
+    return {
+      name: 'detect no swing points - ascending',
+      testcase: {
+        data: [
+          new EnrichedDataPoint({ x: 1, y: 1 }),
+          new EnrichedDataPoint({ x: 2, y: 2 }),
+          new EnrichedDataPoint({ x: 3, y: 3 }),
+        ],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
 
-  // noSwingPoint_FlatLine_closeValues(): SwingPointAnalysis {
-  //   return {
-  //     data: [
-  //       new EnrichedDataPoint({ x: 1, y: 1 }),
-  //       new EnrichedDataPoint({ x: 2, y: 1.01 }),
-  //       new EnrichedDataPoint({ x: 3, y: 0.99 }),
-  //     ],
-  //     result: [],
-  //     windowSize: 1,
-  //   };
-  // }
+  noSwingPoint_Descending(): SwingPointTestCase {
+    return {
+      name: 'detect no swing points - descending',
+      testcase: {
+        data: [
+          new EnrichedDataPoint({ x: 1, y: 3 }),
+          new EnrichedDataPoint({ x: 2, y: 2 }),
+          new EnrichedDataPoint({ x: 3, y: 1 }),
+        ],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
 
-  // noSwingPoint_Ascending(): SwingPointAnalysis {
-  //   return {
-  //     data: [
-  //       new EnrichedDataPoint({ x: 1, y: 1 }),
-  //       new EnrichedDataPoint({ x: 2, y: 2 }),
-  //       new EnrichedDataPoint({ x: 3, y: 3 }),
-  //     ],
-  //     result: [],
-  //     windowSize: 1,
-  //   };
-  // }
+  plateauToUpward(): SwingPointTestCase {
+    return {
+      name: 'detect plateau high',
+      testcase: {
+        data: [
+          new EnrichedDataPoint({ x: 1, y: 2 }),
+          new EnrichedDataPoint({ x: 2, y: 2 }),
+          new EnrichedDataPoint({ x: 3, y: 3 }),
+        ],
+        expectedSwingPoints: [{ index: 1, type: 'plateauToUpward' }],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
 
-  // noSwingPoint_Descending(): SwingPointAnalysis {
-  //   return {
-  //     data: [
-  //       new EnrichedDataPoint({ x: 1, y: 3 }),
-  //       new EnrichedDataPoint({ x: 2, y: 2 }),
-  //       new EnrichedDataPoint({ x: 3, y: 1 }),
-  //     ],
-  //     result: [],
-  //     windowSize: 1,
-  //   };
-  // }
-
-  // plateauToUpward(): SwingPointAnalysis {
-  //   return {
-  //     data: [
-  //       new EnrichedDataPoint({ x: 1, y: 2 }),
-  //       new EnrichedDataPoint({ x: 2, y: 2 }),
-  //       new EnrichedDataPoint({ x: 3, y: 3 }),
-  //     ],
-  //     result: [{ point: { x: 2, y: 2 }, swingPointType: 'plateauToUpward' }],
-  //     windowSize: 1,
-  //   };
-  // }
-
+  plateauToDownward(): SwingPointTestCase {
+    return {
+      name: '',
+      testcase: {
+        data: [],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
   // plateauToDownward(): SwingPointAnalysis {
   //   return {
   //     data: [
@@ -218,6 +256,16 @@ export class TestDataSwingPoints {
   //   };
   // }
 
+  upwardToPlateau(): SwingPointTestCase {
+    return {
+      name: '',
+      testcase: {
+        data: [],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
   // upwardToPlateau(): SwingPointAnalysis {
   //   return {
   //     data: [
@@ -230,6 +278,16 @@ export class TestDataSwingPoints {
   //   };
   // }
 
+  downwardToPlateau(): SwingPointTestCase {
+    return {
+      name: '',
+      testcase: {
+        data: [],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
   // downwardToPlateau(): SwingPointAnalysis {
   //   return {
   //     data: [
@@ -242,6 +300,16 @@ export class TestDataSwingPoints {
   //   };
   // }
 
+  singleSwingHighWindow(): SwingPointTestCase {
+    return {
+      name: '',
+      testcase: {
+        data: [],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
   // singleSwingHighWindow(): SwingPointAnalysis {
   //   return {
   //     data: [
@@ -265,6 +333,16 @@ export class TestDataSwingPoints {
   //   };
   // }
 
+  swingHighWindow3_centeredPeak(): SwingPointTestCase {
+    return {
+      name: '',
+      testcase: {
+        data: [],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
   // swingHighWindow3_centeredPeak(): SwingPointAnalysis {
   //   return {
   //     data: [
@@ -281,6 +359,16 @@ export class TestDataSwingPoints {
   //   };
   // }
 
+  swingLowWindow3_centeredValley(): SwingPointTestCase {
+    return {
+      name: '',
+      testcase: {
+        data: [],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
   // swingLowWindow3_centeredValley(): SwingPointAnalysis {
   //   return {
   //     data: [
@@ -297,6 +385,16 @@ export class TestDataSwingPoints {
   //   };
   // }
 
+  swingHighWindow3_noPeak(): SwingPointTestCase {
+    return {
+      name: '',
+      testcase: {
+        data: [],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
   // swingHighWindow3_noPeak(): SwingPointAnalysis {
   //   return {
   //     data: [
@@ -313,6 +411,16 @@ export class TestDataSwingPoints {
   //   };
   // }
 
+  swingLowWindow3_noValley(): SwingPointTestCase {
+    return {
+      name: '',
+      testcase: {
+        data: [],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
   // swingLowWindow3_noValley(): SwingPointAnalysis {
   //   return {
   //     data: [
@@ -330,6 +438,16 @@ export class TestDataSwingPoints {
   // }
   // // -------------------------------------------- //
 
+  upwardToPlateau_window2(): SwingPointTestCase {
+    return {
+      name: '',
+      testcase: {
+        data: [],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
   // upwardToPlateau_window2(): SwingPointAnalysis {
   //   return {
   //     data: [
@@ -348,6 +466,16 @@ export class TestDataSwingPoints {
   //   };
   // }
 
+  downwardToPlateau_window2(): SwingPointTestCase {
+    return {
+      name: '',
+      testcase: {
+        data: [],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
   // downwardToPlateau_window2(): SwingPointAnalysis {
   //   return {
   //     data: [
@@ -366,6 +494,16 @@ export class TestDataSwingPoints {
   //   };
   // }
 
+  plateauToUpward_window2(): SwingPointTestCase {
+    return {
+      name: '',
+      testcase: {
+        data: [],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
   // plateauToUpward_window2(): SwingPointAnalysis {
   //   return {
   //     data: [
@@ -387,6 +525,16 @@ export class TestDataSwingPoints {
   //   };
   // }
 
+  plateauToDownward_window2(): SwingPointTestCase {
+    return {
+      name: '',
+      testcase: {
+        data: [],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
   // plateauToDownward_window2(): SwingPointAnalysis {
   //   return {
   //     data: [
@@ -405,6 +553,16 @@ export class TestDataSwingPoints {
   //   };
   // }
 
+  upwardToPlateau_window2_trendFail(): SwingPointTestCase {
+    return {
+      name: '',
+      testcase: {
+        data: [],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
   // upwardToPlateau_window2_trendFail(): SwingPointAnalysis {
   //   return {
   //     data: [
@@ -423,6 +581,16 @@ export class TestDataSwingPoints {
   //   };
   // }
 
+  upwardToPlateau_window2_plateauFail(): SwingPointTestCase {
+    return {
+      name: '',
+      testcase: {
+        data: [],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
   // upwardToPlateau_window2_plateauFail(): SwingPointAnalysis {
   //   return {
   //     data: [
@@ -441,6 +609,16 @@ export class TestDataSwingPoints {
   //   };
   // }
 
+  plateauToUpward_window1_but_fails_window2(): SwingPointTestCase {
+    return {
+      name: '',
+      testcase: {
+        data: [],
+        expectedSwingPoints: [],
+        settings: { relativeThreshold: 0.1, windowSize: 1 },
+      },
+    };
+  }
   // plateauToUpward_window1_but_fails_window2(): SwingPointAnalysis {
   //   return {
   //     data: [
