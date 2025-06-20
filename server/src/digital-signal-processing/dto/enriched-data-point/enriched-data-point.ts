@@ -46,6 +46,33 @@ export class EnrichedDataPoint {
       this.trendChannel = [this.trendChannel, channel];
     }
   }
+
+  clone(): EnrichedDataPoint {
+    const clone = new EnrichedDataPoint({
+      x: this.dataPoint.x,
+      y: this.dataPoint.y,
+    });
+
+    clone.swingPointType = this.swingPointType;
+
+    clone.trend = Array.isArray(this.trend) ? [...this.trend] : this.trend;
+
+    if (this.trendChannel === null) {
+      clone.trendChannel = null;
+    } else if (
+      Array.isArray(this.trendChannel) &&
+      this.trendChannel.length === 2
+    ) {
+      clone.trendChannel = [
+        { ...this.trendChannel[0] },
+        { ...this.trendChannel[1] },
+      ];
+    } else {
+      clone.trendChannel = { ...this.trendChannel };
+    }
+
+    return clone;
+  }
 }
 
 export type SwingPointType =
