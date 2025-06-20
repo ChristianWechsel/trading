@@ -1,23 +1,23 @@
-import { ComparableNumber } from '../../digital-signal-processing/comparable-number/comparable-number';
+import { ComparableNumber } from '../../../digital-signal-processing/comparable-number/comparable-number';
 import {
   MAX_THRESHOLD,
   MIN_THRESHOLD,
-} from '../../digital-signal-processing/comparable-number/parameters';
-import { DataPoint } from '../../digital-signal-processing/digital-signal-processing.interface';
-import { EnrichedDataPoint } from '../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
-import { SwingPointData } from '../../digital-signal-processing/swing-points/swing-points.interface';
-import { MIN_SWING_POINTS } from './parameters';
+} from '../../../digital-signal-processing/comparable-number/parameters';
+import { DataPoint } from '../../../digital-signal-processing/digital-signal-processing.interface';
+import { EnrichedDataPoint } from '../../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
+import { SwingPointData } from '../../../digital-signal-processing/swing-points/swing-points.interface';
+import { MIN_SWING_POINTS } from '../../../financial-analysis/parameters';
+import { TrendDetectionStateMachine } from './trend-detection-state-machine';
 import {
   DownwardTrendConfirmed,
   DownwardTrendWarning,
   TrendBroken,
   UpwardTrendConfirmed,
   UpwardTrendWarning,
-} from './states';
-import { TrendStateMachine } from './trend-state-machine';
-import { TrendDataMetadata } from './trend.interface';
+} from './trend-detection-states';
+import { TrendDataMetadata } from './trend-detection.interface';
 
-export class Trend {
+export class TrendDetection {
   private trends: TrendDataMetadata[];
   private swingPoints: SwingPointData<ComparableNumber>[];
   private data: DataPoint<ComparableNumber>[];
@@ -68,7 +68,7 @@ export class Trend {
   }
 
   detectTrends(): EnrichedDataPoint[] {
-    const stateMachine = new TrendStateMachine(
+    const stateMachine = new TrendDetectionStateMachine(
       ({ newState, oldState, memory }) => {
         // Erste Trendbestätigung
         if (

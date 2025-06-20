@@ -1,10 +1,13 @@
 import { ComparableNumber } from 'src/digital-signal-processing/comparable-number/comparable-number';
 import { SwingPointData } from 'src/digital-signal-processing/swing-points/swing-points.interface';
-import { Memory } from './memory';
-import { StartState, State } from './states';
-import { TransitionCallback, TrendAnalysisPoint } from './trend.interface';
+import { Memory } from '../../memory/memory';
+import { StartState, State } from './trend-detection-states';
+import {
+  TransitionCallback,
+  TrendAnalysisPoint,
+} from './trend-detection.interface';
 
-export class TrendStateMachine {
+export class TrendDetectionStateMachine {
   private currentState: State;
   private memory: Memory<TrendAnalysisPoint>;
 

@@ -3,7 +3,7 @@ import {
   EnrichedDataPoint,
   SwingPointType,
 } from '../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
-import { TrendTestCase } from './trend.spec';
+import { TrendTestCase } from './trend-detection/trend-detection.spec';
 
 export class TrendTestData {
   private createEnrichedDataPoint(
