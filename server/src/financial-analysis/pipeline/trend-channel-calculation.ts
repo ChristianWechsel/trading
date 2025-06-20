@@ -2,6 +2,7 @@ import { EnrichedDataPoint } from '../../digital-signal-processing/dto/enriched-
 import { AnalysisStep, Step } from './pipeline.interface';
 
 export class TrendChannelCalculation implements AnalysisStep {
+  name: Step = 'TrendChannelCalculation';
   dependsOn: Step[] = ['TrendDetection'];
 
   execute(context: EnrichedDataPoint[]): void {

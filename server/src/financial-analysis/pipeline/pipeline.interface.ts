@@ -3,10 +3,11 @@ import { EnrichedDataPoint } from '../../digital-signal-processing/dto/enriched-
 export interface AnalysisStep {
   execute(context: EnrichedDataPoint[]): void;
   readonly dependsOn: Step[];
+  readonly name: Step;
 }
 
 export type Step =
   | 'MovingAverage'
   | 'SwingPointDetection'
-  | 'TrendDetection'
-  | 'TrendChannelCalculation';
+  | 'TrendChannelCalculation'
+  | 'TrendDetection';

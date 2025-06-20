@@ -2,6 +2,7 @@ import { EnrichedDataPoint } from '../../digital-signal-processing/dto/enriched-
 import { AnalysisStep, Step } from './pipeline.interface';
 
 export class MovingAverage implements AnalysisStep {
+  name: Step = 'MovingAverage';
   dependsOn: Step[] = [];
 
   execute(context: EnrichedDataPoint[]): void {
