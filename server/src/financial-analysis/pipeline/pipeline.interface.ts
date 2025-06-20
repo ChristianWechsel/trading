@@ -2,4 +2,11 @@ import { EnrichedDataPoint } from '../../digital-signal-processing/dto/enriched-
 
 export interface AnalysisStep {
   execute(context: EnrichedDataPoint[]): void;
+  readonly dependsOn: Steps[];
 }
+
+export type Steps =
+  | 'MovingAverage'
+  | 'SwingPointDetection'
+  | 'TrendDetection'
+  | 'TrendChannelCalculation';
