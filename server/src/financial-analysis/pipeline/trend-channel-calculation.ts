@@ -1,11 +1,10 @@
-import { EnrichedDataPoint } from '../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
-import { AnalysisStep, Step } from './pipeline.interface';
+import { AnalysisContext, AnalysisStep, Step } from './pipeline.interface';
 
 export class TrendChannelCalculation implements AnalysisStep {
   name: Step = 'TrendChannelCalculation';
   dependsOn: Step[] = ['TrendDetection'];
 
-  execute(context: EnrichedDataPoint[]): void {
+  execute(context: AnalysisContext): void {
     console.log('TrendChannelCalculation executed');
     // PRÜFUNG: Sind die benötigten Daten (trends) vorhanden?
     // if (!context.trends || context.trends.length === 0) {
