@@ -12,7 +12,7 @@ class MockStep implements AnalysisStep {
     this.dependsOn = dependsOn;
   }
 
-  execute(context: AnalysisContext): void {
+  execute(_context: AnalysisContext): void {
     // Diese Implementierung wird im Test durch einen Spy ersetzt
   }
 }
@@ -76,12 +76,10 @@ describe('AnalysisPipeline', () => {
       expect(executeSpy1).toHaveBeenCalledWith(expect.any(Object));
 
       // Wir extrahieren das Kontext-Objekt, mit dem der Spy aufgerufen wurde.
-      const contextArg = executeSpy1.mock.calls[0][0] as AnalysisContext;
+      const contextArg = executeSpy1.mock.calls[0][0];
 
       // GEÄNDERT: Wir prüfen die Eigenschaften des Kontext-Objekts.
       expect(contextArg).toHaveProperty('enrichedDataPoints');
-      expect(contextArg).toHaveProperty('trendData');
-      expect(contextArg).toHaveProperty('swingPoints');
       expect(contextArg.enrichedDataPoints[0]).toBeInstanceOf(
         EnrichedDataPoint,
       );
@@ -91,7 +89,7 @@ describe('AnalysisPipeline', () => {
       expect(contextArg.enrichedDataPoints[0]).not.toBe(originalData[0]);
 
       // Das Ergebnis von run() ist das geklonte und bearbeitete Array aus dem Kontext.
-      expect(result).toBe(contextArg.enrichedDataPoints);
+      expect(result.enrichedDataPoints).toBe(contextArg.enrichedDataPoints);
     });
 
     it('sollte die Originaldaten dank des Klonens nicht mutieren', () => {
@@ -106,7 +104,7 @@ describe('AnalysisPipeline', () => {
       expect(originalData[0].getSwingPointType()).toBeNull();
 
       // Das geklonte, prozessierte Objekt im Ergebnis hat sich jedoch geändert.
-      expect(result[0].getSwingPointType()).toBe('swingLow');
+      expect(result.enrichedDataPoints[0].getSwingPointType()).toBe('swingLow');
     });
 
     it('sollte die Steps in der korrekten Reihenfolge ausführen', () => {
@@ -144,7 +142,7 @@ describe('AnalysisPipeline', () => {
 
       // Hier fehlt 'SwingPointDetection', also sollte der Konstruktor einen Fehler werfen.
       expect(() => new AnalysisPipeline([step2])).toThrow(
-        "Missing dependency: 'TrendDetection' requires 'SwingPointDetection'.",
+        "Missing dependency: 'TrendDetection' requires 'SwingPointDetection', which is not configured in the pipeline.",
       );
     });
 

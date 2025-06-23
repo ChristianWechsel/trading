@@ -53,11 +53,12 @@ describe('AnalysisBuilder', () => {
   afterEach(() => {
     // Spione nach jedem Test wiederherstellen
     jest.restoreAllMocks();
+    jest.clearAllMocks();
   });
 
   it('sollte einen einzelnen Schritt ohne Abhängigkeiten hinzufügen', () => {
     builder.addStep('SwingPointDetection');
-    const pipeline = builder.build();
+    builder.build();
 
     // Prüfen, ob der Pipeline-Konstruktor mit dem richtigen Array aufgerufen wurde
     const steps = (AnalysisPipeline as jest.Mock).mock
@@ -69,10 +70,9 @@ describe('AnalysisBuilder', () => {
 
   it('sollte eine Abhängigkeit automatisch vor dem angeforderten Schritt hinzufügen', () => {
     builder.addStep('TrendDetection');
-    const pipeline = builder.build();
-
-    const steps = (AnalysisPipeline as jest.Mock).mock
-      .calls[0][0] as AnalysisStep[];
+    builder.build();
+    const calls = (AnalysisPipeline as jest.Mock).mock.calls;
+    const steps = calls[0][0] as AnalysisStep[];
 
     expect(steps).toHaveLength(2);
     // Wichtig: Die Reihenfolge muss korrekt sein!
@@ -82,7 +82,7 @@ describe('AnalysisBuilder', () => {
 
   it('sollte eine mehrstufige Abhängigkeitskette korrekt auflösen und sortieren', () => {
     builder.addStep('TrendChannelCalculation');
-    const pipeline = builder.build();
+    builder.build();
 
     const steps = (AnalysisPipeline as jest.Mock).mock
       .calls[0][0] as AnalysisStep[];
@@ -102,7 +102,7 @@ describe('AnalysisBuilder', () => {
     // Dann einen Step, dessen Abhängigkeit ('TrendDetection') schon da ist
     builder.addStep('TrendChannelCalculation');
 
-    const pipeline = builder.build();
+    builder.build();
     const steps = (AnalysisPipeline as jest.Mock).mock
       .calls[0][0] as AnalysisStep[];
 
@@ -137,7 +137,7 @@ describe('AnalysisBuilder', () => {
     // expect(() => builder.build()).toThrow('Cannot build an empty pipeline');
 
     // Für die aktuelle Implementierung erwarten wir, dass einfach eine leere Pipeline gebaut wird
-    const pipeline = builder.build();
+    builder.build();
     const steps = (AnalysisPipeline as jest.Mock).mock
       .calls[0][0] as AnalysisStep[];
     expect(steps).toHaveLength(0);

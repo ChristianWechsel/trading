@@ -8,8 +8,8 @@ export type AnalysisContext = {
   enrichedDataPoints: EnrichedDataPoint[]; // sammelt alle Daten zu einem Datenpunkt
 
   // übergeordnete Daten, welche sich nicht einem einzelnen Datenpunkt zuordnen lassen
-  trendData: TrendDataMetadata['trendData'][];
-  swingPoints: SwingPointType[];
+  trendData?: TrendDataMetadata['trendData'][];
+  swingPoints?: SwingPointType[];
 };
 
 export interface AnalysisStep {
