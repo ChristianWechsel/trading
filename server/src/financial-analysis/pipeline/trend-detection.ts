@@ -1,4 +1,8 @@
-import { AnalysisContext, AnalysisStep, Step } from './pipeline.interface';
+import {
+  AnalysisContext,
+  AnalysisStep,
+  Step,
+} from '../../analysis/core/analysis.interface';
 
 export class TrendDetection implements AnalysisStep {
   name: Step = 'TrendDetection';

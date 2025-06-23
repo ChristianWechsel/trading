@@ -1,6 +1,6 @@
 import { AnalysisBuilder } from './analysis-builder';
 import { AnalysisPipeline } from './analysis-pipeline';
-import { AnalysisStep, Step } from './pipeline.interface';
+import { AnalysisStep, Step } from './analysis.interface';
 
 // Wir mocken die AnalysisPipeline, da wir nur prüfen wollen, OB und WOMIT
 // der Konstruktor aufgerufen wird, nicht was die Pipeline intern macht.

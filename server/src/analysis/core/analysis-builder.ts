@@ -1,9 +1,9 @@
+import { MovingAverage } from '../../financial-analysis/pipeline/moving-average';
+import { SwingPointDetection } from '../../financial-analysis/pipeline/swing-point-detection';
+import { TrendChannelCalculation } from '../../financial-analysis/pipeline/trend-channel-calculation';
+import { TrendDetection } from '../../financial-analysis/pipeline/trend-detection';
 import { AnalysisPipeline } from './analysis-pipeline';
-import { MovingAverage } from './moving-average';
-import { AnalysisStep, Step } from './pipeline.interface';
-import { SwingPointDetection } from './swing-point-detection';
-import { TrendChannelCalculation } from './trend-channel-calculation';
-import { TrendDetection } from './trend-detection';
+import { AnalysisStep, Step } from './analysis.interface';
 
 export class AnalysisBuilder {
   private steps: AnalysisStep[] = [];

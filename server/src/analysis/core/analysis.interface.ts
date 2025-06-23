@@ -2,7 +2,7 @@ import {
   EnrichedDataPoint,
   SwingPointType,
 } from '../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
-import { TrendDataMetadata } from '../trend/trend-detection/trend-detection.interface';
+import { TrendDataMetadata } from '../../financial-analysis/trend/trend-detection/trend-detection.interface';
 
 export type AnalysisContext = {
   enrichedDataPoints: EnrichedDataPoint[]; // sammelt alle Daten zu einem Datenpunkt

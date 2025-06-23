@@ -1,5 +1,5 @@
 import { EnrichedDataPoint } from '../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
-import { AnalysisContext, AnalysisStep } from './pipeline.interface';
+import { AnalysisContext, AnalysisStep } from './analysis.interface';
 
 export class AnalysisPipeline {
   constructor(private steps: AnalysisStep[]) {

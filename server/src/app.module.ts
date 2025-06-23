@@ -21,6 +21,7 @@ import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
 import { FinancialAnalysisModule } from './financial-analysis/financial-analysis.module';
 import { DigitalSignalProcessingModule } from './digital-signal-processing/digital-signal-processing.module';
+import { AnalysisModule } from './analysis/analysis.module';
 
 @Module({
   imports: [
@@ -98,6 +99,7 @@ import { DigitalSignalProcessingModule } from './digital-signal-processing/digit
     DataAggregationModule,
     FinancialAnalysisModule,
     DigitalSignalProcessingModule,
+    AnalysisModule,
   ],
   controllers: [AppController],
   providers: [
