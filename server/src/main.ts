@@ -8,9 +8,11 @@ import { AppModule } from './app.module';
 import { UsersService } from './users/users.service';
 
 async function bootstrap() {
+  // Zertifikate immer relativ zum Projekt-Root suchen, egal ob dist oder src
+  const basePath = process.cwd();
   const httpsOptions = {
-    key: readFileSync(join(__dirname, '../certificates/localhost.key')),
-    cert: readFileSync(join(__dirname, '../certificates/localhost.cert')),
+    key: readFileSync(join(basePath, 'certificates/localhost.key')),
+    cert: readFileSync(join(basePath, 'certificates/localhost.cert')),
   };
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     httpsOptions,
@@ -35,4 +37,7 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+bootstrap().catch((err) => {
+  console.error('Fehler beim Starten der App:', err);
+  process.exit(1);
+});
