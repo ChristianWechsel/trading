@@ -1,7 +1,4 @@
-import {
-  MAX_THRESHOLD,
-  MIN_THRESHOLD,
-} from '../../../digital-signal-processing/comparable-number/parameters';
+import { analysisConfig } from 'src/analysis/config/analysis.config';
 import {
   EnrichedDataPoint,
   TrendType,
@@ -58,7 +55,7 @@ describe('Trend', () => {
             relativeThreshold: -0.1, // Wert unter MIN_THRESHOLD (angenommen 0)
           }),
       ).toThrow(
-        `relativeThreshold must be between ${MIN_THRESHOLD} and ${MAX_THRESHOLD}`,
+        `relativeThreshold must be between ${analysisConfig.comparableNumber.MIN_THRESHOLD} and ${analysisConfig.comparableNumber.MAX_THRESHOLD}`,
       );
     });
 
@@ -69,7 +66,7 @@ describe('Trend', () => {
             relativeThreshold: 1.1, // Wert über MAX_THRESHOLD (angenommen 1)
           }),
       ).toThrow(
-        `relativeThreshold must be between ${MIN_THRESHOLD} and ${MAX_THRESHOLD}`,
+        `relativeThreshold must be between ${analysisConfig.comparableNumber.MIN_THRESHOLD} and ${analysisConfig.comparableNumber.MAX_THRESHOLD}`,
       );
     });
 
@@ -77,7 +74,7 @@ describe('Trend', () => {
       expect(
         () =>
           new TrendDetection(testData.minSwingPoints(), {
-            relativeThreshold: MIN_THRESHOLD, // Exakter Grenzwert
+            relativeThreshold: analysisConfig.comparableNumber.MIN_THRESHOLD, // Exakter Grenzwert
           }),
       ).not.toThrow();
     });
@@ -86,7 +83,7 @@ describe('Trend', () => {
       expect(
         () =>
           new TrendDetection(testData.minSwingPoints(), {
-            relativeThreshold: MAX_THRESHOLD, // Exakter Grenzwert
+            relativeThreshold: analysisConfig.comparableNumber.MAX_THRESHOLD, // Exakter Grenzwert
           }),
       ).not.toThrow();
     });

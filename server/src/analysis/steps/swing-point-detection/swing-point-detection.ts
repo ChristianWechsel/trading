@@ -1,14 +1,10 @@
+import { analysisConfig } from 'src/analysis/config/analysis.config';
 import {
   AnalysisContext,
   AnalysisStep,
   Step,
 } from 'src/analysis/core/analysis.interface';
 import { ComparableNumber } from '../../../digital-signal-processing/comparable-number/comparable-number';
-import {
-  MAX_THRESHOLD,
-  MIN_THRESHOLD,
-  MIN_WINDOW_SIZE,
-} from '../../../digital-signal-processing/comparable-number/parameters';
 import { EnrichedDataPoint } from '../../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
 
 export class SwingPointDetection implements AnalysisStep {
@@ -20,16 +16,19 @@ export class SwingPointDetection implements AnalysisStep {
   ) {
     const { relativeThreshold, windowSize } = options;
     if (
-      relativeThreshold < MIN_THRESHOLD ||
-      relativeThreshold > MAX_THRESHOLD
+      relativeThreshold < analysisConfig.comparableNumber.MIN_THRESHOLD ||
+      relativeThreshold > analysisConfig.comparableNumber.MAX_THRESHOLD
     ) {
       throw new Error(
-        `relativeThreshold must be between ${MIN_THRESHOLD} and ${MAX_THRESHOLD}`,
+        `relativeThreshold must be between ${analysisConfig.comparableNumber.MIN_THRESHOLD} and ${analysisConfig.comparableNumber.MAX_THRESHOLD}`,
       );
     }
-    if (!Number.isInteger(windowSize) || windowSize < MIN_WINDOW_SIZE) {
+    if (
+      !Number.isInteger(windowSize) ||
+      windowSize < analysisConfig.swingPointDetection.MIN_WINDOW_SIZE
+    ) {
       throw new Error(
-        `windowSize must be a natural number >= ${MIN_WINDOW_SIZE}`,
+        `windowSize must be a natural number >= ${analysisConfig.swingPointDetection.MIN_WINDOW_SIZE}`,
       );
     }
   }

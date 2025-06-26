@@ -1,8 +1,5 @@
+import { analysisConfig } from 'src/analysis/config/analysis.config';
 import { ComparableNumber } from '../../../digital-signal-processing/comparable-number/comparable-number';
-import {
-  MAX_THRESHOLD,
-  MIN_THRESHOLD,
-} from '../../../digital-signal-processing/comparable-number/parameters';
 import { DataPoint } from '../../../digital-signal-processing/digital-signal-processing.interface';
 import { EnrichedDataPoint } from '../../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
 import { SwingPointData } from '../../../digital-signal-processing/swing-points/swing-points.interface';
@@ -28,11 +25,11 @@ export class TrendDetection {
   ) {
     const { relativeThreshold } = options;
     if (
-      relativeThreshold < MIN_THRESHOLD ||
-      relativeThreshold > MAX_THRESHOLD
+      relativeThreshold < analysisConfig.comparableNumber.MIN_THRESHOLD ||
+      relativeThreshold > analysisConfig.comparableNumber.MAX_THRESHOLD
     ) {
       throw new Error(
-        `relativeThreshold must be between ${MIN_THRESHOLD} and ${MAX_THRESHOLD}`,
+        `relativeThreshold must be between ${analysisConfig.comparableNumber.MIN_THRESHOLD} and ${analysisConfig.comparableNumber.MAX_THRESHOLD}`,
       );
     }
 

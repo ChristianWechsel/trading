@@ -1,13 +1,16 @@
-import { MAX_THRESHOLD, MIN_THRESHOLD } from './parameters';
+import { analysisConfig } from 'src/analysis/config/analysis.config';
 
 export class ComparableNumber {
   constructor(
     private value: number,
     private threshold: number,
   ) {
-    if (this.threshold < MIN_THRESHOLD || this.threshold > MAX_THRESHOLD) {
+    if (
+      this.threshold < analysisConfig.comparableNumber.MIN_THRESHOLD ||
+      this.threshold > analysisConfig.comparableNumber.MAX_THRESHOLD
+    ) {
       throw new Error(
-        `relativeThreshold must be between ${MIN_THRESHOLD} and ${MAX_THRESHOLD}`,
+        `relativeThreshold must be between ${analysisConfig.comparableNumber.MIN_THRESHOLD} and ${analysisConfig.comparableNumber.MAX_THRESHOLD}`,
       );
     }
   }
