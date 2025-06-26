@@ -8,8 +8,8 @@ import { SwingPointData } from '../../../digital-signal-processing/swing-points/
 export type TrendDataMetadata = {
   trendData: {
     type: TrendDirection;
-    startPoint: DataPoint<number>;
-    endPoint?: DataPoint<number>;
+    startPoint: DataPoint<number>['x'];
+    endPoint?: DataPoint<number>['x'];
   };
   metaddata: { statusTrend: 'ongoing' | 'finished' };
 };

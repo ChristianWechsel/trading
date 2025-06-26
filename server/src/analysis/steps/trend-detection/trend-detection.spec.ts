@@ -1,7 +1,5 @@
-import {
-  EnrichedDataPoint,
-  TrendType,
-} from '../../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
+import { AnalysisContext } from 'src/analysis/core/analysis.interface';
+import { EnrichedDataPoint } from '../../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
 import { analysisConfig } from '../../config/analysis.config';
 import { TrendDetection } from './trend-detection';
 import { TrendDetectionTestdata } from './trend-detection.testdata';
@@ -10,7 +8,7 @@ export type TrendTestCase = {
   name: string;
   testcase: {
     data: EnrichedDataPoint[];
-    expectedTrend: { index: number; type: TrendType }[];
+    expectedTrends: AnalysisContext['trends'];
     settings: {
       relativeThreshold: number;
     };
@@ -118,12 +116,12 @@ describe('Trend', () => {
 
       const areTrendsAsExpected = testcase.data.every(
         (elementResult, idxResult) => {
-          const idxExpectedTrend = testcase.expectedTrend.findIndex(
+          const idxExpectedTrend = testcase.expectedTrends.findIndex(
             (expected) => expected.index === idxResult,
           );
           if (idxExpectedTrend > -1) {
             const expectedTrendType =
-              testcase.expectedTrend[idxExpectedTrend].type;
+              testcase.expectedTrends[idxExpectedTrend].type;
             const actualTrendType = elementResult.getTrend();
             if (
               Array.isArray(expectedTrendType) &&
@@ -159,13 +157,13 @@ describe('Trend', () => {
 
       const areTrendsAsExpected = testcase.data.every(
         (elementResult, idxResult) => {
-          const idxExpectedTrend = testcase.expectedTrend.findIndex(
+          const idxExpectedTrend = testcase.expectedTrends.findIndex(
             (expected) => expected.index === idxResult,
           );
           if (idxExpectedTrend > -1) {
             return (
               elementResult.getTrend() ===
-              testcase.expectedTrend[idxExpectedTrend].type
+              testcase.expectedTrends[idxExpectedTrend].type
             );
           }
           return elementResult.getTrend() === null;

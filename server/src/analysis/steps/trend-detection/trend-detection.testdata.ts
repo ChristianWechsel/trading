@@ -60,7 +60,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 2, y: 2 }, 'swingHigh'),
           this.createEnrichedDataPoint({ x: 3, y: 3 }, 'swingLow'),
         ],
-        expectedTrend: [
+        expectedTrends: [
           { index: 0, type: 'upward' },
           { index: 1, type: 'upward' },
           { index: 2, type: 'upward' },
@@ -79,7 +79,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 2, y: 2 }, 'swingLow'),
           this.createEnrichedDataPoint({ x: 3, y: 1 }, 'swingHigh'),
         ],
-        expectedTrend: [
+        expectedTrends: [
           { index: 0, type: 'downward' },
           { index: 1, type: 'downward' },
           { index: 2, type: 'downward' },
@@ -99,7 +99,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 2, y: 3 }, 'swingHigh'),
           this.createEnrichedDataPoint({ x: 3, y: 1 }, 'swingLow'),
         ],
-        expectedTrend: [],
+        expectedTrends: [],
         settings: { relativeThreshold: 0.01 },
       },
     };
@@ -115,7 +115,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 2, y: 2 }, 'swingLow'),
           this.createEnrichedDataPoint({ x: 3, y: 4 }, 'swingHigh'),
         ],
-        expectedTrend: [],
+        expectedTrends: [],
         settings: { relativeThreshold: 0.01 },
       },
     };
@@ -130,7 +130,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 2, y: 3 }, 'swingHigh'),
           this.createEnrichedDataPoint({ x: 3, y: 2 }, 'swingLow'),
         ],
-        expectedTrend: [],
+        expectedTrends: [],
         settings: { relativeThreshold: 0.01 },
       },
     };
@@ -146,7 +146,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 2, y: 2 }, 'swingLow'),
           this.createEnrichedDataPoint({ x: 3, y: 3 }, 'swingHigh'),
         ],
-        expectedTrend: [],
+        expectedTrends: [],
         settings: { relativeThreshold: 0.01 },
       },
     };
@@ -166,7 +166,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 6, y: 6 }, null),
           this.createEnrichedDataPoint({ x: 7, y: 7 }, null),
         ],
-        expectedTrend: [
+        expectedTrends: [
           { index: 0, type: 'upward' },
           { index: 1, type: 'upward' },
           { index: 2, type: 'upward' },
@@ -194,7 +194,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 6, y: 6 }, null),
           this.createEnrichedDataPoint({ x: 7, y: 7 }, null),
         ],
-        expectedTrend: [
+        expectedTrends: [
           { index: 0, type: 'downward' },
           { index: 1, type: 'downward' },
           { index: 2, type: 'downward' },
@@ -221,7 +221,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 5, y: 4 }, 'swingLow'),
           this.createEnrichedDataPoint({ x: 6, y: 5 }, 'swingHigh'),
         ],
-        expectedTrend: [
+        expectedTrends: [
           { index: 0, type: 'upward' },
           { index: 1, type: 'upward' },
           { index: 2, type: 'upward' },
@@ -247,7 +247,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 5, y: 1 }, 'swingLow'), // WARNING: tieferes Tief
           this.createEnrichedDataPoint({ x: 6, y: 3 }, 'swingHigh'), // BROKEN: tieferes Hoch
         ],
-        expectedTrend: [
+        expectedTrends: [
           { index: 0, type: 'upward' },
           { index: 1, type: 'upward' },
           { index: 2, type: 'upward' },
@@ -271,7 +271,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 5, y: 3 }, 'swingHigh'),
           this.createEnrichedDataPoint({ x: 6, y: 2 }, 'swingLow'),
         ],
-        expectedTrend: [
+        expectedTrends: [
           { index: 0, type: 'downward' },
           { index: 1, type: 'downward' },
           { index: 2, type: 'downward' },
@@ -297,7 +297,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 5, y: 8 }, 'swingHigh'), // WARNING: höheres Hoch
           this.createEnrichedDataPoint({ x: 6, y: 3 }, 'swingLow'), // BROKEN: höheres Tief
         ],
-        expectedTrend: [
+        expectedTrends: [
           { index: 0, type: 'downward' },
           { index: 1, type: 'downward' },
           { index: 2, type: 'downward' },
@@ -324,7 +324,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 6, y: 25 }, 'swingHigh'), // RECOVER: höheres Hoch
           this.createEnrichedDataPoint({ x: 7, y: 15 }, 'swingLow'), // Fortsetzung
         ],
-        expectedTrend: [
+        expectedTrends: [
           { index: 0, type: 'upward' },
           { index: 1, type: 'upward' },
           { index: 2, type: 'upward' },
@@ -355,7 +355,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 5, y: 19 }, 'swingHigh'), // WARNING: höheres Hoch
           this.createEnrichedDataPoint({ x: 6, y: 9 }, 'swingLow'), // BROKEN: höheres Tief
         ],
-        expectedTrend: [
+        expectedTrends: [
           { index: 0, type: 'downward' },
           { index: 1, type: 'downward' },
           { index: 2, type: 'downward' },
@@ -382,7 +382,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 6, y: 5 }, 'swingLow'), // RECOVER: tieferes Tief
           this.createEnrichedDataPoint({ x: 7, y: 15 }, 'swingHigh'), // Fortsetzung
         ],
-        expectedTrend: [
+        expectedTrends: [
           { index: 0, type: 'downward' },
           { index: 1, type: 'downward' },
           { index: 2, type: 'downward' },
@@ -412,7 +412,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 6, y: 18 }, 'swingHigh'),
           this.createEnrichedDataPoint({ x: 7, y: 9 }, 'swingLow'),
         ],
-        expectedTrend: [
+        expectedTrends: [
           { index: 0, type: 'upward' },
           { index: 1, type: 'upward' },
           { index: 2, type: 'upward' },
@@ -442,7 +442,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 6, y: 21 }, 'swingLow'),
           this.createEnrichedDataPoint({ x: 7, y: 32 }, 'swingHigh'),
         ],
-        expectedTrend: [
+        expectedTrends: [
           { index: 0, type: 'downward' },
           { index: 1, type: 'downward' },
           { index: 2, type: 'downward' },
@@ -480,7 +480,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 7, y: 5 }, 'swingLow'),
           this.createEnrichedDataPoint({ x: 8, y: 14 }, 'swingHigh'), // Confirmed Down
         ],
-        expectedTrend: [
+        expectedTrends: [
           { index: 0, type: 'upward' },
           { index: 1, type: 'upward' },
           { index: 2, type: 'upward' },
@@ -521,7 +521,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 11, y: 7 }, 'swingLow'),
           this.createEnrichedDataPoint({ x: 12, y: 22 }, 'swingHigh'), // Confirmed Down
         ],
-        expectedTrend: [
+        expectedTrends: [
           { index: 0, type: 'upward' },
           { index: 1, type: 'upward' },
           { index: 2, type: 'upward' },
@@ -549,7 +549,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 2, y: 110 }, 'swingHigh'),
           this.createEnrichedDataPoint({ x: 3, y: 101 }, 'swingLow'),
         ],
-        expectedTrend: [],
+        expectedTrends: [],
         settings: { relativeThreshold: 0.01 },
       },
     };
@@ -569,7 +569,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 2, y: 90 }, 'swingLow'),
           this.createEnrichedDataPoint({ x: 3, y: 99 }, 'swingHigh'),
         ],
-        expectedTrend: [],
+        expectedTrends: [],
         settings: { relativeThreshold: 0.01 },
       },
     };
@@ -593,7 +593,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 6, y: 116 }, 'swingHigh'), // WARNING: stagnating High
           this.createEnrichedDataPoint({ x: 7, y: 109 }, 'swingLow'), // WARNING: stagnating Low
         ],
-        expectedTrend: [
+        expectedTrends: [
           { index: 0, type: 'upward' },
           { index: 1, type: 'upward' },
           { index: 2, type: 'upward' },
@@ -629,7 +629,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 6, y: 84.5 }, 'swingLow'),
           this.createEnrichedDataPoint({ x: 7, y: 91.5 }, 'swingHigh'),
         ],
-        expectedTrend: [
+        expectedTrends: [
           { index: 0, type: 'downward' },
           { index: 1, type: 'downward' },
           { index: 2, type: 'downward' },
@@ -655,7 +655,7 @@ export class TrendDetectionTestdata {
           this.createEnrichedDataPoint({ x: 3, y: 99.8 }, 'swingLow'),
           this.createEnrichedDataPoint({ x: 4, y: 101.5 }, 'swingHigh'),
         ],
-        expectedTrend: [],
+        expectedTrends: [],
         settings: { relativeThreshold: 0.01 },
       },
     };
