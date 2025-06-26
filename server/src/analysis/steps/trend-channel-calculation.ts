@@ -2,7 +2,7 @@ import {
   AnalysisContext,
   AnalysisStep,
   Step,
-} from '../../analysis/core/analysis.interface';
+} from '../core/analysis.interface';
 
 export class TrendChannelCalculation implements AnalysisStep {
   name: Step = 'TrendChannelCalculation';

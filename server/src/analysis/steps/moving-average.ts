@@ -2,7 +2,7 @@ import {
   AnalysisContext,
   AnalysisStep,
   Step,
-} from '../../analysis/core/analysis.interface';
+} from '../core/analysis.interface';
 
 export class MovingAverage implements AnalysisStep {
   name: Step = 'MovingAverage';

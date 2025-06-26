@@ -1,7 +1,7 @@
-import { MovingAverage } from '../../financial-analysis/pipeline/moving-average';
-import { SwingPointDetection } from '../../financial-analysis/pipeline/swing-point-detection';
-import { TrendChannelCalculation } from '../../financial-analysis/pipeline/trend-channel-calculation';
-import { TrendDetection } from '../../financial-analysis/pipeline/trend-detection';
+import { MovingAverage } from '../steps/moving-average';
+import { SwingPointDetection } from '../steps/swing-point-detection';
+import { TrendChannelCalculation } from '../steps/trend-channel-calculation';
+import { TrendDetection } from '../steps/trend-detection';
 import { AnalysisPipeline } from './analysis-pipeline';
 import { AnalysisStep, Step } from './analysis.interface';
 
