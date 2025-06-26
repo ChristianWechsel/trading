@@ -36,12 +36,16 @@ export class SwingPointDetection implements AnalysisStep {
 
   execute(context: AnalysisContext): void {
     const data = context.enrichedDataPoints;
+    this.checkData(data);
+    this.getSwingPoints(data);
+  }
+
+  private checkData(data: EnrichedDataPoint[]) {
     if (data.length < 2 * this.options.windowSize + 1) {
       throw new Error(
         `data must have at least ${2 * this.options.windowSize + 1} points for windowSize=${this.options.windowSize}`,
       );
     }
-    this.getSwingPoints(context.enrichedDataPoints);
   }
 
   private getSwingPoints(data: EnrichedDataPoint[]) {
