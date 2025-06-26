@@ -1,9 +1,9 @@
 import {
   EnrichedDataPoint,
   SwingPointType,
-} from '../dto/enriched-data-point/enriched-data-point';
-import { SwingPoints } from './swing-points';
-import { TestDataSwingPoints } from './testdata';
+} from '../../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
+import { SwingPointDetection } from './swing-point-detection';
+import { SwingPointDetectionTestdata } from './swing-point-detection.testdata';
 
 export type SwingPointTestCase = {
   name: string;
@@ -17,8 +17,8 @@ export type SwingPointTestCase = {
   };
 };
 
-describe('SwingPoints', () => {
-  const testData = new TestDataSwingPoints();
+describe('SwingPointDetection', () => {
+  const testData = new SwingPointDetectionTestdata();
 
   it.each([
     testData.singleSwingHigh(),
@@ -51,11 +51,12 @@ describe('SwingPoints', () => {
     testData.upwardToPlateau_window2_plateauFail(),
     testData.plateauToUpward_window1_but_fails_window2(),
   ])('$name', ({ testcase }) => {
-    const swingPoints = new SwingPoints(testcase.data, testcase.settings);
-    const result = swingPoints.getSwingPoints();
-    expect(result).toHaveLength(testcase.data.length);
+    const swingPointDetection = new SwingPointDetection(testcase.settings);
+    swingPointDetection.execute({
+      enrichedDataPoints: testcase.data,
+    });
 
-    const areSwingPointsAsExpected = result.every(
+    const areSwingPointsAsExpected = testcase.data.every(
       (elementResult, idxResult) => {
         const idxExpectedSwingPoint = testcase.expectedSwingPoints.findIndex(
           (expected) => expected.index === idxResult,
@@ -78,15 +79,10 @@ describe('SwingPoints', () => {
     (threshold) => {
       expect(
         () =>
-          new SwingPoints(
-            new Array<EnrichedDataPoint>(25).fill(
-              new EnrichedDataPoint({ x: 1, y: 1 }),
-            ),
-            {
-              relativeThreshold: threshold,
-              windowSize: 1,
-            },
-          ),
+          new SwingPointDetection({
+            relativeThreshold: threshold,
+            windowSize: 1,
+          }),
       ).not.toThrow();
     },
   );
@@ -96,15 +92,10 @@ describe('SwingPoints', () => {
     (threshold) => {
       expect(
         () =>
-          new SwingPoints(
-            new Array<EnrichedDataPoint>(25).fill(
-              new EnrichedDataPoint({ x: 1, y: 1 }),
-            ),
-            {
-              relativeThreshold: threshold,
-              windowSize: 1,
-            },
-          ),
+          new SwingPointDetection({
+            relativeThreshold: threshold,
+            windowSize: 1,
+          }),
       ).toThrow();
     },
   );
@@ -114,15 +105,10 @@ describe('SwingPoints', () => {
     (windowSize) => {
       expect(
         () =>
-          new SwingPoints(
-            new Array<EnrichedDataPoint>(25).fill(
-              new EnrichedDataPoint({ x: 1, y: 1 }),
-            ),
-            {
-              relativeThreshold: 0.1,
-              windowSize,
-            },
-          ),
+          new SwingPointDetection({
+            relativeThreshold: 0.1,
+            windowSize,
+          }),
       ).not.toThrow();
     },
   );
@@ -132,15 +118,10 @@ describe('SwingPoints', () => {
     (windowSize) => {
       expect(
         () =>
-          new SwingPoints(
-            new Array<EnrichedDataPoint>(25).fill(
-              new EnrichedDataPoint({ x: 1, y: 1 }),
-            ),
-            {
-              relativeThreshold: 0.1,
-              windowSize,
-            },
-          ),
+          new SwingPointDetection({
+            relativeThreshold: 0.1,
+            windowSize,
+          }),
       ).toThrow();
     },
   );
@@ -151,12 +132,14 @@ describe('SwingPoints', () => {
   ])(
     'does not throw for minimum valid data length (windowSize=$windowSize, dataLength=$dataLength)',
     ({ windowSize, dataLength }) => {
-      const data = new Array<EnrichedDataPoint>(dataLength).fill(
-        new EnrichedDataPoint({ x: 1, y: 1 }),
-      );
-
-      expect(
-        () => new SwingPoints(data, { relativeThreshold: 0.1, windowSize }),
+      expect(() =>
+        new SwingPointDetection({ relativeThreshold: 0.1, windowSize }).execute(
+          {
+            enrichedDataPoints: new Array<EnrichedDataPoint>(dataLength).fill(
+              new EnrichedDataPoint({ x: 1, y: 1 }),
+            ),
+          },
+        ),
       ).not.toThrow();
     },
   );
@@ -170,8 +153,12 @@ describe('SwingPoints', () => {
       const data = new Array<EnrichedDataPoint>(dataLength).fill(
         new EnrichedDataPoint({ x: 1, y: 1 }),
       );
-      expect(
-        () => new SwingPoints(data, { relativeThreshold: 0.1, windowSize }),
+      expect(() =>
+        new SwingPointDetection({ relativeThreshold: 0.1, windowSize }).execute(
+          {
+            enrichedDataPoints: data,
+          },
+        ),
       ).toThrow();
     },
   );

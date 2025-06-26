@@ -1,8 +1,8 @@
-import { DataPoint } from '../digital-signal-processing.interface';
-import { EnrichedDataPoint } from '../dto/enriched-data-point/enriched-data-point';
-import { SwingPointTestCase } from './swing-points.spec';
+import { DataPoint } from '../../../digital-signal-processing/digital-signal-processing.interface';
+import { EnrichedDataPoint } from '../../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
+import { SwingPointTestCase } from './swing-point-detection.spec';
 
-export class TestDataSwingPoints {
+export class SwingPointDetectionTestdata {
   private createEnrichedDataPoint(dataPoint: DataPoint<number>) {
     return new EnrichedDataPoint(dataPoint);
   }

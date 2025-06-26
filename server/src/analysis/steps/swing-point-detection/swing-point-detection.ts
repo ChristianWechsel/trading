@@ -1,14 +1,21 @@
-import { ComparableNumber } from '../comparable-number/comparable-number';
+import {
+  AnalysisContext,
+  AnalysisStep,
+  Step,
+} from 'src/analysis/core/analysis.interface';
+import { ComparableNumber } from '../../../digital-signal-processing/comparable-number/comparable-number';
 import {
   MAX_THRESHOLD,
   MIN_THRESHOLD,
   MIN_WINDOW_SIZE,
-} from '../comparable-number/parameters';
-import { EnrichedDataPoint } from '../dto/enriched-data-point/enriched-data-point';
+} from '../../../digital-signal-processing/comparable-number/parameters';
+import { EnrichedDataPoint } from '../../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
 
-export class SwingPoints {
+export class SwingPointDetection implements AnalysisStep {
+  name: Step = 'SwingPointDetection';
+  dependsOn: Step[] = [];
+
   constructor(
-    private data: EnrichedDataPoint[],
     private options: { relativeThreshold: number; windowSize: number },
   ) {
     const { relativeThreshold, windowSize } = options;
@@ -25,18 +32,26 @@ export class SwingPoints {
         `windowSize must be a natural number >= ${MIN_WINDOW_SIZE}`,
       );
     }
-    if (data.length < 2 * windowSize + 1) {
-      throw new Error(
-        `data must have at least ${2 * windowSize + 1} points for windowSize=${windowSize}`,
-      );
-    }
   }
 
-  getSwingPoints(): EnrichedDataPoint[] {
+  execute(context: AnalysisContext): void {
+    const data = context.enrichedDataPoints;
+    if (data.length < 2 * this.options.windowSize + 1) {
+      throw new Error(
+        `data must have at least ${2 * this.options.windowSize + 1} points for windowSize=${this.options.windowSize}`,
+      );
+    }
+    this.getSwingPoints(context.enrichedDataPoints);
+  }
+
+  private getSwingPoints(data: EnrichedDataPoint[]) {
     let idx = this.options.windowSize;
-    while (idx < this.data.length - this.options.windowSize) {
-      const { previousPoints, nextPoints } = this.getSurroundingPoints(idx);
-      const currentPoint = this.data[idx];
+    while (idx < data.length - this.options.windowSize) {
+      const { previousPoints, nextPoints } = this.getSurroundingPoints(
+        idx,
+        data,
+      );
+      const currentPoint = data[idx];
       const currentComparableNumber = this.createComparableNumber(
         currentPoint.y,
       );
@@ -84,21 +99,19 @@ export class SwingPoints {
       }
       idx++;
     }
-
-    return this.data;
   }
 
-  private getSurroundingPoints(idx: number) {
+  private getSurroundingPoints(idx: number, data: EnrichedDataPoint[]) {
     const previousPoints = new Array<ComparableNumber>(this.options.windowSize);
     const nextPoints = new Array<ComparableNumber>(this.options.windowSize);
 
     let idxWindowSize = 0;
     while (idxWindowSize < this.options.windowSize) {
       previousPoints[idxWindowSize] = this.createComparableNumber(
-        this.data[idx - this.options.windowSize + idxWindowSize].y,
+        data[idx - this.options.windowSize + idxWindowSize].y,
       );
       nextPoints[idxWindowSize] = this.createComparableNumber(
-        this.data[idx + idxWindowSize + 1].y,
+        data[idx + idxWindowSize + 1].y,
       );
       idxWindowSize++;
     }
