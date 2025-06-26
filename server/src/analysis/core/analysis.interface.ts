@@ -1,7 +1,4 @@
-import {
-  EnrichedDataPoint,
-  SwingPointType,
-} from '../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
+import { EnrichedDataPoint } from '../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
 import { TrendDataMetadata } from '../../financial-analysis/trend/trend-detection/trend-detection.interface';
 
 export type AnalysisContext = {
@@ -9,7 +6,6 @@ export type AnalysisContext = {
 
   // übergeordnete Daten, welche sich nicht einem einzelnen Datenpunkt zuordnen lassen
   trendData?: TrendDataMetadata['trendData'][];
-  swingPoints?: SwingPointType[];
 };
 
 export interface AnalysisStep {
