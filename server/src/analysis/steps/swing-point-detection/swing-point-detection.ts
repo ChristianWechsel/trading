@@ -1,11 +1,11 @@
-import { analysisConfig } from 'src/analysis/config/analysis.config';
 import {
   AnalysisContext,
   AnalysisStep,
   Step,
 } from 'src/analysis/core/analysis.interface';
-import { ComparableNumber } from '../../../digital-signal-processing/comparable-number/comparable-number';
+import { analysisConfig } from '../../../analysis/config/analysis.config';
 import { EnrichedDataPoint } from '../../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
+import { ComparableNumber } from '../utils/comparable-number/comparable-number';
 
 export class SwingPointDetection implements AnalysisStep {
   name: Step = 'SwingPointDetection';

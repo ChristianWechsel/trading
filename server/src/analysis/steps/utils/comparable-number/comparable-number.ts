@@ -1,4 +1,4 @@
-import { analysisConfig } from 'src/analysis/config/analysis.config';
+import { analysisConfig } from '../../../config/analysis.config';
 
 export class ComparableNumber {
   constructor(

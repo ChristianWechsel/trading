@@ -1,4 +1,4 @@
-import { analysisConfig } from 'src/analysis/config/analysis.config';
+import { analysisConfig } from '../../../analysis/config/analysis.config';
 import {
   EnrichedDataPoint,
   TrendType,
