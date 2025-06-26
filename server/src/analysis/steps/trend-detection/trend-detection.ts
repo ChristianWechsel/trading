@@ -1,9 +1,14 @@
-import { analysisConfig } from '../../../analysis/config/analysis.config';
-import { ComparableNumber } from '../../../analysis/steps/utils/comparable-number/comparable-number';
 import { DataPoint } from '../../../digital-signal-processing/digital-signal-processing.interface';
 import { EnrichedDataPoint } from '../../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
 import { SwingPointData } from '../../../digital-signal-processing/swing-points/swing-points.interface';
-import { MIN_SWING_POINTS } from '../../../financial-analysis/parameters';
+import { TrendDataMetadata } from '../../../financial-analysis/trend/trend-detection/trend-detection.interface';
+import { analysisConfig } from '../../config/analysis.config';
+import {
+  AnalysisContext,
+  AnalysisStep,
+  Step,
+} from '../../core/analysis.interface';
+import { ComparableNumber } from '../utils/comparable-number/comparable-number';
 import { TrendDetectionStateMachine } from './trend-detection-state-machine';
 import {
   DownwardTrendConfirmed,
@@ -12,17 +17,14 @@ import {
   UpwardTrendConfirmed,
   UpwardTrendWarning,
 } from './trend-detection-states';
-import { TrendDataMetadata } from './trend-detection.interface';
 
-export class TrendDetection {
+export class TrendDetection implements AnalysisStep {
+  name: Step = 'TrendDetection';
+  dependsOn: Step[] = ['SwingPointDetection'];
+
   private trends: TrendDataMetadata[];
-  private swingPoints: SwingPointData<ComparableNumber>[];
-  private data: DataPoint<ComparableNumber>[];
 
-  constructor(
-    private dataRaw: EnrichedDataPoint[],
-    private options: { relativeThreshold: number },
-  ) {
+  constructor(private options: { relativeThreshold: number }) {
     const { relativeThreshold } = options;
     if (
       relativeThreshold < analysisConfig.comparableNumber.MIN_THRESHOLD ||
@@ -33,7 +35,17 @@ export class TrendDetection {
       );
     }
 
-    this.swingPoints = dataRaw
+    this.trends = [];
+  }
+
+  execute(context: AnalysisContext): void {
+    const rawData = context.enrichedDataPoints;
+    const { swingPoints, data } = this.generateSwingPointsAndData(rawData);
+    this.detectTrends(swingPoints, data);
+  }
+
+  private generateSwingPointsAndData(rawData: EnrichedDataPoint[]) {
+    const swingPoints = rawData
       .filter((datum) => datum.getSwingPointType() !== null)
       .map<SwingPointData<ComparableNumber>>((enrichedDataPoint) => {
         return {
@@ -50,21 +62,23 @@ export class TrendDetection {
           },
         };
       });
-    if (this.swingPoints.length < MIN_SWING_POINTS) {
+    if (swingPoints.length < analysisConfig.trendDetection.MIN_SWING_POINTS) {
       throw new Error(
-        `data must be an array with at least ${MIN_SWING_POINTS} swing points`,
+        `data must be an array with at least ${analysisConfig.trendDetection.MIN_SWING_POINTS} swing points`,
       );
     }
 
-    this.data = dataRaw.map<DataPoint<ComparableNumber>>((point) => ({
+    const data = rawData.map<DataPoint<ComparableNumber>>((point) => ({
       x: new ComparableNumber(point.x, this.options.relativeThreshold),
       y: new ComparableNumber(point.y, this.options.relativeThreshold),
     }));
-
-    this.trends = [];
+    return { swingPoints, data };
   }
 
-  detectTrends(): EnrichedDataPoint[] {
+  private detectTrends(
+    swingPoints: SwingPointData<ComparableNumber>[],
+    data: DataPoint<ComparableNumber>[],
+  ) {
     const stateMachine = new TrendDetectionStateMachine(
       ({ newState, oldState, memory }) => {
         // Erste Trendbestätigung
@@ -139,21 +153,20 @@ export class TrendDetection {
     );
 
     let idxSwingPoint = 0;
-    while (idxSwingPoint < this.swingPoints.length) {
-      stateMachine.process(this.swingPoints[idxSwingPoint]);
+    while (idxSwingPoint < swingPoints.length) {
+      stateMachine.process(swingPoints[idxSwingPoint]);
       idxSwingPoint++;
     }
     const lastTrend = this.trends[this.trends.length - 1];
     if (lastTrend && lastTrend.metaddata.statusTrend === 'ongoing') {
       lastTrend.trendData.endPoint = {
-        x: this.data[this.data.length - 1].x.getValue(),
-        y: this.data[this.data.length - 1].y.getValue(),
+        x: data[data.length - 1].x.getValue(),
+        y: data[data.length - 1].y.getValue(),
       }; // Ende des Trends auf letzten Datenpunkt setzen
     }
 
     // return this.trends.map((trend) => trend.trendData);
     this.enrichDataPoint();
-    return this.dataRaw;
   }
 
   private enrichDataPoint() {

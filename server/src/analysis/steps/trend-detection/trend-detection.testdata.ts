@@ -1,11 +1,11 @@
-import { DataPoint } from '../../digital-signal-processing/digital-signal-processing.interface';
+import { DataPoint } from '../../../digital-signal-processing/digital-signal-processing.interface';
 import {
   EnrichedDataPoint,
   SwingPointType,
-} from '../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
-import { TrendTestCase } from './trend-detection/trend-detection.spec';
+} from '../../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
+import { TrendTestCase } from './trend-detection.spec';
 
-export class TrendTestData {
+export class TrendDetectionTestdata {
   private createEnrichedDataPoint(
     dataPoint: DataPoint<number>,
     type: SwingPointType | null,

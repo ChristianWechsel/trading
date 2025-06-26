@@ -17,10 +17,10 @@ export const analysisConfig = {
 
   /**
    * Parameter für die Trendanalyse.
-   * Referenz: /home/christian/Programmierung/trading/Trendanalyse.txt
+   * Ursprünglich in: /home/christian/Programmierung/trading/server/src/financial-analysis/parameters.ts
    */
-  trendAnalysis: {
-    pivotPointWindowSize: 1,
-    minTrendLength: 3,
+
+  trendDetection: {
+    MIN_SWING_POINTS: 3,
   },
 };

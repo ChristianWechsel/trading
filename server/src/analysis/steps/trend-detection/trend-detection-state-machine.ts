@@ -1,11 +1,11 @@
-import { ComparableNumber } from '../../../analysis/steps/utils/comparable-number/comparable-number';
 import { SwingPointData } from '../../../digital-signal-processing/swing-points/swing-points.interface';
-import { Memory } from '../../memory/memory';
-import { StartState, State } from './trend-detection-states';
 import {
   TransitionCallback,
   TrendAnalysisPoint,
-} from './trend-detection.interface';
+} from '../../../financial-analysis/trend/trend-detection/trend-detection.interface';
+import { ComparableNumber } from '../utils/comparable-number/comparable-number';
+import { Memory } from '../utils/memory/memory';
+import { StartState, State } from './trend-detection-states';
 
 export class TrendDetectionStateMachine {
   private currentState: State;

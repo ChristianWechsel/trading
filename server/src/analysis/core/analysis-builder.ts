@@ -1,7 +1,7 @@
 import { MovingAverage } from '../steps/moving-average';
 import { SwingPointDetection } from '../steps/swing-point-detection/swing-point-detection';
 import { TrendChannelCalculation } from '../steps/trend-channel-calculation';
-import { TrendDetection } from '../steps/trend-detection';
+import { TrendDetection } from '../steps/trend-detection/trend-detection';
 import { AnalysisPipeline } from './analysis-pipeline';
 import { AnalysisStep, Step } from './analysis.interface';
 
