@@ -110,34 +110,11 @@ describe('Trend', () => {
       testData.trendFollowedByChoppyPeriodThenNewTrend(),
       testData.trendBreaksFollowedByGapThenNewTrend(),
     ])('$name', ({ testcase }) => {
-      new TrendDetection(testcase.settings).execute({
+      const context: AnalysisContext = {
         enrichedDataPoints: testcase.data,
-      });
-
-      const areTrendsAsExpected = testcase.data.every(
-        (elementResult, idxResult) => {
-          const idxExpectedTrend = testcase.expectedTrends.findIndex(
-            (expected) => expected.index === idxResult,
-          );
-          if (idxExpectedTrend > -1) {
-            const expectedTrendType =
-              testcase.expectedTrends[idxExpectedTrend].type;
-            const actualTrendType = elementResult.getTrend();
-            if (
-              Array.isArray(expectedTrendType) &&
-              Array.isArray(actualTrendType) &&
-              expectedTrendType.length === actualTrendType.length
-            ) {
-              return expectedTrendType.every(
-                (trend, index) => trend === actualTrendType[index],
-              );
-            }
-            return actualTrendType === expectedTrendType;
-          }
-          return elementResult.getTrend() === null;
-        },
-      );
-      expect(areTrendsAsExpected).toBe(true);
+      };
+      new TrendDetection(testcase.settings).execute(context);
+      expect(context.trends).toEqual(testcase.expectedTrends);
     });
   });
 
@@ -151,25 +128,11 @@ describe('Trend', () => {
       testData.downwardTrendBreaksDueToStallingLow(),
       testData.sidewaysTrendRecognizedAsNoUpDownTrend(),
     ])('$name', ({ testcase }) => {
-      new TrendDetection(testcase.settings).execute({
+      const context: AnalysisContext = {
         enrichedDataPoints: testcase.data,
-      });
-
-      const areTrendsAsExpected = testcase.data.every(
-        (elementResult, idxResult) => {
-          const idxExpectedTrend = testcase.expectedTrends.findIndex(
-            (expected) => expected.index === idxResult,
-          );
-          if (idxExpectedTrend > -1) {
-            return (
-              elementResult.getTrend() ===
-              testcase.expectedTrends[idxExpectedTrend].type
-            );
-          }
-          return elementResult.getTrend() === null;
-        },
-      );
-      expect(areTrendsAsExpected).toBe(true);
+      };
+      new TrendDetection(testcase.settings).execute(context);
+      expect(context.trends).toEqual(testcase.expectedTrends);
     });
   });
 });
