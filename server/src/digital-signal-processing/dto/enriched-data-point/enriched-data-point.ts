@@ -41,5 +41,3 @@ export type SwingPointType =
   | 'upwardToPlateau' // previous < current == next
   | 'downwardToPlateau' // previous > current == next;
   | null; // no swing point detected
-
-export type TrendDirection = 'upward' | 'downward';
