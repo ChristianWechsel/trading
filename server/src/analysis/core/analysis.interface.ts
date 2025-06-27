@@ -17,7 +17,7 @@ export type TrendDataMetadata = {
   metaddata: { statusTrend: 'ongoing' | 'finished' };
 };
 
-type TrendChannel = {
+export type TrendChannel = {
   trendLine: Line;
   returnLine: Line;
 };
