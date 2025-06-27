@@ -1,6 +1,6 @@
-import { EnrichedDataPoint } from '../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
 import { AnalysisPipeline } from './analysis-pipeline';
 import { AnalysisContext, AnalysisStep, Step } from './analysis.interface';
+import { EnrichedDataPoint } from './enriched-data-point';
 
 // NEU: Wir erstellen robustere Mock-Implementierungen, die die komplette Schnittstelle erfüllen.
 class MockStep implements AnalysisStep {

@@ -2,7 +2,7 @@ import { DataPoint } from '../../../digital-signal-processing/digital-signal-pro
 import {
   EnrichedDataPoint,
   SwingPointType,
-} from '../../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
+} from '../../core/enriched-data-point';
 import { TrendTestCase } from './trend-detection.spec';
 
 export class TrendDetectionTestdata {

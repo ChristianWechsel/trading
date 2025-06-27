@@ -1,7 +1,7 @@
 import {
   EnrichedDataPoint,
   SwingPointType,
-} from '../../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
+} from '../../core/enriched-data-point';
 import { SwingPointDetection } from './swing-point-detection';
 import { SwingPointDetectionTestdata } from './swing-point-detection.testdata';
 

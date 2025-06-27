@@ -1,5 +1,5 @@
 import { DataPoint } from '../../../digital-signal-processing/digital-signal-processing.interface';
-import { EnrichedDataPoint } from '../../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
+import { EnrichedDataPoint } from '../../core/enriched-data-point';
 import { SwingPointTestCase } from './swing-point-detection.spec';
 
 export class SwingPointDetectionTestdata {

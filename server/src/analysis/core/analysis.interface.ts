@@ -1,5 +1,5 @@
 import { DataPoint } from 'src/digital-signal-processing/digital-signal-processing.interface';
-import { EnrichedDataPoint } from '../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
+import { EnrichedDataPoint } from './enriched-data-point';
 
 export type AnalysisContext = {
   enrichedDataPoints: EnrichedDataPoint[]; // sammelt alle Daten zu einem Datenpunkt

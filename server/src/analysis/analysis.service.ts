@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { EnrichedDataPoint } from '../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
 import { AnalysisQueryDto } from './analysis-query.dto';
 import { AnalysisBuilder } from './core/analysis-builder';
 import { AnalysisContext } from './core/analysis.interface';
+import { EnrichedDataPoint } from './core/enriched-data-point';
 
 @Injectable()
 export class AnalysisService {

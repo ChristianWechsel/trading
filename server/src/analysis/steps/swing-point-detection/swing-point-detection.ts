@@ -4,7 +4,7 @@ import {
   Step,
 } from 'src/analysis/core/analysis.interface';
 import { analysisConfig } from '../../../analysis/config/analysis.config';
-import { EnrichedDataPoint } from '../../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
+import { EnrichedDataPoint } from '../../core/enriched-data-point';
 import { ComparableNumber } from '../utils/comparable-number/comparable-number';
 
 export class SwingPointDetection implements AnalysisStep {

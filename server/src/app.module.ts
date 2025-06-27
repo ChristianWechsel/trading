@@ -7,6 +7,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 import { join } from 'path';
+import { AnalysisModule } from './analysis/analysis.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -15,13 +16,11 @@ import { CalendarEventModule } from './calendar-event/calendar-event.module';
 import { DataAggregationModule } from './data-aggregation/data-aggregation.module';
 import { EodPrice } from './data-aggregation/eod-price.entity';
 import { Security } from './data-aggregation/security.entity';
+import { DigitalSignalProcessingModule } from './digital-signal-processing/digital-signal-processing.module';
 import { NotificationModule } from './notification/notification.module';
 import { PushSubscription } from './notification/push-subscription.entity';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
-import { FinancialAnalysisModule } from './financial-analysis/financial-analysis.module';
-import { DigitalSignalProcessingModule } from './digital-signal-processing/digital-signal-processing.module';
-import { AnalysisModule } from './analysis/analysis.module';
 
 @Module({
   imports: [
@@ -97,7 +96,6 @@ import { AnalysisModule } from './analysis/analysis.module';
       serveRoot: '/static/',
     }),
     DataAggregationModule,
-    FinancialAnalysisModule,
     DigitalSignalProcessingModule,
     AnalysisModule,
   ],

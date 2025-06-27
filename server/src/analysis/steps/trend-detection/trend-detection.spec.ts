@@ -1,6 +1,6 @@
 import { AnalysisContext } from 'src/analysis/core/analysis.interface';
-import { EnrichedDataPoint } from '../../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
 import { analysisConfig } from '../../config/analysis.config';
+import { EnrichedDataPoint } from '../../core/enriched-data-point';
 import { TrendDetection } from './trend-detection';
 import { TrendDetectionTestdata } from './trend-detection.testdata';
 

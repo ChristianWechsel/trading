@@ -1,10 +1,10 @@
-import { SwingPointData } from '../../../digital-signal-processing/swing-points/swing-points.interface';
-import {
-  TransitionCallback,
-  TrendAnalysisPoint,
-} from '../../../financial-analysis/trend/trend-detection/trend-detection.interface';
 import { ComparableNumber } from '../utils/comparable-number/comparable-number';
 import { Memory } from '../utils/memory/memory';
+import {
+  SwingPointData,
+  TransitionCallback,
+  TrendAnalysisPoint,
+} from './trend-detection.interface';
 
 export abstract class State {
   constructor(

@@ -1,6 +1,4 @@
 import { DataPoint } from '../../../digital-signal-processing/digital-signal-processing.interface';
-import { EnrichedDataPoint } from '../../../digital-signal-processing/dto/enriched-data-point/enriched-data-point';
-import { SwingPointData } from '../../../digital-signal-processing/swing-points/swing-points.interface';
 import { analysisConfig } from '../../config/analysis.config';
 import {
   AnalysisContext,
@@ -8,6 +6,7 @@ import {
   Step,
   TrendDataMetadata,
 } from '../../core/analysis.interface';
+import { EnrichedDataPoint } from '../../core/enriched-data-point';
 import { ComparableNumber } from '../utils/comparable-number/comparable-number';
 import { TrendDetectionStateMachine } from './trend-detection-state-machine';
 import {
@@ -17,6 +16,7 @@ import {
   UpwardTrendConfirmed,
   UpwardTrendWarning,
 } from './trend-detection-states';
+import { SwingPointData } from './trend-detection.interface';
 
 export class TrendDetection implements AnalysisStep {
   name: Step = 'TrendDetection';
