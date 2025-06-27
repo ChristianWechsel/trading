@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { DataAggregationService } from '../data-aggregation/data-aggregation.service';
 import { AnalysisQueryDto } from './analysis-query.dto';
 import { AnalysisController } from './analysis.controller';
 import { AnalysisService } from './analysis.service';
@@ -11,10 +12,19 @@ describe('AnalysisController', () => {
     const mockService = {
       performAnalysis: jest.fn().mockReturnValue({ foo: 'bar' }),
     };
+    const mockDataAggregationService = {
+      // ggf. Methoden mocken, falls benötigt
+    };
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AnalysisController],
-      providers: [{ provide: AnalysisService, useValue: mockService }],
+      providers: [
+        { provide: AnalysisService, useValue: mockService },
+        {
+          provide: DataAggregationService,
+          useValue: mockDataAggregationService,
+        },
+      ],
     }).compile();
 
     controller = module.get<AnalysisController>(AnalysisController);
