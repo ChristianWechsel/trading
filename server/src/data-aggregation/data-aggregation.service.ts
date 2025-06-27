@@ -73,4 +73,17 @@ export class DataAggregationService {
       message: `Data imported and saved for ${dto.symbol}.${dto.exchange}`,
     };
   }
+
+  async loadData(dto: TickerDto): Promise<EodPrice[]> {
+    const security = await this.securityRepo.findOne({
+      where: { symbol: dto.symbol, exchangeId: dto.exchange },
+    });
+    if (!security) {
+      return [];
+    }
+    return this.eodPriceRepo.find({
+      where: { securityId: security.securityId },
+      order: { priceDate: 'ASC' },
+    });
+  }
 }

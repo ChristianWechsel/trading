@@ -1,5 +1,6 @@
-import { Transform } from 'class-transformer';
-import { IsArray, IsEnum, IsNotEmpty } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, IsEnum, IsNotEmpty, ValidateNested } from 'class-validator';
+import { TickerDto } from 'src/data-aggregation/data-aggregation.dto';
 import { Step } from './core/analysis.interface';
 
 const allSteps: Step[] = [
@@ -10,11 +11,11 @@ const allSteps: Step[] = [
 ];
 
 export class AnalysisQueryDto {
-  /**
-   * Eine kommagetrennte Liste der auszuführenden Analyse-Schritte.
-   * Beispiel: "TrendDetection,MovingAverage"
-   */
-  @Transform(({ value }: { value: string }) => value.split(',')) // Transformiert den String in ein Array
+  @ValidateNested()
+  @Type(() => TickerDto)
+  @IsNotEmpty()
+  ticker: TickerDto;
+
   @IsArray()
   @IsEnum(allSteps, { each: true }) // Validiert jeden Wert im Array gegen den Step-Typ
   @IsNotEmpty()

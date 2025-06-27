@@ -117,4 +117,34 @@ describe('DataAggregationService', () => {
     expect(eodPriceRepo.upsert).toHaveBeenCalled();
     expect(result.message).toMatch(/Data imported and saved/);
   });
+
+  it('should return empty array if security not found in loadData', async () => {
+    securityRepo.findOne.mockResolvedValue(undefined);
+    const dto: TickerDto = { symbol: 'MSFT', exchange: 'US' };
+    const result = await service.loadData(dto);
+    expect(result).toEqual([]);
+    expect(securityRepo.findOne).toHaveBeenCalledWith({
+      where: { symbol: dto.symbol, exchangeId: dto.exchange },
+    });
+  });
+
+  it('should return EodPrice array if security found in loadData', async () => {
+    const security = { securityId: 3, symbol: 'GOOG', exchangeId: 'US' };
+    const eodPrices = [
+      { priceDate: '2024-01-01', closePrice: 100 },
+      { priceDate: '2024-02-01', closePrice: 110 },
+    ];
+    securityRepo.findOne.mockResolvedValue(security);
+    eodPriceRepo.find = jest.fn().mockResolvedValue(eodPrices);
+    const dto: TickerDto = { symbol: 'GOOG', exchange: 'US' };
+    const result = await service.loadData(dto);
+    expect(result).toBe(eodPrices);
+    expect(securityRepo.findOne).toHaveBeenCalledWith({
+      where: { symbol: dto.symbol, exchangeId: dto.exchange },
+    });
+    expect(eodPriceRepo.find).toHaveBeenCalledWith({
+      where: { securityId: security.securityId },
+      order: { priceDate: 'ASC' },
+    });
+  });
 });
