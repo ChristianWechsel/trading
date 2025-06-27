@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsArray, IsEnum, IsNotEmpty, ValidateNested } from 'class-validator';
-import { TickerDto } from 'src/data-aggregation/data-aggregation.dto';
+import { TickerDto } from '../data-aggregation/data-aggregation.dto';
 import { Step } from './core/analysis.interface';
 
 const allSteps: Step[] = [

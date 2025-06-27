@@ -26,10 +26,13 @@ describe('AnalysisController', () => {
   });
 
   it('should delegate performAnalysis to the service', () => {
-    const dto: AnalysisQueryDto = { steps: ['MovingAverage'] as any };
+    const dto: AnalysisQueryDto = {
+      steps: ['MovingAverage'],
+      ticker: { exchange: 'US', symbol: 'AAPL' },
+    };
     const result = controller.performAnalysis(dto);
 
-    expect(service.performAnalysis).toHaveBeenCalledWith(dto);
+    expect(service.performAnalysis).toHaveBeenCalledWith(dto.steps, []);
     expect(result).toEqual({ foo: 'bar' });
   });
 });

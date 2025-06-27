@@ -13,6 +13,6 @@ export class AnalysisController {
   // Wenn nicht, dann werden die Datenpunkte aktualisiert => data-aggregation verwenden.
   @Post()
   performAnalysis(@Body() body: AnalysisQueryDto) {
-    return this.analysisService.performAnalysis(body, []);
+    return this.analysisService.performAnalysis(body.steps, []);
   }
 }
