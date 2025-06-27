@@ -11,11 +11,6 @@ export class AnalysisController {
     private readonly dataAggregationService: DataAggregationService,
   ) {}
 
-  // Umbau zu Post.Dort die Analsyseschritte angeben, die durchgeführt werden sollen.
-  // TickerSymbol übergeben, für welche die Analyse durchgeführt werden soll.
-  // Die Datenpunkte für die Analyse werden aus der Datenbank geladen.
-  // Beim Laden aus der Datenbank wird geprüft, ob der letzte Datenpunkt aktuell ist.
-  // Wenn nicht, dann werden die Datenpunkte aktualisiert => data-aggregation verwenden.
   @Post()
   async performAnalysis(@Body() body: AnalysisQueryDto) {
     const dataPoints = await this.dataAggregationService.loadData(body.ticker);
