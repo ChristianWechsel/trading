@@ -12,8 +12,19 @@ export type TrendDataMetadata = {
     type: 'upward' | 'downward';
     startPoint: Pick<DataPoint<number>, 'x'>;
     endPoint?: Pick<DataPoint<number>, 'x'>;
+    channel?: TrendChannel;
   };
   metaddata: { statusTrend: 'ongoing' | 'finished' };
+};
+
+type TrendChannel = {
+  trendLine: Line;
+  returnLine: Line;
+};
+
+type Line = {
+  slope: number; // m in y = mx + b
+  yIntercept: number; // b in y = mx + b
 };
 
 export interface AnalysisStep {
