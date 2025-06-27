@@ -1,5 +1,5 @@
-import { SwingPointType } from 'src/analysis/core/enriched-data-point';
-import { DataPoint } from 'src/digital-signal-processing/digital-signal-processing.interface';
+import { DataPoint } from '../../core/analysis.interface';
+import { SwingPointType } from '../../core/enriched-data-point';
 import { ComparableNumber } from '../utils/comparable-number/comparable-number';
 import { Memory } from '../utils/memory/memory';
 import { State } from './trend-detection-states';

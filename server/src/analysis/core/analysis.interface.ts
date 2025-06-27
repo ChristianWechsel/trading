@@ -1,4 +1,3 @@
-import { DataPoint } from 'src/digital-signal-processing/digital-signal-processing.interface';
 import { EnrichedDataPoint } from './enriched-data-point';
 
 export type AnalysisContext = {
@@ -28,3 +27,8 @@ export type Step =
   | 'SwingPointDetection'
   | 'TrendChannelCalculation'
   | 'TrendDetection';
+
+export type DataPoint<T> = {
+  x: T;
+  y: T;
+};

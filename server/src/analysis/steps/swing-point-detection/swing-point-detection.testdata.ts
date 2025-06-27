@@ -1,4 +1,4 @@
-import { DataPoint } from '../../../digital-signal-processing/digital-signal-processing.interface';
+import { DataPoint } from '../../core/analysis.interface';
 import { EnrichedDataPoint } from '../../core/enriched-data-point';
 import { SwingPointTestCase } from './swing-point-detection.spec';
 

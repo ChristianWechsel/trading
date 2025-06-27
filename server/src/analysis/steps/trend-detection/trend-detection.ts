@@ -1,8 +1,8 @@
-import { DataPoint } from '../../../digital-signal-processing/digital-signal-processing.interface';
 import { analysisConfig } from '../../config/analysis.config';
 import {
   AnalysisContext,
   AnalysisStep,
+  DataPoint,
   Step,
   TrendDataMetadata,
 } from '../../core/analysis.interface';

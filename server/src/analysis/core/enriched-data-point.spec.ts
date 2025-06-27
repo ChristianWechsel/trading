@@ -1,4 +1,4 @@
-import { DataPoint } from 'src/digital-signal-processing/digital-signal-processing.interface';
+import { DataPoint } from './analysis.interface';
 import { EnrichedDataPoint } from './enriched-data-point';
 
 describe('EnrichedDataPoint', () => {

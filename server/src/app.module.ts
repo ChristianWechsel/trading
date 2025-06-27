@@ -16,7 +16,6 @@ import { CalendarEventModule } from './calendar-event/calendar-event.module';
 import { DataAggregationModule } from './data-aggregation/data-aggregation.module';
 import { EodPrice } from './data-aggregation/eod-price.entity';
 import { Security } from './data-aggregation/security.entity';
-import { DigitalSignalProcessingModule } from './digital-signal-processing/digital-signal-processing.module';
 import { NotificationModule } from './notification/notification.module';
 import { PushSubscription } from './notification/push-subscription.entity';
 import { User } from './users/user.entity';
@@ -96,7 +95,6 @@ import { UsersModule } from './users/users.module';
       serveRoot: '/static/',
     }),
     DataAggregationModule,
-    DigitalSignalProcessingModule,
     AnalysisModule,
   ],
   controllers: [AppController],
