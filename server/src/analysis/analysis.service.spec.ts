@@ -42,9 +42,10 @@ describe('AnalysisService', () => {
 
     const dto: AnalysisQueryDto = {
       steps: ['MovingAverage', 'TrendDetection'],
+      ticker: { exchange: 'US', symbol: 'AAPL' },
     };
 
-    const result = service.performAnalysis(dto, [
+    const result = service.performAnalysis(dto.steps, [
       { x: 1, y: 10 },
       { x: 2, y: 5 },
       { x: 3, y: 15 },
@@ -76,6 +77,7 @@ describe('AnalysisService', () => {
 
     const dto: AnalysisQueryDto = {
       steps: ['MovingAverage'],
+      ticker: { exchange: 'US', symbol: 'AAPL' },
     };
 
     const inputData = [
@@ -83,7 +85,7 @@ describe('AnalysisService', () => {
       { x: 2, y: 5 },
     ];
 
-    service.performAnalysis(dto, inputData);
+    service.performAnalysis(dto.steps, inputData);
 
     const calledWith = mockRun.mock.calls[0][0];
     expect(Array.isArray(calledWith)).toBe(true);
