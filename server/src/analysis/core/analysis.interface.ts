@@ -22,9 +22,10 @@ type TrendChannel = {
   returnLine: Line;
 };
 
+// y = mx + b
 type Line = {
-  slope: number; // m in y = mx + b
-  yIntercept: number; // b in y = mx + b
+  slope: number; // m
+  yIntercept: number; // b
 };
 
 export interface AnalysisStep {
