@@ -1,7 +1,12 @@
 import {
+  EnrichedDataPoint,
+  SwingPointType,
+} from 'src/analysis/core/enriched-data-point';
+import {
   AnalysisContext,
   AnalysisStep,
   Step,
+  TrendChannel,
 } from '../../core/analysis.interface';
 
 export class TrendChannelCalculation implements AnalysisStep {
@@ -10,54 +15,75 @@ export class TrendChannelCalculation implements AnalysisStep {
 
   execute(context: AnalysisContext): void {
     if (!context.trends || context.trends.length === 0) return;
+
     for (const trend of context.trends) {
-      // Trendbereich bestimmen
+      // Determine the range of the trend
       const startX = trend.startPoint.x;
       const endX = trend.endPoint?.x;
       const pointsInTrend = context.enrichedDataPoints.filter(
         (p) => p.x >= startX && (endX === undefined || p.x <= endX),
       );
+
       if (trend.type === 'upward') {
-        // Finde die ersten beiden swingLows und das erste swingHigh dazwischen
-        const swingLows = pointsInTrend.filter(
-          (p) => p.getSwingPointType() === 'swingLow',
+        trend.channel = this.calculateChannelForSequence(
+          pointsInTrend,
+          'swingLow',
+          'swingHigh',
         );
-        const swingHighs = pointsInTrend.filter(
-          (p) => p.getSwingPointType() === 'swingHigh',
-        );
-        if (swingLows.length >= 2 && swingHighs.length >= 1) {
-          const pointA = swingLows[0];
-          const pointB = swingHighs[0];
-          const pointC = swingLows[1];
-          const slope = (pointC.y - pointA.y) / (pointC.x - pointA.x);
-          const trendLine = { slope, yIntercept: pointA.y - slope * pointA.x };
-          const returnLine = { slope, yIntercept: pointB.y - slope * pointB.x };
-          trend.channel = { trendLine, returnLine };
-        } else {
-          trend.channel = undefined;
-        }
       } else if (trend.type === 'downward') {
-        // Finde die ersten beiden swingHighs und das erste swingLow dazwischen
-        const swingHighs = pointsInTrend.filter(
-          (p) => p.getSwingPointType() === 'swingHigh',
+        trend.channel = this.calculateChannelForSequence(
+          pointsInTrend,
+          'swingHigh',
+          'swingLow',
         );
-        const swingLows = pointsInTrend.filter(
-          (p) => p.getSwingPointType() === 'swingLow',
-        );
-        if (swingHighs.length >= 2 && swingLows.length >= 1) {
-          const pointA = swingHighs[0];
-          const pointB = swingLows[0];
-          const pointC = swingHighs[1];
-          const slope = (pointC.y - pointA.y) / (pointC.x - pointA.x);
-          const trendLine = { slope, yIntercept: pointA.y - slope * pointA.x };
-          const returnLine = { slope, yIntercept: pointB.y - slope * pointB.x };
-          trend.channel = { trendLine, returnLine };
-        } else {
-          trend.channel = undefined;
-        }
       } else {
         trend.channel = undefined;
       }
     }
+  }
+
+  private calculateChannelForSequence(
+    pointsInTrend: EnrichedDataPoint[],
+    primaryType: SwingPointType,
+    secondaryType: SwingPointType,
+  ): TrendChannel | undefined {
+    const primarySwings = pointsInTrend.filter(
+      (p) => p.getSwingPointType() === primaryType,
+    );
+    const secondarySwings = pointsInTrend.filter(
+      (p) => p.getSwingPointType() === secondaryType,
+    );
+
+    // We need at least two primary swings to define the trend line.
+    if (primarySwings.length < 2) {
+      return undefined;
+    }
+
+    const trendPointA = primarySwings[0];
+    const trendPointB = primarySwings[1];
+
+    // Find the first secondary swing that lies *between* the two primary swings.
+    const returnPoint = secondarySwings.find(
+      (p) => p.x > trendPointA.x && p.x < trendPointB.x,
+    );
+
+    // If no such point exists, we can't form a valid channel.
+    if (!returnPoint) {
+      return undefined;
+    }
+
+    // Calculate slope and intercepts
+    const slope =
+      (trendPointB.y - trendPointA.y) / (trendPointB.x - trendPointA.x);
+    const trendLine = {
+      slope,
+      yIntercept: trendPointA.y - slope * trendPointA.x,
+    };
+    const returnLine = {
+      slope,
+      yIntercept: returnPoint.y - slope * returnPoint.x,
+    };
+
+    return { trendLine, returnLine };
   }
 }
