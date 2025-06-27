@@ -7,6 +7,17 @@ import { AnalysisStep, Step } from './analysis.interface';
 
 export class AnalysisBuilder {
   private steps: AnalysisStep[] = [];
+  private configuration: {
+    SwingPointDetection: ConstructorParameters<typeof SwingPointDetection>;
+    TrendDetection: ConstructorParameters<typeof TrendDetection>;
+  };
+
+  constructor() {
+    this.configuration = {
+      SwingPointDetection: [{ relativeThreshold: 0.01, windowSize: 1 }],
+      TrendDetection: [{ relativeThreshold: 0.01 }],
+    };
+  }
 
   addStep(step: Step): void {
     if (!this.has(step)) {
@@ -37,9 +48,11 @@ export class AnalysisBuilder {
       case 'MovingAverage':
         return new MovingAverage();
       case 'SwingPointDetection':
-        return new SwingPointDetection();
+        return new SwingPointDetection(
+          ...this.configuration.SwingPointDetection,
+        );
       case 'TrendDetection':
-        return new TrendDetection();
+        return new TrendDetection(...this.configuration.TrendDetection);
       case 'TrendChannelCalculation':
         return new TrendChannelCalculation();
       default:
