@@ -37,4 +37,9 @@ export class DataAggregationController {
 
     return this.dataAggregationService.importAndSaveData(dto);
   }
+
+  @Post('load')
+  async loadData(@Body() dto: TickerDto) {
+    return this.dataAggregationService.loadData(dto);
+  }
 }

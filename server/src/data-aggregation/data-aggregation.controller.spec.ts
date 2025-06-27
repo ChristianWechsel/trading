@@ -5,10 +5,10 @@ import { DataAggregationService } from './data-aggregation.service';
 
 describe('DataAggregationController', () => {
   let controller: DataAggregationController;
-  let service: { importAndSaveData: jest.Mock };
+  let service: { importAndSaveData: jest.Mock; loadData: jest.Mock };
 
   beforeEach(async () => {
-    service = { importAndSaveData: jest.fn() };
+    service = { importAndSaveData: jest.fn(), loadData: jest.fn() };
     const module: TestingModule = await Test.createTestingModule({
       controllers: [DataAggregationController],
       providers: [{ provide: DataAggregationService, useValue: service }],
@@ -40,5 +40,29 @@ describe('DataAggregationController', () => {
     const result = await controller.importData({});
     expect(service.importAndSaveData).toHaveBeenCalled();
     expect(result).toEqual({ message: 'ok' });
+  });
+
+  describe('loadData', () => {
+    it('should call loadData and return result', async () => {
+      const dto: TickerDto = { symbol: 'AAPL', exchange: 'US' };
+      service.loadData.mockResolvedValue({ data: [1, 2, 3] });
+      const result = await controller.loadData(dto);
+      expect(service.loadData).toHaveBeenCalledWith(dto);
+      expect(result).toEqual({ data: [1, 2, 3] });
+    });
+
+    it('should throw if service throws', async () => {
+      const dto: TickerDto = { symbol: 'AAPL', exchange: 'US' };
+      service.loadData.mockRejectedValue(new Error('fail'));
+      await expect(controller.loadData(dto)).rejects.toThrow('fail');
+    });
+
+    it('should handle empty dto', async () => {
+      service.loadData.mockResolvedValue({ data: [] });
+      // @ts-expect-error purposely incomplete dto
+      const result = await controller.loadData({});
+      expect(service.loadData).toHaveBeenCalled();
+      expect(result).toEqual({ data: [] });
+    });
   });
 });
