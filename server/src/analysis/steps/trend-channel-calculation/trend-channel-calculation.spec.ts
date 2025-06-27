@@ -17,6 +17,12 @@ describe('TrendChannelCalculation', () => {
     testData.noTrends(),
     testData.simpleUpwardTrend(),
     testData.simpleDownwardTrend(),
+    testData.overlappingTrends(),
+    testData.separatedTrends(),
+    testData.multiplePointsBetweenSwings(),
+    testData.decimalValues(),
+    testData.leadingPoints(),
+    testData.trailingPoints(),
   ])('$name', ({ testcase }) => {
     const context = testcase.initialContext;
     new TrendChannelCalculation().execute(context);
