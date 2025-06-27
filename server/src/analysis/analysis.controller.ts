@@ -2,6 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { DataAggregationService } from '../data-aggregation/data-aggregation.service';
 import { AnalysisQueryDto } from './analysis-query.dto';
 import { AnalysisService } from './analysis.service';
+import { DataPoint } from './core/analysis.interface';
 
 @Controller('analysis')
 export class AnalysisController {
@@ -16,7 +17,14 @@ export class AnalysisController {
   // Beim Laden aus der Datenbank wird geprüft, ob der letzte Datenpunkt aktuell ist.
   // Wenn nicht, dann werden die Datenpunkte aktualisiert => data-aggregation verwenden.
   @Post()
-  performAnalysis(@Body() body: AnalysisQueryDto) {
-    return this.analysisService.performAnalysis(body.steps, []);
+  async performAnalysis(@Body() body: AnalysisQueryDto) {
+    const dataPoints = await this.dataAggregationService.loadData(body.ticker);
+    return this.analysisService.performAnalysis(
+      body.steps,
+      dataPoints.map<DataPoint<number>>((dp) => ({
+        x: new Date(dp.priceDate).getTime(),
+        y: dp.closePrice,
+      })),
+    );
   }
 }
