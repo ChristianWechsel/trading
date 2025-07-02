@@ -117,13 +117,4 @@ siehe auch Gemini Chat JWT-Sicherheit. Sessionstorage
 
 Ablauf:
 
-1.  endpoint login aufrufen.
-    Unterscheidung nach admin und normalen user
-    jwt token erzeugen, dabei die Rolle als payload mitgeben
-    cookie setzen
-2.  Guard liest cookie aus
-    jwt token auslesen. payload role definiert die Berechtigungen
-3.  Admin kann User anlegen
 4.  PUG Template für login erstellen
-5.  logout erstellen
-    cookie löschen

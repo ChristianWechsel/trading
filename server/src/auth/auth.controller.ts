@@ -65,6 +65,14 @@ export class AuthController {
     }
   }
 
+  @Public()
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  signOut(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie(this.authTokenCookie);
+    return { message: 'Logout successful' };
+  }
+
   private validateBody(body: AuthDto) {
     if (!body.username || !body.password) {
       return { error: 'username and password are required' };
