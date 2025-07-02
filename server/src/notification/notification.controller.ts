@@ -21,7 +21,6 @@ export class NotificationController {
     private readonly configService: ConfigService,
   ) {}
 
-  @Public()
   @Get('register')
   @Render('register-notification')
   registerNotification() {
@@ -35,7 +34,6 @@ export class NotificationController {
     res.type('text/plain').send(key);
   }
 
-  @Public()
   @Post('subscribe')
   @HttpCode(HttpStatus.CREATED)
   async subscribe(@Body() subscription: PushSubscriptionDto) {
@@ -44,7 +42,6 @@ export class NotificationController {
   }
 
   // Test-Endpoint: Sendet eine Beispielbenachrichtigung an alle
-
   @Post('send')
   async sendNotification(
     @Body() body: { title: string; body: string; url?: string },
