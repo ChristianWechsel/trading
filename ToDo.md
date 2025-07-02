@@ -96,6 +96,5 @@
 
 Ablauf:
 
-4.  PUG Template für login erstellen
 5.  Nach login auf Startseite umleiten
 6.  Bei fehlgeschlagenem Login, logout, zugriff auf nicht authorisierte Seite wird auf login umgeleitet
