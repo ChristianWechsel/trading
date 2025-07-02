@@ -46,21 +46,23 @@ export class AuthController {
     const error = this.validateBody(body);
     if (error) return error;
 
-    const user = await this.authService.authenticateUser(
-      body.username,
-      body.password,
-    );
-
-    const role: Role = user.username === 'admin' ? 'admin' : 'user';
-    const token = await this.authService.generateToken(user, role);
-    response.cookie(this.authTokenCookie, token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 1000, // 1 Stunde
-    });
-
-    return { message: 'Login successful', user, role };
+    try {
+      const user = await this.authService.authenticateUser(
+        body.username,
+        body.password,
+      );
+      const role: Role = user.username === 'admin' ? 'admin' : 'user';
+      const token = await this.authService.generateToken(user, role);
+      response.cookie(this.authTokenCookie, token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 60 * 60 * 1000, // 1 Stunde
+      });
+      return { message: 'Login successful', user, role };
+    } catch (e) {
+      return { error: e.message };
+    }
   }
 
   private validateBody(body: AuthDto) {
