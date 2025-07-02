@@ -1,21 +1,24 @@
 import {
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Post,
-  Request,
+  Res,
   UseGuards,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { UsersService } from '../users/users.service';
 import { AdminGuard } from './admin.guard';
 import { AuthDto } from './auth.dto';
 import { AuthService } from './auth.service';
 import { Public } from './public.decorator';
+import { Role } from './type';
 
 @Controller('auth')
 export class AuthController {
+  private readonly authTokenCookie = 'auth_token';
+
   constructor(
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
@@ -35,16 +38,28 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async signIn(@Body() body: AuthDto) {
+  async signIn(
+    @Body() body: AuthDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
     const error = this.validateBody(body);
     if (error) return error;
 
-    return await this.authService.signIn(body.username, body.password);
-  }
+    const user = await this.authService.authenticateUser(
+      body.username,
+      body.password,
+    );
 
-  @Get('profile')
-  getProfile(@Request() req: { user: string }) {
-    return req.user;
+    const role: Role = user.username === 'admin' ? 'admin' : 'user';
+    const token = await this.authService.generateToken(user, role);
+    response.cookie(this.authTokenCookie, token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 1000, // 1 Stunde
+    });
+
+    return { message: 'Login successful', user, role };
   }
 
   private validateBody(body: AuthDto) {

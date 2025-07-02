@@ -32,7 +32,7 @@ describe('AuthService', () => {
 
   it('should throw UnauthorizedException if user not found', async () => {
     usersService.findOne.mockResolvedValue(null);
-    await expect(service.signIn('foo', 'bar')).rejects.toThrow(
+    await expect(service.authenticateUser('foo', 'bar')).rejects.toThrow(
       'User not found',
     );
   });

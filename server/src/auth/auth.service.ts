@@ -1,7 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { User } from 'src/users/user.entity';
 import { UsersService } from '../users/users.service';
+import { Role, TokenPayload } from './type';
 
 @Injectable()
 export class AuthService {
@@ -10,10 +12,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signIn(
-    username: string,
-    pass: string,
-  ): Promise<{ access_token: string }> {
+  async authenticateUser(username: string, pass: string) {
     const user = await this.usersService.findOne(username);
     if (!user) {
       throw new UnauthorizedException('User not found');
@@ -22,12 +21,14 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid password');
     }
+    return user;
+  }
 
-    // Set role based on username
-    const role = user.username === 'admin' ? 'admin' : 'user';
-    const payload = { sub: user.userId, username: user.username, role };
-    return {
-      access_token: await this.jwtService.signAsync(payload),
+  async generateToken(user: User, role: Role) {
+    const payload: TokenPayload = {
+      ...user,
+      role,
     };
+    return await this.jwtService.signAsync(payload);
   }
 }

@@ -9,6 +9,7 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { IS_PUBLIC_KEY } from './public.decorator';
+import { TokenPayload } from './type';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -19,25 +20,17 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-    if (isPublic) {
+    if (this.isPublicMethod(context)) {
       return true;
     }
 
-    const request = context.switchToHttp().getRequest<Request>();
-    const token = this.extractTokenFromHeader(request);
-    if (!token) {
-      throw new UnauthorizedException();
-    }
     try {
+      const authToken = this.getAuthTokenFromRequest(context);
       const secret = this.configService.get<string>('JWT_SECRET');
-      const payload = await this.jwtService.verifyAsync<object>(token, {
+      const payload = await this.jwtService.verifyAsync<object>(authToken, {
         secret,
       });
-      request['user'] = payload;
+      this.addUserToRequest(context, payload as TokenPayload);
     } catch {
       throw new UnauthorizedException();
     }
@@ -45,8 +38,29 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+  private isPublicMethod(context: ExecutionContext) {
+    return this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+  }
+
+  private getAuthTokenFromRequest(context: ExecutionContext) {
+    const request = context.switchToHttp().getRequest<Request>();
+    const cookies = request.cookies as Record<string, string>;
+    if (!cookies) {
+      throw new Error();
+    }
+
+    if (!('auth_token' in cookies)) {
+      throw new Error();
+    }
+
+    return cookies.auth_token;
+  }
+
+  private addUserToRequest(context: ExecutionContext, user: TokenPayload) {
+    const request = context.switchToHttp().getRequest<Request>();
+    request['user'] = user;
   }
 }
