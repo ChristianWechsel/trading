@@ -60,8 +60,10 @@ export class AuthController {
         maxAge: 60 * 60 * 1000, // 1 Stunde
       });
       return { message: 'Login successful', user, role };
-    } catch (e) {
-      return { error: e.message };
+    } catch (e: unknown) {
+      const errorMessage =
+        e instanceof Error ? e.message : 'An unknown error occurred';
+      return { error: errorMessage };
     }
   }
 
