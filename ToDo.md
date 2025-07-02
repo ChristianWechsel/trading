@@ -94,27 +94,8 @@
 
 # Login implementieren. Dabei JWT Token mit Cookie versenden
 
-- Cookie Einstellung: HttpOnly, Secure und SameSite=Strict
-  Speichermethode
-
-Schutz vor XSS (Token-Diebstahl)
-
-Schutz vor CSRF
-
-sessionStorage / localStorage
-
-Schlecht. Sehr anfällig, da per JS lesbar.
-
-Gut. Token wird nicht automatisch gesendet.
-
-HttpOnly, Secure, SameSite Cookie
-
-Sehr Gut. Kann nicht per JS ausgelesen werden.
-
-Sehr Gut. Schutz durch das SameSite-Attribut.
-https://blog.logto.io/de/token-based-authentication-vs-session-based-authentication
-siehe auch Gemini Chat JWT-Sicherheit. Sessionstorage
-
 Ablauf:
 
 4.  PUG Template für login erstellen
+5.  Nach login auf Startseite umleiten
+6.  Bei fehlgeschlagenem Login, logout, zugriff auf nicht authorisierte Seite wird auf login umgeleitet
