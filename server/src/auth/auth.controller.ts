@@ -9,10 +9,11 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UsersService } from '../users/users.service';
-import { AdminGuard } from './admin.guard';
 import { AuthDto } from './auth.dto';
 import { AuthService } from './auth.service';
 import { Public } from './public.decorator';
+import { Roles } from './roles.decorator';
+import { RolesGuard } from './roles.guard';
 import { Role } from './type';
 
 @Controller('auth')
@@ -24,9 +25,9 @@ export class AuthController {
     private readonly authService: AuthService,
   ) {}
 
-  @Public()
-  @UseGuards(AdminGuard)
   @Post('register')
+  @Roles('admin')
+  @UseGuards(RolesGuard)
   async register(@Body() body: AuthDto) {
     const error = this.validateBody(body);
     if (error) return error;
