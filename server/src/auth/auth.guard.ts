@@ -13,11 +13,16 @@ import { TokenPayload } from './type';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
+  private readonly authTokenCookie: string;
+
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly reflector: Reflector,
-  ) {}
+  ) {
+    this.authTokenCookie =
+      this.configService.get<string>('AUTH_TOKEN_COOKIE_NAME') ?? 'auth_token';
+  }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     if (this.isPublicMethod(context)) {
@@ -52,11 +57,11 @@ export class AuthGuard implements CanActivate {
       throw new Error();
     }
 
-    if (!('auth_token' in cookies)) {
+    if (!(this.authTokenCookie in cookies)) {
       throw new Error();
     }
 
-    return cookies.auth_token;
+    return cookies[this.authTokenCookie];
   }
 
   private addUserToRequest(context: ExecutionContext, user: TokenPayload) {

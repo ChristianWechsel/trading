@@ -15,7 +15,11 @@ import { AuthService } from './auth.service';
       useFactory: (configService: ConfigService) => ({
         global: true,
         secret: configService.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn: '1h' },
+        signOptions: {
+          expiresIn: configService.get<number>('AUTH_TOKEN_MAX_AGE')
+            ? configService.get<number>('AUTH_TOKEN_MAX_AGE')! / 1000
+            : '1h',
+        },
       }),
     }),
     ConfigModule,

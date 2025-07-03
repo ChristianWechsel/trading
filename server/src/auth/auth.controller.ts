@@ -7,6 +7,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { UsersService } from '../users/users.service';
 import { AuthDto } from './auth.dto';
@@ -18,12 +19,19 @@ import { Role } from './type';
 
 @Controller('auth')
 export class AuthController {
-  private readonly authTokenCookie = 'auth_token';
+  private readonly authTokenCookie: string;
+  private readonly authTokenMaxAge: number;
 
   constructor(
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
-  ) {}
+    private readonly configService: ConfigService,
+  ) {
+    this.authTokenMaxAge =
+      this.configService.get<number>('AUTH_TOKEN_MAX_AGE') ?? 3600000;
+    this.authTokenCookie =
+      this.configService.get<string>('AUTH_TOKEN_COOKIE_NAME') ?? 'auth_token';
+  }
 
   @Post('register')
   @Roles('admin')
@@ -57,7 +65,7 @@ export class AuthController {
         httpOnly: true,
         secure: true,
         sameSite: 'strict',
-        maxAge: 60 * 60 * 1000, // 1 Stunde
+        maxAge: this.authTokenMaxAge,
       });
       return { message: 'Login successful', user, role };
     } catch (e: unknown) {

@@ -66,6 +66,26 @@ import { UsersModule } from './users/users.module';
           'any.required':
             'EODHD_API_KEY is required. Please add your End Of Day Historical Data API key to the .env file.',
         }),
+        AUTH_TOKEN_COOKIE_NAME: Joi.string()
+          .min(3)
+          .max(64)
+          .pattern(/^[a-zA-Z0-9 ]+$/)
+          .messages({
+            'string.pattern.base':
+              'AUTH_TOKEN_COOKIE_NAME may only contain letters, numbers, underscores, and hyphens.',
+          }),
+        AUTH_TOKEN_MAX_AGE: Joi.number()
+          .integer()
+          .min(60000)
+          .max(604800000)
+          .messages({
+            'number.base':
+              'AUTH_TOKEN_MAX_AGE must be a number (milliseconds).',
+            'number.min':
+              'AUTH_TOKEN_MAX_AGE must be at least 60000 (1 Minute).',
+            'number.max':
+              'AUTH_TOKEN_MAX_AGE must be at most 604800000 (7 Tage).',
+          }),
       }),
     }),
     TypeOrmModule.forRootAsync({
