@@ -5,5 +5,8 @@ block content
   .button-container
     a.button(href="/analysis") Analyse
     a.button(href="/notifications") Benachrichtigungen
-  form.logout-form(action="/auth/logout", method="POST")
+  form.logout-form
     button(type="submit") Logout
+
+append scripts
+  script(src="/static/js/home.js")

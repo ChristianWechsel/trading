@@ -91,5 +91,3 @@
 
 - Apache ECharts als Alternative prüfen (ebenfalls self-hosted möglich).
 ````
-
-# nach logout auf login umleiten
