@@ -88,6 +88,11 @@ import { UsersModule } from './users/users.module';
           }),
       }),
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'public'),
+      serveRoot: '/static/',
+    }),
+    AuthModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -103,17 +108,13 @@ import { UsersModule } from './users/users.module';
       }),
     }),
     ScheduleModule.forRoot(),
-    AuthModule,
     UsersModule,
     ThrottlerModule.forRoot({
       throttlers: [{ ttl: 60, limit: 5 }],
     }),
     NotificationModule,
     CalendarEventModule,
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
-      serveRoot: '/static/',
-    }),
+
     DataAggregationModule,
     AnalysisModule,
   ],
