@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#222"/>
+  <!-- Grüner Candlestick -->
+  <rect x="16" y="24" width="8" height="24" rx="2" fill="#4caf50"/>
+  <rect x="19" y="16" width="2" height="8" fill="#4caf50"/>
+  <rect x="19" y="48" width="2" height="8" fill="#4caf50"/>
+  <!-- Roter Candlestick -->
+  <rect x="40" y="32" width="8" height="16" rx="2" fill="#f44336"/>
+  <rect x="43" y="16" width="2" height="16" fill="#f44336"/>
+  <rect x="43" y="48" width="2" height="8" fill="#f44336"/>
+  <!-- Optional: Chart-Linie -->
+  <polyline points="12,44 24,28 32,36 40,24 52,40" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
