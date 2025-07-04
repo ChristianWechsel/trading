@@ -91,19 +91,3 @@
 
 - Apache ECharts als Alternative prüfen (ebenfalls self-hosted möglich).
 ````
-
-# Login implementieren. Dabei JWT Token mit Cookie versenden
-
-Ablauf:
-
-5.  Nach login auf Startseite umleiten
-6.  Bei fehlgeschlagenem Login, logout, zugriff auf nicht authorisierte Seite wird auf login umgeleitet
-
-# Umleitung für unauthentifizierte Nutzer
-
-- [ ] Die `home`-Seite (`/`) nur für angemeldete Nutzer zugänglich machen (d.h. `@Public()`-Decorator entfernen).
-- [ ] Einen `UnauthorizedExceptionFilter` erstellen, der `UnauthorizedException` abfängt.
-- [ ] Im Filter je nach Anfrage-Typ unterschiedlich reagieren:
-  - [ ] Wenn der `Accept`-Header der Anfrage `text/html` enthält (Browser-Anfrage), soll auf `/login` umgeleitet werden.
-  - [ ] Andernfalls (API-Anfrage) soll ein `401 Unauthorized` mit einer JSON-Fehlermeldung zurückgegeben werden.
-- [ ] Den `UnauthorizedExceptionFilter` global in `main.ts` registrieren, damit er für die gesamte Anwendung aktiv ist.
