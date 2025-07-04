@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (response.ok && result.message === 'Login successful') {
                     // Bei Erfolg: Leite auf die Home-Seite um
-                    window.location.href = '/home';
+                    window.location.href = '/';
                 } else {
                     // Bei Fehler: Zeige die Fehlermeldung an
                     errorElem.textContent = result.error || 'Login fehlgeschlagen.';
