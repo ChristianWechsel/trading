@@ -9,7 +9,6 @@ export class AppController {
   @Get()
   @Render('home')
   landingPage() {
-    console.log('Landing page rendered');
     return {};
   }
 
@@ -17,7 +16,6 @@ export class AppController {
   @Get('login')
   @Render('login')
   loginPage() {
-    console.log('Login page rendered');
     return {};
   }
 }
