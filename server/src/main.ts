@@ -6,6 +6,7 @@ import { readFileSync } from 'fs';
 import helmet from 'helmet';
 import { join } from 'path';
 import { AppModule } from './app.module';
+import { UnauthorizedExceptionFilter } from './auth/unauthorized-exception.filter';
 import { UsersService } from './users/users.service';
 
 async function bootstrap() {
@@ -22,7 +23,7 @@ async function bootstrap() {
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-
+  app.useGlobalFilters(new UnauthorizedExceptionFilter());
   app.setBaseViewsDir(join(basePath, 'views'));
   app.setViewEngine('pug');
 

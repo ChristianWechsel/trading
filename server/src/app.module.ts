@@ -69,7 +69,7 @@ import { UsersModule } from './users/users.module';
         AUTH_TOKEN_COOKIE_NAME: Joi.string()
           .min(3)
           .max(64)
-          .pattern(/^[a-zA-Z0-9 ]+$/)
+          .pattern(/^[a-zA-Z0-9]+$/)
           .messages({
             'string.pattern.base':
               'AUTH_TOKEN_COOKIE_NAME may only contain letters, numbers, underscores, and hyphens.',

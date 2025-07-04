@@ -6,7 +6,6 @@ import { Public } from './auth/public.decorator';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Public()
   @Get()
   @Render('home')
   landingPage() {
