@@ -1,0 +1,13 @@
+extends layout
+
+block head
+  - title = 'Analyse'
+
+block content
+  h1 Analyse
+  p Hier werden die Trading-Charts angezeigt.
+  #chart-container
+
+block scripts
+  script(src="/vendor/lightweight-charts/lightweight-charts.standalone.production.js")
+  script(src="/static/js/analysis.js")

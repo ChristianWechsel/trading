@@ -6,16 +6,28 @@ import { Public } from './auth/public.decorator';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  @Public()
+  @Get('login')
+  @Render('login')
+  loginPage() {
+    return {};
+  }
+
   @Get()
   @Render('home')
   landingPage() {
     return {};
   }
 
-  @Public()
-  @Get('login')
-  @Render('login')
-  loginPage() {
+  @Get('analysis')
+  @Render('analysis')
+  showAnalysisPage() {
+    return {};
+  }
+
+  @Get('notification')
+  @Render('notification')
+  notificationPage() {
     return {};
   }
 }

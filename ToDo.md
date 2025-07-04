@@ -91,3 +91,17 @@
 
 - Apache ECharts als Alternative prüfen (ebenfalls self-hosted möglich).
 ````
+
+# ToDo UI
+
+- [ ] Analyse-Seite erstellen
+- [ ] Notification-Seite erstellen
+- [ ] Logout-Button auf der Startseite implementieren
+- [ ] Registrierung für Notifications implementieren
+- [ ] Notifications versenden implementieren
+- [ ] Analyse-Funktionalität implementieren
+- [ ] Daten-Aggregations-Funktionalität implementieren
+- [ ] User-Management implementieren
+- [ ] Authentifizierung implementieren
+- [ ] Kalender-Event-Funktionalität implementieren
+- [ ] Für jede Seite soll eine einfache Navigation vorliegen
