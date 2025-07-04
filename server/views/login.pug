@@ -3,9 +3,8 @@ extends layout
 block content
   .login-container
     h1 Login
-    if error
-      p.error= error
-    form(action="/auth/login", method="POST")
+    p#error-message.error
+    form
       .form-group
         label(for="username") Username
         input#username(type="text", name="username", required)
@@ -13,3 +12,7 @@ block content
         label(for="password") Password
         input#password(type="password", name="password", required)
       button(type="submit") Login
+
+append scripts
+  script(src="/static/js/login.js")
+
