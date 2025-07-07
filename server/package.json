@@ -17,7 +17,8 @@
     "test:watch": "jest --config jest.config.json --watch",
     "test:cov": "jest --coverage --config jest.config.json",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config jest-e2e.json"
+    "test:e2e": "jest --config jest-e2e.json",
+    "postinstall": "cp node_modules/lightweight-charts/dist/lightweight-charts.standalone.production.js public/vendor/lightweight-charts/"
   },
   "dependencies": {
     "@nestjs/axios": "^4.0.0",
@@ -39,6 +40,7 @@
     "cookie-parser": "^1.4.7",
     "helmet": "^8.1.0",
     "joi": "^17.13.3",
+    "lightweight-charts": "^5.0.8",
     "mysql2": "^3.14.1",
     "pug": "^3.0.3",
     "reflect-metadata": "^0.2.2",
