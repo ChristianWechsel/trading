@@ -5,17 +5,29 @@ import { TrendDetection } from '../steps/trend-detection/trend-detection';
 import { AnalysisPipeline } from './analysis-pipeline';
 import { AnalysisStep, Step } from './analysis.interface';
 
+type StepConfiguration = {
+  swingPointDetection: ConstructorParameters<typeof SwingPointDetection>;
+  trendDetection: ConstructorParameters<typeof TrendDetection>;
+};
+
 export class AnalysisBuilder {
   private steps: AnalysisStep[] = [];
-  private configuration: {
-    SwingPointDetection: ConstructorParameters<typeof SwingPointDetection>;
-    TrendDetection: ConstructorParameters<typeof TrendDetection>;
-  };
+  private configuration: StepConfiguration;
 
-  constructor() {
+  constructor(options?: StepConfiguration) {
+    const defaultConfiguration: StepConfiguration = {
+      swingPointDetection: [{ relativeThreshold: 0.01, windowSize: 1 }],
+      trendDetection: [{ relativeThreshold: 0.01 }],
+    };
     this.configuration = {
-      SwingPointDetection: [{ relativeThreshold: 0.01, windowSize: 1 }],
-      TrendDetection: [{ relativeThreshold: 0.01 }],
+      swingPointDetection: {
+        ...defaultConfiguration.swingPointDetection,
+        ...options?.swingPointDetection,
+      },
+      trendDetection: {
+        ...defaultConfiguration.trendDetection,
+        ...options?.trendDetection,
+      },
     };
   }
 
@@ -49,10 +61,10 @@ export class AnalysisBuilder {
         return new MovingAverage();
       case 'SwingPointDetection':
         return new SwingPointDetection(
-          ...this.configuration.SwingPointDetection,
+          ...this.configuration.swingPointDetection,
         );
       case 'TrendDetection':
-        return new TrendDetection(...this.configuration.TrendDetection);
+        return new TrendDetection(...this.configuration.trendDetection);
       case 'TrendChannelCalculation':
         return new TrendChannelCalculation();
       default:

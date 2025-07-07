@@ -1,15 +1,5 @@
 # ToDo List
 
-- In `src/analysis/analysis.service.ts` soll eine Konfigurationsmöglichkeit eingefügt werden,
-  um z.B. Parameter für die SwingDetection (oder andere Analyse-Schritte) zentral zu verwalten und zu übergeben.
-
-# Technische Analyse Pipeline erweitern
-
-- `TrendChannelCalculation`-Step implementieren:
-  - Für jeden erkannten Trend (Aufwärts/Abwärts) die Trend- und Rückkehrlinie berechnen.
-  - Die Linien als mathematische Formel (Steigung, y-Achsenabschnitt) in der `TrendDataMetadata` im `AnalysisContext` speichern.
-  - Die Logik soll die Swing-Punkte nutzen, um die definierenden Punkte für die Linien zu finden (z.B. zwei steigende Tiefs für Aufwärtstrendlinie).
-
 # Zusammenspiel von Data Aggregation und Analysis (Use-Case: On-Demand Analyse)
 
 - **Orchestrierung von Datenbeschaffung und Analyse:**

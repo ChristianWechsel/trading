@@ -15,7 +15,7 @@ export class AnalysisController {
   async performAnalysis(@Body() body: AnalysisQueryDto) {
     const dataPoints = await this.dataAggregationService.loadData(body.ticker);
     return this.analysisService.performAnalysis(
-      body.steps,
+      body,
       dataPoints.map<DataPoint<number>>((dp) => ({
         x: new Date(dp.priceDate).getTime(),
         y: dp.closePrice,

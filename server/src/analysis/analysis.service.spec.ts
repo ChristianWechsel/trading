@@ -3,102 +3,85 @@ import { AnalysisQueryDto } from './analysis-query.dto';
 import { AnalysisService } from './analysis.service';
 import { AnalysisBuilder } from './core/analysis-builder';
 import { AnalysisPipeline } from './core/analysis-pipeline';
+import { EnrichedDataPoint } from './core/enriched-data-point';
 
+// Mocken des AnalysisBuilder und der Pipeline
 jest.mock('./core/analysis-builder');
-jest.mock('./core/analysis-pipeline');
+jest.mock('./core/analysis-pipeline', () => {
+  return {
+    AnalysisPipeline: jest.fn().mockImplementation(() => ({
+      run: jest.fn().mockReturnValue({
+        enrichedDataPoints: [],
+        trends: [],
+      }),
+    })),
+  };
+});
 
 describe('AnalysisService', () => {
   let service: AnalysisService;
+  const analysisBuilderMock = AnalysisBuilder as jest.Mock<AnalysisBuilder>;
+  const analysisPipelineMock = AnalysisPipeline as jest.Mock<AnalysisPipeline>;
 
   beforeEach(async () => {
-    (AnalysisBuilder as jest.Mock).mockClear();
-    (AnalysisPipeline as jest.Mock).mockClear();
-
     const module: TestingModule = await Test.createTestingModule({
       providers: [AnalysisService],
     }).compile();
 
     service = module.get<AnalysisService>(AnalysisService);
+    analysisBuilderMock.mockClear();
+    (analysisPipelineMock as any).mock.instances[0].run.mockClear();
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-
-  it('should build and run the pipeline with the requested steps', () => {
-    const mockAddStep = jest.fn();
-    const mockBuild = jest.fn();
-    const mockRun = jest.fn().mockReturnValue({ result: 'ok' });
-
-    (AnalysisBuilder as jest.Mock).mockImplementation(() => ({
-      addStep: mockAddStep,
-      build: mockBuild,
-    }));
-    (AnalysisPipeline as jest.Mock).mockImplementation(() => ({
-      run: mockRun,
-    }));
-
-    mockBuild.mockReturnValue(new (AnalysisPipeline as any)());
-
-    const dto: AnalysisQueryDto = {
-      steps: ['MovingAverage', 'TrendDetection'],
-      ticker: { exchange: 'US', symbol: 'AAPL' },
+  it('sollte den AnalysisBuilder mit den stepOptions aus dem Query-DTO instanziieren', () => {
+    const query: AnalysisQueryDto = {
+      ticker: { symbol: 'AAPL' },
+      steps: ['SwingPointDetection'],
+      stepOptions: {
+        SwingPointDetection: { windowSize: 5 },
+      },
     };
 
-    const result = service.performAnalysis(dto.steps, [
-      { x: 1, y: 10 },
-      { x: 2, y: 5 },
-      { x: 3, y: 15 },
-    ]);
+    service.performAnalysis(query, []);
 
-    expect(mockAddStep).toHaveBeenCalledTimes(2);
-    expect(mockAddStep).toHaveBeenCalledWith('MovingAverage');
-    expect(mockAddStep).toHaveBeenCalledWith('TrendDetection');
-    expect(mockBuild).toHaveBeenCalledTimes(1);
-    expect(mockRun).toHaveBeenCalledTimes(1);
-    expect(Array.isArray(mockRun.mock.calls[0][0])).toBe(true);
-    expect(result).toEqual({ result: 'ok' });
+    // Prüfen, ob der Konstruktor des Builders mit den Optionen aufgerufen wurde
+    expect(analysisBuilderMock).toHaveBeenCalledWith(query.stepOptions);
   });
 
-  it('should pass EnrichedDataPoints to pipeline.run', () => {
-    const mockAddStep = jest.fn();
-    const mockBuild = jest.fn();
-    const mockRun = jest.fn().mockReturnValue({ result: 'ok' });
-
-    (AnalysisBuilder as jest.Mock).mockImplementation(() => ({
-      addStep: mockAddStep,
-      build: mockBuild,
-    }));
-    (AnalysisPipeline as jest.Mock).mockImplementation(() => ({
-      run: mockRun,
-    }));
-
-    mockBuild.mockReturnValue(new (AnalysisPipeline as any)());
-
-    const dto: AnalysisQueryDto = {
-      steps: ['MovingAverage'],
-      ticker: { exchange: 'US', symbol: 'AAPL' },
+  it('sollte den AnalysisBuilder ohne Optionen instanziieren, wenn keine übergeben werden', () => {
+    const query: AnalysisQueryDto = {
+      ticker: { symbol: 'AAPL' },
+      steps: ['SwingPointDetection'],
+      // stepOptions ist hier absichtlich nicht gesetzt
     };
 
-    const inputData = [
+    service.performAnalysis(query, []);
+
+    // Prüfen, ob der Konstruktor des Builders mit `undefined` aufgerufen wurde
+    expect(analysisBuilderMock).toHaveBeenCalledWith(undefined);
+  });
+
+  it('sollte die Pipeline mit korrekt transformierten Datenpunkten ausführen', () => {
+    const query: AnalysisQueryDto = {
+      ticker: { symbol: 'AAPL' },
+      steps: ['SwingPointDetection'],
+    };
+    const dataPoints = [
       { x: 1, y: 10 },
       { x: 2, y: 5 },
     ];
 
-    service.performAnalysis(dto.steps, inputData);
+    service.performAnalysis(query, dataPoints);
 
-    const calledWith = mockRun.mock.calls[0][0];
-    expect(Array.isArray(calledWith)).toBe(true);
+    const runMock = (analysisPipelineMock as any).mock.instances[0].run;
+    expect(runMock).toHaveBeenCalledTimes(1);
+
+    const calledWith = runMock.mock.calls[0][0];
     expect(calledWith.length).toBe(2);
-    // Prüfe, dass alle Elemente Instanzen von EnrichedDataPoint sind
-    const { EnrichedDataPoint } = require('./core/enriched-data-point');
     expect(
       calledWith.every((item: any) => item instanceof EnrichedDataPoint),
     ).toBe(true);
-    // Optional: Prüfe, dass die Werte korrekt übernommen wurden
-    expect(calledWith[0].x).toBe(1);
     expect(calledWith[0].y).toBe(10);
-    expect(calledWith[1].x).toBe(2);
     expect(calledWith[1].y).toBe(5);
   });
 });

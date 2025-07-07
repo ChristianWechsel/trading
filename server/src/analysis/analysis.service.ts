@@ -7,11 +7,11 @@ import { EnrichedDataPoint } from './core/enriched-data-point';
 @Injectable()
 export class AnalysisService {
   performAnalysis(
-    requestedSteps: AnalysisQueryDto['steps'],
+    query: AnalysisQueryDto,
     dataPoints: DataPoint<number>[],
   ): AnalysisContext {
-    const builder = new AnalysisBuilder();
-    for (const step of requestedSteps) {
+    const builder = new AnalysisBuilder(query.stepOptions);
+    for (const step of query.steps) {
       builder.addStep(step);
     }
 
