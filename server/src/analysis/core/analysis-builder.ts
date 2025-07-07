@@ -1,3 +1,4 @@
+import { StepOptionsDto } from '../analysis-query.dto';
 import { MovingAverage } from '../steps/moving-average';
 import { SwingPointDetection } from '../steps/swing-point-detection/swing-point-detection';
 import { TrendChannelCalculation } from '../steps/trend-channel-calculation/trend-channel-calculation';
@@ -6,27 +7,27 @@ import { AnalysisPipeline } from './analysis-pipeline';
 import { AnalysisStep, Step } from './analysis.interface';
 
 type StepConfiguration = {
-  swingPointDetection: ConstructorParameters<typeof SwingPointDetection>;
-  trendDetection: ConstructorParameters<typeof TrendDetection>;
+  swingPointDetection: { relativeThreshold: number; windowSize: number };
+  trendDetection: { relativeThreshold: number };
 };
 
 export class AnalysisBuilder {
   private steps: AnalysisStep[] = [];
   private configuration: StepConfiguration;
 
-  constructor(options?: StepConfiguration) {
+  constructor(options?: StepOptionsDto) {
     const defaultConfiguration: StepConfiguration = {
-      swingPointDetection: [{ relativeThreshold: 0.01, windowSize: 1 }],
-      trendDetection: [{ relativeThreshold: 0.01 }],
+      swingPointDetection: { relativeThreshold: 0.01, windowSize: 1 },
+      trendDetection: { relativeThreshold: 0.01 },
     };
     this.configuration = {
       swingPointDetection: {
         ...defaultConfiguration.swingPointDetection,
-        ...options?.swingPointDetection,
+        ...(options?.swingPointDetection ?? {}),
       },
       trendDetection: {
         ...defaultConfiguration.trendDetection,
-        ...options?.trendDetection,
+        ...(options?.trendDetection ?? {}),
       },
     };
   }
@@ -60,11 +61,9 @@ export class AnalysisBuilder {
       case 'MovingAverage':
         return new MovingAverage();
       case 'SwingPointDetection':
-        return new SwingPointDetection(
-          ...this.configuration.swingPointDetection,
-        );
+        return new SwingPointDetection(this.configuration.swingPointDetection);
       case 'TrendDetection':
-        return new TrendDetection(...this.configuration.trendDetection);
+        return new TrendDetection(this.configuration.trendDetection);
       case 'TrendChannelCalculation':
         return new TrendChannelCalculation();
       default:

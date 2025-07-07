@@ -20,12 +20,52 @@ describe('AnalysisBuilder', () => {
   const swingPointDetectionMock =
     SwingPointDetection as jest.Mock<SwingPointDetection>;
   const trendDetectionMock = TrendDetection as jest.Mock<TrendDetection>;
+  const movingAverageMock = (require('../steps/moving-average').MovingAverage ||
+    require('../steps/moving-average')) as jest.Mock;
+  const trendChannelCalculationMock =
+    TrendChannelCalculation as jest.Mock<TrendChannelCalculation>;
 
   beforeEach(() => {
     // Mocks vor jedem Test zurücksetzen
     swingPointDetectionMock.mockClear();
     trendDetectionMock.mockClear();
+    movingAverageMock.mockClear?.();
+    trendChannelCalculationMock.mockClear?.();
     (AnalysisPipeline as jest.Mock).mockClear();
+
+    // Ensure all mocks return an object with a dependsOn array
+    swingPointDetectionMock.mockImplementation(
+      () =>
+        ({
+          name: 'SwingPointDetection',
+          dependsOn: [],
+          execute: jest.fn(),
+        }) as unknown as SwingPointDetection,
+    );
+    trendDetectionMock.mockImplementation(
+      () =>
+        ({
+          name: 'TrendDetection',
+          dependsOn: ['SwingPointDetection'],
+          execute: jest.fn(),
+        }) as unknown as TrendDetection,
+    );
+    movingAverageMock.mockImplementation?.(
+      () =>
+        ({
+          name: 'MovingAverage',
+          dependsOn: [],
+          execute: jest.fn(),
+        }) as unknown,
+    );
+    trendChannelCalculationMock.mockImplementation(
+      () =>
+        ({
+          name: 'TrendChannelCalculation',
+          dependsOn: ['TrendDetection'],
+          execute: jest.fn(),
+        }) as unknown as TrendChannelCalculation,
+    );
   });
 
   describe('Konfiguration', () => {
@@ -46,10 +86,10 @@ describe('AnalysisBuilder', () => {
 
     it('sollte übergebene Optionen mit den Standardwerten mergen', () => {
       const customOptions: StepOptionsDto = {
-        SwingPointDetection: {
+        swingPointDetection: {
           windowSize: 10,
         },
-        TrendDetection: {
+        trendDetection: {
           relativeThreshold: 0.05,
         },
       };
@@ -73,7 +113,7 @@ describe('AnalysisBuilder', () => {
 
     it('sollte nur die Optionen für einen Step überschreiben', () => {
       const customOptions: StepOptionsDto = {
-        SwingPointDetection: {
+        swingPointDetection: {
           relativeThreshold: 0.02,
           windowSize: 5,
         },
@@ -100,16 +140,27 @@ describe('AnalysisBuilder', () => {
     beforeEach(() => {
       builder = new AnalysisBuilder();
       // Wir müssen die Mocks so konfigurieren, dass sie die `dependsOn` Eigenschaft haben
-      swingPointDetectionMock.mockImplementation(() => ({
-        name: 'SwingPointDetection',
-        dependsOn: [],
-        execute: jest.fn(),
-      }));
-      trendDetectionMock.mockImplementation(() => ({
-        name: 'TrendDetection',
-        dependsOn: ['SwingPointDetection'],
-        execute: jest.fn(),
-      }));
+      swingPointDetectionMock.mockImplementation(
+        () =>
+          ({
+            name: 'SwingPointDetection',
+            dependsOn: [],
+            execute: jest.fn(),
+            checkData: jest.fn(),
+            getSwingPoints: jest.fn(),
+            getSurroundingPoints: jest.fn(),
+          }) as unknown as SwingPointDetection,
+      );
+      trendDetectionMock.mockImplementation(
+        () =>
+          ({
+            name: 'TrendDetection',
+            dependsOn: ['SwingPointDetection'],
+            execute: jest.fn(),
+            generateSwingPointsAndData: jest.fn(),
+            detectTrends: jest.fn(),
+          }) as unknown as TrendDetection,
+      );
       (TrendChannelCalculation as jest.Mock).mockImplementation(() => ({
         name: 'TrendChannelCalculation',
         dependsOn: ['TrendDetection'],

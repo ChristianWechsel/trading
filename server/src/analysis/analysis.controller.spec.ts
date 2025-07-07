@@ -50,7 +50,7 @@ describe('AnalysisController', () => {
     dataAggregationService.loadData = jest.fn().mockResolvedValue([]);
     const result = await controller.performAnalysis(dto);
 
-    expect(service.performAnalysis).toHaveBeenCalledWith(dto.steps, []);
+    expect(service.performAnalysis).toHaveBeenCalledWith(dto, []);
     expect(result).toEqual({ foo: 'bar' });
   });
 
@@ -67,9 +67,12 @@ describe('AnalysisController', () => {
     await controller.performAnalysis({ ticker: mockTicker, steps: mockSteps });
 
     expect(dataAggregationService.loadData).toHaveBeenCalledWith(mockTicker);
-    expect(service.performAnalysis).toHaveBeenCalledWith(mockSteps, [
-      { x: new Date('2024-06-01T00:00:00Z').getTime(), y: 100 },
-      { x: new Date('2024-06-02T00:00:00Z').getTime(), y: 110 },
-    ]);
+    expect(service.performAnalysis).toHaveBeenCalledWith(
+      { ticker: mockTicker, steps: mockSteps },
+      [
+        { x: new Date('2024-06-01T00:00:00Z').getTime(), y: 100 },
+        { x: new Date('2024-06-02T00:00:00Z').getTime(), y: 110 },
+      ],
+    );
   });
 });

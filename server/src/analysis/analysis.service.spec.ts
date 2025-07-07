@@ -30,15 +30,15 @@ describe('AnalysisService', () => {
 
     service = module.get<AnalysisService>(AnalysisService);
     analysisBuilderMock.mockClear();
-    (analysisPipelineMock as any).mock.instances[0].run.mockClear();
+    // (analysisPipelineMock as any).mock.instances[0].run.mockClear(); // Remove or comment out this line
   });
 
   it('sollte den AnalysisBuilder mit den stepOptions aus dem Query-DTO instanziieren', () => {
     const query: AnalysisQueryDto = {
-      ticker: { symbol: 'AAPL' },
+      ticker: { symbol: 'AAPL', exchange: 'US' },
       steps: ['SwingPointDetection'],
       stepOptions: {
-        SwingPointDetection: { windowSize: 5 },
+        swingPointDetection: { windowSize: 5 },
       },
     };
 
@@ -50,7 +50,7 @@ describe('AnalysisService', () => {
 
   it('sollte den AnalysisBuilder ohne Optionen instanziieren, wenn keine übergeben werden', () => {
     const query: AnalysisQueryDto = {
-      ticker: { symbol: 'AAPL' },
+      ticker: { symbol: 'AAPL', exchange: 'US' },
       steps: ['SwingPointDetection'],
       // stepOptions ist hier absichtlich nicht gesetzt
     };
@@ -63,7 +63,7 @@ describe('AnalysisService', () => {
 
   it('sollte die Pipeline mit korrekt transformierten Datenpunkten ausführen', () => {
     const query: AnalysisQueryDto = {
-      ticker: { symbol: 'AAPL' },
+      ticker: { symbol: 'AAPL', exchange: 'US' },
       steps: ['SwingPointDetection'],
     };
     const dataPoints = [

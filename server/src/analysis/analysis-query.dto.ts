@@ -20,7 +20,7 @@ const allSteps: Step[] = [
   'TrendChannelCalculation',
 ];
 
-class SwingPointDetectionOptionsDto {
+export class SwingPointDetectionOptionsDto {
   @IsOptional()
   @IsNumber()
   @Min(analysisConfig.comparableNumber.MIN_THRESHOLD)
@@ -33,7 +33,7 @@ class SwingPointDetectionOptionsDto {
   windowSize?: number;
 }
 
-class TrendDetectionOptionsDto {
+export class TrendDetectionOptionsDto {
   @IsOptional()
   @IsNumber()
   @Min(analysisConfig.comparableNumber.MIN_THRESHOLD)
@@ -41,7 +41,7 @@ class TrendDetectionOptionsDto {
   relativeThreshold?: number;
 }
 
-class StepOptionsDto {
+export class StepOptionsDto {
   @IsOptional()
   @ValidateNested()
   @Type(() => SwingPointDetectionOptionsDto)
