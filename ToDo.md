@@ -105,3 +105,5 @@
 - [ ] Authentifizierung implementieren
 - [ ] Kalender-Event-Funktionalität implementieren
 - [ ] Für jede Seite soll eine einfache Navigation vorliegen
+      Button logout auf login seite ausblenden, dann funktioniert Logik in main.js besser
+      Dazu in main.js den Button Logout kontrollieren
