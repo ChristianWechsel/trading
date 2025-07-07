@@ -12,6 +12,8 @@ body {
   display: flex;
   gap: 1em;
   align-items: center;
+  justify-content: flex-start;
+  position: relative;
 }
 
 .nav-item {
@@ -79,4 +81,24 @@ input[type='submit'] {
 button:hover,
 input[type='submit']:hover {
   background: #0056b3;
+}
+
+/* Container für Logout-Button rechts oben */
+.logout-container {
+  margin-left: auto;
+}
+
+.logout-nav {
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 0.5em 1.2em;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.logout-nav:hover {
+  background: #b52a37;
 }
