@@ -1,17 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const logoutForm = document.querySelector('.logout-form');
+    const logoutBtn = document.getElementById('logout-btn');
 
-    if (logoutForm) {
-        logoutForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Verhindert das Neuladen der Seite
-
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
             try {
                 const response = await fetch('/auth/logout', {
                     method: 'POST',
                 });
 
                 if (response.ok) {
-                    // Bei Erfolg: Leite auf die Login-Seite um
                     window.location.href = '/login';
                 } else {
                     alert('Logout fehlgeschlagen.');

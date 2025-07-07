@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title #{title} | Trading App
+    title Trading App
     link(rel="icon" type="image/svg+xml" href="/static/favicon.svg")
     link(rel="stylesheet", href="/static/css/layout.css")
     block head
@@ -10,6 +10,8 @@ html
       a.nav-item(href="/") Home
       a.nav-item(href="/analysis") Analyse
       a.nav-item(href="/notification") Benachrichtigungen
+      button#logout-btn.logout-nav(type="button") Logout
+        
     main.content-container
       block content
     block scripts
