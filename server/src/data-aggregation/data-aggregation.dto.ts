@@ -19,10 +19,12 @@ export class TickerDto {
 
 export class DateRangeDto {
   @IsDateString()
-  from: string;
+  @IsOptional()
+  from?: string;
 
   @IsDateString()
-  to: string;
+  @IsOptional()
+  to?: string;
 }
 
 export class DataAggregationDto {

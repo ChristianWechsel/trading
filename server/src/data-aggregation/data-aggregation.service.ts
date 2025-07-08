@@ -3,7 +3,12 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { firstValueFrom } from 'rxjs';
-import { Repository } from 'typeorm';
+import {
+  FindManyOptions,
+  LessThanOrEqual,
+  MoreThanOrEqual,
+  Repository,
+} from 'typeorm';
 import { DataAggregationDto } from './data-aggregation.dto';
 import { EodPrice } from './eod-price.entity';
 import { Security } from './security.entity';
@@ -83,9 +88,22 @@ export class DataAggregationService {
     if (!security) {
       return [];
     }
-    return this.eodPriceRepo.find({
+    const options: FindManyOptions<EodPrice> = {
       where: { securityId: security.securityId },
       order: { priceDate: 'ASC' },
-    });
+    };
+
+    if (range && options.where) {
+      if (range.from && range.to) {
+        options.where['priceDate'] =
+          MoreThanOrEqual(range.from) && LessThanOrEqual(range.to);
+      } else if (range.from) {
+        options.where['priceDate'] = MoreThanOrEqual(range.from);
+      } else if (range.to) {
+        options.where['priceDate'] = LessThanOrEqual(range.to);
+      }
+    }
+
+    return this.eodPriceRepo.find(options);
   }
 }
