@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { TickerDto } from './data-aggregation.dto';
+import { DataAggregationDto } from './data-aggregation.dto';
 import { DataAggregationService } from './data-aggregation.service';
 
 @Controller('data-aggregation')
@@ -9,7 +9,9 @@ export class DataAggregationController {
   ) {}
 
   @Post('import')
-  async importData(@Body() dto: TickerDto): Promise<{ message: string }> {
+  async importData(
+    @Body() dto: DataAggregationDto['ticker'],
+  ): Promise<{ message: string }> {
     // Als Parameter kann {SYMBOL_NAME}.{EXCHANGE_ID}übergeben werden,
     // Beispiel:  AAPL.US, TSLA.US, VTI.US, AMZN.US, BTC-USD.CC and EURUSD.FOREX
     // MCD.US consists of two parts: {SYMBOL_NAME}.{EXCHANGE_ID}, then you can use, for example,
@@ -39,7 +41,7 @@ export class DataAggregationController {
   }
 
   @Post('load')
-  async loadData(@Body() dto: TickerDto) {
+  async loadData(@Body() dto: DataAggregationDto) {
     let data = await this.dataAggregationService.loadData(dto);
     if (!data || data.length === 0) {
       await this.dataAggregationService.importAndSaveData(dto);

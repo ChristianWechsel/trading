@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { firstValueFrom } from 'rxjs';
 import { Repository } from 'typeorm';
-import { TickerDto } from './data-aggregation.dto';
+import { DataAggregationDto } from './data-aggregation.dto';
 import { EodPrice } from './eod-price.entity';
 import { Security } from './security.entity';
 
@@ -19,7 +19,9 @@ export class DataAggregationService {
     private readonly eodPriceRepo: Repository<EodPrice>,
   ) {}
 
-  async importAndSaveData(dto: TickerDto): Promise<{ message: string }> {
+  async importAndSaveData(
+    dto: DataAggregationDto['ticker'],
+  ): Promise<{ message: string }> {
     // Beispiel: symbol = 'MCD', exchange = 'US'
 
     const apiKey = this.configService.get<string>('EODHD_API_KEY');
@@ -74,9 +76,9 @@ export class DataAggregationService {
     };
   }
 
-  async loadData(dto: TickerDto): Promise<EodPrice[]> {
+  async loadData({ ticker, range }: DataAggregationDto): Promise<EodPrice[]> {
     const security = await this.securityRepo.findOne({
-      where: { symbol: dto.symbol, exchangeId: dto.exchange },
+      where: { symbol: ticker.symbol, exchangeId: ticker.exchange },
     });
     if (!security) {
       return [];
