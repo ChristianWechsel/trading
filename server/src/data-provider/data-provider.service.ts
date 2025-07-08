@@ -7,10 +7,7 @@ export class DataProviderService {
   constructor(
     private readonly dataAggregationService: DataAggregationService,
   ) {}
-  async getEod(dto: DataAggregationDto) {
-    // Zeitraum from to beachten.
-    // Wird kein Zeitraum angegeben, dann wird der gesamte Zeitraum geladen.
-    const eodData = await this.dataAggregationService.loadData(dto);
-    return eodData;
+  getEod(dto: DataAggregationDto) {
+    return this.dataAggregationService.loadData(dto);
   }
 }
