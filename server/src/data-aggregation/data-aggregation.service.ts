@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { firstValueFrom } from 'rxjs';
 import {
+  Between,
   FindManyOptions,
   LessThanOrEqual,
   MoreThanOrEqual,
@@ -95,8 +96,7 @@ export class DataAggregationService {
 
     if (range && options.where) {
       if (range.from && range.to) {
-        options.where['priceDate'] =
-          MoreThanOrEqual(range.from) && LessThanOrEqual(range.to);
+        options.where['priceDate'] = Between(range.from, range.to);
       } else if (range.from) {
         options.where['priceDate'] = MoreThanOrEqual(range.from);
       } else if (range.to) {
