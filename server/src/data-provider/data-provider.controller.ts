@@ -8,6 +8,6 @@ export class DataProviderController {
 
   @Post('eod')
   eodData(@Body() dto: DataAggregationDto) {
-    return this.dataProviderService.getEod(dto.ticker);
+    return this.dataProviderService.getEod(dto);
   }
 }

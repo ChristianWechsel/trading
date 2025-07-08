@@ -15,5 +15,6 @@ import { Security } from './security.entity';
   ],
   controllers: [DataAggregationController],
   providers: [DataAggregationService],
+  exports: [DataAggregationService],
 })
 export class DataAggregationModule {}

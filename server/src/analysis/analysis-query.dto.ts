@@ -9,7 +9,7 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
-import { TickerDto } from '../data-aggregation/data-aggregation.dto';
+import { DataAggregationDto } from '../data-aggregation/data-aggregation.dto';
 import { analysisConfig } from './config/analysis.config';
 import { Step } from './core/analysis.interface';
 
@@ -55,9 +55,8 @@ export class StepOptionsDto {
 
 export class AnalysisQueryDto {
   @ValidateNested()
-  @Type(() => TickerDto)
-  @IsNotEmpty()
-  ticker: TickerDto;
+  @Type(() => DataAggregationDto)
+  dataAggregation: DataAggregationDto;
 
   @IsArray()
   @IsEnum(allSteps, { each: true }) // Validiert jeden Wert im Array gegen den Step-Typ
