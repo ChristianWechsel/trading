@@ -1,15 +1,22 @@
 import { Type } from 'class-transformer';
-import { IsDateString, ValidateNested } from 'class-validator';
+import { IsDateString, IsOptional, ValidateNested } from 'class-validator';
 import { TickerDto } from 'src/data-aggregation/data-aggregation.dto';
+
+export class DateRangeDto {
+  @IsDateString()
+  from: string;
+
+  @IsDateString()
+  to: string;
+}
 
 export class DataProviderDto {
   @ValidateNested()
   @Type(() => TickerDto)
   ticker: TickerDto;
 
-  @IsDateString()
-  from: string;
-
-  @IsDateString()
-  to: string;
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => DateRangeDto)
+  range?: DateRangeDto;
 }
