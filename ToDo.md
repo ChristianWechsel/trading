@@ -2,28 +2,25 @@
 
 # TradingCharts
 
-- TradingView Lightweight Charts **self-hosted** einbinden (ohne CDN, keine Fremdserver):
+- laden der Daten, um reine CandleStick Daten anzuzeigen
+  - Auswahl der Aktien und Börse ermöglichen. ggf. kann mit Dropdown gearbeitet werden,
+    welches dynamisch geladen wird.
 
-  1. Library installieren:  
-     `npm install --save lightweight-charts`
-  2. Die JS/CSS-Dateien aus `node_modules/lightweight-charts/dist/` ins eigene `public`-Verzeichnis kopieren, z.B.:  
-     `cp node_modules/lightweight-charts/dist/lightweight-charts.standalone.production.js server/public/vendor/lightweight-charts/`
-  3. Statische Auslieferung des Vendor-Ordners im Server sicherstellen (NestJS: ServeStaticModule).
-  4. Ein einfaches HTML-Template (z.B. `chart.html` oder mit Pug) bereitstellen, das die JS-Datei lokal einbindet:
-     ```html
-     <script src="/vendor/lightweight-charts/lightweight-charts.standalone.production.js"></script>
-     ```
-  5. Im HTML eine Chart-Container-DIV und ein JS-Snippet, das einen Beispiel-Chart rendert:
-     ```js
-     const chart = LightweightCharts.createChart(document.getElementById('chart'), { width: 600, height: 400 });
-     const series = chart.addLineSeries();
-     series.setData([{ time: '2024-06-01', value: 100 }, ...]);
-     ```
-  6. Testen: Seite im Browser aufrufen und prüfen, ob der Chart angezeigt wird.
-  7. (Später) Daten dynamisch per `fetch('/analysis', ...)` laden und im Chart anzeigen.
-  8. Keine Frameworks wie React verwenden, sondern reine Templates (z.B. Pug) und Vanilla JS.
+# Backend Architektur & Module
 
-- Apache ECharts als Alternative prüfen (ebenfalls self-hosted möglich).
+- [ ] Neues Modul `data-provider` für reine Datenbereitstellung (EOD, Unternehmenskennzahlen, Wirtschaftskalender etc.) anlegen
+- [ ] `data-provider`-Modul greift ausschließlich auf lokale Datenbank/die von `data-aggregation` bereitgestellten Daten zu
+- [ ] `data-aggregation` bleibt für Datenimport und -aktualisierung aus externen Quellen zuständig
+- [ ] Schnittstelle zwischen `data-provider` und `data-aggregation` definieren (z.B. Service-Methoden für Datenzugriff)
+- [ ] Erweiterbarkeit für weitere Datenarten (z.B. Fundamentals, Kalenderdaten) sicherstellen
+
+# Technische Aufgaben
+
+- [ ] Datenbankstruktur für EOD-Daten, Unternehmenskennzahlen, Wirtschaftskalender etc. entwerfen und ggf. partitionieren
+- [ ] Upsert-Logik für EOD-Daten implementieren (bestehende Daten aktualisieren oder ergänzen)
+- [ ] Endpoints im `data-provider`-Modul für verschiedene Datenarten bereitstellen (z.B. `/market-data/eod`, `/market-data/fundamentals`)
+- [ ] DTOs mit Validierung für alle Datenabfragen erstellen
+- [ ] Tests für neue Module und Endpoints (Unit, Integration, e2e) anlegen
 
 # ToDo UI
 
@@ -40,3 +37,5 @@
 - [ ] Für jede Seite soll eine einfache Navigation vorliegen
       Button logout auf login seite ausblenden, dann funktioniert Logik in main.js besser
       Dazu in main.js den Button Logout kontrollieren
+
+# .env von github copilot ausschließen, da hier Passwörter enthalten sind

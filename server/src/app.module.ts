@@ -20,6 +20,7 @@ import { NotificationModule } from './notification/notification.module';
 import { PushSubscription } from './notification/push-subscription.entity';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
+import { DataProviderModule } from './data-provider/data-provider.module';
 
 @Module({
   imports: [
@@ -117,6 +118,7 @@ import { UsersModule } from './users/users.module';
 
     DataAggregationModule,
     AnalysisModule,
+    DataProviderModule,
   ],
   controllers: [AppController],
   providers: [
