@@ -44,8 +44,8 @@ describe('AnalysisController', () => {
   it('should delegate performAnalysis to the service', async () => {
     const dto: AnalysisQueryDto = {
       steps: ['MovingAverage'],
-      ticker: { exchange: 'US', symbol: 'AAPL' },
-    };
+      dataAggregation: { ticker: { exchange: 'US', symbol: 'AAPL' } },
+    } as any;
     // Mock loadData, da performAnalysis async ist und auf Daten zugreift
     dataAggregationService.loadData = jest.fn().mockResolvedValue([]);
     const result = await controller.performAnalysis(dto);
@@ -64,11 +64,11 @@ describe('AnalysisController', () => {
     dataAggregationService.loadData = jest.fn().mockResolvedValue(mockData);
     service.performAnalysis = jest.fn();
 
-    await controller.performAnalysis({ ticker: mockTicker, steps: mockSteps });
+    await controller.performAnalysis({ dataAggregation: { ticker: mockTicker }, steps: mockSteps } as any);
 
-    expect(dataAggregationService.loadData).toHaveBeenCalledWith(mockTicker);
+    expect(dataAggregationService.loadData).toHaveBeenCalledWith({ ticker: mockTicker });
     expect(service.performAnalysis).toHaveBeenCalledWith(
-      { ticker: mockTicker, steps: mockSteps },
+      { dataAggregation: { ticker: mockTicker }, steps: mockSteps },
       [
         { x: new Date('2024-06-01T00:00:00Z').getTime(), y: 100 },
         { x: new Date('2024-06-02T00:00:00Z').getTime(), y: 110 },

@@ -41,12 +41,12 @@ describe('AnalysisService', () => {
 
   it('sollte den AnalysisBuilder mit den stepOptions aus dem Query-DTO instanziieren', () => {
     const query: AnalysisQueryDto = {
-      ticker: { symbol: 'AAPL', exchange: 'US' },
+      dataAggregation: { ticker: { symbol: 'AAPL', exchange: 'US' } },
       steps: ['SwingPointDetection'],
       stepOptions: {
         swingPointDetection: { windowSize: 5 },
       },
-    };
+    } as any;
 
     service.performAnalysis(query, []);
 
@@ -56,10 +56,10 @@ describe('AnalysisService', () => {
 
   it('sollte den AnalysisBuilder ohne Optionen instanziieren, wenn keine übergeben werden', () => {
     const query: AnalysisQueryDto = {
-      ticker: { symbol: 'AAPL', exchange: 'US' },
+      dataAggregation: { ticker: { symbol: 'AAPL', exchange: 'US' } },
       steps: ['SwingPointDetection'],
       // stepOptions ist hier absichtlich nicht gesetzt
-    };
+    } as any;
 
     service.performAnalysis(query, []);
 
