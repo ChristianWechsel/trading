@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DataAggregationController } from './data-aggregation.controller';
-import { TickerDto } from './data-aggregation.dto';
+import { TickerDto, DataAggregationDto } from './data-aggregation.dto';
 import { DataAggregationService } from './data-aggregation.service';
 
 describe('DataAggregationController', () => {
@@ -44,7 +44,8 @@ describe('DataAggregationController', () => {
 
   describe('loadData', () => {
     it('should call loadData and return result', async () => {
-      const dto: TickerDto = { symbol: 'AAPL', exchange: 'US' };
+      const ticker: TickerDto = { symbol: 'AAPL', exchange: 'US' };
+      const dto: DataAggregationDto = { ticker };
       const eodPrices = [
         { priceDate: new Date().toISOString(), closePrice: 123 },
       ];
@@ -55,7 +56,8 @@ describe('DataAggregationController', () => {
     });
 
     it('should throw if service throws', async () => {
-      const dto: TickerDto = { symbol: 'AAPL', exchange: 'US' };
+      const ticker: TickerDto = { symbol: 'AAPL', exchange: 'US' };
+      const dto: DataAggregationDto = { ticker };
       service.loadData.mockRejectedValue(new Error('fail'));
       await expect(controller.loadData(dto)).rejects.toThrow('fail');
     });
@@ -69,7 +71,8 @@ describe('DataAggregationController', () => {
     });
 
     it('should call importAndSaveData if no data is present', async () => {
-      const dto: TickerDto = { symbol: 'AAPL', exchange: 'US' };
+      const ticker: TickerDto = { symbol: 'AAPL', exchange: 'US' };
+      const dto: DataAggregationDto = { ticker };
       // 1. Beim ersten Aufruf: keine Daten
       service.loadData.mockResolvedValueOnce([]);
       // 2. Nach dem Import: neue Daten vorhanden
@@ -81,12 +84,13 @@ describe('DataAggregationController', () => {
 
       const result = await controller.loadData(dto);
 
-      expect(service.importAndSaveData).toHaveBeenCalledWith(dto);
+      expect(service.importAndSaveData).toHaveBeenCalledWith(dto.ticker);
       expect(result).toEqual(importedData);
     });
 
     it('should return data if last date is not older than 24h', async () => {
-      const dto: TickerDto = { symbol: 'AAPL', exchange: 'US' };
+      const ticker: TickerDto = { symbol: 'AAPL', exchange: 'US' };
+      const dto: DataAggregationDto = { ticker };
       const now = new Date();
       const recentDate = new Date(now.getTime() - 2 * 60 * 60 * 1000); // 2h alt
       const eodPrices = [
@@ -101,7 +105,8 @@ describe('DataAggregationController', () => {
     });
 
     it('should call importAndSaveData if last date is older than 24h', async () => {
-      const dto: TickerDto = { symbol: 'AAPL', exchange: 'US' };
+      const ticker: TickerDto = { symbol: 'AAPL', exchange: 'US' };
+      const dto: DataAggregationDto = { ticker };
       const oldDate = new Date(Date.now() - 48 * 60 * 60 * 1000); // 48h alt
       const eodPrices = [{ priceDate: oldDate.toISOString(), closePrice: 100 }];
       // 1. Erstes Laden: alte Daten
@@ -112,12 +117,13 @@ describe('DataAggregationController', () => {
 
       const result = await controller.loadData(dto);
 
-      expect(service.importAndSaveData).toHaveBeenCalledWith(dto);
+      expect(service.importAndSaveData).toHaveBeenCalledWith(dto.ticker);
       expect(result).toEqual(eodPrices);
     });
 
     it('should not call importAndSaveData if data is up-to-date (simulate API returns no newer data)', async () => {
-      const dto: TickerDto = { symbol: 'AAPL', exchange: 'US' };
+      const ticker: TickerDto = { symbol: 'AAPL', exchange: 'US' };
+      const dto: DataAggregationDto = { ticker };
       const now = new Date();
       const recentDate = new Date(now.getTime() - 1 * 60 * 60 * 1000); // 1h alt
       const eodPrices = [

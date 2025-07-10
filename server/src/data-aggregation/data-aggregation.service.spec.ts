@@ -120,11 +120,12 @@ describe('DataAggregationService', () => {
 
   it('should return empty array if security not found in loadData', async () => {
     securityRepo.findOne.mockResolvedValue(undefined);
-    const dto: TickerDto = { symbol: 'MSFT', exchange: 'US' };
+    const ticker: TickerDto = { symbol: 'MSFT', exchange: 'US' };
+    const dto = { ticker };
     const result = await service.loadData(dto);
     expect(result).toEqual([]);
     expect(securityRepo.findOne).toHaveBeenCalledWith({
-      where: { symbol: dto.symbol, exchangeId: dto.exchange },
+      where: { symbol: ticker.symbol, exchangeId: ticker.exchange },
     });
   });
 
@@ -136,11 +137,12 @@ describe('DataAggregationService', () => {
     ];
     securityRepo.findOne.mockResolvedValue(security);
     eodPriceRepo.find = jest.fn().mockResolvedValue(eodPrices);
-    const dto: TickerDto = { symbol: 'GOOG', exchange: 'US' };
+    const ticker: TickerDto = { symbol: 'GOOG', exchange: 'US' };
+    const dto = { ticker };
     const result = await service.loadData(dto);
     expect(result).toBe(eodPrices);
     expect(securityRepo.findOne).toHaveBeenCalledWith({
-      where: { symbol: dto.symbol, exchangeId: dto.exchange },
+      where: { symbol: ticker.symbol, exchangeId: ticker.exchange },
     });
     expect(eodPriceRepo.find).toHaveBeenCalledWith({
       where: { securityId: security.securityId },

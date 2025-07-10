@@ -1,5 +1,9 @@
 # ToDo List
 
+# DataAggregationController soll keine Logik für Aktualisierung der Daten enthalten
+
+Dies soll in Service gemacht werden. Service loadData wird in data-provider verwendet
+
 # TradingCharts
 
 - laden der Daten, um reine CandleStick Daten anzuzeigen
