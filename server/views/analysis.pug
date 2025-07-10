@@ -13,6 +13,12 @@ block content
     .form-group
       label(for="exchange") Handelsplatz
       input#exchange(type="text", name="exchange", maxlength="30", required placeholder="z.B. NASDAQ")
+    .form-group
+      label(for="date-from") Von (optional)
+      input#date-from(type="date", name="from")
+    .form-group
+      label(for="date-to") Bis (optional)
+      input#date-to(type="date", name="to")
     button(type="submit") Anzeigen
 
   // Die Überschrift "Analyse" wurde entfernt

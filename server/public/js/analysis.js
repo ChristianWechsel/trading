@@ -8,12 +8,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 e.preventDefault();
                 const symbol = form.querySelector('#stock-symbol').value.trim();
                 const exchange = form.querySelector('#exchange').value.trim();
+                const from = form.querySelector('#date-from').value;
+                const to = form.querySelector('#date-to').value;
                 if (symbol && exchange) {
                     const candlestickSeries = createChart(chartContainer);
-                    const chartData = await loadChartData(symbol, exchange);
+                    const chartData = await loadChartData(symbol, exchange, from, to);
                     const transformedData = transformChartData(chartData);
                     candlestickSeries.setData(transformedData);
-                    chart.timeScale().fitContent();
+                    // chart.timeScale().fitContent();
                 }
             });
         } catch (error) {
@@ -37,7 +39,7 @@ function createChart(chartContainer) {
     });
 }
 
-async function loadChartData(symbol, exchange) {
+async function loadChartData(symbol, exchange, from, to) {
     const postData = {
         ticker: {
             symbol,
@@ -48,6 +50,17 @@ async function loadChartData(symbol, exchange) {
         //     to: "2001-12-31"
         // }
     };
+
+    if (from || to) {
+        postData.range = {}
+    }
+    if (from) {
+        postData.range.from = from;
+    }
+    if (to) {
+        postData.range.to = to;
+    }
+
     const response = await fetch('/data-provider/eod', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
