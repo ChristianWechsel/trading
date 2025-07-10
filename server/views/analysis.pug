@@ -5,7 +5,17 @@ block head
   link(rel="stylesheet", href="/static/css/analyis.css")
 
 block content
-  h1 Analyse
+  // Formular für Aktie und Handelsplatz direkt unter der Navigation
+  form#stock-form(action="/analysis" method="get")
+    .form-group
+      label(for="stock-symbol") Aktie
+      input#stock-symbol(type="text", name="stock", maxlength="30", required placeholder="z.B. AAPL")
+    .form-group
+      label(for="exchange") Handelsplatz
+      input#exchange(type="text", name="exchange", maxlength="30", required placeholder="z.B. NASDAQ")
+    button(type="submit") Anzeigen
+
+  // Die Überschrift "Analyse" wurde entfernt
   p Hier werden die Trading-Charts angezeigt.
   #chart-container
 
