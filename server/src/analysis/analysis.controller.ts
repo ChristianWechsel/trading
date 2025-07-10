@@ -13,7 +13,7 @@ export class AnalysisController {
 
   @Post()
   async performAnalysis(@Body() body: AnalysisQueryDto) {
-    const dataPoints = await this.dataAggregationService.loadData(
+    const dataPoints = await this.dataAggregationService.loadAndUpdateIfNeeded(
       body.dataAggregation,
     );
     return this.analysisService.performAnalysis(

@@ -1,13 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import {
+  DataAggregationDto,
+  TickerDto,
+} from '../data-aggregation/data-aggregation.dto';
 import { DataAggregationService } from '../data-aggregation/data-aggregation.service';
 import { DataProviderService } from './data-provider.service';
 
 describe('DataProviderService', () => {
   let service: DataProviderService;
-  let aggregationService: { loadData: jest.Mock };
+  let aggregationService: { loadAndUpdateIfNeeded: jest.Mock };
 
   beforeEach(async () => {
-    aggregationService = { loadData: jest.fn() };
+    aggregationService = { loadAndUpdateIfNeeded: jest.fn() };
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         DataProviderService,
@@ -22,12 +26,13 @@ describe('DataProviderService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should call loadData and return result', async () => {
-    const dto = { ticker: { symbol: 'AAPL', exchange: 'US' } };
+  it('should call loadAndUpdateIfNeeded and return result', async () => {
+    const ticker: TickerDto = { symbol: 'AAPL', exchange: 'US' };
+    const dto: DataAggregationDto = { ticker };
     const resultData = [{ priceDate: '2024-01-01', closePrice: 123 }];
-    aggregationService.loadData.mockResolvedValue(resultData);
-    const result = await service.getEod(dto as any);
-    expect(aggregationService.loadData).toHaveBeenCalledWith(dto);
+    aggregationService.loadAndUpdateIfNeeded.mockResolvedValue(resultData);
+    const result = await service.getEod(dto);
+    expect(aggregationService.loadAndUpdateIfNeeded).toHaveBeenCalledWith(dto);
     expect(result).toEqual(resultData);
   });
 });

@@ -8,6 +8,6 @@ export class DataProviderService {
     private readonly dataAggregationService: DataAggregationService,
   ) {}
   getEod(dto: DataAggregationDto) {
-    return this.dataAggregationService.loadData(dto);
+    return this.dataAggregationService.loadAndUpdateIfNeeded(dto);
   }
 }

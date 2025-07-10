@@ -1,5 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TickerDto } from '../data-aggregation/data-aggregation.dto';
+import {
+  DataAggregationDto,
+  TickerDto,
+} from '../data-aggregation/data-aggregation.dto';
 import { DataAggregationService } from '../data-aggregation/data-aggregation.service';
 import { AnalysisQueryDto } from './analysis-query.dto';
 import { AnalysisController } from './analysis.controller';
@@ -16,7 +19,7 @@ describe('AnalysisController', () => {
       performAnalysis: jest.fn().mockReturnValue({ foo: 'bar' }),
     };
     const mockDataAggregationService = {
-      loadData: jest.fn(),
+      loadAndUpdateIfNeeded: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -42,12 +45,15 @@ describe('AnalysisController', () => {
   });
 
   it('should delegate performAnalysis to the service', async () => {
+    const ticker: TickerDto = { exchange: 'US', symbol: 'AAPL' };
+    const dataAggregation: DataAggregationDto = { ticker };
     const dto: AnalysisQueryDto = {
       steps: ['MovingAverage'],
-      dataAggregation: { ticker: { exchange: 'US', symbol: 'AAPL' } },
-    } as any;
-    // Mock loadData, da performAnalysis async ist und auf Daten zugreift
-    dataAggregationService.loadData = jest.fn().mockResolvedValue([]);
+      dataAggregation,
+    };
+    (
+      dataAggregationService.loadAndUpdateIfNeeded as jest.Mock
+    ).mockResolvedValue([]);
     const result = await controller.performAnalysis(dto);
 
     expect(service.performAnalysis).toHaveBeenCalledWith(dto, []);
@@ -61,14 +67,19 @@ describe('AnalysisController', () => {
     ];
     const mockSteps: Step[] = ['MovingAverage', 'TrendDetection'];
     const mockTicker: TickerDto = { exchange: 'US', symbol: 'AAPL' };
-    dataAggregationService.loadData = jest.fn().mockResolvedValue(mockData);
+    const dataAggregation: DataAggregationDto = { ticker: mockTicker };
+    (
+      dataAggregationService.loadAndUpdateIfNeeded as jest.Mock
+    ).mockResolvedValue(mockData);
     service.performAnalysis = jest.fn();
 
-    await controller.performAnalysis({ dataAggregation: { ticker: mockTicker }, steps: mockSteps } as any);
+    await controller.performAnalysis({ dataAggregation, steps: mockSteps });
 
-    expect(dataAggregationService.loadData).toHaveBeenCalledWith({ ticker: mockTicker });
+    expect(dataAggregationService.loadAndUpdateIfNeeded).toHaveBeenCalledWith({
+      ticker: mockTicker,
+    });
     expect(service.performAnalysis).toHaveBeenCalledWith(
-      { dataAggregation: { ticker: mockTicker }, steps: mockSteps },
+      { dataAggregation, steps: mockSteps },
       [
         { x: new Date('2024-06-01T00:00:00Z').getTime(), y: 100 },
         { x: new Date('2024-06-02T00:00:00Z').getTime(), y: 110 },
