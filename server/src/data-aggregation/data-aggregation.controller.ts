@@ -42,18 +42,6 @@ export class DataAggregationController {
 
   @Post('load')
   async loadData(@Body() dto: DataAggregationDto) {
-    let data = await this.dataAggregationService.loadData(dto);
-    if (!data || data.length === 0) {
-      await this.dataAggregationService.importAndSaveData(dto.ticker);
-      data = await this.dataAggregationService.loadData(dto);
-      return data;
-    }
-    const lastDate = new Date(data[data.length - 1].priceDate);
-    if (Date.now() - lastDate.getTime() < 24 * 60 * 60 * 1000) {
-      return data;
-    }
-    await this.dataAggregationService.importAndSaveData(dto.ticker);
-    data = await this.dataAggregationService.loadData(dto);
-    return data;
+    return this.dataAggregationService.loadAndUpdateIfNeeded(dto);
   }
 }

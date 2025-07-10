@@ -1,14 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DataAggregationController } from './data-aggregation.controller';
-import { TickerDto, DataAggregationDto } from './data-aggregation.dto';
+import { DataAggregationDto, TickerDto } from './data-aggregation.dto';
 import { DataAggregationService } from './data-aggregation.service';
 
 describe('DataAggregationController', () => {
   let controller: DataAggregationController;
-  let service: { importAndSaveData: jest.Mock; loadData: jest.Mock };
+  let service: {
+    importAndSaveData: jest.Mock;
+    loadAndUpdateIfNeeded: jest.Mock;
+  };
 
   beforeEach(async () => {
-    service = { importAndSaveData: jest.fn(), loadData: jest.fn() };
+    service = {
+      importAndSaveData: jest.fn(),
+      loadAndUpdateIfNeeded: jest.fn(),
+    };
     const module: TestingModule = await Test.createTestingModule({
       controllers: [DataAggregationController],
       providers: [{ provide: DataAggregationService, useValue: service }],
@@ -43,98 +49,33 @@ describe('DataAggregationController', () => {
   });
 
   describe('loadData', () => {
-    it('should call loadData and return result', async () => {
+    it('should call loadAndUpdateIfNeeded and return result', async () => {
       const ticker: TickerDto = { symbol: 'AAPL', exchange: 'US' };
       const dto: DataAggregationDto = { ticker };
       const eodPrices = [
         { priceDate: new Date().toISOString(), closePrice: 123 },
       ];
-      service.loadData.mockResolvedValue(eodPrices);
+      service.loadAndUpdateIfNeeded = jest.fn().mockResolvedValue(eodPrices);
       const result = await controller.loadData(dto);
-      expect(service.loadData).toHaveBeenCalledWith(dto);
+      expect(service.loadAndUpdateIfNeeded).toHaveBeenCalledWith(dto);
       expect(result).toEqual(eodPrices);
     });
 
     it('should throw if service throws', async () => {
       const ticker: TickerDto = { symbol: 'AAPL', exchange: 'US' };
       const dto: DataAggregationDto = { ticker };
-      service.loadData.mockRejectedValue(new Error('fail'));
+      service.loadAndUpdateIfNeeded = jest
+        .fn()
+        .mockRejectedValue(new Error('fail'));
       await expect(controller.loadData(dto)).rejects.toThrow('fail');
     });
 
     it('should handle empty dto', async () => {
-      service.loadData.mockResolvedValue([]);
+      service.loadAndUpdateIfNeeded = jest.fn().mockResolvedValue([]);
       // @ts-expect-error purposely incomplete dto
       const result = await controller.loadData({});
-      expect(service.loadData).toHaveBeenCalled();
+      expect(service.loadAndUpdateIfNeeded).toHaveBeenCalled();
       expect(result).toEqual([]);
-    });
-
-    it('should call importAndSaveData if no data is present', async () => {
-      const ticker: TickerDto = { symbol: 'AAPL', exchange: 'US' };
-      const dto: DataAggregationDto = { ticker };
-      // 1. Beim ersten Aufruf: keine Daten
-      service.loadData.mockResolvedValueOnce([]);
-      // 2. Nach dem Import: neue Daten vorhanden
-      const importedData = [
-        { priceDate: new Date().toISOString(), closePrice: 123 },
-      ];
-      service.importAndSaveData.mockResolvedValue({ message: 'imported' });
-      service.loadData.mockResolvedValueOnce(importedData);
-
-      const result = await controller.loadData(dto);
-
-      expect(service.importAndSaveData).toHaveBeenCalledWith(dto.ticker);
-      expect(result).toEqual(importedData);
-    });
-
-    it('should return data if last date is not older than 24h', async () => {
-      const ticker: TickerDto = { symbol: 'AAPL', exchange: 'US' };
-      const dto: DataAggregationDto = { ticker };
-      const now = new Date();
-      const recentDate = new Date(now.getTime() - 2 * 60 * 60 * 1000); // 2h alt
-      const eodPrices = [
-        { priceDate: recentDate.toISOString(), closePrice: 100 },
-      ];
-      service.loadData.mockResolvedValue(eodPrices);
-
-      const result = await controller.loadData(dto);
-
-      expect(result).toEqual(eodPrices);
-      expect(service.importAndSaveData).not.toHaveBeenCalled();
-    });
-
-    it('should call importAndSaveData if last date is older than 24h', async () => {
-      const ticker: TickerDto = { symbol: 'AAPL', exchange: 'US' };
-      const dto: DataAggregationDto = { ticker };
-      const oldDate = new Date(Date.now() - 48 * 60 * 60 * 1000); // 48h alt
-      const eodPrices = [{ priceDate: oldDate.toISOString(), closePrice: 100 }];
-      // 1. Erstes Laden: alte Daten
-      service.loadData.mockResolvedValueOnce(eodPrices);
-      // 2. Nach Import: neue Daten (hier einfach die gleichen, aber das Verhalten zählt)
-      service.importAndSaveData.mockResolvedValue({ message: 'imported' });
-      service.loadData.mockResolvedValueOnce(eodPrices);
-
-      const result = await controller.loadData(dto);
-
-      expect(service.importAndSaveData).toHaveBeenCalledWith(dto.ticker);
-      expect(result).toEqual(eodPrices);
-    });
-
-    it('should not call importAndSaveData if data is up-to-date (simulate API returns no newer data)', async () => {
-      const ticker: TickerDto = { symbol: 'AAPL', exchange: 'US' };
-      const dto: DataAggregationDto = { ticker };
-      const now = new Date();
-      const recentDate = new Date(now.getTime() - 1 * 60 * 60 * 1000); // 1h alt
-      const eodPrices = [
-        { priceDate: recentDate.toISOString(), closePrice: 100 },
-      ];
-      service.loadData.mockResolvedValue(eodPrices);
-
-      const result = await controller.loadData(dto);
-
-      expect(service.importAndSaveData).not.toHaveBeenCalled();
-      expect(result).toEqual(eodPrices);
     });
   });
 });

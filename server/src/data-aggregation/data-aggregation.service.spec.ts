@@ -149,4 +149,80 @@ describe('DataAggregationService', () => {
       order: { priceDate: 'ASC' },
     });
   });
+
+  describe('loadAndUpdateIfNeeded', () => {
+    beforeEach(() => {
+      service.loadData = jest.fn();
+      service.importAndSaveData = jest.fn();
+    });
+
+    it('should import and reload if no data is present', async () => {
+      const ticker: TickerDto = { symbol: 'AAPL', exchange: 'US' };
+      const dto = { ticker };
+      // Erstes Laden: keine Daten
+      (service.loadData as jest.Mock).mockResolvedValueOnce([]);
+      // Nach Import: neue Daten vorhanden
+      (service.importAndSaveData as jest.Mock).mockResolvedValue({
+        message: 'imported',
+      });
+      const importedData = [
+        { priceDate: new Date().toISOString(), closePrice: 123 },
+      ];
+      (service.loadData as jest.Mock).mockResolvedValueOnce(importedData);
+      const result = await service.loadAndUpdateIfNeeded(dto);
+      expect(service.importAndSaveData).toHaveBeenCalledWith(ticker);
+      expect(result).toEqual(importedData);
+    });
+
+    it('should import if no data is present', async () => {
+      const ticker = { symbol: 'AAPL', exchange: 'US' };
+      const dto = { ticker };
+      (service.loadData as jest.Mock).mockResolvedValueOnce([]);
+      (service.loadData as jest.Mock).mockResolvedValueOnce([
+        { priceDate: '2024-01-01', closePrice: 100 },
+      ]);
+      (service.importAndSaveData as jest.Mock).mockResolvedValue({
+        message: 'imported',
+      });
+      const result = await service.loadAndUpdateIfNeeded(dto);
+      expect(service.importAndSaveData as jest.Mock).toHaveBeenCalledWith(
+        ticker,
+      );
+      expect(result).toEqual([{ priceDate: '2024-01-01', closePrice: 100 }]);
+    });
+
+    it('should import if data is stale (older than 24h)', async () => {
+      const ticker = { symbol: 'AAPL', exchange: 'US' };
+      const dto = { ticker };
+      const oldDate = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+      (service.loadData as jest.Mock).mockResolvedValueOnce([
+        { priceDate: oldDate, closePrice: 100 },
+      ]);
+      (service.loadData as jest.Mock).mockResolvedValueOnce([
+        { priceDate: oldDate, closePrice: 100 },
+      ]);
+      (service.importAndSaveData as jest.Mock).mockResolvedValue({
+        message: 'imported',
+      });
+      const result = await service.loadAndUpdateIfNeeded(dto);
+      expect(service.importAndSaveData as jest.Mock).toHaveBeenCalledWith(
+        ticker,
+      );
+      expect(result).toEqual([{ priceDate: oldDate, closePrice: 100 }]);
+    });
+
+    it('should not import if data is up-to-date', async () => {
+      const ticker = { symbol: 'AAPL', exchange: 'US' };
+      const dto = { ticker };
+      const recentDate = new Date(
+        Date.now() - 2 * 60 * 60 * 1000,
+      ).toISOString();
+      (service.loadData as jest.Mock).mockResolvedValue([
+        { priceDate: recentDate, closePrice: 100 },
+      ]);
+      const result = await service.loadAndUpdateIfNeeded(dto);
+      expect(service.importAndSaveData as jest.Mock).not.toHaveBeenCalled();
+      expect(result).toEqual([{ priceDate: recentDate, closePrice: 100 }]);
+    });
+  });
 });

@@ -86,6 +86,11 @@ export class DataAggregationService {
     };
   }
 
+  /**
+   * Lädt EOD-Daten aus der Datenbank. Löst KEINE externe Aktualisierung aus.
+   * @param dto - Enthält Ticker und optionalen Zeitraum.
+   * @returns Ein Array von EodPrice-Entitäten.
+   */
   async loadData({ ticker, range }: DataAggregationDto): Promise<EodPrice[]> {
     const security = await this.fetchSecurityByTicker(ticker);
     if (!security) {
@@ -95,6 +100,32 @@ export class DataAggregationService {
     return this.eodPriceRepo.find(
       this.createPriceQueryOptions(security, range),
     );
+  }
+
+  /**
+   * Stellt sicher, dass die Daten aktuell sind.
+   * Lädt Daten und prüft, ob sie fehlen oder veraltet sind.
+   * Falls nötig, wird ein Import von der externen API angestoßen.
+   * @param dto - Enthält Ticker und optionalen Zeitraum.
+   * @returns Ein Array der (ggf. aktualisierten) EodPrice-Entitäten.
+   */
+  async loadAndUpdateIfNeeded(dto: DataAggregationDto): Promise<EodPrice[]> {
+    // Zuerst die Daten ohne Range laden, um das letzte Datum zu prüfen
+    const latestData = await this.loadData({ ticker: dto.ticker });
+
+    const isDataMissing = !latestData || latestData.length === 0;
+    const isDataStale =
+      !isDataMissing &&
+      Date.now() -
+        new Date(latestData[latestData.length - 1].priceDate).getTime() >=
+        24 * 60 * 60 * 1000;
+
+    if (isDataMissing || isDataStale) {
+      await this.importAndSaveData(dto.ticker);
+    }
+
+    // Nach potenzieller Aktualisierung die Daten mit dem gewünschten Filter laden
+    return this.loadData(dto);
   }
 
   private fetchSecurityByTicker(ticker: TickerDto) {
