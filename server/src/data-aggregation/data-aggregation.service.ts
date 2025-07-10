@@ -10,7 +10,11 @@ import {
   MoreThanOrEqual,
   Repository,
 } from 'typeorm';
-import { DataAggregationDto } from './data-aggregation.dto';
+import {
+  DataAggregationDto,
+  DateRangeDto,
+  TickerDto,
+} from './data-aggregation.dto';
 import { EodPrice } from './eod-price.entity';
 import { Security } from './security.entity';
 
@@ -83,12 +87,26 @@ export class DataAggregationService {
   }
 
   async loadData({ ticker, range }: DataAggregationDto): Promise<EodPrice[]> {
-    const security = await this.securityRepo.findOne({
-      where: { symbol: ticker.symbol, exchangeId: ticker.exchange },
-    });
+    const security = await this.fetchSecurityByTicker(ticker);
     if (!security) {
       return [];
     }
+
+    return this.eodPriceRepo.find(
+      this.createPriceQueryOptions(security, range),
+    );
+  }
+
+  private fetchSecurityByTicker(ticker: TickerDto) {
+    return this.securityRepo.findOne({
+      where: { symbol: ticker.symbol, exchangeId: ticker.exchange },
+    });
+  }
+
+  private createPriceQueryOptions(
+    security: Security,
+    range: DateRangeDto | undefined,
+  ) {
     const options: FindManyOptions<EodPrice> = {
       where: { securityId: security.securityId },
       order: { priceDate: 'ASC' },
@@ -103,7 +121,6 @@ export class DataAggregationService {
         options.where['priceDate'] = LessThanOrEqual(range.to);
       }
     }
-
-    return this.eodPriceRepo.find(options);
+    return options;
   }
 }
