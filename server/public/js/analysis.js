@@ -2,83 +2,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('analysis-form');
     const analysisContainer = document.getElementById('analysis-container');
 
-
     if (form && analysisContainer) {
         try {
             form.addEventListener('submit', async (event) => {
                 event.preventDefault();
-                const symbol = form.querySelector('#stock-symbol').value.trim();
-                const exchange = form.querySelector('#exchange').value.trim();
-                const from = form.querySelector('#date-from').value;
-                const to = form.querySelector('#date-to').value;
-                if (symbol && exchange) {
-                    const candlestickSeries = createChart(chartContainer);
-                    const chartData = await loadChartData(symbol, exchange, from, to);
-                    const transformedData = transformChartData(chartData);
-                    candlestickSeries.setData(transformedData);
-                    // chart.timeScale().fitContent();
+                const formData = new FormData(form);
+                const symbol = formData.get('stock').trim();
+                const exchange = formData.get('exchange').trim();
+                const from = formData.get('from');
+                const to = formData.get('to');
+                const steps = formData.getAll('steps');
+
+                if (symbol && exchange && steps.length > 0) {
+                    //     const candlestickSeries = createChart(chartContainer);
+                    //     const chartData = await loadChartData(symbol, exchange, from, to);
+                    //     const transformedData = transformChartData(chartData);
+                    //     candlestickSeries.setData(transformedData);
+                    //     // chart.timeScale().fitContent();
                 }
             });
         } catch (error) {
             console.error('Fehler beim Laden der Analyse-Daten:', error);
         }
     }
-    // Set default dates
-    const toInput = document.getElementById('to');
-    const fromInput = document.getElementById('from');
-    const today = new Date();
-    toInput.valueAsDate = today;
-    const oneYearAgo = new Date(today.setFullYear(today.getFullYear() - 1));
-    fromInput.valueAsDate = oneYearAgo;
-
-
-    form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        const formData = new FormData(form);
-        const symbol = formData.get('symbol');
-        const from = formData.get('from');
-        const to = formData.get('to');
-        const steps = formData.getAll('steps');
-
-        const analysisQuery = {
-            dataAggregation: {
-                symbol: symbol.toUpperCase(),
-                from: new Date(from).toISOString(),
-                to: new Date(to).toISOString(),
-                // Annahme: Intervall ist fix oder wird hier gesetzt
-                interval: '1d',
-            },
-            steps: steps,
-            stepOptions: {
-                // Hier könnten optional Werte aus dem UI für die Optionen eingefügt werden
-            },
-        };
-
-        resultsJson.textContent = 'Lade...';
-
-        try {
-            // Annahme: Der Endpunkt ist /api/analysis
-            const response = await fetch('/api/analysis', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(analysisQuery),
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`HTTP-Fehler! Status: ${response.status}, Meldung: ${errorText}`);
-            }
-
-            const data = await response.json();
-            resultsJson.textContent = JSON.stringify(data, null, 2);
-        } catch (error) {
-            resultsJson.textContent = `Fehler bei der Analyse: ${error.message}`;
-            console.error('Fehler:', error);
-        }
-    });
 });
 
 function createChart(chartContainer) {
@@ -96,7 +42,7 @@ function createChart(chartContainer) {
     });
 }
 
-async function loadChartData(symbol, exchange, from, to) {
+async function loadChartData(symbol, exchange, from, to, steps) {
     const postData = {
         ticker: {
             symbol,
@@ -105,7 +51,7 @@ async function loadChartData(symbol, exchange, from, to) {
     };
 
     if (from || to) {
-        postData.range = {}
+        postData.range = {};
     }
     if (from) {
         postData.range.from = from;

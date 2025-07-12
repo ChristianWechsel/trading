@@ -5,8 +5,7 @@ block head
   link(rel="stylesheet", href="/static/css/analysis.css")
  
 block content
-  body
-    form#analysis-form
+  form#analysis-form
     .form-group
       label(for="stock-symbol") Aktie
       input#stock-symbol(type="text", name="stock", maxlength="30", required placeholder="z.B. AAPL")
@@ -34,4 +33,4 @@ block content
   #analysis-container
 
 block scripts
-    script(src="/js/analysis.js")
+    script(src="/static/js/analysis.js")
