@@ -23,8 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     );
                     const chart = createChart(analysisContainer);
                     chart.timeScale().fitContent();
-                    addCandlestickSeries(chart);
-
+                    addLineSeries(chart, getLineSeriesData(chartData));
                 }
             });
         } catch (error) {
@@ -67,26 +66,31 @@ function createChart(chartContainer) {
     return LightweightCharts.createChart(chartContainer, {
         width: chartContainer.clientWidth,
         height: chartContainer.clientHeight,
+        timeScale: {
+            tickMarkFormatter: (time) => {
+                // time ist der UNIX-Timestamp in Sekunden
+                const date = new Date(time * 1000);
+                const year = date.getFullYear();
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const day = date.getDate().toString().padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            },
+        },
     });
 }
 
-function addCandlestickSeries(chart, data) {
-    const candlestickSeries = chart.addSeries(LightweightCharts.CandlestickSeries, {
-        upColor: '#26a69a',
-        downColor: '#ef5350',
-        borderVisible: false,
-        wickUpColor: '#26a69a',
-        wickDownColor: '#ef5350',
+function getLineSeriesData(data) {
+    return data.enrichedDataPoints.map((enrichedDataPoint) => {
+        return {
+            time: enrichedDataPoint.dataPoint.x / 1000,
+            value: parseFloat(enrichedDataPoint.dataPoint.y),
+        };
     });
-    candlestickSeries.setData(data);
 }
 
-function transformChartData(chartData) {
-    return chartData.map((item) => ({
-        time: item.priceDate, // ISO-String oder 'YYYY-MM-DD'
-        open: Number(item.openPrice),
-        high: Number(item.highPrice),
-        low: Number(item.lowPrice),
-        close: Number(item.closePrice),
-    }));
+function addLineSeries(chart, dataPoints) {
+    const series = chart.addSeries(LightweightCharts.LineSeries, {
+        color: '#2962FF',
+    });
+    series.setData(dataPoints);
 }
