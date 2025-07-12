@@ -14,12 +14,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const steps = formData.getAll('steps');
 
                 if (symbol && exchange && steps.length > 0) {
-                    //     const candlestickSeries = createChart(chartContainer);
-                    const chartData = await loadChartData(symbol, exchange, from, to, steps);
-                    console.log('Chart data loaded:', chartData);
-                    //     const transformedData = transformChartData(chartData);
-                    //     candlestickSeries.setData(transformedData);
-                    //     // chart.timeScale().fitContent();
+                    const chartData = await loadChartData(
+                        symbol,
+                        exchange,
+                        from,
+                        to,
+                        steps,
+                    );
+                    const chart = createChart(analysisContainer);
+                    chart.timeScale().fitContent();
+                    addCandlestickSeries(chart);
+
                 }
             });
         } catch (error) {
@@ -28,31 +33,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-function createChart(chartContainer) {
-    const chart = LightweightCharts.createChart(chartContainer, {
-        width: chartContainer.clientWidth,
-        height: chartContainer.clientHeight,
-    });
-
-    return chart.addSeries(LightweightCharts.CandlestickSeries, {
-        upColor: '#26a69a',
-        downColor: '#ef5350',
-        borderVisible: false,
-        wickUpColor: '#26a69a',
-        wickDownColor: '#ef5350',
-    });
-}
-
 async function loadChartData(symbol, exchange, from, to, steps) {
     const postData = {
         dataAggregation: {
             ticker: {
                 symbol,
                 exchange,
-            }
+            },
         },
-        steps
-
+        steps,
     };
 
     if (from || to) {
@@ -72,6 +61,24 @@ async function loadChartData(symbol, exchange, from, to, steps) {
     });
     if (!response.ok) throw new Error('Fehler beim Laden der Daten');
     return await response.json();
+}
+
+function createChart(chartContainer) {
+    return LightweightCharts.createChart(chartContainer, {
+        width: chartContainer.clientWidth,
+        height: chartContainer.clientHeight,
+    });
+}
+
+function addCandlestickSeries(chart, data) {
+    const candlestickSeries = chart.addSeries(LightweightCharts.CandlestickSeries, {
+        upColor: '#26a69a',
+        downColor: '#ef5350',
+        borderVisible: false,
+        wickUpColor: '#26a69a',
+        wickDownColor: '#ef5350',
+    });
+    candlestickSeries.setData(data);
 }
 
 function transformChartData(chartData) {
