@@ -7,7 +7,7 @@ export class DataProviderService {
   constructor(
     private readonly dataAggregationService: DataAggregationService,
   ) {}
-  getEod(dto: DataAggregationDto) {
+  getCandleSticks(dto: DataAggregationDto) {
     return this.dataAggregationService.loadAndUpdateIfNeeded(dto);
   }
 }

@@ -45,10 +45,6 @@ async function loadChartData(symbol, exchange, from, to) {
             symbol,
             exchange,
         },
-        // range: {
-        //     from: "2001-01-01",
-        //     to: "2001-12-31"
-        // }
     };
 
     if (from || to) {
@@ -61,7 +57,7 @@ async function loadChartData(symbol, exchange, from, to) {
         postData.range.to = to;
     }
 
-    const response = await fetch('/data-provider/eod', {
+    const response = await fetch('/data-provider/candleSticks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(postData),

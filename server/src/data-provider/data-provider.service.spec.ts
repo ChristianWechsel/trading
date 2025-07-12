@@ -31,7 +31,7 @@ describe('DataProviderService', () => {
     const dto: DataAggregationDto = { ticker };
     const resultData = [{ priceDate: '2024-01-01', closePrice: 123 }];
     aggregationService.loadAndUpdateIfNeeded.mockResolvedValue(resultData);
-    const result = await service.getEod(dto);
+    const result = await service.getCandleSticks(dto);
     expect(aggregationService.loadAndUpdateIfNeeded).toHaveBeenCalledWith(dto);
     expect(result).toEqual(resultData);
   });

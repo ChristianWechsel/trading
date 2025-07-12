@@ -1,10 +1,14 @@
 # ToDo List
 
+# Performance Messung auf Client etablieren. Damit ich schnell Feedback erhalte, wie sich die Performace entwickelt.
+
 # TradingCharts
 
-- laden der Daten, um reine CandleStick Daten anzuzeigen
-  - Auswahl der Aktien und Börse ermöglichen. ggf. kann mit Dropdown gearbeitet werden,
-    welches dynamisch geladen wird.
+- Auswahl der Charts Linien oder Candlestick
+- Auswahl der Filter ermöglichen
+- Candlestick zusätzliche Linien hinzufügen für gleitende Durchschnitte Trendkanäle etc
+- Tages, Woichen, Minuten Charts, ...
+- Liniencharts z.B. auf Bais open, close, max, min Kurs, wenn candleStick data vorliegen
 
 # Backend Architektur & Module
 

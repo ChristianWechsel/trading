@@ -6,8 +6,8 @@ import { DataProviderService } from './data-provider.service';
 export class DataProviderController {
   constructor(private readonly dataProviderService: DataProviderService) {}
 
-  @Post('eod')
-  eodData(@Body() dto: DataAggregationDto) {
-    return this.dataProviderService.getEod(dto);
+  @Post('candleSticks')
+  candleSticks(@Body() dto: DataAggregationDto) {
+    return this.dataProviderService.getCandleSticks(dto);
   }
 }
