@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (symbol && exchange && steps.length > 0) {
                     //     const candlestickSeries = createChart(chartContainer);
-                    //     const chartData = await loadChartData(symbol, exchange, from, to);
+                    const chartData = await loadChartData(symbol, exchange, from, to, steps);
+                    console.log('Chart data loaded:', chartData);
                     //     const transformedData = transformChartData(chartData);
                     //     candlestickSeries.setData(transformedData);
                     //     // chart.timeScale().fitContent();
@@ -44,10 +45,14 @@ function createChart(chartContainer) {
 
 async function loadChartData(symbol, exchange, from, to, steps) {
     const postData = {
-        ticker: {
-            symbol,
-            exchange,
+        dataAggregation: {
+            ticker: {
+                symbol,
+                exchange,
+            }
         },
+        steps
+
     };
 
     if (from || to) {
@@ -60,7 +65,7 @@ async function loadChartData(symbol, exchange, from, to, steps) {
         postData.range.to = to;
     }
 
-    const response = await fetch('/data-provider/candleSticks', {
+    const response = await fetch('/analysis', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(postData),
