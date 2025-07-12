@@ -1,0 +1,5 @@
+#analysis-container {
+  overflow: hidden; /* Verhindert Scrollen im Container */
+  width: 80vw;
+  height: 50vh;
+}

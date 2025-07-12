@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const chartContainer = document.getElementById('chart-container');
     const form = document.getElementById('stock-form');
+    const chartContainer = document.getElementById('chart-container');
 
     if (chartContainer && form) {
         try {

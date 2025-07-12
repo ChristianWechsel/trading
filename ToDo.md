@@ -11,6 +11,7 @@
 - Liniencharts z.B. auf Bais open, close, max, min Kurs, wenn candleStick data vorliegen
 - Idee: Verwendung von Art Toolbox, in welcher schematisch verschiedene Charts
   vorhanden sind. Diese kann man mit Drag & Drop in Seite ziehen und damit die gewünschte Chartart erhalten.
+- chart und analyse sind in .pug, .js und .css sehr ähnlich. Daher sollte man gemeinsame Aspekte herausschneiden.
 
 # Backend Architektur & Module
 

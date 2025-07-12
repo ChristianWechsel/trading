@@ -30,4 +30,10 @@ export class AppController {
   notificationPage() {
     return {};
   }
+
+  @Get('analysis')
+  @Render('analysis')
+  analysisPage() {
+    return {};
+  }
 }

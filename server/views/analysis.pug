@@ -2,11 +2,11 @@ extends layout
 
 block head
   - title = 'Analyse'
-  link(rel="stylesheet", href="/static/css/analyis.css")
-
+  link(rel="stylesheet", href="/static/css/analysis.css")
+ 
 block content
-  // Formular für Aktie und Handelsplatz direkt unter der Navigation
-  form#stock-form(action="/analysis" method="get")
+  body
+    form#analysis-form
     .form-group
       label(for="stock-symbol") Aktie
       input#stock-symbol(type="text", name="stock", maxlength="30", required placeholder="z.B. AAPL")
@@ -19,12 +19,19 @@ block content
     .form-group
       label(for="date-to") Bis (optional)
       input#date-to(type="date", name="to")
-    button(type="submit") Anzeigen
 
-  // Die Überschrift "Analyse" wurde entfernt
-  p Hier werden die Trading-Charts angezeigt.
-  #chart-container
+    fieldset
+      legend Analysemethoden
+      .checkbox-group
+        - const steps = ['MovingAverage', 'SwingPointDetection', 'TrendDetection', 'TrendChannelCalculation']
+        each step in steps
+          div
+            input(type="checkbox", id=step, name="steps", value=step)
+            label(for=step)= step
+
+    button(type="submit") Analyse starten
+
+  #analysis-container
 
 block scripts
-  script(src="/static/vendor/lightweight-charts/lightweight-charts.standalone.production.js")
-  script(src="/static/js/analysis.js")
+    script(src="/js/analysis.js")

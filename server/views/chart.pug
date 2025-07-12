@@ -5,8 +5,7 @@ block head
   link(rel="stylesheet", href="/static/css/chart.css")
 
 block content
-  // Formular für Aktie und Handelsplatz direkt unter der Navigation
-  form#stock-form(action="/chart" method="get")
+  form#stock-form
     .form-group
       label(for="stock-symbol") Aktie
       input#stock-symbol(type="text", name="stock", maxlength="30", required placeholder="z.B. AAPL")
@@ -21,8 +20,6 @@ block content
       input#date-to(type="date", name="to")
     button(type="submit") Anzeigen
 
-  // Die Überschrift "Analyse" wurde entfernt
-  p Hier werden die Trading-Charts angezeigt.
   #chart-container
 
 block scripts
