@@ -19,9 +19,9 @@ export class AppController {
     return {};
   }
 
-  @Get('analysis')
-  @Render('analysis')
-  showAnalysisPage() {
+  @Get('chart')
+  @Render('chart')
+  showChartPage() {
     return {};
   }
 

@@ -30,7 +30,7 @@
 
 # ToDo UI
 
-- [ ] Analyse-Seite erstellen
+- [ ] Chart-Seite erstellen
 - [ ] Notification-Seite erstellen
 - [ ] Logout-Button auf der Startseite implementieren
 - [ ] Registrierung für Notifications implementieren
