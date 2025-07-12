@@ -9,6 +9,8 @@
 - Candlestick zusätzliche Linien hinzufügen für gleitende Durchschnitte Trendkanäle etc
 - Tages, Woichen, Minuten Charts, ...
 - Liniencharts z.B. auf Bais open, close, max, min Kurs, wenn candleStick data vorliegen
+- Idee: Verwendung von Art Toolbox, in welcher schematisch verschiedene Charts
+  vorhanden sind. Diese kann man mit Drag & Drop in Seite ziehen und damit die gewünschte Chartart erhalten.
 
 # Backend Architektur & Module
 
