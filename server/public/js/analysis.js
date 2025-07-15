@@ -48,13 +48,13 @@ async function loadChartData(symbol, exchange, from, to, steps) {
     };
 
     if (from || to) {
-        postData.range = {};
+        postData.dataAggregation.range = {};
     }
     if (from) {
-        postData.range.from = from;
+        postData.dataAggregation.range.from = from;
     }
     if (to) {
-        postData.range.to = to;
+        postData.dataAggregation.range.to = to;
     }
 
     const response = await fetch('/analysis', {
@@ -83,11 +83,11 @@ function createChart(chartContainer) {
     });
 }
 
-function getChartData(data) {
-    return data.map((dataPoint) => {
+function getChartData(enrichedDataPoints) {
+    return enrichedDataPoints.map((enrichedDataPoint) => {
         return {
-            time: dataPoint.x / 1000,
-            value: parseFloat(dataPoint.y),
+            time: enrichedDataPoint.dataPoint.x / 1000,
+            value: parseFloat(enrichedDataPoint.dataPoint.y),
         };
     });
 }

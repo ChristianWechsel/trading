@@ -7,7 +7,7 @@
 - Auswahl der Charts Linien oder Candlestick
 - Auswahl der Filter ermöglichen
 - Candlestick zusätzliche Linien hinzufügen für gleitende Durchschnitte Trendkanäle etc
-- Tages, Woichen, Minuten Charts, ...
+- Tages, Wochen, Minuten Charts, ...
 - Liniencharts z.B. auf Bais open, close, max, min Kurs, wenn candleStick data vorliegen
 - Idee: Verwendung von Art Toolbox, in welcher schematisch verschiedene Charts
   vorhanden sind. Diese kann man mit Drag & Drop in Seite ziehen und damit die gewünschte Chartart erhalten.
@@ -16,22 +16,6 @@
 - Trendkanäle hinzufügen
 - Seite für Auswahl der Optionen, dann submit, dann neue Seite öffnen => evtl. kann man
   dadurch auch ServerSide Rendering nutzen, um Last auf Server zu nehmen (ThinClient)
-
-# Backend Architektur & Module
-
-- [ ] Neues Modul `data-provider` für reine Datenbereitstellung (EOD, Unternehmenskennzahlen, Wirtschaftskalender etc.) anlegen
-- [ ] `data-provider`-Modul greift ausschließlich auf lokale Datenbank/die von `data-aggregation` bereitgestellten Daten zu
-- [ ] `data-aggregation` bleibt für Datenimport und -aktualisierung aus externen Quellen zuständig
-- [ ] Schnittstelle zwischen `data-provider` und `data-aggregation` definieren (z.B. Service-Methoden für Datenzugriff)
-- [ ] Erweiterbarkeit für weitere Datenarten (z.B. Fundamentals, Kalenderdaten) sicherstellen
-
-# Technische Aufgaben
-
-- [ ] Datenbankstruktur für EOD-Daten, Unternehmenskennzahlen, Wirtschaftskalender etc. entwerfen und ggf. partitionieren
-- [ ] Upsert-Logik für EOD-Daten implementieren (bestehende Daten aktualisieren oder ergänzen)
-- [ ] Endpoints im `data-provider`-Modul für verschiedene Datenarten bereitstellen (z.B. `/market-data/eod`, `/market-data/fundamentals`)
-- [ ] DTOs mit Validierung für alle Datenabfragen erstellen
-- [ ] Tests für neue Module und Endpoints (Unit, Integration, e2e) anlegen
 
 # ToDo UI
 
