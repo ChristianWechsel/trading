@@ -22,8 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         steps,
                     );
                     const chart = createChart(analysisContainer);
-                    chart.timeScale().fitContent();
-                    addLineSeries(chart, getLineSeriesData(chartData));
+                    // chart.timeScale().fitContent();
+                    addLineSeries(chart, getChartData(chartData.enrichedDataPoints));
+                    // getTrendChannelData(chartData).forEach(trendDataPoints => {
+                    //     addLineSeries(chart, getChartData(trendDataPoints));
+                    // });
+
                 }
             });
         } catch (error) {
@@ -79,13 +83,56 @@ function createChart(chartContainer) {
     });
 }
 
-function getLineSeriesData(data) {
-    return data.enrichedDataPoints.map((enrichedDataPoint) => {
+function getChartData(data) {
+    return data.map((dataPoint) => {
         return {
-            time: enrichedDataPoint.dataPoint.x / 1000,
-            value: parseFloat(enrichedDataPoint.dataPoint.y),
+            time: dataPoint.x / 1000,
+            value: parseFloat(dataPoint.y),
         };
     });
+}
+
+function getTrendChannelData(data) {
+    const { enrichedDataPoints, trends } = data;
+
+    const lines = trends.reduce((total, trend) => {
+        const trendLineDataPoints = [];
+        const returnLineDataPoints = [];
+        const start = enrichedDataPoints.findIndex(
+            (enrichedDataPoint) => enrichedDataPoint.dataPoint.x === trend.startPoint.x,
+        );
+        const end = enrichedDataPoints.findIndex(
+            (enrichedDataPoint) => enrichedDataPoint.dataPoint.x === trend.endPoint.x,
+        );
+        const { trendLine, returnLine } = trend.channel;
+        if (start > -1 && end > -1) {
+            for (let i = start; i <= end; i++) {
+                trendLineDataPoints.push(
+                    calcTrendLineDataPoint(
+                        enrichedDataPoints[i].dataPoint.x,
+                        trendLine.slope,
+                        trendLine.yIntercept,
+                    ),
+                );
+                returnLineDataPoints.push(
+                    calcTrendLineDataPoint(
+                        enrichedDataPoints[i].dataPoint.x,
+                        returnLine.slope,
+                        returnLine.yIntercept,
+                    ),
+                );
+            }
+        }
+        total.push(trendLineDataPoints);
+        total.push(returnLineDataPoints);
+        return total;
+    }, []);
+
+    return lines;
+}
+
+function calcTrendLineDataPoint(x, slope, yIntercept) {
+    return { x, y: slope * x + yIntercept };
 }
 
 function addLineSeries(chart, dataPoints) {
