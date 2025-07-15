@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { firstValueFrom } from 'rxjs';
+import { IDataAggregationService } from 'src/analysis/analysis.interface';
 import {
   Between,
   FindManyOptions,
@@ -19,7 +20,7 @@ import { EodPrice } from './eod-price.entity';
 import { Security } from './security.entity';
 
 @Injectable()
-export class DataAggregationService {
+export class DataAggregationService implements IDataAggregationService {
   constructor(
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,

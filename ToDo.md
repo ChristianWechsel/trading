@@ -1,5 +1,9 @@
 # ToDo List
 
+# Integationstest für analysis für MCD.US von 17.03.1980 bis 01.06.1980
+
+- die Erkennung von SwingPoints klappt noch nicht.
+
 # Performance Messung auf Client etablieren. Damit ich schnell Feedback erhalte, wie sich die Performace entwickelt.
 
 # TradingCharts
