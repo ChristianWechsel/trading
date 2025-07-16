@@ -24,7 +24,7 @@ export class AnalysisIntTestData {
             to: '1980-06-01',
           },
         },
-        steps: ['TrendChannelCalculation'],
+        steps: ['SwingPointDetection'],
       },
       data: this.testDatasets.getMCD_US_19800317_19800601(),
     };
