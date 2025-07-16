@@ -5,7 +5,11 @@
 - die Erkennung von SwingPoints klappt noch nicht.
 - Entfernen von Points welche nicht swingLow und swingHigh sind
 - Threshold verkleinern, man könnte das in Relation zu den durchschnittlichen Deltas zwischen zwei Zeiträumen setzen. Gedanke, wenn viel Bewegung herrscht, dann wäre ein zu kleiner Threshold kontrapoduktiv, bei wenig Bewegung erkennt man mit einem zu großem Threshold keine SwingPoints
-- SwingPoint kann auch sein, wenn z.B. in Swingpoint ein abstieg und danach auf gleicher Höhe bleibt, dann könnte man das als swingLow bezeichnen.
+- Plateus sind gesondert zu betrachten
+  - upward - plateu - upward => kein SwingPoint
+  - upward - plateu - downward => swingHigh
+  - downward - plateu - upward => kein SwingPoint
+  - downward - plateu - downward => swingLow
 
 # Performance Messung auf Client etablieren. Damit ich schnell Feedback erhalte, wie sich die Performace entwickelt.
 

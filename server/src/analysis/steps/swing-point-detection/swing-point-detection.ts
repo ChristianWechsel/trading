@@ -74,7 +74,7 @@ export class SwingPointDetection implements AnalysisStep {
           nextPoints,
         )
       ) {
-        currentPoint.setSwingPointType('downwardToPlateau');
+        currentPoint.setSwingPointType('swingLow');
       } else if (
         this.isUpwardToPlateau(
           previousPoints,
@@ -82,7 +82,7 @@ export class SwingPointDetection implements AnalysisStep {
           nextPoints,
         )
       ) {
-        currentPoint.setSwingPointType('upwardToPlateau');
+        currentPoint.setSwingPointType('swingHigh');
       } else if (
         this.isPlateauToUpward(
           previousPoints,
@@ -90,7 +90,7 @@ export class SwingPointDetection implements AnalysisStep {
           nextPoints,
         )
       ) {
-        currentPoint.setSwingPointType('plateauToUpward');
+        // currentPoint.setSwingPointType('swingLow');
       } else if (
         this.isPlateauToDownward(
           previousPoints,
@@ -98,7 +98,7 @@ export class SwingPointDetection implements AnalysisStep {
           nextPoints,
         )
       ) {
-        currentPoint.setSwingPointType('plateauToDownward');
+        // currentPoint.setSwingPointType('swingHigh');
       }
       idx++;
     }
