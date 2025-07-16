@@ -1,8 +1,13 @@
 import { EodPrice } from '../data-aggregation/eod-price.entity';
 import { AnalysisQueryDto } from './analysis-query.dto';
+import { EnrichedDataPoint } from './core/enriched-data-point';
 import { TestDatasets } from './TestDatasets';
 
-type TestData = { dto: AnalysisQueryDto; data: EodPrice[] };
+export type TestData = {
+  dto: AnalysisQueryDto;
+  data: EodPrice[];
+  expected: EnrichedDataPoint[];
+};
 
 export class AnalysisIntTestData {
   private testDatasets: TestDatasets;
@@ -26,7 +31,7 @@ export class AnalysisIntTestData {
         },
         steps: ['SwingPointDetection'],
       },
-      data: this.testDatasets.getMCD_US_19800317_19800601(),
+      ...this.testDatasets.getMCD_US_19800317_19800601(),
     };
   }
 }

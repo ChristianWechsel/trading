@@ -32,9 +32,8 @@ describe('Analysis (Integration)', () => {
   });
 
   it('MCD.US 1980-03-17 - 1980-06-01', async () => {
-    const result = await controller.performAnalysis(
-      analysisIntTestData.getMCDUSHistoricalData1980().dto,
-    );
-    expect(result).toEqual(false);
+    const testData = analysisIntTestData.getMCDUSHistoricalData1980();
+    const result = await controller.performAnalysis(testData.dto);
+    expect(result).toEqual(expect.arrayContaining(testData.expected));
   });
 });

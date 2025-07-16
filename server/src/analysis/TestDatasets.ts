@@ -1,5 +1,6 @@
 import { EodPrice } from '../data-aggregation/eod-price.entity';
-import { SwingPointType } from './core/enriched-data-point';
+import { TestData } from './analysis.int.testdata';
+import { EnrichedDataPoint, SwingPointType } from './core/enriched-data-point';
 
 type RawEod = {
   securityId: number;
@@ -13,10 +14,29 @@ type RawEod = {
 };
 
 export class TestDatasets {
-  getMCD_US_19800317_19800601(): EodPrice[] {
-    return MCD_US_19800317_19800601.map((item) =>
-      this.mapRawEodToEodPrice(item.dataPoint),
-    );
+  getMCD_US_19800317_19800601(): Pick<TestData, 'data' | 'expected'> {
+    return {
+      data: MCD_US_19800317_19800601.map<EodPrice>((item) =>
+        this.mapRawEodToEodPrice(item.dataPoint),
+      ),
+      expected: MCD_US_19800317_19800601.map<EnrichedDataPoint>((item) => {
+        return this.mapToEnrichedDataPoint(item);
+      }),
+    };
+  }
+
+  private mapToEnrichedDataPoint(item: {
+    dataPoint: RawEod;
+    swingPoint: SwingPointType;
+  }) {
+    const enrichedDataPoint = new EnrichedDataPoint({
+      x: new Date(item.dataPoint.priceDate).getTime(),
+      y: parseFloat(item.dataPoint.closePrice),
+    });
+    if (item.swingPoint) {
+      enrichedDataPoint.setSwingPointType(item.swingPoint);
+    }
+    return enrichedDataPoint;
   }
 
   private mapRawEodToEodPrice(raw: RawEod): EodPrice {
