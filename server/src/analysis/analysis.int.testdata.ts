@@ -30,6 +30,10 @@ export class AnalysisIntTestData {
           },
         },
         steps: ['SwingPointDetection'],
+        stepOptions: {
+          swingPointDetection: { relativeThreshold: 0.005 },
+          trendDetection: { relativeThreshold: 0.005 },
+        },
       },
       ...this.testDatasets.getMCD_US_19800317_19800601(),
     };

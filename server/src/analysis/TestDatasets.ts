@@ -68,6 +68,7 @@ const MCD_US_19800317_19800601: {
   dataPoint: RawEod;
   swingPoint: SwingPointType;
 }[] = [
+  // 0
   {
     dataPoint: {
       securityId: 1,
@@ -81,6 +82,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 1
   {
     dataPoint: {
       securityId: 1,
@@ -94,6 +96,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 2 swingHigh
   {
     dataPoint: {
       securityId: 1,
@@ -107,6 +110,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingHigh',
   },
+  // 3
   {
     dataPoint: {
       securityId: 1,
@@ -120,6 +124,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 4
   {
     dataPoint: {
       securityId: 1,
@@ -133,6 +138,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 5 swingLow
   {
     dataPoint: {
       securityId: 1,
@@ -146,6 +152,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingLow',
   },
+  // 6
   {
     dataPoint: {
       securityId: 1,
@@ -159,6 +166,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 7
   {
     dataPoint: {
       securityId: 1,
@@ -172,6 +180,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 8
   {
     dataPoint: {
       securityId: 1,
@@ -185,6 +194,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 9
   {
     dataPoint: {
       securityId: 1,
@@ -198,6 +208,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 10 swingHigh
   {
     dataPoint: {
       securityId: 1,
@@ -211,6 +222,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingHigh',
   },
+  // 11 swingLow
   {
     dataPoint: {
       securityId: 1,
@@ -224,6 +236,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingLow',
   },
+  // 12 swingHigh
   {
     dataPoint: {
       securityId: 1,
@@ -237,6 +250,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingHigh',
   },
+  // 13
   {
     dataPoint: {
       securityId: 1,
@@ -250,6 +264,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 14 swingLow
   {
     dataPoint: {
       securityId: 1,
@@ -263,6 +278,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingLow',
   },
+  // 15
   {
     dataPoint: {
       securityId: 1,
@@ -276,6 +292,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 16 swingHigh
   {
     dataPoint: {
       securityId: 1,
@@ -289,6 +306,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingHigh',
   },
+  // 17
   {
     dataPoint: {
       securityId: 1,
@@ -302,6 +320,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 18
   {
     dataPoint: {
       securityId: 1,
@@ -315,6 +334,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 19
   {
     dataPoint: {
       securityId: 1,
@@ -328,6 +348,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 20
   {
     dataPoint: {
       securityId: 1,
@@ -341,6 +362,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 21
   {
     dataPoint: {
       securityId: 1,
@@ -354,6 +376,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 22
   {
     dataPoint: {
       securityId: 1,
@@ -367,6 +390,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 23
   {
     dataPoint: {
       securityId: 1,
@@ -380,6 +404,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 24 swingLow
   {
     dataPoint: {
       securityId: 1,
@@ -393,6 +418,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingLow',
   },
+  // 25
   {
     dataPoint: {
       securityId: 1,
@@ -406,6 +432,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 26 swingHigh
   {
     dataPoint: {
       securityId: 1,
@@ -419,6 +446,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingHigh',
   },
+  // 27
   {
     dataPoint: {
       securityId: 1,
@@ -432,6 +460,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 28
   {
     dataPoint: {
       securityId: 1,
@@ -445,6 +474,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 29 swingLow
   {
     dataPoint: {
       securityId: 1,
@@ -458,6 +488,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingLow',
   },
+  // 30
   {
     dataPoint: {
       securityId: 1,
@@ -471,6 +502,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 31
   {
     dataPoint: {
       securityId: 1,
@@ -484,6 +516,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 32
   {
     dataPoint: {
       securityId: 1,
@@ -497,6 +530,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 33
   {
     dataPoint: {
       securityId: 1,
@@ -510,6 +544,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 34 swingHigh
   {
     dataPoint: {
       securityId: 1,
@@ -523,6 +558,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingHigh',
   },
+  // 35 swingLow
   {
     dataPoint: {
       securityId: 1,
@@ -536,6 +572,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingLow',
   },
+  // 36 swingHigh
   {
     dataPoint: {
       securityId: 1,
@@ -549,6 +586,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingHigh',
   },
+  // 37 swingLow
   {
     dataPoint: {
       securityId: 1,
@@ -562,6 +600,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingLow', // kam von oben und macht Knick zur Seite
   },
+  // 38
   {
     dataPoint: {
       securityId: 1,
@@ -575,6 +614,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 39
   {
     dataPoint: {
       securityId: 1,
@@ -588,6 +628,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 40
   {
     dataPoint: {
       securityId: 1,
@@ -601,6 +642,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 41
   {
     dataPoint: {
       securityId: 1,
@@ -614,6 +656,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 42
   {
     dataPoint: {
       securityId: 1,
@@ -627,6 +670,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 43
   {
     dataPoint: {
       securityId: 1,
@@ -640,6 +684,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 44
   {
     dataPoint: {
       securityId: 1,
@@ -653,6 +698,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 45 swingHigh
   {
     dataPoint: {
       securityId: 1,
@@ -666,6 +712,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingHigh',
   },
+  // 46
   {
     dataPoint: {
       securityId: 1,
@@ -679,6 +726,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
+  // 47 swingLow
   {
     dataPoint: {
       securityId: 1,
@@ -692,6 +740,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingLow',
   },
+  // 48 swingHigh
   {
     dataPoint: {
       securityId: 1,
@@ -705,6 +754,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingHigh',
   },
+  // 49 swingLow
   {
     dataPoint: {
       securityId: 1,
@@ -718,6 +768,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingLow',
   },
+  // 50 swingHigh
   {
     dataPoint: {
       securityId: 1,
@@ -731,6 +782,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingHigh',
   },
+  // 51 swingLow
   {
     dataPoint: {
       securityId: 1,
@@ -744,6 +796,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingLow', // kam von oben und macht Knick zur Seite
   },
+  // 52
   {
     dataPoint: {
       securityId: 1,
