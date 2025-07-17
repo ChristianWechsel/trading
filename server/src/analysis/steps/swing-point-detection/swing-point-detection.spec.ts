@@ -50,6 +50,14 @@ describe('SwingPointDetection', () => {
     testData.upwardToPlateau_window2_trendFail(),
     testData.upwardToPlateau_window2_plateauFail(),
     testData.plateauToUpward_window1_but_fails_window2(),
+    testData.upwardPlateauUpward_window1(),
+    testData.upwardPlateauUpward_window2(),
+    testData.upwardPlateauDownward_window1(),
+    testData.upwardPlateauDownward_window2(),
+    testData.downwardPlateauUpward_window1(),
+    testData.downwardPlateauUpward_window2(),
+    testData.downwardPlateauDownward_window1(),
+    testData.downwardPlateauDownward_window2(),
   ])('$name', ({ testcase }) => {
     const swingPointDetection = new SwingPointDetection(testcase.settings);
     swingPointDetection.execute({
