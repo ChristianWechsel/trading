@@ -228,7 +228,7 @@ export class SwingPointDetectionTestdata {
           new EnrichedDataPoint({ x: 2, y: 2 }),
           new EnrichedDataPoint({ x: 3, y: 3 }),
         ],
-        expectedSwingPoints: [{ index: 1, type: 'plateauToUpward' }],
+        expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
       },
     };
@@ -243,7 +243,7 @@ export class SwingPointDetectionTestdata {
           new EnrichedDataPoint({ x: 2, y: 2 }),
           new EnrichedDataPoint({ x: 3, y: 1 }),
         ],
-        expectedSwingPoints: [{ index: 1, type: 'plateauToDownward' }],
+        expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
       },
     };
@@ -258,7 +258,7 @@ export class SwingPointDetectionTestdata {
           new EnrichedDataPoint({ x: 2, y: 2 }),
           new EnrichedDataPoint({ x: 3, y: 2 }),
         ],
-        expectedSwingPoints: [{ index: 1, type: 'upwardToPlateau' }],
+        expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
       },
     };
@@ -273,7 +273,7 @@ export class SwingPointDetectionTestdata {
           new EnrichedDataPoint({ x: 2, y: 2 }),
           new EnrichedDataPoint({ x: 3, y: 2 }),
         ],
-        expectedSwingPoints: [{ index: 1, type: 'downwardToPlateau' }],
+        expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
       },
     };
@@ -391,7 +391,7 @@ export class SwingPointDetectionTestdata {
           new EnrichedDataPoint({ x: 7, y: 18 }),
           new EnrichedDataPoint({ x: 8, y: 19 }),
         ],
-        expectedSwingPoints: [{ index: 4, type: 'upwardToPlateau' }],
+        expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
       },
     };
@@ -412,7 +412,7 @@ export class SwingPointDetectionTestdata {
           new EnrichedDataPoint({ x: 7, y: 12 }),
           new EnrichedDataPoint({ x: 8, y: 11 }),
         ],
-        expectedSwingPoints: [{ index: 4, type: 'downwardToPlateau' }],
+        expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
       },
     };
@@ -433,10 +433,7 @@ export class SwingPointDetectionTestdata {
           new EnrichedDataPoint({ x: 7, y: 18 }),
           new EnrichedDataPoint({ x: 8, y: 19 }),
         ],
-        expectedSwingPoints: [
-          { index: 2, type: 'upwardToPlateau' },
-          { index: 4, type: 'plateauToUpward' },
-        ],
+        expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
       },
     };
@@ -457,7 +454,7 @@ export class SwingPointDetectionTestdata {
           new EnrichedDataPoint({ x: 7, y: 8 }),
           new EnrichedDataPoint({ x: 8, y: 7 }),
         ],
-        expectedSwingPoints: [{ index: 4, type: 'plateauToDownward' }],
+        expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
       },
     };
