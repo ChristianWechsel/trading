@@ -278,7 +278,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingLow',
   },
-  // 15
+  // 15 swingHigh
   {
     dataPoint: {
       securityId: 1,
@@ -290,9 +290,9 @@ const MCD_US_19800317_19800601: {
       adjustedClosePrice: '0.4241',
       volume: '489600',
     },
-    swingPoint: null,
+    swingPoint: 'swingHigh',
   },
-  // 16 kein swingHigh, da praktisch gleich zu Vortag und Folgetag
+  // 16
   {
     dataPoint: {
       securityId: 1,
@@ -306,7 +306,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
-  // 17 swingHigh kam seitlich an und macht Knick nach unten
+  // 17
   {
     dataPoint: {
       securityId: 1,
@@ -318,7 +318,7 @@ const MCD_US_19800317_19800601: {
       adjustedClosePrice: '0.4241',
       volume: '1220412',
     },
-    swingPoint: 'swingHigh',
+    swingPoint: null,
   },
   // 18
   {
@@ -334,7 +334,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
-  // 19 swingLow kam von oben an und läuft seitlich aus
+  // 19 swingLow
   {
     dataPoint: {
       securityId: 1,
@@ -404,7 +404,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
-  // 24 swingLow
+  // 24
   {
     dataPoint: {
       securityId: 1,
@@ -416,7 +416,7 @@ const MCD_US_19800317_19800601: {
       adjustedClosePrice: '0.4126',
       volume: '706812',
     },
-    swingPoint: 'swingLow',
+    swingPoint: null,
   },
   // 25
   {
@@ -642,7 +642,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
-  // 41 swingHigh
+  // 41
   {
     dataPoint: {
       securityId: 1,
@@ -654,7 +654,7 @@ const MCD_US_19800317_19800601: {
       adjustedClosePrice: '0.4778',
       volume: '1814400',
     },
-    swingPoint: 'swingHigh',
+    swingPoint: null,
   },
   // 42
   {
@@ -684,7 +684,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
-  // 44 swingLow
+  // 44
   {
     dataPoint: {
       securityId: 1,
@@ -696,9 +696,9 @@ const MCD_US_19800317_19800601: {
       adjustedClosePrice: '0.4804',
       volume: '709212',
     },
-    swingPoint: 'swingLow',
+    swingPoint: null,
   },
-  // 45 swingHigh
+  // 45
   {
     dataPoint: {
       securityId: 1,
@@ -710,7 +710,7 @@ const MCD_US_19800317_19800601: {
       adjustedClosePrice: '0.4855',
       volume: '1104000',
     },
-    swingPoint: 'swingHigh',
+    swingPoint: null,
   },
   // 46
   {
@@ -726,7 +726,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: null,
   },
-  // 47 swingLow
+  // 47
   {
     dataPoint: {
       securityId: 1,
@@ -738,7 +738,7 @@ const MCD_US_19800317_19800601: {
       adjustedClosePrice: '0.4830',
       volume: '1095612',
     },
-    swingPoint: 'swingLow',
+    swingPoint: null,
   },
   // 48 swingHigh
   {
@@ -754,7 +754,7 @@ const MCD_US_19800317_19800601: {
     },
     swingPoint: 'swingHigh',
   },
-  // 49 swingLow
+  // 49
   {
     dataPoint: {
       securityId: 1,
@@ -766,9 +766,9 @@ const MCD_US_19800317_19800601: {
       adjustedClosePrice: '0.4830',
       volume: '1569600',
     },
-    swingPoint: 'swingLow',
+    swingPoint: null,
   },
-  // 50 swingHigh
+  // 50
   {
     dataPoint: {
       securityId: 1,
@@ -780,9 +780,9 @@ const MCD_US_19800317_19800601: {
       adjustedClosePrice: '0.4842',
       volume: '598812',
     },
-    swingPoint: 'swingHigh',
+    swingPoint: null,
   },
-  // 51 swingLow
+  // 51
   {
     dataPoint: {
       securityId: 1,
@@ -794,7 +794,7 @@ const MCD_US_19800317_19800601: {
       adjustedClosePrice: '0.4792',
       volume: '2584812',
     },
-    swingPoint: 'swingLow', // kam von oben und macht Knick zur Seite
+    swingPoint: null,
   },
   // 52
   {
