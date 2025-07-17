@@ -264,29 +264,43 @@ export class SwingPointDetection implements AnalysisStep {
     }, true);
   }
 
-  private setSwingPoint(point: EnrichedDataPoint, swingPoint: SwingPointType) {
-    if (swingPoint === 'swingHigh' || swingPoint === 'swingLow') {
-      point.setSwingPointType(swingPoint);
-      this.unconfirmedSwingPoint = null;
-    } else if (
-      swingPoint === 'downwardToPlateau' ||
-      swingPoint === 'upwardToPlateau'
-    ) {
-      this.unconfirmedSwingPoint = { point, type: swingPoint };
-    } else if (
-      this.unconfirmedSwingPoint?.type === 'upwardToPlateau' &&
-      swingPoint === 'plateauToDownward'
-    ) {
-      this.unconfirmedSwingPoint.point.setSwingPointType('swingHigh');
-      this.unconfirmedSwingPoint = null;
-    } else if (
-      this.unconfirmedSwingPoint?.type === 'downwardToPlateau' &&
-      swingPoint === 'plateauToUpward'
-    ) {
-      this.unconfirmedSwingPoint.point.setSwingPointType('swingLow');
-      this.unconfirmedSwingPoint = null;
-    } else {
-      this.unconfirmedSwingPoint = null;
+  private setSwingPoint(point: EnrichedDataPoint, newType: SwingPointType) {
+    const lastUnconfirmed = this.unconfirmedSwingPoint;
+    // Setzt den Zustand standardmäßig zurück. Er wird nur wieder gesetzt,
+    // wenn eine neue Plateau-Sequenz beginnt.
+    this.unconfirmedSwingPoint = null;
+
+    // 1. Fall: Bestätigung einer Sequenz
+    // Prüft, ob der neue Punkt eine vorherige Plateau-Bewegung vervollständigt.
+    if (lastUnconfirmed) {
+      if (
+        lastUnconfirmed.type === 'upwardToPlateau' &&
+        newType === 'plateauToDownward'
+      ) {
+        lastUnconfirmed.point.setSwingPointType('swingHigh');
+        return; // Sequenz abgeschlossen, Zustand ist bereits zurückgesetzt.
+      }
+      if (
+        lastUnconfirmed.type === 'downwardToPlateau' &&
+        newType === 'plateauToUpward'
+      ) {
+        lastUnconfirmed.point.setSwingPointType('swingLow');
+        return; // Sequenz abgeschlossen, Zustand ist bereits zurückgesetzt.
+      }
+    }
+
+    // Wenn eine Sequenz nicht bestätigt wurde, wird der alte `lastUnconfirmed` verworfen.
+    // Jetzt behandeln wir den neuen Punkt:
+
+    // 2. Fall: Ein einfacher, sofortiger Swing-Point
+    if (newType === 'swingHigh' || newType === 'swingLow') {
+      point.setSwingPointType(newType);
+      // Zustand bleibt zurückgesetzt.
+    }
+    // 3. Fall: Beginn einer neuen potenziellen Sequenz
+    else if (newType === 'upwardToPlateau' || newType === 'downwardToPlateau') {
+      // Dies ist der einzige Fall, in dem wir einen neuen unbestätigten Punkt speichern.
+      this.unconfirmedSwingPoint = { point, type: newType };
     }
   }
 }
