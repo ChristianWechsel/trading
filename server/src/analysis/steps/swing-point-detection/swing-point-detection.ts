@@ -4,12 +4,19 @@ import {
   Step,
 } from 'src/analysis/core/analysis.interface';
 import { analysisConfig } from '../../../analysis/config/analysis.config';
-import { EnrichedDataPoint } from '../../core/enriched-data-point';
+import {
+  EnrichedDataPoint,
+  SwingPointType,
+} from '../../core/enriched-data-point';
 import { ComparableNumber } from '../utils/comparable-number/comparable-number';
 
 export class SwingPointDetection implements AnalysisStep {
   name: Step = 'SwingPointDetection';
   dependsOn: Step[] = [];
+  private unconfirmedSwingPoint: {
+    point: EnrichedDataPoint;
+    type: SwingPointType;
+  } | null;
 
   constructor(
     private options: { relativeThreshold: number; windowSize: number },
@@ -62,11 +69,11 @@ export class SwingPointDetection implements AnalysisStep {
       if (
         this.isSwingHigh(previousPoints, currentComparableNumber, nextPoints)
       ) {
-        currentPoint.setSwingPointType('swingHigh');
+        this.setSwingPoint(currentPoint, 'swingHigh');
       } else if (
         this.isSwingLow(previousPoints, currentComparableNumber, nextPoints)
       ) {
-        currentPoint.setSwingPointType('swingLow');
+        this.setSwingPoint(currentPoint, 'swingLow');
       } else if (
         this.isDownwardToPlateau(
           previousPoints,
@@ -74,7 +81,7 @@ export class SwingPointDetection implements AnalysisStep {
           nextPoints,
         )
       ) {
-        currentPoint.setSwingPointType('swingLow');
+        this.setSwingPoint(currentPoint, 'downwardToPlateau');
       } else if (
         this.isUpwardToPlateau(
           previousPoints,
@@ -82,7 +89,7 @@ export class SwingPointDetection implements AnalysisStep {
           nextPoints,
         )
       ) {
-        currentPoint.setSwingPointType('swingHigh');
+        this.setSwingPoint(currentPoint, 'upwardToPlateau');
       } else if (
         this.isPlateauToUpward(
           previousPoints,
@@ -90,7 +97,7 @@ export class SwingPointDetection implements AnalysisStep {
           nextPoints,
         )
       ) {
-        // currentPoint.setSwingPointType('swingLow');
+        this.setSwingPoint(currentPoint, 'plateauToUpward');
       } else if (
         this.isPlateauToDownward(
           previousPoints,
@@ -98,7 +105,7 @@ export class SwingPointDetection implements AnalysisStep {
           nextPoints,
         )
       ) {
-        // currentPoint.setSwingPointType('swingHigh');
+        this.setSwingPoint(currentPoint, 'plateauToDownward');
       }
       idx++;
     }
@@ -255,5 +262,31 @@ export class SwingPointDetection implements AnalysisStep {
       }
       return isTrendConfirmed;
     }, true);
+  }
+
+  private setSwingPoint(point: EnrichedDataPoint, swingPoint: SwingPointType) {
+    if (swingPoint === 'swingHigh' || swingPoint === 'swingLow') {
+      point.setSwingPointType(swingPoint);
+      this.unconfirmedSwingPoint = null;
+    } else if (
+      swingPoint === 'downwardToPlateau' ||
+      swingPoint === 'upwardToPlateau'
+    ) {
+      this.unconfirmedSwingPoint = { point, type: swingPoint };
+    } else if (
+      this.unconfirmedSwingPoint?.type === 'upwardToPlateau' &&
+      swingPoint === 'plateauToDownward'
+    ) {
+      this.unconfirmedSwingPoint.point.setSwingPointType('swingHigh');
+      this.unconfirmedSwingPoint = null;
+    } else if (
+      this.unconfirmedSwingPoint?.type === 'downwardToPlateau' &&
+      swingPoint === 'plateauToUpward'
+    ) {
+      this.unconfirmedSwingPoint.point.setSwingPointType('swingLow');
+      this.unconfirmedSwingPoint = null;
+    } else {
+      this.unconfirmedSwingPoint = null;
+    }
   }
 }
