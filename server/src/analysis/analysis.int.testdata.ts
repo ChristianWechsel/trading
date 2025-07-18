@@ -16,7 +16,7 @@ export class AnalysisIntTestData {
     this.testDatasets = new TestDatasets();
   }
 
-  getMCDUSHistoricalData1980(): TestData {
+  getMCDUSHistoricalData1980FirstHalf(): TestData {
     return {
       dto: {
         dataAggregation: {
@@ -36,6 +36,28 @@ export class AnalysisIntTestData {
         },
       },
       ...this.testDatasets.getMCD_US_19800317_19800601(),
+    };
+  }
+  getMCDUSHistoricalData1980SecondHalf(): TestData {
+    return {
+      dto: {
+        dataAggregation: {
+          ticker: {
+            symbol: 'MCD',
+            exchange: 'US',
+          },
+          range: {
+            from: '1980-06-01',
+            to: '1980-12-31',
+          },
+        },
+        steps: ['SwingPointDetection'],
+        stepOptions: {
+          swingPointDetection: { relativeThreshold: 0.01 },
+          trendDetection: { relativeThreshold: 0.01 },
+        },
+      },
+      ...this.testDatasets.getMCD_US_19800601_19801231(),
     };
   }
 }

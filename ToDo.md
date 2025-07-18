@@ -3,7 +3,7 @@
 # Integationstest für analysis für MCD.US von 17.03.1980 bis 01.06.1980
 
 - die Erkennung von SwingPoints klappt noch nicht.
-- Threshold verkleinern, man könnte das in Relation zu den durchschnittlichen Deltas zwischen zwei Zeiträumen setzen. Gedanke, wenn viel Bewegung herrscht, dann wäre ein zu kleiner Threshold kontrapoduktiv, bei wenig Bewegung erkennt man mit einem zu großem Threshold keine SwingPoints
+- Threshold verkleinern, man könnte das in Relation zu den durchschnittlichen Deltas zwischen zwei Zeiträumen setzen. Gedanke, wenn viel Bewegung herrscht, dann wäre ein zu kleiner Threshold kontrapoduktiv, bei wenig Bewegung erkennt man mit einem zu großem Threshold keine SwingPoints => Average True Range nach Weller Wilders. Da ATR in kurzen Intervallen berechnet wird, müsste die SwingPointAnalyse für jeden DataPoint den aktuellen Wert der ATR verwenden => ein fester Wert via Construtor ist nur als Fallback geeignet.
 
 # Performance Messung auf Client etablieren. Damit ich schnell Feedback erhalte, wie sich die Performace entwickelt.
 
