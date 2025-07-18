@@ -1119,7 +1119,7 @@ const MCD_US_19800601_19801231: {
       adjustedClosePrice: '0.5217',
       volume: '421212',
     },
-    swingPoint: 'swingLow', // kam von oben und macht Knick zur Seite
+    swingPoint: 'swingLow',
   },
   // 21 swingHigh
   {
@@ -1133,7 +1133,7 @@ const MCD_US_19800601_19801231: {
       adjustedClosePrice: '0.5271',
       volume: '346812',
     },
-    swingPoint: 'swingHigh', // kam von unten und macht Knick nach oben
+    swingPoint: 'swingHigh',
   },
   // 22
   {
@@ -2855,7 +2855,7 @@ const MCD_US_19800601_19801231: {
       adjustedClosePrice: '0.5642',
       volume: '684012',
     },
-    swingPoint: null,
+    swingPoint: 'swingHigh',
   },
   // 145
   {
