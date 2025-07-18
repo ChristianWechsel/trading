@@ -1,9 +1,9 @@
+import { analysisConfig } from '../../../analysis/config/analysis.config';
 import {
   AnalysisContext,
   AnalysisStep,
   Step,
-} from 'src/analysis/core/analysis.interface';
-import { analysisConfig } from '../../../analysis/config/analysis.config';
+} from '../../core/analysis.interface';
 import {
   EnrichedDataPoint,
   SwingPointType,
@@ -12,7 +12,7 @@ import { ComparableNumber } from '../utils/comparable-number/comparable-number';
 
 export class SwingPointDetection implements AnalysisStep {
   name: Step = 'SwingPointDetection';
-  dependsOn: Step[] = [];
+  dependsOn: Step[] = ['AverageTrueRange'];
   private unconfirmedSwingPoint: {
     point: EnrichedDataPoint;
     type: SwingPointType;

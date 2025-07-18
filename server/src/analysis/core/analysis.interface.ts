@@ -38,7 +38,8 @@ export type Step =
   | 'MovingAverage'
   | 'SwingPointDetection'
   | 'TrendChannelCalculation'
-  | 'TrendDetection';
+  | 'TrendDetection'
+  | 'AverageTrueRange';
 
 export type DataPoint<T> = {
   x: T;
