@@ -8,7 +8,7 @@ export class AnalysisPipeline {
 
   run(ohlcvs: OHLCV[]) {
     const context: AnalysisContext = {
-      enrichedDataPoints: ohlcvs.map((datum) => datum.clone()),
+      enrichedDataPoints: [], //ohlcvs.map((datum) => datum.clone()),
     };
     for (const step of this.steps) {
       step.execute(context);

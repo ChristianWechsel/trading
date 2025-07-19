@@ -27,7 +27,6 @@ jest.mock('./core/analysis-pipeline', () => {
 describe('AnalysisService', () => {
   let service: AnalysisService;
   const analysisBuilderMock = AnalysisBuilder as jest.Mock<AnalysisBuilder>;
-  const analysisPipelineMock = AnalysisPipeline as jest.Mock<AnalysisPipeline>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -46,7 +45,7 @@ describe('AnalysisService', () => {
       stepOptions: {
         swingPointDetection: { windowSize: 5 },
       },
-    } as any;
+    };
 
     service.performAnalysis(query, []);
 
@@ -59,7 +58,7 @@ describe('AnalysisService', () => {
       dataAggregation: { ticker: { symbol: 'AAPL', exchange: 'US' } },
       steps: ['SwingPointDetection'],
       // stepOptions ist hier absichtlich nicht gesetzt
-    } as any;
+    };
 
     service.performAnalysis(query, []);
 

@@ -4,6 +4,7 @@ import {
   TickerDto,
 } from '../data-aggregation/data-aggregation.dto';
 import { DataAggregationService } from '../data-aggregation/data-aggregation.service';
+import { OHLCV } from '../data-aggregation/ohlcv.entity';
 import { AnalysisQueryDto } from './analysis-query.dto';
 import { AnalysisController } from './analysis.controller';
 import { AnalysisService } from './analysis.service';
@@ -61,9 +62,27 @@ describe('AnalysisController', () => {
   });
 
   it('should load data from dataAggregationService and transform to dataPoints', async () => {
-    const mockData = [
-      { priceDate: '2024-06-01T00:00:00Z', closePrice: 100 },
-      { priceDate: '2024-06-02T00:00:00Z', closePrice: 110 },
+    const mockData: OHLCV[] = [
+      new OHLCV({
+        priceDate: '2024-06-01T00:00:00Z',
+        closePrice: 100,
+        securityId: 1,
+        volume: 1000,
+        adjustedClosePrice: 100,
+        highPrice: 105,
+        lowPrice: 95,
+        openPrice: 98,
+      }),
+      new OHLCV({
+        priceDate: '2024-06-02T00:00:00Z',
+        closePrice: 110,
+        securityId: 1,
+        volume: 1100,
+        adjustedClosePrice: 110,
+        highPrice: 115,
+        lowPrice: 105,
+        openPrice: 108,
+      }),
     ];
     const mockSteps: Step[] = ['MovingAverage', 'TrendDetection'];
     const mockTicker: TickerDto = { exchange: 'US', symbol: 'AAPL' };
@@ -80,10 +99,7 @@ describe('AnalysisController', () => {
     });
     expect(service.performAnalysis).toHaveBeenCalledWith(
       { dataAggregation, steps: mockSteps },
-      [
-        { x: new Date('2024-06-01T00:00:00Z').getTime(), y: 100 },
-        { x: new Date('2024-06-02T00:00:00Z').getTime(), y: 110 },
-      ],
+      mockData,
     );
   });
 });
