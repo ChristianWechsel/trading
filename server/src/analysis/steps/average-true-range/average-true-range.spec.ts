@@ -124,10 +124,11 @@ describe('AverageTrueRange', () => {
 
   describe('AverageTrueRange calculation', () => {
     const testData = new AverageTrueRangeTestdata();
-    it.only.each([
+    it.each([
       testData.minimumPeriod_todayMax(),
       testData.minimumPeriod_todayHighClosingYesterday(),
       testData.minimumPeriod_todayLowClosingYesterday(),
+      testData.period5_with10datapoints(),
     ])('$name', ({ setting, testcase }) => {
       expect.assertions(testcase.length);
 
