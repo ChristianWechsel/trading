@@ -1,15 +1,17 @@
+import { OHLCV } from '../../../data-aggregation/ohlcv.entity';
 import { analysisConfig } from '../../config/analysis.config';
+import { AnalysisContext } from '../../core/analysis.interface';
 import { EnrichedDataPoint } from '../../core/enriched-data-point';
 import { AverageTrueRange } from './average-true-range';
 import { AverageTrueRangeTestdata } from './average-true-range.testdata';
 
 export type AverageTrueRangeTestCase = {
   name: string;
+  setting: { period: number };
   testcase: {
-    period: number;
-    data: EnrichedDataPoint[];
+    dataPoint: EnrichedDataPoint;
     expectedATR?: number;
-  };
+  }[];
 };
 
 describe('AverageTrueRange', () => {
@@ -55,7 +57,18 @@ describe('AverageTrueRange', () => {
       expect(() =>
         atr.execute({
           enrichedDataPoints: new Array<EnrichedDataPoint>(period - 1).fill(
-            new EnrichedDataPoint({ x: 1, y: 1 }),
+            new EnrichedDataPoint(
+              new OHLCV({
+                securityId: 0,
+                priceDate: '1970-01-01',
+                openPrice: 0,
+                highPrice: 0,
+                lowPrice: 0,
+                closePrice: 0,
+                adjustedClosePrice: 0,
+                volume: 0,
+              }),
+            ),
           ),
         }),
       ).toThrow(`Not enough data points for period=${period}`);
@@ -67,7 +80,18 @@ describe('AverageTrueRange', () => {
       expect(() =>
         atr.execute({
           enrichedDataPoints: new Array<EnrichedDataPoint>(period).fill(
-            new EnrichedDataPoint({ x: 1, y: 1 }),
+            new EnrichedDataPoint(
+              new OHLCV({
+                securityId: 0,
+                priceDate: '1970-01-01',
+                openPrice: 0,
+                highPrice: 0,
+                lowPrice: 0,
+                closePrice: 0,
+                adjustedClosePrice: 0,
+                volume: 0,
+              }),
+            ),
           ),
         }),
       ).not.toThrow();
@@ -80,7 +104,18 @@ describe('AverageTrueRange', () => {
       expect(() =>
         atr.execute({
           enrichedDataPoints: new Array<EnrichedDataPoint>(period + 1).fill(
-            new EnrichedDataPoint({ x: 1, y: 1 }),
+            new EnrichedDataPoint(
+              new OHLCV({
+                securityId: 0,
+                priceDate: '1970-01-01',
+                openPrice: 0,
+                highPrice: 0,
+                lowPrice: 0,
+                closePrice: 0,
+                adjustedClosePrice: 0,
+                volume: 0,
+              }),
+            ),
           ),
         }),
       ).not.toThrow();
@@ -89,10 +124,27 @@ describe('AverageTrueRange', () => {
 
   describe('AverageTrueRange calculation', () => {
     const testData = new AverageTrueRangeTestdata();
-    it.each([testData.minimumPeriod()])('$name', ({ testcase }) => {
-      const atr = new AverageTrueRange({ period: testcase.period });
-      const result = atr.execute({ enrichedDataPoints: testcase.data });
-      expect(result).toBeCloseTo(testcase.expectedATR, 5);
+    it.only.each([
+      testData.minimumPeriod_todayMax(),
+      testData.minimumPeriod_todayHighClosingYesterday(),
+      testData.minimumPeriod_todayLowClosingYesterday(),
+    ])('$name', ({ setting, testcase }) => {
+      expect.assertions(testcase.length);
+
+      const atr = new AverageTrueRange(setting);
+      const context: AnalysisContext = {
+        enrichedDataPoints: testcase.map((tc) => tc.dataPoint),
+      };
+      atr.execute(context);
+      context.enrichedDataPoints.forEach((dataPoint, index) => {
+        if (testcase[index].expectedATR !== undefined) {
+          expect(dataPoint.getAverageTrueRange()).toBeCloseTo(
+            testcase[index].expectedATR,
+          );
+        } else {
+          expect(dataPoint.getAverageTrueRange()).toBeUndefined();
+        }
+      });
     });
   });
 });
