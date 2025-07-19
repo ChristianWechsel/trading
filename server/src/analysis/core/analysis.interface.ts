@@ -1,9 +1,7 @@
 import { EnrichedDataPoint } from './enriched-data-point';
 
 export type AnalysisContext = {
-  enrichedDataPoints: EnrichedDataPoint[]; // sammelt alle Daten zu einem Datenpunkt
-
-  // übergeordnete Daten, welche sich nicht einem einzelnen Datenpunkt zuordnen lassen
+  enrichedDataPoints: EnrichedDataPoint[];
   trends?: TrendDataMetadata['trendData'][];
 };
 

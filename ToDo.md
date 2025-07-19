@@ -9,13 +9,13 @@
 
   server/src/analysis/core/analysis.interface.ts DataPoint kann entfallen
 
+  ATR wird bei SwingPoint und Trenderkennung benötigt, da hier mit THreshold gearbeitet wird, was eine signifikaten Änderung darstellt
+
 # Integationstest für analysis für MCD.US von 17.03.1980 bis 01.06.1980
 
 - die Erkennung von SwingPoints klappt noch nicht.
 - => Average True Range nach Weller Wilders. Da ATR in kurzen Intervallen berechnet wird, müsste die SwingPointAnalyse für jeden DataPoint den aktuellen Wert der ATR verwenden => ein fester Wert via Construtor ist nur als Fallback geeignet ()kann aber auch für Tests verwendet werden).
   https://www.investopedia.com/terms/a/atr.asp
-
-# Performance Messung auf Client etablieren. Damit ich schnell Feedback erhalte, wie sich die Performace entwickelt.
 
 # TradingCharts
 
@@ -31,6 +31,7 @@
 - Trendkanäle hinzufügen
 - Seite für Auswahl der Optionen, dann submit, dann neue Seite öffnen => evtl. kann man
   dadurch auch ServerSide Rendering nutzen, um Last auf Server zu nehmen (ThinClient)
+- Trendkanäle mit Checkbox anbieten und gezielt in Chart einblenden lassen. Alle Trendkanäle einblenden hat im ersten Versuch nicht geklappt
 
 # ToDo UI
 
