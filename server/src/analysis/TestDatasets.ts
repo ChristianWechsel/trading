@@ -1,4 +1,4 @@
-import { OHLCV } from 'src/data-aggregation/ohlcv.entity';
+import { OHLCV } from '../data-aggregation/ohlcv.entity';
 import { TestData } from './analysis.int.testdata';
 import { EnrichedDataPoint, SwingPointType } from './core/enriched-data-point';
 

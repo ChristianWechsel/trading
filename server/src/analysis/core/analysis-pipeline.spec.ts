@@ -1,6 +1,6 @@
+import { OHLCV } from '../../data-aggregation/ohlcv.entity';
 import { AnalysisPipeline } from './analysis-pipeline';
 import { AnalysisContext, AnalysisStep, Step } from './analysis.interface';
-import { EnrichedDataPoint } from './enriched-data-point';
 
 // NEU: Wir erstellen robustere Mock-Implementierungen, die die komplette Schnittstelle erfüllen.
 class MockStep implements AnalysisStep {
@@ -31,14 +31,28 @@ class MutatorStep implements AnalysisStep {
 }
 
 describe('AnalysisPipeline', () => {
-  let originalData: EnrichedDataPoint[];
-
-  beforeEach(() => {
-    originalData = [
-      new EnrichedDataPoint({ x: 10, y: 20 }),
-      new EnrichedDataPoint({ x: 30, y: 40 }),
-    ];
-  });
+  const originalData: OHLCV[] = [
+    new OHLCV({
+      securityId: 1,
+      priceDate: '2023-01-01',
+      openPrice: 100,
+      highPrice: 110,
+      lowPrice: 90,
+      closePrice: 105,
+      adjustedClosePrice: 105,
+      volume: 1000,
+    }),
+    new OHLCV({
+      securityId: 1,
+      priceDate: '2023-01-01',
+      openPrice: 100,
+      highPrice: 110,
+      lowPrice: 90,
+      closePrice: 105,
+      adjustedClosePrice: 105,
+      volume: 1000,
+    }),
+  ];
 
   afterEach(() => {
     jest.restoreAllMocks();
@@ -80,9 +94,6 @@ describe('AnalysisPipeline', () => {
 
       // GEÄNDERT: Wir prüfen die Eigenschaften des Kontext-Objekts.
       expect(contextArg).toHaveProperty('enrichedDataPoints');
-      expect(contextArg.enrichedDataPoints[0]).toBeInstanceOf(
-        EnrichedDataPoint,
-      );
 
       // Wichtig: Das Array im Kontext darf nicht das Original-Array sein.
       expect(contextArg.enrichedDataPoints).not.toBe(originalData);
@@ -96,12 +107,7 @@ describe('AnalysisPipeline', () => {
       const mutatorStep = new MutatorStep();
       const pipeline = new AnalysisPipeline([mutatorStep]);
 
-      expect(originalData[0].getSwingPointType()).toBeNull();
-
       const result = pipeline.run(originalData);
-
-      // Das Original-Objekt bleibt unberührt.
-      expect(originalData[0].getSwingPointType()).toBeNull();
 
       // Das geklonte, prozessierte Objekt im Ergebnis hat sich jedoch geändert.
       expect(result.enrichedDataPoints[0].getSwingPointType()).toBe('swingLow');

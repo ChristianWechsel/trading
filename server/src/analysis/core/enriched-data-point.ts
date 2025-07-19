@@ -1,24 +1,29 @@
-import { DataPoint } from './analysis.interface';
+import { OHLCV } from 'src/data-aggregation/ohlcv.entity';
 
 export class EnrichedDataPoint {
-  private swingPointType: SwingPointType = null;
+  private swingPointType?: SwingPointType;
+  private averageTrueRange?: number;
 
-  constructor(private dataPoint: DataPoint<number>) {}
+  constructor(private dataPoint: OHLCV) {}
 
-  get x(): number {
-    return this.dataPoint.x;
+  getDataPoint(): OHLCV {
+    return this.dataPoint;
   }
 
-  get y(): number {
-    return this.dataPoint.y;
-  }
-
-  getSwingPointType(): SwingPointType {
+  getSwingPointType() {
     return this.swingPointType;
   }
 
   setSwingPointType(type: SwingPointType): void {
     this.swingPointType = type;
+  }
+
+  getAverageTrueRange() {
+    return this.averageTrueRange;
+  }
+
+  setAverageTrueRange(atr: number): void {
+    this.averageTrueRange = atr;
   }
 }
 

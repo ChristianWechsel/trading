@@ -1,5 +1,6 @@
 import { OHLCV } from 'src/data-aggregation/ohlcv.entity';
 import { AnalysisContext, AnalysisStep } from './analysis.interface';
+import { EnrichedDataPoint } from './enriched-data-point';
 
 export class AnalysisPipeline {
   constructor(private steps: AnalysisStep[]) {
@@ -8,7 +9,9 @@ export class AnalysisPipeline {
 
   run(ohlcvs: OHLCV[]) {
     const context: AnalysisContext = {
-      enrichedDataPoints: [], //ohlcvs.map((datum) => datum.clone()),
+      enrichedDataPoints: ohlcvs
+        .map((ohlcv) => ohlcv.clone())
+        .map((ohlcv) => new EnrichedDataPoint(ohlcv)),
     };
     for (const step of this.steps) {
       step.execute(context);
