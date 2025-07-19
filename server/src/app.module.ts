@@ -14,7 +14,7 @@ import { AuthModule } from './auth/auth.module';
 import { CalendarEvent } from './calendar-event/calendar-event.entity';
 import { CalendarEventModule } from './calendar-event/calendar-event.module';
 import { DataAggregationModule } from './data-aggregation/data-aggregation.module';
-import { OHLCV } from './data-aggregation/ohlcv.entity';
+import { OHLCVEntity } from './data-aggregation/ohlcv.entity';
 import { Security } from './data-aggregation/security.entity';
 import { DataProviderModule } from './data-provider/data-provider.module';
 import { NotificationModule } from './notification/notification.module';
@@ -104,7 +104,13 @@ import { UsersModule } from './users/users.module';
         username: 'trading_user',
         password: configService.get('DB_PASSWORD'),
         database: 'trading',
-        entities: [User, PushSubscription, CalendarEvent, OHLCV, Security],
+        entities: [
+          User,
+          PushSubscription,
+          CalendarEvent,
+          OHLCVEntity,
+          Security,
+        ],
         synchronize: false, // Temporär true für die Tabellenerstellung,
       }),
     }),

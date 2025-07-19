@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity()
-export class OHLCV {
+export class OHLCVEntity {
   @PrimaryColumn()
   securityId: number;
 
@@ -25,4 +25,34 @@ export class OHLCV {
 
   @Column('bigint')
   volume: number;
+}
+
+export class OHLCV {
+  constructor(private ohlcvData: OHLCVEntity) {}
+
+  getSecurityId(): number {
+    return this.ohlcvData.securityId;
+  }
+  getPriceDate(): string {
+    return this.ohlcvData.priceDate;
+  }
+
+  getOpenPrice(): number {
+    return this.ohlcvData.openPrice;
+  }
+  getHighPrice(): number {
+    return this.ohlcvData.highPrice;
+  }
+  getLowPrice(): number {
+    return this.ohlcvData.lowPrice;
+  }
+  getClosePrice(): number {
+    return this.ohlcvData.closePrice;
+  }
+  getAdjustedClosePrice(): number {
+    return this.ohlcvData.adjustedClosePrice;
+  }
+  getVolume(): number {
+    return this.ohlcvData.volume;
+  }
 }

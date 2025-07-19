@@ -16,7 +16,7 @@ import {
   DateRangeDto,
   TickerDto,
 } from './data-aggregation.dto';
-import { OHLCV } from './ohlcv.entity';
+import { OHLCV, OHLCVEntity } from './ohlcv.entity';
 import { Security } from './security.entity';
 
 @Injectable()
@@ -26,8 +26,8 @@ export class DataAggregationService implements IDataAggregationService {
     private readonly configService: ConfigService,
     @InjectRepository(Security)
     private readonly securityRepo: Repository<Security>,
-    @InjectRepository(OHLCV)
-    private readonly eodPriceRepo: Repository<OHLCV>,
+    @InjectRepository(OHLCVEntity)
+    private readonly ohlcvRepo: Repository<OHLCVEntity>,
   ) {}
 
   async importAndSaveData(
@@ -69,7 +69,7 @@ export class DataAggregationService implements IDataAggregationService {
     );
     // 3. Daten transformieren und upserten
     const priceEntities = data.map((item) =>
-      this.eodPriceRepo.create({
+      this.ohlcvRepo.create({
         securityId: security.securityId,
         priceDate: item.date,
         openPrice: item.open,
@@ -81,35 +81,24 @@ export class DataAggregationService implements IDataAggregationService {
       }),
     );
     // Upsert: nach PK (securityId, priceDate)
-    await this.eodPriceRepo.upsert(priceEntities, ['securityId', 'priceDate']);
+    await this.ohlcvRepo.upsert(priceEntities, ['securityId', 'priceDate']);
     return {
       message: `Data imported and saved for ${dto.symbol}.${dto.exchange}`,
     };
   }
 
-  /**
-   * Lädt EOD-Daten aus der Datenbank. Löst KEINE externe Aktualisierung aus.
-   * @param dto - Enthält Ticker und optionalen Zeitraum.
-   * @returns Ein Array von EodPrice-Entitäten.
-   */
   async loadData({ ticker, range }: DataAggregationDto): Promise<OHLCV[]> {
     const security = await this.fetchSecurityByTicker(ticker);
     if (!security) {
       return [];
     }
 
-    return this.eodPriceRepo.find(
+    const ohlcvData = await this.ohlcvRepo.find(
       this.createPriceQueryOptions(security, range),
     );
+    return ohlcvData.map<OHLCV>((item) => new OHLCV(item));
   }
 
-  /**
-   * Stellt sicher, dass die Daten aktuell sind.
-   * Lädt Daten und prüft, ob sie fehlen oder veraltet sind.
-   * Falls nötig, wird ein Import von der externen API angestoßen.
-   * @param dto - Enthält Ticker und optionalen Zeitraum.
-   * @returns Ein Array der (ggf. aktualisierten) EodPrice-Entitäten.
-   */
   async loadAndUpdateIfNeeded(dto: DataAggregationDto): Promise<OHLCV[]> {
     // Zuerst die Daten ohne Range laden, um das letzte Datum zu prüfen
     const latestData = await this.loadData({ ticker: dto.ticker });
@@ -118,7 +107,7 @@ export class DataAggregationService implements IDataAggregationService {
     const isDataStale =
       !isDataMissing &&
       Date.now() -
-        new Date(latestData[latestData.length - 1].priceDate).getTime() >=
+        new Date(latestData[latestData.length - 1].getPriceDate()).getTime() >=
         24 * 60 * 60 * 1000;
 
     if (isDataMissing || isDataStale) {
@@ -139,7 +128,7 @@ export class DataAggregationService implements IDataAggregationService {
     security: Security,
     range: DateRangeDto | undefined,
   ) {
-    const options: FindManyOptions<OHLCV> = {
+    const options: FindManyOptions<OHLCVEntity> = {
       where: { securityId: security.securityId },
       order: { priceDate: 'ASC' },
     };

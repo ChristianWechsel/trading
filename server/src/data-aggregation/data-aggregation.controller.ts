@@ -1,6 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { DataAggregationDto } from './data-aggregation.dto';
 import { DataAggregationService } from './data-aggregation.service';
+import { OHLCV } from './ohlcv.entity';
 
 @Controller('data-aggregation')
 export class DataAggregationController {
@@ -41,7 +42,7 @@ export class DataAggregationController {
   }
 
   @Post('load')
-  async loadData(@Body() dto: DataAggregationDto) {
+  async loadData(@Body() dto: DataAggregationDto): Promise<OHLCV[]> {
     return this.dataAggregationService.loadAndUpdateIfNeeded(dto);
   }
 }

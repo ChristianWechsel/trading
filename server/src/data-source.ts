@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 import { join } from 'path';
 import { DataSource } from 'typeorm';
 import { CalendarEvent } from './calendar-event/calendar-event.entity';
-import { OHLCV } from './data-aggregation/ohlcv.entity';
+import { OHLCVEntity } from './data-aggregation/ohlcv.entity';
 import { Security } from './data-aggregation/security.entity';
 import { PushSubscription } from './notification/push-subscription.entity';
 import { User } from './users/user.entity';
@@ -16,7 +16,7 @@ export const AppDataSource = new DataSource({
   username: 'trading_user',
   password: process.env.DB_PASSWORD,
   database: 'trading',
-  entities: [User, PushSubscription, CalendarEvent, Security, OHLCV],
+  entities: [User, PushSubscription, CalendarEvent, Security, OHLCVEntity],
   migrations: [join(__dirname, 'migrations', '*.{ts,js}')],
   synchronize: false,
 });

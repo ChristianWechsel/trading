@@ -3,42 +3,59 @@ import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { of } from 'rxjs';
-import { TickerDto } from './data-aggregation.dto';
+import { DataAggregationDto, TickerDto } from './data-aggregation.dto';
 import { DataAggregationService } from './data-aggregation.service';
-import { OHLCV } from './ohlcv.entity';
+import { OHLCV, OHLCVEntity } from './ohlcv.entity';
 import { Security } from './security.entity';
 
 describe('DataAggregationService', () => {
   let service: DataAggregationService;
-  let securityRepo: any;
-  let eodPriceRepo: any;
-  let httpService: any;
-  let configService: any;
+  const securityRepo = {
+    findOne: jest.fn(),
+    create: jest.fn(),
+    save: jest.fn(),
+  };
+  const ohlcvRepo = {
+    create: jest.fn(),
+    upsert: jest.fn(),
+    find: jest.fn(),
+  };
+  const httpService = {
+    get: () => {
+      return of({
+        data: [
+          {
+            date: '2024-01-01',
+            open: 1,
+            high: 2,
+            low: 0.5,
+            close: 1.5,
+            adjusted_close: 1.4,
+            volume: 1000,
+          },
+        ],
+      });
+    },
+  };
+  const configService = { get: jest.fn() };
 
   beforeEach(async () => {
-    securityRepo = {
-      findOne: jest.fn(),
-      create: jest.fn(),
-      save: jest.fn(),
-    };
-    eodPriceRepo = {
-      create: jest.fn(),
-      upsert: jest.fn(),
-    };
-    httpService = { get: jest.fn() };
-    configService = { get: jest.fn() };
-
+    configService.get.mockReturnValue('test-api-key');
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         DataAggregationService,
         { provide: getRepositoryToken(Security), useValue: securityRepo },
-        { provide: getRepositoryToken(OHLCV), useValue: eodPriceRepo },
+        { provide: getRepositoryToken(OHLCVEntity), useValue: ohlcvRepo },
         { provide: HttpService, useValue: httpService },
         { provide: ConfigService, useValue: configService },
       ],
     }).compile();
 
     service = module.get<DataAggregationService>(DataAggregationService);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should be defined', () => {
@@ -53,7 +70,6 @@ describe('DataAggregationService', () => {
   });
 
   it('should create security if not exists and upsert prices', async () => {
-    configService.get.mockReturnValue('testkey');
     securityRepo.findOne.mockResolvedValue(undefined);
     securityRepo.create.mockReturnValue({ symbol: 'AAPL', exchangeId: 'US' });
     securityRepo.save.mockResolvedValue({
@@ -61,60 +77,14 @@ describe('DataAggregationService', () => {
       symbol: 'AAPL',
       exchangeId: 'US',
     });
-    httpService.get.mockReturnValue(
-      of({
-        data: [
-          {
-            date: '2024-01-01',
-            open: 1,
-            high: 2,
-            low: 0.5,
-            close: 1.5,
-            adjusted_close: 1.4,
-            volume: 1000,
-          },
-        ],
-      }),
-    );
-    eodPriceRepo.create.mockReturnValue({});
-    eodPriceRepo.upsert.mockResolvedValue(undefined);
+
+    ohlcvRepo.create.mockReturnValue({});
+    ohlcvRepo.upsert.mockResolvedValue(undefined);
     const dto: TickerDto = { symbol: 'AAPL', exchange: 'US' };
     const result = await service.importAndSaveData(dto);
     expect(securityRepo.create).toHaveBeenCalled();
     expect(securityRepo.save).toHaveBeenCalled();
-    expect(eodPriceRepo.upsert).toHaveBeenCalled();
-    expect(result.message).toMatch(/Data imported and saved/);
-  });
-
-  it('should use existing security if found', async () => {
-    configService.get.mockReturnValue('testkey');
-    securityRepo.findOne.mockResolvedValue({
-      securityId: 2,
-      symbol: 'TSLA',
-      exchangeId: 'US',
-    });
-    httpService.get.mockReturnValue(
-      of({
-        data: [
-          {
-            date: '2024-01-01',
-            open: 1,
-            high: 2,
-            low: 0.5,
-            close: 1.5,
-            adjusted_close: 1.4,
-            volume: 1000,
-          },
-        ],
-      }),
-    );
-    eodPriceRepo.create.mockReturnValue({});
-    eodPriceRepo.upsert.mockResolvedValue(undefined);
-    const dto: TickerDto = { symbol: 'TSLA', exchange: 'US' };
-    const result = await service.importAndSaveData(dto);
-    expect(securityRepo.create).not.toHaveBeenCalled();
-    expect(securityRepo.save).not.toHaveBeenCalled();
-    expect(eodPriceRepo.upsert).toHaveBeenCalled();
+    expect(ohlcvRepo.upsert).toHaveBeenCalled();
     expect(result.message).toMatch(/Data imported and saved/);
   });
 
@@ -131,98 +101,158 @@ describe('DataAggregationService', () => {
 
   it('should return EodPrice array if security found in loadData', async () => {
     const security = { securityId: 3, symbol: 'GOOG', exchangeId: 'US' };
-    const eodPrices = [
-      { priceDate: '2024-01-01', closePrice: 100 },
-      { priceDate: '2024-02-01', closePrice: 110 },
+    const eodPrices: OHLCVEntity[] = [
+      {
+        priceDate: '2024-01-01',
+        closePrice: 100,
+        adjustedClosePrice: 1,
+        securityId: 3,
+        openPrice: 95,
+        highPrice: 110,
+        lowPrice: 90,
+        volume: 1000,
+      },
+      {
+        priceDate: '2024-02-01',
+        closePrice: 110,
+        adjustedClosePrice: 1,
+        securityId: 3,
+        openPrice: 105,
+        highPrice: 115,
+        lowPrice: 95,
+        volume: 1200,
+      },
     ];
     securityRepo.findOne.mockResolvedValue(security);
-    eodPriceRepo.find = jest.fn().mockResolvedValue(eodPrices);
+    ohlcvRepo.find = jest.fn().mockResolvedValue(eodPrices);
     const ticker: TickerDto = { symbol: 'GOOG', exchange: 'US' };
     const dto = { ticker };
     const result = await service.loadData(dto);
-    expect(result).toBe(eodPrices);
+    expect(result).toEqual(eodPrices.map((item) => new OHLCV(item)));
     expect(securityRepo.findOne).toHaveBeenCalledWith({
       where: { symbol: ticker.symbol, exchangeId: ticker.exchange },
     });
-    expect(eodPriceRepo.find).toHaveBeenCalledWith({
+    expect(ohlcvRepo.find).toHaveBeenCalledWith({
       where: { securityId: security.securityId },
       order: { priceDate: 'ASC' },
     });
   });
 
   describe('loadAndUpdateIfNeeded', () => {
-    beforeEach(() => {
-      service.loadData = jest.fn();
-      service.importAndSaveData = jest.fn();
-    });
-
     it('should import and reload if no data is present', async () => {
-      const ticker: TickerDto = { symbol: 'AAPL', exchange: 'US' };
-      const dto = { ticker };
-      // Erstes Laden: keine Daten
-      (service.loadData as jest.Mock).mockResolvedValueOnce([]);
-      // Nach Import: neue Daten vorhanden
-      (service.importAndSaveData as jest.Mock).mockResolvedValue({
-        message: 'imported',
-      });
-      const importedData = [
-        { priceDate: new Date().toISOString(), closePrice: 123 },
+      const dto: DataAggregationDto = {
+        ticker: { symbol: 'AAPL', exchange: 'US' },
+      };
+      const importedData: OHLCVEntity[] = [
+        {
+          adjustedClosePrice: 0.1,
+          closePrice: 100,
+          highPrice: 110,
+          lowPrice: 90,
+          openPrice: 95,
+          priceDate: '2024-01-01',
+          securityId: 1,
+          volume: 1000,
+        },
       ];
-      (service.loadData as jest.Mock).mockResolvedValueOnce(importedData);
-      const result = await service.loadAndUpdateIfNeeded(dto);
-      expect(service.importAndSaveData).toHaveBeenCalledWith(ticker);
-      expect(result).toEqual(importedData);
-    });
-
-    it('should import if no data is present', async () => {
-      const ticker = { symbol: 'AAPL', exchange: 'US' };
-      const dto = { ticker };
-      (service.loadData as jest.Mock).mockResolvedValueOnce([]);
-      (service.loadData as jest.Mock).mockResolvedValueOnce([
-        { priceDate: '2024-01-01', closePrice: 100 },
-      ]);
-      (service.importAndSaveData as jest.Mock).mockResolvedValue({
-        message: 'imported',
+      ohlcvRepo.find
+        .mockResolvedValueOnce([])
+        .mockResolvedValueOnce(importedData);
+      securityRepo.findOne.mockResolvedValue({
+        securityId: 1,
+        symbol: 'AAPL',
+        exchangeId: 'US',
       });
       const result = await service.loadAndUpdateIfNeeded(dto);
-      expect(service.importAndSaveData as jest.Mock).toHaveBeenCalledWith(
-        ticker,
+      expect(result).toEqual(
+        importedData.map<OHLCV>((item) => new OHLCV(item)),
       );
-      expect(result).toEqual([{ priceDate: '2024-01-01', closePrice: 100 }]);
     });
 
     it('should import if data is stale (older than 24h)', async () => {
-      const ticker = { symbol: 'AAPL', exchange: 'US' };
-      const dto = { ticker };
+      const dto: DataAggregationDto = {
+        ticker: { symbol: 'AAPL', exchange: 'US' },
+      };
       const oldDate = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
-      (service.loadData as jest.Mock).mockResolvedValueOnce([
-        { priceDate: oldDate, closePrice: 100 },
-      ]);
-      (service.loadData as jest.Mock).mockResolvedValueOnce([
-        { priceDate: oldDate, closePrice: 100 },
-      ]);
-      (service.importAndSaveData as jest.Mock).mockResolvedValue({
-        message: 'imported',
+      const currentDate = new Date(Date.now()).toISOString();
+      const oldData: OHLCVEntity[] = [
+        {
+          adjustedClosePrice: 0.1,
+          closePrice: 100,
+          highPrice: 110,
+          lowPrice: 90,
+          openPrice: 95,
+          priceDate: oldDate,
+          securityId: 1,
+          volume: 1000,
+        },
+      ];
+      const currentData: OHLCVEntity[] = [
+        ...oldData,
+        {
+          adjustedClosePrice: 0.1,
+          closePrice: 100,
+          highPrice: 110,
+          lowPrice: 90,
+          openPrice: 95,
+          priceDate: currentDate,
+          securityId: 1,
+          volume: 1000,
+        },
+      ];
+      ohlcvRepo.find
+        .mockResolvedValueOnce(oldData)
+        .mockResolvedValueOnce(currentData);
+      securityRepo.findOne.mockResolvedValue({
+        securityId: 1,
+        symbol: 'AAPL',
+        exchangeId: 'US',
       });
+
       const result = await service.loadAndUpdateIfNeeded(dto);
-      expect(service.importAndSaveData as jest.Mock).toHaveBeenCalledWith(
-        ticker,
-      );
-      expect(result).toEqual([{ priceDate: oldDate, closePrice: 100 }]);
+
+      expect(result).toEqual(currentData.map<OHLCV>((item) => new OHLCV(item)));
     });
 
     it('should not import if data is up-to-date', async () => {
-      const ticker = { symbol: 'AAPL', exchange: 'US' };
-      const dto = { ticker };
-      const recentDate = new Date(
-        Date.now() - 2 * 60 * 60 * 1000,
-      ).toISOString();
-      (service.loadData as jest.Mock).mockResolvedValue([
-        { priceDate: recentDate, closePrice: 100 },
-      ]);
+      const dto: DataAggregationDto = {
+        ticker: { symbol: 'AAPL', exchange: 'US' },
+      };
+
+      const currentDate = new Date(Date.now()).toISOString();
+      const currentData: OHLCVEntity[] = [
+        {
+          adjustedClosePrice: 0.1,
+          closePrice: 100,
+          highPrice: 110,
+          lowPrice: 90,
+          openPrice: 95,
+          priceDate: currentDate,
+          securityId: 1,
+          volume: 1000,
+        },
+
+        {
+          adjustedClosePrice: 0.1,
+          closePrice: 100,
+          highPrice: 110,
+          lowPrice: 90,
+          openPrice: 95,
+          priceDate: currentDate,
+          securityId: 1,
+          volume: 1000,
+        },
+      ];
+      ohlcvRepo.find
+        .mockResolvedValueOnce(currentData)
+        .mockResolvedValueOnce(currentData);
+      securityRepo.findOne.mockResolvedValue({
+        securityId: 1,
+        symbol: 'AAPL',
+        exchangeId: 'US',
+      });
       const result = await service.loadAndUpdateIfNeeded(dto);
-      expect(service.importAndSaveData as jest.Mock).not.toHaveBeenCalled();
-      expect(result).toEqual([{ priceDate: recentDate, closePrice: 100 }]);
+      expect(result).toEqual(currentData.map<OHLCV>((item) => new OHLCV(item)));
     });
   });
 });

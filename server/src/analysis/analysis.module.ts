@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataAggregationService } from '../data-aggregation/data-aggregation.service';
-import { OHLCV } from '../data-aggregation/ohlcv.entity';
+import { OHLCVEntity } from '../data-aggregation/ohlcv.entity';
 import { Security } from '../data-aggregation/security.entity';
 import { AnalysisController } from './analysis.controller';
 import { AnalysisService } from './analysis.service';
@@ -12,7 +12,7 @@ import { AnalysisService } from './analysis.service';
   imports: [
     HttpModule,
     ConfigModule,
-    TypeOrmModule.forFeature([Security, OHLCV]),
+    TypeOrmModule.forFeature([Security, OHLCVEntity]),
   ],
   controllers: [AnalysisController],
   providers: [AnalysisService, DataAggregationService],
