@@ -20,17 +20,6 @@ export class EnrichedDataPoint {
   setSwingPointType(type: SwingPointType): void {
     this.swingPointType = type;
   }
-
-  clone(): EnrichedDataPoint {
-    const clone = new EnrichedDataPoint({
-      x: this.dataPoint.x,
-      y: this.dataPoint.y,
-    });
-
-    clone.swingPointType = this.swingPointType;
-
-    return clone;
-  }
 }
 
 export type SwingPointType =

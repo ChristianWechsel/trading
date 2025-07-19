@@ -6,7 +6,8 @@
 - data-provider
 - data-analysis
 - Bereitstellung von enrichedDataPoints überdenken. Evtl sollte enriched DataPoint ein Wrapper sein,
-  welcher einem unterlagertem Wert Zusatzinfos mitgibt. Dadurch spielt es keine Rolle mehr, welche Datenstruktur der eigentliche Datensatz hat => mit Generics arbeiten. Dabei berücksichtigen, dass für Auswertungen z.B. nur der close price relevant ist, für andere der Höchststand. Dies könnte man mit abstracten Klassen lösen. Vielleicht kann man OHLCV fest vorgeben
+  welcher einem unterlagertem Wert Zusatzinfos mitgibt. Dadurch spielt es keine Rolle mehr, welche Datenstruktur der eigentliche Datensatz hat => mit Generics arbeiten. Dabei berücksichtigen, dass für Auswertungen z.B. nur der close price relevant ist, für andere der Höchststand. Dies könnte man mit abstracten Klassen lösen. Vielleicht kann man OHLCV fest vorgeben. Die DTOs müssen vorgeben, ob man
+  close, open, etc haben möchte
 
 # Integationstest für analysis für MCD.US von 17.03.1980 bis 01.06.1980
 

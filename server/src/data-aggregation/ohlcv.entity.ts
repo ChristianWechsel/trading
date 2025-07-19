@@ -33,10 +33,12 @@ export class OHLCV {
   getSecurityId(): number {
     return this.ohlcvData.securityId;
   }
-  getPriceDate(): string {
+  getPriceIsoDate(): string {
     return this.ohlcvData.priceDate;
   }
-
+  getPriceEpochTime(): number {
+    return new Date(this.ohlcvData.priceDate).getTime();
+  }
   getOpenPrice(): number {
     return this.ohlcvData.openPrice;
   }
@@ -54,5 +56,8 @@ export class OHLCV {
   }
   getVolume(): number {
     return this.ohlcvData.volume;
+  }
+  clone(): OHLCV {
+    return new OHLCV({ ...this.ohlcvData });
   }
 }

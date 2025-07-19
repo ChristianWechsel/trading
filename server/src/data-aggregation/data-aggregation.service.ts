@@ -106,8 +106,7 @@ export class DataAggregationService implements IDataAggregationService {
     const isDataMissing = !latestData || latestData.length === 0;
     const isDataStale =
       !isDataMissing &&
-      Date.now() -
-        new Date(latestData[latestData.length - 1].getPriceDate()).getTime() >=
+      Date.now() - latestData[latestData.length - 1].getPriceEpochTime() >=
         24 * 60 * 60 * 1000;
 
     if (isDataMissing || isDataStale) {

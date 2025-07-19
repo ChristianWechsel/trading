@@ -1,4 +1,4 @@
-import { OHLCVEntity } from '../data-aggregation/ohlcv.entity';
+import { OHLCV } from 'src/data-aggregation/ohlcv.entity';
 import { TestData } from './analysis.int.testdata';
 import { EnrichedDataPoint, SwingPointType } from './core/enriched-data-point';
 
@@ -16,7 +16,7 @@ type RawEod = {
 export class TestDatasets {
   getMCD_US_19800317_19800601(): Pick<TestData, 'data' | 'expected'> {
     return {
-      data: MCD_US_19800317_19800601.map<OHLCVEntity>((item) =>
+      data: MCD_US_19800317_19800601.map<OHLCV>((item) =>
         this.mapRawEodToEodPrice(item.dataPoint),
       ),
       expected: MCD_US_19800317_19800601.map<EnrichedDataPoint>((item) => {
@@ -27,7 +27,7 @@ export class TestDatasets {
 
   getMCD_US_19800601_19801231(): Pick<TestData, 'data' | 'expected'> {
     return {
-      data: MCD_US_19800601_19801231.map<OHLCVEntity>((item) =>
+      data: MCD_US_19800601_19801231.map<OHLCV>((item) =>
         this.mapRawEodToEodPrice(item.dataPoint),
       ),
       expected: MCD_US_19800601_19801231.map<EnrichedDataPoint>((item) => {
@@ -50,7 +50,7 @@ export class TestDatasets {
     return enrichedDataPoint;
   }
 
-  private mapRawEodToEodPrice(raw: RawEod): OHLCVEntity {
+  private mapRawEodToEodPrice(raw: RawEod): OHLCV {
     const {
       adjustedClosePrice,
       closePrice,
@@ -62,7 +62,7 @@ export class TestDatasets {
       volume,
     } = raw;
 
-    return {
+    return new OHLCV({
       adjustedClosePrice: parseFloat(adjustedClosePrice),
       closePrice: parseFloat(closePrice),
       highPrice: parseFloat(highPrice),
@@ -71,7 +71,7 @@ export class TestDatasets {
       priceDate: priceDate,
       securityId,
       volume: parseInt(volume, 10),
-    };
+    });
   }
 }
 

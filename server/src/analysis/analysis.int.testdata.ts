@@ -1,11 +1,11 @@
-import { OHLCVEntity } from '../data-aggregation/ohlcv.entity';
+import { OHLCV } from '../data-aggregation/ohlcv.entity';
 import { AnalysisQueryDto } from './analysis-query.dto';
 import { EnrichedDataPoint } from './core/enriched-data-point';
 import { TestDatasets } from './TestDatasets';
 
 export type TestData = {
   dto: AnalysisQueryDto;
-  data: OHLCVEntity[];
+  data: OHLCV[];
   expected: EnrichedDataPoint[];
 };
 

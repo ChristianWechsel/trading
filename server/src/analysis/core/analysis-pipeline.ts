@@ -1,14 +1,14 @@
+import { OHLCV } from 'src/data-aggregation/ohlcv.entity';
 import { AnalysisContext, AnalysisStep } from './analysis.interface';
-import { EnrichedDataPoint } from './enriched-data-point';
 
 export class AnalysisPipeline {
   constructor(private steps: AnalysisStep[]) {
     this.validateDependencies();
   }
 
-  run(data: EnrichedDataPoint[]) {
+  run(ohlcvs: OHLCV[]) {
     const context: AnalysisContext = {
-      enrichedDataPoints: data.map((datum) => datum.clone()),
+      enrichedDataPoints: ohlcvs.map((datum) => datum.clone()),
     };
     for (const step of this.steps) {
       step.execute(context);
