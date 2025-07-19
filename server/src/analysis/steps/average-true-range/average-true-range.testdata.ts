@@ -101,7 +101,7 @@ export class AverageTrueRangeTestdata {
         period: 5,
       },
       testcase: [
-        // Periode 1 -> Kein ATR
+        // Periode 0 -> Kein ATR
         {
           dataPoint: this.createEnrichedDataPoint({
             highPrice: 101,
@@ -109,83 +109,86 @@ export class AverageTrueRangeTestdata {
             closePrice: 100,
           }),
         },
-        // Periode 2 -> Kein ATR
+        // Periode 1 -> Kein ATR
         {
           dataPoint: this.createEnrichedDataPoint({
             highPrice: 102,
             lowPrice: 98,
             closePrice: 101,
           }),
+          expectedATR: 4,
         },
-        // Periode 3 -> Kein ATR
+        // Periode 2 -> Kein ATR
         {
           dataPoint: this.createEnrichedDataPoint({
-            highPrice: 103,
+            highPrice: 101,
             lowPrice: 99,
             closePrice: 102,
           }),
+          expectedATR: 3,
         },
-        // Periode 4 -> Kein ATR
+        // Periode 3 -> Kein ATR
         {
           dataPoint: this.createEnrichedDataPoint({
             highPrice: 105,
             lowPrice: 101,
             closePrice: 104,
           }),
+          expectedATR: 3.33,
         },
-        // Periode 5 -> Initialer ATR wird berechnet
+        // Periode 4 -> Initialer ATR wird berechnet
         {
           dataPoint: this.createEnrichedDataPoint({
             highPrice: 106,
             lowPrice: 102,
             closePrice: 105,
           }),
-          expectedATR: 3.8,
+          expectedATR: 3.5,
         },
-        // Periode 6 -> Erster geglätteter ATR
+        // Periode 5 -> Erster geglätteter ATR
         {
           dataPoint: this.createEnrichedDataPoint({
             highPrice: 110,
             lowPrice: 105,
             closePrice: 109,
           }),
-          expectedATR: 4.04,
+          expectedATR: 3.8,
         },
-        // Periode 7
+        // Periode 6
         {
           dataPoint: this.createEnrichedDataPoint({
             highPrice: 112,
             lowPrice: 108,
             closePrice: 110,
           }),
-          expectedATR: 4.032,
+          expectedATR: 3.84,
         },
-        // Periode 8
+        // Periode 7
         {
           dataPoint: this.createEnrichedDataPoint({
             highPrice: 115,
             lowPrice: 110,
             closePrice: 114,
           }),
-          expectedATR: 4.2256,
+          expectedATR: 4.07,
         },
-        // Periode 9
+        // Periode 8
         {
           dataPoint: this.createEnrichedDataPoint({
             highPrice: 118,
             lowPrice: 112,
             closePrice: 117,
           }),
-          expectedATR: 4.58048,
+          expectedATR: 4.46,
         },
-        // Periode 10
+        // Periode 9
         {
           dataPoint: this.createEnrichedDataPoint({
             highPrice: 117,
             lowPrice: 111,
             closePrice: 113,
           }),
-          expectedATR: 4.864384,
+          expectedATR: 4.77,
         },
       ],
     };

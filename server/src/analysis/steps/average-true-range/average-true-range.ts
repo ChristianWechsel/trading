@@ -36,17 +36,42 @@ export class AverageTrueRange implements AnalysisStep {
   }
 
   private getAverageTrueRange(data: EnrichedDataPoint[]) {
-    let period = this.startPeriod;
-    while (period < data.length) {
-      const previous = data[period - 1];
-      const current = data[period];
-      const trueRange = this.calculateTrueRange(
+    let n = this.startPeriod;
+
+    // Berechnung des True Range für die ersten Perioden
+    let accumulatedTrueRangeFirstPeriod = 0;
+    let previousATR = 0;
+
+    while (n <= this.options.period - 1) {
+      const previous = data[n - 1];
+      const current = data[n];
+      const calculatedTrueRange = this.calculateTrueRange(
         previous.getDataPoint(),
         current.getDataPoint(),
       );
+      accumulatedTrueRangeFirstPeriod += calculatedTrueRange;
+      const trueRange = accumulatedTrueRangeFirstPeriod / n;
+      previousATR = trueRange;
       current.setAverageTrueRange(trueRange);
 
-      period++;
+      n++;
+    }
+
+    // Berechnung des geglätteten ATR für die restlichen Perioden
+    while (n < data.length) {
+      const previous = data[n - 1];
+      const current = data[n];
+      const calculatedTrueRange = this.calculateTrueRange(
+        previous.getDataPoint(),
+        current.getDataPoint(),
+      );
+      const averageTrueRange =
+        (previousATR * (this.options.period - 1) + calculatedTrueRange) /
+        this.options.period;
+
+      current.setAverageTrueRange(averageTrueRange);
+      previousATR = averageTrueRange;
+      n++;
     }
   }
 
