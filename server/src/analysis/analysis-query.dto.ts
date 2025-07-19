@@ -41,6 +41,13 @@ export class TrendDetectionOptionsDto {
   relativeThreshold?: number;
 }
 
+export class AverageTrueRangeOptionsDto {
+  @IsOptional()
+  @IsNumber()
+  @Min(analysisConfig.averageTrueRange.MIN_PERIOD)
+  period?: number;
+}
+
 export class StepOptionsDto {
   @IsOptional()
   @ValidateNested()
@@ -51,6 +58,11 @@ export class StepOptionsDto {
   @ValidateNested()
   @Type(() => TrendDetectionOptionsDto)
   trendDetection?: TrendDetectionOptionsDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => AverageTrueRangeOptionsDto)
+  averageTrueRange?: AverageTrueRangeOptionsDto;
 }
 
 export class AnalysisQueryDto {

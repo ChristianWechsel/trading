@@ -16,7 +16,7 @@ import {
   DateRangeDto,
   TickerDto,
 } from './data-aggregation.dto';
-import { EodPrice } from './eod-price.entity';
+import { OHLCV } from './ohlcv.entity';
 import { Security } from './security.entity';
 
 @Injectable()
@@ -26,8 +26,8 @@ export class DataAggregationService implements IDataAggregationService {
     private readonly configService: ConfigService,
     @InjectRepository(Security)
     private readonly securityRepo: Repository<Security>,
-    @InjectRepository(EodPrice)
-    private readonly eodPriceRepo: Repository<EodPrice>,
+    @InjectRepository(OHLCV)
+    private readonly eodPriceRepo: Repository<OHLCV>,
   ) {}
 
   async importAndSaveData(
@@ -92,7 +92,7 @@ export class DataAggregationService implements IDataAggregationService {
    * @param dto - Enthält Ticker und optionalen Zeitraum.
    * @returns Ein Array von EodPrice-Entitäten.
    */
-  async loadData({ ticker, range }: DataAggregationDto): Promise<EodPrice[]> {
+  async loadData({ ticker, range }: DataAggregationDto): Promise<OHLCV[]> {
     const security = await this.fetchSecurityByTicker(ticker);
     if (!security) {
       return [];
@@ -110,7 +110,7 @@ export class DataAggregationService implements IDataAggregationService {
    * @param dto - Enthält Ticker und optionalen Zeitraum.
    * @returns Ein Array der (ggf. aktualisierten) EodPrice-Entitäten.
    */
-  async loadAndUpdateIfNeeded(dto: DataAggregationDto): Promise<EodPrice[]> {
+  async loadAndUpdateIfNeeded(dto: DataAggregationDto): Promise<OHLCV[]> {
     // Zuerst die Daten ohne Range laden, um das letzte Datum zu prüfen
     const latestData = await this.loadData({ ticker: dto.ticker });
 
@@ -139,7 +139,7 @@ export class DataAggregationService implements IDataAggregationService {
     security: Security,
     range: DateRangeDto | undefined,
   ) {
-    const options: FindManyOptions<EodPrice> = {
+    const options: FindManyOptions<OHLCV> = {
       where: { securityId: security.securityId },
       order: { priceDate: 'ASC' },
     };

@@ -14,13 +14,13 @@ import { AuthModule } from './auth/auth.module';
 import { CalendarEvent } from './calendar-event/calendar-event.entity';
 import { CalendarEventModule } from './calendar-event/calendar-event.module';
 import { DataAggregationModule } from './data-aggregation/data-aggregation.module';
-import { EodPrice } from './data-aggregation/eod-price.entity';
+import { OHLCV } from './data-aggregation/ohlcv.entity';
 import { Security } from './data-aggregation/security.entity';
+import { DataProviderModule } from './data-provider/data-provider.module';
 import { NotificationModule } from './notification/notification.module';
 import { PushSubscription } from './notification/push-subscription.entity';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
-import { DataProviderModule } from './data-provider/data-provider.module';
 
 @Module({
   imports: [
@@ -104,7 +104,7 @@ import { DataProviderModule } from './data-provider/data-provider.module';
         username: 'trading_user',
         password: configService.get('DB_PASSWORD'),
         database: 'trading',
-        entities: [User, PushSubscription, CalendarEvent, EodPrice, Security],
+        entities: [User, PushSubscription, CalendarEvent, OHLCV, Security],
         synchronize: false, // Temporär true für die Tabellenerstellung,
       }),
     }),

@@ -1,4 +1,5 @@
 import { StepOptionsDto } from '../analysis-query.dto';
+import { AverageTrueRange } from '../steps/average-true-range/average-true-range';
 import { MovingAverage } from '../steps/moving-average';
 import { SwingPointDetection } from '../steps/swing-point-detection/swing-point-detection';
 import { TrendChannelCalculation } from '../steps/trend-channel-calculation/trend-channel-calculation';
@@ -9,6 +10,7 @@ import { AnalysisStep, Step } from './analysis.interface';
 type StepConfiguration = {
   swingPointDetection: { relativeThreshold: number; windowSize: number };
   trendDetection: { relativeThreshold: number };
+  averageTrueRange: { period: number };
 };
 
 export class AnalysisBuilder {
@@ -19,6 +21,7 @@ export class AnalysisBuilder {
     const defaultConfiguration: StepConfiguration = {
       swingPointDetection: { relativeThreshold: 0.01, windowSize: 1 },
       trendDetection: { relativeThreshold: 0.01 },
+      averageTrueRange: { period: 14 },
     };
     this.configuration = {
       swingPointDetection: {
@@ -28,6 +31,10 @@ export class AnalysisBuilder {
       trendDetection: {
         ...defaultConfiguration.trendDetection,
         ...(options?.trendDetection ?? {}),
+      },
+      averageTrueRange: {
+        ...defaultConfiguration.averageTrueRange,
+        ...(options?.averageTrueRange ?? {}),
       },
     };
   }
@@ -66,6 +73,8 @@ export class AnalysisBuilder {
         return new TrendDetection(this.configuration.trendDetection);
       case 'TrendChannelCalculation':
         return new TrendChannelCalculation();
+      case 'AverageTrueRange':
+        return new AverageTrueRange(this.configuration.averageTrueRange);
       default:
         throw new Error(`Unknown analysis step`);
     }

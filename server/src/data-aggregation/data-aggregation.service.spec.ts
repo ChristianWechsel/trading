@@ -5,7 +5,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { of } from 'rxjs';
 import { TickerDto } from './data-aggregation.dto';
 import { DataAggregationService } from './data-aggregation.service';
-import { EodPrice } from './eod-price.entity';
+import { OHLCV } from './ohlcv.entity';
 import { Security } from './security.entity';
 
 describe('DataAggregationService', () => {
@@ -32,7 +32,7 @@ describe('DataAggregationService', () => {
       providers: [
         DataAggregationService,
         { provide: getRepositoryToken(Security), useValue: securityRepo },
-        { provide: getRepositoryToken(EodPrice), useValue: eodPriceRepo },
+        { provide: getRepositoryToken(OHLCV), useValue: eodPriceRepo },
         { provide: HttpService, useValue: httpService },
         { provide: ConfigService, useValue: configService },
       ],

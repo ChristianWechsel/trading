@@ -1,10 +1,10 @@
 import { DataAggregationDto } from '../data-aggregation/data-aggregation.dto';
-import { EodPrice } from '../data-aggregation/eod-price.entity';
+import { OHLCV } from '../data-aggregation/ohlcv.entity';
 
 export interface IDataAggregationService {
   importAndSaveData(
     dto: DataAggregationDto['ticker'],
   ): Promise<{ message: string }>;
-  loadData(dataAggregationDto: DataAggregationDto): Promise<EodPrice[]>;
-  loadAndUpdateIfNeeded(dto: DataAggregationDto): Promise<EodPrice[]>;
+  loadData(dataAggregationDto: DataAggregationDto): Promise<OHLCV[]>;
+  loadAndUpdateIfNeeded(dto: DataAggregationDto): Promise<OHLCV[]>;
 }
