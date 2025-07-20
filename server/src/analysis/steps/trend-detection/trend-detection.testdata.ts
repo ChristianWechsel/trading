@@ -90,7 +90,7 @@ export class TrendDetectionTestdata extends CreateTestData {
           ),
         ],
         expectedTrends: [
-          { type: 'upward', startPoint: { x: 1 }, endPoint: { x: 3 } },
+          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '3' } },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -116,7 +116,7 @@ export class TrendDetectionTestdata extends CreateTestData {
           ),
         ],
         expectedTrends: [
-          { type: 'downward', startPoint: { x: 1 }, endPoint: { x: 3 } },
+          { type: 'downward', startPoint: { x: '1' }, endPoint: { x: '3' } },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -258,7 +258,7 @@ export class TrendDetectionTestdata extends CreateTestData {
           ),
         ],
         expectedTrends: [
-          { type: 'upward', startPoint: { x: 1 }, endPoint: { x: 7 } },
+          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '7' } },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -301,7 +301,7 @@ export class TrendDetectionTestdata extends CreateTestData {
           ),
         ],
         expectedTrends: [
-          { type: 'downward', startPoint: { x: 1 }, endPoint: { x: 7 } },
+          { type: 'downward', startPoint: { x: '1' }, endPoint: { x: '7' } },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -340,7 +340,7 @@ export class TrendDetectionTestdata extends CreateTestData {
           ),
         ],
         expectedTrends: [
-          { type: 'upward', startPoint: { x: 1 }, endPoint: { x: 6 } },
+          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '6' } },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -379,7 +379,7 @@ export class TrendDetectionTestdata extends CreateTestData {
           ), // BROKEN: tieferes Hoch
         ],
         expectedTrends: [
-          { type: 'upward', startPoint: { x: 1 }, endPoint: { x: 4 } },
+          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '4' } },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -418,7 +418,7 @@ export class TrendDetectionTestdata extends CreateTestData {
           ),
         ],
         expectedTrends: [
-          { type: 'downward', startPoint: { x: 1 }, endPoint: { x: 6 } },
+          { type: 'downward', startPoint: { x: '1' }, endPoint: { x: '6' } },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -457,7 +457,7 @@ export class TrendDetectionTestdata extends CreateTestData {
           ), // BROKEN: höheres Tief
         ],
         expectedTrends: [
-          { type: 'downward', startPoint: { x: 1 }, endPoint: { x: 4 } },
+          { type: 'downward', startPoint: { x: '1' }, endPoint: { x: '4' } },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -502,7 +502,7 @@ export class TrendDetectionTestdata extends CreateTestData {
           ), // Fortsetzung
         ],
         expectedTrends: [
-          { type: 'upward', startPoint: { x: 1 }, endPoint: { x: 7 } },
+          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '7' } },
         ],
 
         settings: { relativeThreshold: 0.01 },
@@ -546,7 +546,7 @@ export class TrendDetectionTestdata extends CreateTestData {
           ), // BROKEN: höheres Tief
         ],
         expectedTrends: [
-          { type: 'downward', startPoint: { x: 1 }, endPoint: { x: 4 } },
+          { type: 'downward', startPoint: { x: '1' }, endPoint: { x: '4' } },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -591,7 +591,7 @@ export class TrendDetectionTestdata extends CreateTestData {
           ), // Fortsetzung
         ],
         expectedTrends: [
-          { type: 'downward', startPoint: { x: 1 }, endPoint: { x: 7 } },
+          { type: 'downward', startPoint: { x: '1' }, endPoint: { x: '7' } },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -636,8 +636,8 @@ export class TrendDetectionTestdata extends CreateTestData {
           ),
         ],
         expectedTrends: [
-          { type: 'upward', startPoint: { x: 1 }, endPoint: { x: 4 } },
-          { type: 'downward', startPoint: { x: 4 }, endPoint: { x: 7 } },
+          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '4' } },
+          { type: 'downward', startPoint: { x: '4' }, endPoint: { x: '7' } },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -682,8 +682,8 @@ export class TrendDetectionTestdata extends CreateTestData {
           ),
         ],
         expectedTrends: [
-          { type: 'downward', startPoint: { x: 1 }, endPoint: { x: 4 } },
-          { type: 'upward', startPoint: { x: 4 }, endPoint: { x: 7 } },
+          { type: 'downward', startPoint: { x: '1' }, endPoint: { x: '4' } },
+          { type: 'upward', startPoint: { x: '4' }, endPoint: { x: '7' } },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -739,8 +739,8 @@ export class TrendDetectionTestdata extends CreateTestData {
           ), // Confirmed Down
         ],
         expectedTrends: [
-          { type: 'upward', startPoint: { x: 1 }, endPoint: { x: 3 } },
-          { type: 'downward', startPoint: { x: 6 }, endPoint: { x: 8 } },
+          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '3' } },
+          { type: 'downward', startPoint: { x: '6' }, endPoint: { x: '8' } },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -812,8 +812,8 @@ export class TrendDetectionTestdata extends CreateTestData {
           ), // Confirmed Down
         ],
         expectedTrends: [
-          { type: 'upward', startPoint: { x: 1 }, endPoint: { x: 3 } },
-          { type: 'downward', startPoint: { x: 10 }, endPoint: { x: 12 } },
+          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '3' } },
+          { type: 'downward', startPoint: { x: '10' }, endPoint: { x: '12' } },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -918,7 +918,7 @@ export class TrendDetectionTestdata extends CreateTestData {
           ), // WARNING: stagnating Low
         ],
         expectedTrends: [
-          { type: 'upward', startPoint: { x: 1 }, endPoint: { x: 5 } },
+          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '5' } },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -971,7 +971,7 @@ export class TrendDetectionTestdata extends CreateTestData {
           ),
         ],
         expectedTrends: [
-          { type: 'downward', startPoint: { x: 1 }, endPoint: { x: 5 } },
+          { type: 'downward', startPoint: { x: '1' }, endPoint: { x: '5' } },
         ],
         settings: { relativeThreshold: 0.01 },
       },

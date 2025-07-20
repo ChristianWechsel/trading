@@ -1,4 +1,3 @@
-import { ComparableNumber } from '../utils/comparable-number/comparable-number';
 import { Memory } from '../utils/memory/memory';
 import { StartState, State } from './trend-detection-states';
 import {
@@ -16,7 +15,7 @@ export class TrendDetectionStateMachine {
     this.currentState = new StartState(this.memory, onTransition);
   }
 
-  process(swingPoint: SwingPointData<ComparableNumber>): void {
+  process(swingPoint: SwingPointData): void {
     this.currentState = this.currentState.process(swingPoint);
   }
 }

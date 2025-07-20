@@ -2,7 +2,6 @@ import { analysisConfig } from '../../config/analysis.config';
 import {
   AnalysisContext,
   AnalysisStep,
-  DataPoint,
   Step,
   TrendDataMetadata,
 } from '../../core/analysis.interface';
@@ -46,14 +45,11 @@ export class TrendDetection implements AnalysisStep {
   private generateSwingPointsAndData(rawData: EnrichedDataPoint[]) {
     const swingPoints = rawData
       .filter((datum) => datum.getSwingPointType() !== null)
-      .map<SwingPointData<ComparableNumber>>((enrichedDataPoint) => {
+      .map<SwingPointData>((enrichedDataPoint) => {
         return {
           swingPointType: enrichedDataPoint.getSwingPointType()!,
           point: {
-            x: new ComparableNumber(
-              enrichedDataPoint.getDataPoint().getPriceEpochTime(),
-              this.options.relativeThreshold,
-            ),
+            x: enrichedDataPoint.getDataPoint().getPriceDateIsoDate(),
             y: new ComparableNumber(
               enrichedDataPoint.getDataPoint().getClosePrice(),
               this.options.relativeThreshold,
@@ -67,11 +63,8 @@ export class TrendDetection implements AnalysisStep {
       );
     }
 
-    const data = rawData.map<DataPoint<ComparableNumber>>((point) => ({
-      x: new ComparableNumber(
-        point.getDataPoint().getPriceEpochTime(),
-        this.options.relativeThreshold,
-      ),
+    const data = rawData.map<SwingPointData['point']>((point) => ({
+      x: point.getDataPoint().getPriceDateIsoDate(),
       y: new ComparableNumber(
         point.getDataPoint().getClosePrice(),
         this.options.relativeThreshold,
@@ -81,8 +74,8 @@ export class TrendDetection implements AnalysisStep {
   }
 
   private detectTrends(
-    swingPoints: SwingPointData<ComparableNumber>[],
-    data: DataPoint<ComparableNumber>[],
+    swingPoints: SwingPointData[],
+    data: SwingPointData['point'][],
   ) {
     const trends: TrendDataMetadata[] = [];
 
@@ -109,10 +102,10 @@ export class TrendDetection implements AnalysisStep {
                   ? 'upward'
                   : 'downward',
               startPoint: {
-                x: trendDefiningPoints[0].swingPoint.point.x.getValue(),
+                x: trendDefiningPoints[0].swingPoint.point.x,
               },
               endPoint: {
-                x: trendDefiningPoints[2].swingPoint.point.x.getValue(),
+                x: trendDefiningPoints[2].swingPoint.point.x,
               },
             },
             metaddata: { statusTrend: 'ongoing' },
@@ -127,7 +120,7 @@ export class TrendDetection implements AnalysisStep {
           const lastTrend = trends[trends.length - 1];
           const [pointBeforeWarning] = memory.getLatest(2);
           lastTrend.trendData.endPoint = {
-            x: pointBeforeWarning.swingPoint.point.x.getValue(),
+            x: pointBeforeWarning.swingPoint.point.x,
           }; // Ende wird auf letzten Punkt vor Warnung gesetzt
         } else if (
           // Warnung hat sich nicht bestätigt, Trend geht weiter.
@@ -140,7 +133,7 @@ export class TrendDetection implements AnalysisStep {
           const currentPoint = memory.getLast();
           if (currentPoint) {
             lastTrend.trendData.endPoint = {
-              x: currentPoint.swingPoint.point.x.getValue(),
+              x: currentPoint.swingPoint.point.x,
             }; // Ende wird auf aktuellen Punkt gesetzt
           }
         } else if (
@@ -163,7 +156,7 @@ export class TrendDetection implements AnalysisStep {
     const lastTrend = trends[trends.length - 1];
     if (lastTrend && lastTrend.metaddata.statusTrend === 'ongoing') {
       lastTrend.trendData.endPoint = {
-        x: data[data.length - 1].x.getValue(),
+        x: data[data.length - 1].x,
       }; // Ende des Trends auf letzten Datenpunkt setzen
     }
 

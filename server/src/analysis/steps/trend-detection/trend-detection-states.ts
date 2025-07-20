@@ -1,4 +1,3 @@
-import { ComparableNumber } from '../utils/comparable-number/comparable-number';
 import { Memory } from '../utils/memory/memory';
 import {
   SwingPointData,
@@ -12,7 +11,7 @@ export abstract class State {
     protected onTransition: TransitionCallback,
   ) {}
 
-  abstract process(swingPoint: SwingPointData<ComparableNumber>): State;
+  abstract process(swingPoint: SwingPointData): State;
 
   protected transitionTo(newState: State): State {
     this.onTransition({ newState, oldState: this, memory: this.memory });
@@ -21,7 +20,7 @@ export abstract class State {
 }
 
 export class StartState extends State {
-  process(swingPoint: SwingPointData<ComparableNumber>): State {
+  process(swingPoint: SwingPointData): State {
     this.memory.clear();
     this.memory.add({ swingPoint });
 
@@ -43,7 +42,7 @@ export class StartState extends State {
 }
 
 class UpwardTrendFirstCheck extends State {
-  process(swingPoint: SwingPointData<ComparableNumber>): State {
+  process(swingPoint: SwingPointData): State {
     this.memory.add({ swingPoint });
     if (swingPoint.swingPointType === 'swingHigh') {
       return this.transitionTo(
@@ -55,7 +54,7 @@ class UpwardTrendFirstCheck extends State {
 }
 
 class UpwardTrendSecondCheck extends State {
-  process(swingPoint: SwingPointData<ComparableNumber>): State {
+  process(swingPoint: SwingPointData): State {
     const lastRelevantPoint = this.memory.findLast(
       (point) => point.swingPoint.swingPointType === 'swingLow',
     );
@@ -80,7 +79,7 @@ class UpwardTrendSecondCheck extends State {
 }
 
 export class UpwardTrendConfirmed extends State {
-  process(swingPoint: SwingPointData<ComparableNumber>): State {
+  process(swingPoint: SwingPointData): State {
     const lastRelevantPoint = this.memory.findLast(
       (point) => point.swingPoint.swingPointType === swingPoint.swingPointType,
     );
@@ -101,7 +100,7 @@ export class UpwardTrendConfirmed extends State {
 }
 
 class DownwardTrendFirstCheck extends State {
-  process(swingPoint: SwingPointData<ComparableNumber>): State {
+  process(swingPoint: SwingPointData): State {
     this.memory.add({ swingPoint });
     if (swingPoint.swingPointType === 'swingLow') {
       return this.transitionTo(
@@ -113,7 +112,7 @@ class DownwardTrendFirstCheck extends State {
 }
 
 class DownwardTrendSecondCheck extends State {
-  process(swingPoint: SwingPointData<ComparableNumber>): State {
+  process(swingPoint: SwingPointData): State {
     const lastRelevantPoint = this.memory.findLast(
       (point) => point.swingPoint.swingPointType === 'swingHigh',
     );
@@ -139,7 +138,7 @@ class DownwardTrendSecondCheck extends State {
 }
 
 export class DownwardTrendConfirmed extends State {
-  process(swingPoint: SwingPointData<ComparableNumber>): State {
+  process(swingPoint: SwingPointData): State {
     const lastRelevantPoint = this.memory.findLast(
       (point) => point.swingPoint.swingPointType === swingPoint.swingPointType,
     );
@@ -160,7 +159,7 @@ export class DownwardTrendConfirmed extends State {
 }
 
 export class UpwardTrendWarning extends State {
-  process(swingPoint: SwingPointData<ComparableNumber>): State {
+  process(swingPoint: SwingPointData): State {
     const lastRelevantPoint = this.memory.findLast(
       (point) => point.swingPoint.swingPointType === swingPoint.swingPointType,
     );
@@ -182,7 +181,7 @@ export class UpwardTrendWarning extends State {
 }
 
 export class DownwardTrendWarning extends State {
-  process(swingPoint: SwingPointData<ComparableNumber>): State {
+  process(swingPoint: SwingPointData): State {
     const lastRelevantPoint = this.memory.findLast(
       (point) => point.swingPoint.swingPointType === swingPoint.swingPointType,
     );
@@ -204,7 +203,7 @@ export class DownwardTrendWarning extends State {
 }
 
 export class TrendBroken extends State {
-  process(swingPoint: SwingPointData<ComparableNumber>): State {
+  process(swingPoint: SwingPointData): State {
     const relevantHistory = this.memory.getLatest(3);
     const beginNewTrend = new BeginNewTrend(
       this.memory,
@@ -227,7 +226,7 @@ class BeginNewTrend extends State {
     this.historyToProcess = historyToProcess;
   }
 
-  process(swingPoint: SwingPointData<ComparableNumber>): State {
+  process(swingPoint: SwingPointData): State {
     let currentState: State = new StartState(this.memory, this.onTransition);
 
     for (const point of this.historyToProcess) {

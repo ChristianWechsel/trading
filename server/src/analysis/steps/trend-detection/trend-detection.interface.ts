@@ -1,4 +1,3 @@
-import { DataPoint } from '../../core/analysis.interface';
 import { SwingPointType } from '../../core/enriched-data-point';
 import { ComparableNumber } from '../utils/comparable-number/comparable-number';
 import { Memory } from '../utils/memory/memory';
@@ -11,10 +10,10 @@ export type TransitionCallback = (values: {
 }) => void;
 
 export type TrendAnalysisPoint = {
-  swingPoint: SwingPointData<ComparableNumber>;
+  swingPoint: SwingPointData;
 };
 
-export type SwingPointData<T> = {
+export type SwingPointData = {
   swingPointType: SwingPointType;
-  point: DataPoint<T>;
+  point: { x: string; y: ComparableNumber };
 };

@@ -18,7 +18,7 @@ describe('OHLCV.clone', () => {
 
     expect(clone).not.toBe(original);
     expect(clone.getSecurityId()).toBe(original.getSecurityId());
-    expect(clone.getPriceIsoDate()).toBe(original.getPriceIsoDate());
+    expect(clone.getPriceDateIsoDate()).toBe(original.getPriceDateIsoDate());
     expect(clone.getOpenPrice()).toBe(original.getOpenPrice());
     expect(clone.getHighPrice()).toBe(original.getHighPrice());
     expect(clone.getLowPrice()).toBe(original.getLowPrice());
