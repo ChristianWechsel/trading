@@ -68,52 +68,52 @@ export class TrendDetectionTestdata extends CreateTestData {
   }
 
   upwardTrend(): TrendTestCase {
+    const startPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 1 },
+      'swingLow',
+    );
+    const endPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '3', closePrice: 3 },
+      'swingLow',
+    );
     return {
       name: 'upward trend',
       testcase: {
         data: [
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 1 },
-            'swingLow',
-          ),
+          startPoint,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '2', closePrice: 2 },
             'swingHigh',
           ),
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '3', closePrice: 3 },
-            'swingLow',
-          ),
+          endPoint,
         ],
-        expectedTrends: [
-          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '3' } },
-        ],
+        expectedTrends: [{ type: 'upward', startPoint, endPoint }],
         settings: { relativeThreshold: 0.01 },
       },
     };
   }
 
   downwardTrend(): TrendTestCase {
+    const startPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 3 },
+      'swingHigh',
+    );
+    const endPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '3', closePrice: 1 },
+      'swingHigh',
+    );
     return {
       name: 'downward trend',
       testcase: {
         data: [
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 3 },
-            'swingHigh',
-          ),
+          startPoint,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '2', closePrice: 2 },
             'swingLow',
           ),
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '3', closePrice: 1 },
-            'swingHigh',
-          ),
+          endPoint,
         ],
-        expectedTrends: [
-          { type: 'downward', startPoint: { x: '1' }, endPoint: { x: '3' } },
-        ],
+        expectedTrends: [{ type: 'downward', startPoint, endPoint }],
         settings: { relativeThreshold: 0.01 },
       },
     };
@@ -220,14 +220,19 @@ export class TrendDetectionTestdata extends CreateTestData {
 
   // Aufwärtstrend bis Ende Datenreihe
   upwardTrendInfinite(): TrendTestCase {
+    const startPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 1 },
+      'swingLow',
+    );
+    const endPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '7', closePrice: 7 },
+      null,
+    );
     return {
       name: 'upward trend infinite',
       testcase: {
         data: [
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 1 },
-            'swingLow',
-          ),
+          startPoint,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '2', closePrice: 2 },
             'swingHigh',
@@ -248,14 +253,9 @@ export class TrendDetectionTestdata extends CreateTestData {
             { priceDate: '6', closePrice: 6 },
             null,
           ),
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '7', closePrice: 7 },
-            null,
-          ),
+          endPoint,
         ],
-        expectedTrends: [
-          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '7' } },
-        ],
+        expectedTrends: [{ type: 'upward', startPoint, endPoint }],
         settings: { relativeThreshold: 0.01 },
       },
     };
@@ -263,14 +263,19 @@ export class TrendDetectionTestdata extends CreateTestData {
 
   // Abwärtstrend bis Ende Datenreihe
   downwardTrendInfinite(): TrendTestCase {
+    const startPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 7 },
+      'swingHigh',
+    );
+    const endPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '7', closePrice: 1 },
+      null,
+    );
     return {
       name: 'downward trend infinite',
       testcase: {
         data: [
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 7 },
-            'swingHigh',
-          ),
+          startPoint,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '2', closePrice: 6 },
             'swingLow',
@@ -291,14 +296,9 @@ export class TrendDetectionTestdata extends CreateTestData {
             { priceDate: '6', closePrice: 2 },
             null,
           ),
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '7', closePrice: 1 },
-            null,
-          ),
+          endPoint,
         ],
-        expectedTrends: [
-          { type: 'downward', startPoint: { x: '1' }, endPoint: { x: '7' } },
-        ],
+        expectedTrends: [{ type: 'downward', startPoint, endPoint }],
         settings: { relativeThreshold: 0.01 },
       },
     };
@@ -306,14 +306,19 @@ export class TrendDetectionTestdata extends CreateTestData {
 
   // Fortgesetzter Aufwärtstrend ohne Endpunkt (Resultat ohne Endpunkt)
   upwardTrendContinuesWithoutEndpoint(): TrendTestCase {
+    const startPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 1 },
+      'swingLow',
+    );
+    const endPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '6', closePrice: 5 },
+      'swingHigh',
+    );
     return {
       name: 'upward trend continues without endpoint',
       testcase: {
         data: [
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 1 },
-            'swingLow',
-          ),
+          startPoint,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '2', closePrice: 2 },
             'swingHigh',
@@ -330,14 +335,9 @@ export class TrendDetectionTestdata extends CreateTestData {
             { priceDate: '5', closePrice: 4 },
             'swingLow',
           ),
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '6', closePrice: 5 },
-            'swingHigh',
-          ),
+          endPoint,
         ],
-        expectedTrends: [
-          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '6' } },
-        ],
+        expectedTrends: [{ type: 'upward', startPoint, endPoint }],
         settings: { relativeThreshold: 0.01 },
       },
     };
@@ -345,14 +345,19 @@ export class TrendDetectionTestdata extends CreateTestData {
 
   // Fortgesetzter Aufwärtstrend, der mit tieferem Tief und tieferem Hoch endet
   upwardTrendBreaksWithLowerLowAndLowerHigh(): TrendTestCase {
+    const startPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 1 },
+      'swingLow',
+    );
+    const endPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '4', closePrice: 4 },
+      'swingHigh',
+    );
     return {
       name: 'upward trend breaks with lower low and lower high',
       testcase: {
         data: [
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 1 },
-            'swingLow',
-          ),
+          startPoint,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '2', closePrice: 3 },
             'swingHigh',
@@ -361,10 +366,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             { priceDate: '3', closePrice: 2 },
             'swingLow',
           ), // Confirmed Up
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '4', closePrice: 4 },
-            'swingHigh',
-          ), // Continuation (Peak)
+          endPoint, // Continuation (Peak)
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '5', closePrice: 1 },
             'swingLow',
@@ -374,9 +376,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             'swingHigh',
           ), // BROKEN: tieferes Hoch
         ],
-        expectedTrends: [
-          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '4' } },
-        ],
+        expectedTrends: [{ type: 'upward', startPoint, endPoint }],
         settings: { relativeThreshold: 0.01 },
       },
     };
@@ -384,14 +384,19 @@ export class TrendDetectionTestdata extends CreateTestData {
 
   // Fortgesetzter Abwärtstrend ohne Endpunkt (Trend läuft weiter, kein bestätigendes Ende)
   downwardTrendContinuesWithoutEndpoint(): TrendTestCase {
+    const startPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 7 },
+      'swingHigh',
+    );
+    const endPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '6', closePrice: 2 },
+      'swingLow',
+    );
     return {
       name: 'downward trend continues without endpoint',
       testcase: {
         data: [
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 7 },
-            'swingHigh',
-          ),
+          startPoint,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '2', closePrice: 6 },
             'swingLow',
@@ -408,14 +413,9 @@ export class TrendDetectionTestdata extends CreateTestData {
             { priceDate: '5', closePrice: 3 },
             'swingHigh',
           ),
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '6', closePrice: 2 },
-            'swingLow',
-          ),
+          endPoint,
         ],
-        expectedTrends: [
-          { type: 'downward', startPoint: { x: '1' }, endPoint: { x: '6' } },
-        ],
+        expectedTrends: [{ type: 'downward', startPoint, endPoint }],
         settings: { relativeThreshold: 0.01 },
       },
     };
@@ -423,14 +423,19 @@ export class TrendDetectionTestdata extends CreateTestData {
 
   // Fortgesetzter Abwärtstrend, der mit höherem Hoch und höherem Tief endet (Trend bricht)
   downwardTrendBreaksWithHigherHighAndHigherLow(): TrendTestCase {
+    const startPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 7 },
+      'swingHigh',
+    );
+    const endPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '4', closePrice: 1 },
+      'swingLow',
+    );
     return {
       name: 'downward trend breaks with higher high and higher low',
       testcase: {
         data: [
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 7 },
-            'swingHigh',
-          ),
+          startPoint,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '2', closePrice: 2 },
             'swingLow',
@@ -439,10 +444,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             { priceDate: '3', closePrice: 6 },
             'swingHigh',
           ), // Confirmed Down
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '4', closePrice: 1 },
-            'swingLow',
-          ), // Continuation (Talsohle)
+          endPoint, // Continuation (Talsohle)
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '5', closePrice: 8 },
             'swingHigh',
@@ -452,9 +454,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             'swingLow',
           ), // BROKEN: höheres Tief
         ],
-        expectedTrends: [
-          { type: 'downward', startPoint: { x: '1' }, endPoint: { x: '4' } },
-        ],
+        expectedTrends: [{ type: 'downward', startPoint, endPoint }],
         settings: { relativeThreshold: 0.01 },
       },
     };
@@ -464,14 +464,19 @@ export class TrendDetectionTestdata extends CreateTestData {
    * Ein Aufwärtstrend wird verletzt (Warning), erholt sich aber wieder.
    */
   upwardTrendRecoversAfterWarning(): TrendTestCase {
+    const startPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 10 },
+      'swingLow',
+    );
+    const endPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '7', closePrice: 15 },
+      'swingLow',
+    );
     return {
       name: 'upward trend recovers after warning',
       testcase: {
         data: [
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 10 },
-            'swingLow',
-          ),
+          startPoint,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '2', closePrice: 20 },
             'swingHigh',
@@ -492,14 +497,9 @@ export class TrendDetectionTestdata extends CreateTestData {
             { priceDate: '6', closePrice: 25 },
             'swingHigh',
           ), // RECOVER: höheres Hoch
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '7', closePrice: 15 },
-            'swingLow',
-          ), // Fortsetzung
+          endPoint, // Fortsetzung
         ],
-        expectedTrends: [
-          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '7' } },
-        ],
+        expectedTrends: [{ type: 'upward', startPoint, endPoint }],
 
         settings: { relativeThreshold: 0.01 },
       },
@@ -512,14 +512,19 @@ export class TrendDetectionTestdata extends CreateTestData {
    * Wir benennen ihn hier explizit, um die Logik klarer zu machen.
    */
   downwardTrendBreaksAfterWarning(): TrendTestCase {
+    const startPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 20 },
+      'swingHigh',
+    );
+    const endPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '4', closePrice: 8 },
+      'swingLow',
+    );
     return {
       name: 'downward trend breaks after warning',
       testcase: {
         data: [
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 20 },
-            'swingHigh',
-          ),
+          startPoint,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '2', closePrice: 10 },
             'swingLow',
@@ -528,10 +533,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             { priceDate: '3', closePrice: 18 },
             'swingHigh',
           ), // Confirmed
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '4', closePrice: 8 },
-            'swingLow',
-          ), // Continuation (Talsohle)
+          endPoint, // Continuation (Talsohle)
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '5', closePrice: 19 },
             'swingHigh',
@@ -541,9 +543,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             'swingLow',
           ), // BROKEN: höheres Tief
         ],
-        expectedTrends: [
-          { type: 'downward', startPoint: { x: '1' }, endPoint: { x: '4' } },
-        ],
+        expectedTrends: [{ type: 'downward', startPoint, endPoint }],
         settings: { relativeThreshold: 0.01 },
       },
     };
@@ -553,14 +553,19 @@ export class TrendDetectionTestdata extends CreateTestData {
    * Ein Abwärtstrend wird verletzt (Warning), erholt sich aber wieder.
    */
   downwardTrendRecoversAfterWarning(): TrendTestCase {
+    const startPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 20 },
+      'swingHigh',
+    );
+    const endPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '7', closePrice: 15 },
+      'swingHigh',
+    );
     return {
       name: 'downward trend recovers after warning',
       testcase: {
         data: [
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 20 },
-            'swingHigh',
-          ),
+          startPoint,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '2', closePrice: 10 },
             'swingLow',
@@ -581,14 +586,9 @@ export class TrendDetectionTestdata extends CreateTestData {
             { priceDate: '6', closePrice: 5 },
             'swingLow',
           ), // RECOVER: tieferes Tief
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '7', closePrice: 15 },
-            'swingHigh',
-          ), // Fortsetzung
+          endPoint, // Fortsetzung
         ],
-        expectedTrends: [
-          { type: 'downward', startPoint: { x: '1' }, endPoint: { x: '7' } },
-        ],
+        expectedTrends: [{ type: 'downward', startPoint, endPoint }],
         settings: { relativeThreshold: 0.01 },
       },
     };
@@ -598,14 +598,23 @@ export class TrendDetectionTestdata extends CreateTestData {
    * Ein sauberer Aufwärtstrend wird von einem sauberen Abwärtstrend gefolgt.
    */
   upwardTrendFollowedByDownwardTrend(): TrendTestCase {
+    const startPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 10 },
+      'swingLow',
+    );
+    const swingPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '4', closePrice: 22 },
+      'swingHigh',
+    );
+    const endPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '7', closePrice: 9 },
+      'swingLow',
+    );
     return {
       name: 'upward trend followed by downward trend',
       testcase: {
         data: [
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 10 },
-            'swingLow',
-          ),
+          startPoint,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '2', closePrice: 20 },
             'swingHigh',
@@ -614,10 +623,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             { priceDate: '3', closePrice: 12 },
             'swingLow',
           ),
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '4', closePrice: 22 },
-            'swingHigh',
-          ),
+          swingPoint,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '5', closePrice: 11 },
             'swingLow',
@@ -626,14 +632,11 @@ export class TrendDetectionTestdata extends CreateTestData {
             { priceDate: '6', closePrice: 18 },
             'swingHigh',
           ),
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '7', closePrice: 9 },
-            'swingLow',
-          ),
+          endPoint,
         ],
         expectedTrends: [
-          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '4' } },
-          { type: 'downward', startPoint: { x: '4' }, endPoint: { x: '7' } },
+          { type: 'upward', startPoint, endPoint: swingPoint },
+          { type: 'downward', startPoint: swingPoint, endPoint },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -644,14 +647,23 @@ export class TrendDetectionTestdata extends CreateTestData {
    * Ein sauberer Abwärtstrend wird von einem sauberen Aufwärtstrend gefolgt.
    */
   downwardTrendFollowedByUpwardTrend(): TrendTestCase {
+    const startPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 30 },
+      'swingHigh',
+    );
+    const swingPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '4', closePrice: 18 },
+      'swingLow',
+    );
+    const endPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '7', closePrice: 32 },
+      'swingHigh',
+    );
     return {
       name: 'downward trend followed by upward trend',
       testcase: {
         data: [
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 30 },
-            'swingHigh',
-          ),
+          startPoint,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '2', closePrice: 20 },
             'swingLow',
@@ -660,10 +672,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             { priceDate: '3', closePrice: 28 },
             'swingHigh',
           ),
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '4', closePrice: 18 },
-            'swingLow',
-          ),
+          swingPoint,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '5', closePrice: 29 },
             'swingHigh',
@@ -672,14 +681,11 @@ export class TrendDetectionTestdata extends CreateTestData {
             { priceDate: '6', closePrice: 21 },
             'swingLow',
           ),
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '7', closePrice: 32 },
-            'swingHigh',
-          ),
+          endPoint,
         ],
         expectedTrends: [
-          { type: 'downward', startPoint: { x: '1' }, endPoint: { x: '4' } },
-          { type: 'upward', startPoint: { x: '4' }, endPoint: { x: '7' } },
+          { type: 'downward', startPoint, endPoint: swingPoint },
+          { type: 'upward', startPoint: swingPoint, endPoint },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -692,23 +698,33 @@ export class TrendDetectionTestdata extends CreateTestData {
    * bestätigtem Ende des alten Trend startet.
    */
   trendFollowedByChoppyPeriodThenNewTrend(): TrendTestCase {
+    const startPoint1 = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 10 },
+      'swingLow',
+    );
+    const endPoint1 = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '3', closePrice: 12 },
+      'swingLow',
+    );
+    const startPoint2 = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '6', closePrice: 16 },
+      'swingHigh',
+    );
+    const endPoint2 = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '8', closePrice: 14 },
+      'swingHigh',
+    );
     return {
       name: 'trend followed by choppy period then new trend. Special Case.',
       testcase: {
         data: [
           // 1. Aufwärtstrend
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 10 },
-            'swingLow',
-          ),
+          startPoint1,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '2', closePrice: 20 },
             'swingHigh',
           ),
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '3', closePrice: 12 },
-            'swingLow',
-          ), // Confirmed Up
+          endPoint1, // Confirmed Up
 
           // 2. Unklare Phase (bricht den Aufwärtstrend, etabliert aber keinen neuen)
           this.createEnrichedDataPointWithSwingPoints(
@@ -721,22 +737,16 @@ export class TrendDetectionTestdata extends CreateTestData {
           ), // Broken: tieferes Tief
 
           // 3. Neuer Abwärtstrend beginnt
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '6', closePrice: 16 },
-            'swingHigh',
-          ), // Start Down
+          startPoint2, // Start Down
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '7', closePrice: 5 },
             'swingLow',
           ),
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '8', closePrice: 14 },
-            'swingHigh',
-          ), // Confirmed Down
+          endPoint2, // Confirmed Down
         ],
         expectedTrends: [
-          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '3' } },
-          { type: 'downward', startPoint: { x: '6' }, endPoint: { x: '8' } },
+          { type: 'upward', startPoint: startPoint1, endPoint: endPoint1 },
+          { type: 'downward', startPoint: startPoint2, endPoint: endPoint2 },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -748,23 +758,33 @@ export class TrendDetectionTestdata extends CreateTestData {
    * bevor ein neuer Trend beginnt.
    */
   trendBreaksFollowedByGapThenNewTrend(): TrendTestCase {
+    const startPoint1 = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 10 },
+      'swingLow',
+    );
+    const endPoint1 = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '3', closePrice: 12 },
+      'swingLow',
+    );
+    const startPoint2 = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '10', closePrice: 25 },
+      'swingHigh',
+    );
+    const endPoint2 = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '12', closePrice: 22 },
+      'swingHigh',
+    );
     return {
       name: 'trend followed by choppy period then new trend',
       testcase: {
         data: [
           // 1. Aufwärtstrend wird etabliert
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 10 },
-            'swingLow',
-          ),
+          startPoint1,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '2', closePrice: 20 },
             'swingHigh',
           ),
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '3', closePrice: 12 },
-            'swingLow',
-          ), // Confirmed Up, Peak
+          endPoint1, // Confirmed Up, Peak
           // 2. Bruch des Aufwärtstrends
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '4', closePrice: 11 },
@@ -794,22 +814,16 @@ export class TrendDetectionTestdata extends CreateTestData {
           ),
 
           // 4. Ein neuer, sauberer Abwärtstrend beginnt hier
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '10', closePrice: 25 },
-            'swingHigh',
-          ), // Start Down
+          startPoint2, // Start Down
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '11', closePrice: 7 },
             'swingLow',
           ),
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '12', closePrice: 22 },
-            'swingHigh',
-          ), // Confirmed Down
+          endPoint2, // Confirmed Down
         ],
         expectedTrends: [
-          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '3' } },
-          { type: 'downward', startPoint: { x: '10' }, endPoint: { x: '12' } },
+          { type: 'upward', startPoint: startPoint1, endPoint: endPoint1 },
+          { type: 'downward', startPoint: startPoint2, endPoint: endPoint2 },
         ],
         settings: { relativeThreshold: 0.01 },
       },
@@ -880,14 +894,19 @@ export class TrendDetectionTestdata extends CreateTestData {
    * Dies testet die Fortsetzungslogik.
    */
   upwardTrendBreaksDueToStallingHigh(): TrendTestCase {
+    const startPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 100 },
+      'swingLow',
+    );
+    const endPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '5', closePrice: 108 },
+      'swingLow',
+    );
     return {
       name: 'should BREAK upward trend if new high is not significantly higher',
       testcase: {
         data: [
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 100 },
-            'swingLow',
-          ),
+          startPoint,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '2', closePrice: 110 },
             'swingHigh',
@@ -900,10 +919,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             { priceDate: '4', closePrice: 115 },
             'swingHigh',
           ), // Continuation, Peak
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '5', closePrice: 108 },
-            'swingLow',
-          ), // Confirmed
+          endPoint, // Confirmed
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '6', closePrice: 116 },
             'swingHigh',
@@ -913,9 +929,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             'swingLow',
           ), // WARNING: stagnating Low
         ],
-        expectedTrends: [
-          { type: 'upward', startPoint: { x: '1' }, endPoint: { x: '5' } },
-        ],
+        expectedTrends: [{ type: 'upward', startPoint, endPoint }],
         settings: { relativeThreshold: 0.01 },
       },
     };
@@ -927,15 +941,20 @@ export class TrendDetectionTestdata extends CreateTestData {
    * Dies testet die Fortsetzungslogik.
    */
   downwardTrendBreaksDueToStallingLow(): TrendTestCase {
+    const startPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 100 },
+      'swingHigh',
+    );
+    const endPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '5', closePrice: 92 },
+      'swingHigh',
+    );
     return {
       name: 'should BREAK downward trend if new low is not significantly lower',
       testcase: {
         data: [
           // 1. Abwärtstrend wird etabliert
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 100 },
-            'swingHigh',
-          ),
+          startPoint,
           this.createEnrichedDataPointWithSwingPoints(
             { priceDate: '2', closePrice: 90 },
             'swingLow',
@@ -950,10 +969,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             { priceDate: '4', closePrice: 85 },
             'swingLow',
           ), // Continuation (Talsohle), da 85 < 90
-          this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '5', closePrice: 92 },
-            'swingHigh',
-          ), // Continuation, da 92 < 95
+          endPoint, // Continuation, da 92 < 95
 
           // 3. Bruch durch Stagnation
           // 84.5 ist zwar < 85, aber nicht signifikant tiefer. Momentum ist weg -> Warning/Break.
@@ -966,9 +982,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             'swingHigh',
           ),
         ],
-        expectedTrends: [
-          { type: 'downward', startPoint: { x: '1' }, endPoint: { x: '5' } },
-        ],
+        expectedTrends: [{ type: 'downward', startPoint, endPoint }],
         settings: { relativeThreshold: 0.01 },
       },
     };

@@ -63,8 +63,8 @@ class UpwardTrendSecondCheck extends State {
     if (
       swingPoint.swingPointType === 'swingLow' &&
       lastRelevantPoint &&
-      swingPoint.point.y.isSignificantlyHigherThan(
-        lastRelevantPoint.swingPoint.point.y,
+      swingPoint.point.priceComparisonValue.isSignificantlyHigherThan(
+        lastRelevantPoint.swingPoint.point.priceComparisonValue,
       )
     ) {
       return this.transitionTo(
@@ -87,8 +87,8 @@ export class UpwardTrendConfirmed extends State {
 
     if (
       lastRelevantPoint &&
-      swingPoint.point.y.isSignificantlyHigherThan(
-        lastRelevantPoint.swingPoint.point.y,
+      swingPoint.point.priceComparisonValue.isSignificantlyHigherThan(
+        lastRelevantPoint.swingPoint.point.priceComparisonValue,
       )
     ) {
       return this;
@@ -121,8 +121,8 @@ class DownwardTrendSecondCheck extends State {
     if (
       swingPoint.swingPointType === 'swingHigh' &&
       lastRelevantPoint &&
-      swingPoint.point.y.isSignificantlyLowerThan(
-        lastRelevantPoint.swingPoint.point.y,
+      swingPoint.point.priceComparisonValue.isSignificantlyLowerThan(
+        lastRelevantPoint.swingPoint.point.priceComparisonValue,
       )
     ) {
       return this.transitionTo(
@@ -146,8 +146,8 @@ export class DownwardTrendConfirmed extends State {
 
     if (
       lastRelevantPoint &&
-      swingPoint.point.y.isSignificantlyLowerThan(
-        lastRelevantPoint.swingPoint.point.y,
+      swingPoint.point.priceComparisonValue.isSignificantlyLowerThan(
+        lastRelevantPoint.swingPoint.point.priceComparisonValue,
       )
     ) {
       return this;
@@ -167,8 +167,8 @@ export class UpwardTrendWarning extends State {
 
     if (
       lastRelevantPoint &&
-      swingPoint.point.y.isSignificantlyHigherThan(
-        lastRelevantPoint.swingPoint.point.y,
+      swingPoint.point.priceComparisonValue.isSignificantlyHigherThan(
+        lastRelevantPoint.swingPoint.point.priceComparisonValue,
       )
     ) {
       return this.transitionTo(
@@ -189,8 +189,8 @@ export class DownwardTrendWarning extends State {
 
     if (
       lastRelevantPoint &&
-      swingPoint.point.y.isSignificantlyLowerThan(
-        lastRelevantPoint.swingPoint.point.y,
+      swingPoint.point.priceComparisonValue.isSignificantlyLowerThan(
+        lastRelevantPoint.swingPoint.point.priceComparisonValue,
       )
     ) {
       return this.transitionTo(

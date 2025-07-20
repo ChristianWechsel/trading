@@ -8,8 +8,8 @@ export type AnalysisContext = {
 export type TrendDataMetadata = {
   trendData: {
     type: 'upward' | 'downward';
-    startPoint: { x: string };
-    endPoint?: { x: string };
+    startPoint: EnrichedDataPoint;
+    endPoint?: EnrichedDataPoint;
     channel?: TrendChannel;
   };
   metaddata: { statusTrend: 'ongoing' | 'finished' };

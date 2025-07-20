@@ -1,4 +1,7 @@
-import { SwingPointType } from '../../core/enriched-data-point';
+import {
+  EnrichedDataPoint,
+  SwingPointType,
+} from '../../core/enriched-data-point';
 import { ComparableNumber } from '../utils/comparable-number/comparable-number';
 import { Memory } from '../utils/memory/memory';
 import { State } from './trend-detection-states';
@@ -15,5 +18,8 @@ export type TrendAnalysisPoint = {
 
 export type SwingPointData = {
   swingPointType: SwingPointType;
-  point: { x: string; y: ComparableNumber };
+  point: {
+    enrichedDataPoint: EnrichedDataPoint;
+    priceComparisonValue: ComparableNumber;
+  };
 };
