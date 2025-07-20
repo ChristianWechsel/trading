@@ -32,9 +32,18 @@ describe('Analysis (Integration)', () => {
     controller = moduleRef.get<AnalysisController>(AnalysisController);
 
     const result = await controller.performAnalysis(testData.dto);
-    expect(result.enrichedDataPoints).toEqual(
-      expect.arrayContaining(testData.expected),
-    );
+
+    const resultObjects = result.enrichedDataPoints.map((r) => ({
+      dataPoint: r.getDataPoint(),
+      swingPointType: r.getSwingPointType(),
+    }));
+
+    const expectedObjects = testData.expected.map((e) => ({
+      dataPoint: e.getDataPoint(),
+      swingPointType: e.getSwingPointType(),
+    }));
+
+    expect(resultObjects).toEqual(expectedObjects);
   });
 
   it('MCD.US 1980-06-01 - 1980-12-31', async () => {
@@ -58,8 +67,16 @@ describe('Analysis (Integration)', () => {
     controller = moduleRef.get<AnalysisController>(AnalysisController);
 
     const result = await controller.performAnalysis(testData.dto);
-    expect(result.enrichedDataPoints).toEqual(
-      expect.arrayContaining(testData.expected),
-    );
+    const resultObjects = result.enrichedDataPoints.map((r) => ({
+      dataPoint: r.getDataPoint(),
+      swingPointType: r.getSwingPointType(),
+    }));
+
+    const expectedObjects = testData.expected.map((e) => ({
+      dataPoint: e.getDataPoint(),
+      swingPointType: e.getSwingPointType(),
+    }));
+
+    expect(resultObjects).toEqual(expectedObjects);
   });
 });

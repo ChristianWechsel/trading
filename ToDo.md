@@ -21,6 +21,8 @@
   enrichedDataPoints: EnrichedDataPoint[];
   -TrendDataMetadata => start und end sollte idealerweise OHCLV Datum sein, dann habe ich Zugriff auf date als ISOString und als ms since epoche, was auch unnötige KOnvertierungen erspart. Alternativ ein EnrichedDataPoint ist.
 
+  - analysis.int.spec.ts soll alle Bearbeitungsschritte abtesten: ATR, SwingPoint, TrendDetction, TrendChannelCalculation. Mit den gleichen Daten kann dann in jedem Schritt ein Integrationstest erstellt werden.
+
 # TradingCharts
 
 - Auswahl der Charts Linien oder Candlestick
