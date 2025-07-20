@@ -1,24 +1,7 @@
-import { OHLCV, OHLCVEntity } from '../../../data-aggregation/ohlcv.entity';
-import { EnrichedDataPoint } from '../../core/enriched-data-point';
+import { CreateTestData } from 'src/utils/test-utils';
 import { AverageTrueRangeTestCase } from './average-true-range.spec';
 
-export class AverageTrueRangeTestdata {
-  private createEnrichedDataPoint(
-    ohlcv: Partial<OHLCVEntity>,
-  ): EnrichedDataPoint {
-    const defaultData: OHLCVEntity = {
-      securityId: 0,
-      priceDate: '1970-01-01',
-      openPrice: 0,
-      highPrice: 0,
-      lowPrice: 0,
-      closePrice: 0,
-      adjustedClosePrice: 0,
-      volume: 0,
-    };
-    return new EnrichedDataPoint(new OHLCV({ ...defaultData, ...ohlcv }));
-  }
-
+export class AverageTrueRangeTestdata extends CreateTestData {
   minimumPeriod_todayMax(): AverageTrueRangeTestCase {
     return {
       name: 'Minimum Period - Today Max',

@@ -1,12 +1,8 @@
-import { DataPoint } from '../../core/analysis.interface';
+import { CreateTestData } from 'src/utils/test-utils';
 import { EnrichedDataPoint } from '../../core/enriched-data-point';
 import { SwingPointTestCase } from './swing-point-detection.spec';
 
-export class SwingPointDetectionTestdata {
-  private createEnrichedDataPoint(dataPoint: DataPoint<number>) {
-    return new EnrichedDataPoint(dataPoint);
-  }
-
+export class SwingPointDetectionTestdata extends CreateTestData {
   singleSwingHigh(): SwingPointTestCase {
     return {
       name: 'detect swing high',

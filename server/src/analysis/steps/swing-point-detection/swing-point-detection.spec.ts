@@ -1,3 +1,4 @@
+import { OHLCV, OHLCVEntity } from '../../../data-aggregation/ohlcv.entity';
 import {
   EnrichedDataPoint,
   SwingPointType,
@@ -144,7 +145,7 @@ describe('SwingPointDetection', () => {
         new SwingPointDetection({ relativeThreshold: 0.1, windowSize }).execute(
           {
             enrichedDataPoints: new Array<EnrichedDataPoint>(dataLength).fill(
-              new EnrichedDataPoint({ x: 1, y: 1 }),
+              createEnrichedDataPoint({}),
             ),
           },
         ),
@@ -159,7 +160,7 @@ describe('SwingPointDetection', () => {
     'throws error for too short data (windowSize=$windowSize, dataLength=$dataLength)',
     ({ windowSize, dataLength }) => {
       const data = new Array<EnrichedDataPoint>(dataLength).fill(
-        new EnrichedDataPoint({ x: 1, y: 1 }),
+        createEnrichedDataPoint({}),
       );
       expect(() =>
         new SwingPointDetection({ relativeThreshold: 0.1, windowSize }).execute(
@@ -171,3 +172,19 @@ describe('SwingPointDetection', () => {
     },
   );
 });
+
+function createEnrichedDataPoint(
+  ohlcv: Partial<OHLCVEntity>,
+): EnrichedDataPoint {
+  const defaultData: OHLCVEntity = {
+    securityId: 0,
+    priceDate: '1970-01-01',
+    openPrice: 0,
+    highPrice: 0,
+    lowPrice: 0,
+    closePrice: 0,
+    adjustedClosePrice: 0,
+    volume: 0,
+  };
+  return new EnrichedDataPoint(new OHLCV({ ...defaultData, ...ohlcv }));
+}

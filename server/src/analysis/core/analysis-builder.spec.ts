@@ -1,4 +1,5 @@
 import { StepOptionsDto } from '../analysis-query.dto';
+import { MovingAverage } from '../steps/moving-average';
 import { SwingPointDetection } from '../steps/swing-point-detection/swing-point-detection';
 import { TrendChannelCalculation } from '../steps/trend-channel-calculation/trend-channel-calculation';
 import { TrendDetection } from '../steps/trend-detection/trend-detection';
@@ -20,8 +21,7 @@ describe('AnalysisBuilder', () => {
   const swingPointDetectionMock =
     SwingPointDetection as jest.Mock<SwingPointDetection>;
   const trendDetectionMock = TrendDetection as jest.Mock<TrendDetection>;
-  const movingAverageMock = (require('../steps/moving-average').MovingAverage ||
-    require('../steps/moving-average')) as jest.Mock;
+  const movingAverageMock = MovingAverage as jest.Mock;
   const trendChannelCalculationMock =
     TrendChannelCalculation as jest.Mock<TrendChannelCalculation>;
 
