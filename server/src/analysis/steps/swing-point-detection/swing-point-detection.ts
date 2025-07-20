@@ -63,7 +63,7 @@ export class SwingPointDetection implements AnalysisStep {
       );
       const currentPoint = data[idx];
       const currentComparableNumber = this.createComparableNumber(
-        currentPoint.y,
+        currentPoint.getDataPoint().getClosePrice(),
       );
 
       if (
@@ -118,10 +118,12 @@ export class SwingPointDetection implements AnalysisStep {
     let idxWindowSize = 0;
     while (idxWindowSize < this.options.windowSize) {
       previousPoints[idxWindowSize] = this.createComparableNumber(
-        data[idx - this.options.windowSize + idxWindowSize].y,
+        data[idx - this.options.windowSize + idxWindowSize]
+          .getDataPoint()
+          .getClosePrice(),
       );
       nextPoints[idxWindowSize] = this.createComparableNumber(
-        data[idx + idxWindowSize + 1].y,
+        data[idx + idxWindowSize + 1].getDataPoint().getClosePrice(),
       );
       idxWindowSize++;
     }

@@ -8,9 +8,9 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect swing high',
       testcase: {
         data: [
-          this.createEnrichedDataPoint({ x: 1, y: 2 }),
-          this.createEnrichedDataPoint({ x: 2, y: 3 }),
-          this.createEnrichedDataPoint({ x: 3, y: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 2 }),
         ],
         expectedSwingPoints: [{ index: 1, type: 'swingHigh' }],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -97,6 +97,7 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       },
     };
   }
+
   multipleSwingPoints(): SwingPointTestCase {
     return {
       name: 'detect multiple swing points',
@@ -134,6 +135,7 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       },
     };
   }
+
   multipleSwingPoints_significant(): SwingPointTestCase {
     return {
       name: 'detect multiple swing points (significant difference)',
