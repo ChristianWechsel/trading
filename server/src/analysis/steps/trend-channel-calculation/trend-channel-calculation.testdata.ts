@@ -1,4 +1,4 @@
-import { CreateTestData } from 'src/utils/test-utils';
+import { CreateTestData } from '../../../utils/test-utils';
 import { EnrichedDataPoint } from '../../core/enriched-data-point';
 import { TrendChannelTestCase } from './trend-channel-calculation.spec';
 
@@ -93,32 +93,43 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
   }
 
   simpleDownwardTrend(): TrendChannelTestCase {
-    const pointA = { x: 1, y: 20 };
-    const pointB = { x: 2, y: 10 };
-    const pointC = { x: 3, y: 18 };
-    const slope = this.calcSlope(pointC, pointA);
+    const primarySwingPointA = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 20 },
+      'swingHigh',
+    );
+    const secondarySwingPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '2', closePrice: 10 },
+      'swingLow',
+    );
+    const primarySwingPointB = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '3', closePrice: 18 },
+      'swingHigh',
+    );
+    const endPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '5', closePrice: 16 },
+      'swingHigh',
+    );
+
+    const slope = this.calcSlope(primarySwingPointB, primarySwingPointA);
     return {
       name: 'should calculate channel for a simple downward trend',
       testcase: {
         initialContext: {
           enrichedDataPoints: [
-            this.createEnrichedDataPointWithSwingPoints(pointA, 'swingHigh'),
-            this.createEnrichedDataPointWithSwingPoints(pointB, 'swingLow'),
-            this.createEnrichedDataPointWithSwingPoints(pointC, 'swingHigh'),
+            primarySwingPointA,
+            secondarySwingPoint,
+            primarySwingPointB,
             this.createEnrichedDataPointWithSwingPoints(
-              { x: 4, y: 8 },
+              { priceDate: '4', closePrice: 8 },
               'swingLow',
             ),
-            this.createEnrichedDataPointWithSwingPoints(
-              { x: 5, y: 16 },
-              'swingHigh',
-            ),
+            endPoint,
           ],
           trends: [
             {
               type: 'downward',
-              startPoint: { x: pointA.x },
-              endPoint: { x: 5 },
+              startPoint: primarySwingPointA,
+              endPoint,
             },
           ],
         },
@@ -126,11 +137,11 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
           {
             trendLine: {
               slope,
-              yIntercept: this.calcYIntercept(pointA, slope),
+              yIntercept: this.calcYIntercept(primarySwingPointA, slope),
             },
             returnLine: {
               slope,
-              yIntercept: this.calcYIntercept(pointB, slope),
+              yIntercept: this.calcYIntercept(secondarySwingPoint, slope),
             },
           },
         ],
@@ -140,12 +151,30 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
 
   // mehrere Trends, überlappend
   overlappingTrends(): TrendChannelTestCase {
-    const pointA = { x: 1, y: 10 };
-    const pointB = { x: 2, y: 20 };
-    const pointC = { x: 3, y: 12 };
-    const pointD = { x: 4, y: 22 };
-    const pointE = { x: 5, y: 14 };
-    const pointF = { x: 6, y: 24 };
+    const pointA = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 10 },
+      'swingLow',
+    );
+    const pointB = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '2', closePrice: 20 },
+      'swingHigh',
+    );
+    const pointC = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '3', closePrice: 12 },
+      'swingLow',
+    );
+    const pointD = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '4', closePrice: 22 },
+      'swingHigh',
+    );
+    const pointE = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '5', closePrice: 14 },
+      'swingLow',
+    );
+    const pointF = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '6', closePrice: 24 },
+      'swingHigh',
+    );
 
     const slope1 = this.calcSlope(pointC, pointA);
     const slope2 = this.calcSlope(pointE, pointC);
@@ -154,24 +183,17 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
       name: 'should handle overlapping trends',
       testcase: {
         initialContext: {
-          enrichedDataPoints: [
-            this.createEnrichedDataPointWithSwingPoints(pointA, 'swingLow'),
-            this.createEnrichedDataPointWithSwingPoints(pointB, 'swingHigh'),
-            this.createEnrichedDataPointWithSwingPoints(pointC, 'swingLow'),
-            this.createEnrichedDataPointWithSwingPoints(pointD, 'swingHigh'),
-            this.createEnrichedDataPointWithSwingPoints(pointE, 'swingLow'),
-            this.createEnrichedDataPointWithSwingPoints(pointF, 'swingHigh'),
-          ],
+          enrichedDataPoints: [pointA, pointB, pointC, pointD, pointE, pointF],
           trends: [
             {
               type: 'upward',
-              startPoint: { x: pointA.x },
-              endPoint: { x: pointE.x },
+              startPoint: pointA,
+              endPoint: pointE,
             },
             {
               type: 'upward',
-              startPoint: { x: pointC.x },
-              endPoint: { x: pointF.x },
+              startPoint: pointC,
+              endPoint: pointF,
             },
           ],
         },
@@ -204,14 +226,32 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
   // mehrere Trends, getrennt
   separatedTrends(): TrendChannelTestCase {
     // Erster Trend: drei SwingPoints
-    const pointA1 = { x: 1, y: 10 };
-    const pointB1 = { x: 2, y: 20 };
-    const pointC1 = { x: 3, y: 12 };
+    const pointA1 = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 10 },
+      'swingLow',
+    );
+    const pointB1 = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '2', closePrice: 20 },
+      'swingHigh',
+    );
+    const pointC1 = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '3', closePrice: 12 },
+      'swingLow',
+    );
 
     // Zweiter Trend: drei SwingPoints
-    const pointA2 = { x: 10, y: 30 };
-    const pointB2 = { x: 11, y: 40 };
-    const pointC2 = { x: 12, y: 32 };
+    const pointA2 = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '10', closePrice: 30 },
+      'swingLow',
+    );
+    const pointB2 = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '11', closePrice: 40 },
+      'swingHigh',
+    );
+    const pointC2 = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '12', closePrice: 32 },
+      'swingLow',
+    );
 
     const slope1 = this.calcSlope(pointC1, pointA1);
     const slope2 = this.calcSlope(pointC2, pointA2);
@@ -221,23 +261,23 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
       testcase: {
         initialContext: {
           enrichedDataPoints: [
-            this.createEnrichedDataPointWithSwingPoints(pointA1, 'swingLow'),
-            this.createEnrichedDataPointWithSwingPoints(pointB1, 'swingHigh'),
-            this.createEnrichedDataPointWithSwingPoints(pointC1, 'swingLow'),
-            this.createEnrichedDataPointWithSwingPoints(pointA2, 'swingLow'),
-            this.createEnrichedDataPointWithSwingPoints(pointB2, 'swingHigh'),
-            this.createEnrichedDataPointWithSwingPoints(pointC2, 'swingLow'),
+            pointA1,
+            pointB1,
+            pointC1,
+            pointA2,
+            pointB2,
+            pointC2,
           ],
           trends: [
             {
               type: 'upward',
-              startPoint: { x: pointA1.x },
-              endPoint: { x: pointC1.x },
+              startPoint: pointA1,
+              endPoint: pointC1,
             },
             {
               type: 'upward',
-              startPoint: { x: pointA2.x },
-              endPoint: { x: pointC2.x },
+              startPoint: pointA2,
+              endPoint: pointC2,
             },
           ],
         },
@@ -269,10 +309,22 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
 
   // mehrere Datenpunkte zwischen swing points
   multiplePointsBetweenSwings(): TrendChannelTestCase {
-    const pointA = { x: 1, y: 10 };
-    const pointB = { x: 2, y: 20 };
-    const pointC = { x: 3, y: 12 };
-    const pointD = { x: 4, y: 22 };
+    const pointA = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 10 },
+      'swingLow',
+    );
+    const pointB = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '2', closePrice: 20 },
+      'swingHigh',
+    );
+    const pointC = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '3', closePrice: 12 },
+      'swingLow',
+    );
+    const pointD = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '4', closePrice: 22 },
+      'swingHigh',
+    );
 
     const slope = this.calcSlope(pointC, pointA);
 
@@ -281,28 +333,28 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
       testcase: {
         initialContext: {
           enrichedDataPoints: [
-            this.createEnrichedDataPointWithSwingPoints(pointA, 'swingLow'),
+            pointA,
             this.createEnrichedDataPointWithSwingPoints(
-              { x: 1.5, y: 15 },
+              { priceDate: '1.5', closePrice: 15 },
               null,
             ),
-            this.createEnrichedDataPointWithSwingPoints(pointB, 'swingHigh'),
+            pointB,
             this.createEnrichedDataPointWithSwingPoints(
-              { x: 2.5, y: 16 },
+              { priceDate: '2.5', closePrice: 16 },
               null,
             ),
-            this.createEnrichedDataPointWithSwingPoints(pointC, 'swingLow'),
+            pointC,
             this.createEnrichedDataPointWithSwingPoints(
-              { x: 3.5, y: 18 },
+              { priceDate: '3.5', closePrice: 18 },
               null,
             ),
-            this.createEnrichedDataPointWithSwingPoints(pointD, 'swingHigh'),
+            pointD,
           ],
           trends: [
             {
               type: 'upward',
-              startPoint: { x: pointA.x },
-              endPoint: { x: pointD.x },
+              startPoint: pointA,
+              endPoint: pointD,
             },
           ],
         },
@@ -324,9 +376,18 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
 
   // Kommazahlen für x und y Werte
   decimalValues(): TrendChannelTestCase {
-    const pointA = { x: 1.1, y: 10.5 };
-    const pointB = { x: 2.2, y: 20.7 };
-    const pointC = { x: 3.3, y: 12.9 };
+    const pointA = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1.1', closePrice: 10.5 },
+      'swingLow',
+    );
+    const pointB = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '2.2', closePrice: 20.7 },
+      'swingHigh',
+    );
+    const pointC = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '3.3', closePrice: 12.9 },
+      'swingLow',
+    );
 
     const slope = this.calcSlope(pointC, pointA);
 
@@ -334,16 +395,12 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
       name: 'should handle decimal x and y values',
       testcase: {
         initialContext: {
-          enrichedDataPoints: [
-            this.createEnrichedDataPointWithSwingPoints(pointA, 'swingLow'),
-            this.createEnrichedDataPointWithSwingPoints(pointB, 'swingHigh'),
-            this.createEnrichedDataPointWithSwingPoints(pointC, 'swingLow'),
-          ],
+          enrichedDataPoints: [pointA, pointB, pointC],
           trends: [
             {
               type: 'upward',
-              startPoint: { x: pointA.x },
-              endPoint: { x: pointC.x },
+              startPoint: pointA,
+              endPoint: pointC,
             },
           ],
         },
@@ -365,9 +422,18 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
 
   // es vorauslaufende Points, welche aber nicht zum Trend gehören
   leadingPoints(): TrendChannelTestCase {
-    const pointA = { x: 3, y: 10 };
-    const pointB = { x: 4, y: 20 };
-    const pointC = { x: 5, y: 12 };
+    const pointA = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '3', closePrice: 10 },
+      'swingLow',
+    );
+    const pointB = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '4', closePrice: 20 },
+      'swingHigh',
+    );
+    const pointC = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '5', closePrice: 12 },
+      'swingLow',
+    );
 
     const slope = this.calcSlope(pointC, pointA);
 
@@ -376,17 +442,23 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
       testcase: {
         initialContext: {
           enrichedDataPoints: [
-            this.createEnrichedDataPointWithSwingPoints({ x: 1, y: 99 }, null),
-            this.createEnrichedDataPointWithSwingPoints({ x: 2, y: 88 }, null),
-            this.createEnrichedDataPointWithSwingPoints(pointA, 'swingLow'),
-            this.createEnrichedDataPointWithSwingPoints(pointB, 'swingHigh'),
-            this.createEnrichedDataPointWithSwingPoints(pointC, 'swingLow'),
+            this.createEnrichedDataPointWithSwingPoints(
+              { priceDate: '1', closePrice: 99 },
+              null,
+            ),
+            this.createEnrichedDataPointWithSwingPoints(
+              { priceDate: '2', closePrice: 88 },
+              null,
+            ),
+            pointA,
+            pointB,
+            pointC,
           ],
           trends: [
             {
               type: 'upward',
-              startPoint: { x: pointA.x },
-              endPoint: { x: pointC.x },
+              startPoint: pointA,
+              endPoint: pointC,
             },
           ],
         },
@@ -408,9 +480,18 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
 
   // es gibt nachlaufende Points, welche aber nicht zum Trend gehören
   trailingPoints(): TrendChannelTestCase {
-    const pointA = { x: 1, y: 10 };
-    const pointB = { x: 2, y: 20 };
-    const pointC = { x: 3, y: 12 };
+    const pointA = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 10 },
+      'swingLow',
+    );
+    const pointB = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '2', closePrice: 20 },
+      'swingHigh',
+    );
+    const pointC = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '3', closePrice: 12 },
+      'swingLow',
+    );
 
     const slope = this.calcSlope(pointC, pointA);
 
@@ -419,17 +500,23 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
       testcase: {
         initialContext: {
           enrichedDataPoints: [
-            this.createEnrichedDataPointWithSwingPoints(pointA, 'swingLow'),
-            this.createEnrichedDataPointWithSwingPoints(pointB, 'swingHigh'),
-            this.createEnrichedDataPointWithSwingPoints(pointC, 'swingLow'),
-            this.createEnrichedDataPointWithSwingPoints({ x: 4, y: 77 }, null),
-            this.createEnrichedDataPointWithSwingPoints({ x: 5, y: 66 }, null),
+            pointA,
+            pointB,
+            pointC,
+            this.createEnrichedDataPointWithSwingPoints(
+              { priceDate: '4', closePrice: 77 },
+              null,
+            ),
+            this.createEnrichedDataPointWithSwingPoints(
+              { priceDate: '5', closePrice: 66 },
+              null,
+            ),
           ],
           trends: [
             {
               type: 'upward',
-              startPoint: { x: pointA.x },
-              endPoint: { x: pointC.x },
+              startPoint: pointA,
+              endPoint: pointC,
             },
           ],
         },
