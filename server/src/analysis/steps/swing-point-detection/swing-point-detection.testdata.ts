@@ -1,5 +1,4 @@
-import { CreateTestData } from 'src/utils/test-utils';
-import { EnrichedDataPoint } from '../../core/enriched-data-point';
+import { CreateTestData } from '../../../utils/test-utils';
 import { SwingPointTestCase } from './swing-point-detection.spec';
 
 export class SwingPointDetectionTestdata extends CreateTestData {
@@ -23,9 +22,9 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect swing high (close values)',
       testcase: {
         data: [
-          this.createEnrichedDataPoint({ x: 1, y: 2 }),
-          this.createEnrichedDataPoint({ x: 2, y: 2.09 }), // close to 2
-          this.createEnrichedDataPoint({ x: 3, y: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 2.09 }), // close to 2
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 2 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -38,9 +37,9 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect swing high (significant difference)',
       testcase: {
         data: [
-          this.createEnrichedDataPoint({ x: 1, y: 2 }),
-          this.createEnrichedDataPoint({ x: 2, y: 3 }),
-          this.createEnrichedDataPoint({ x: 3, y: 1.5 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 1.5 }),
         ],
         expectedSwingPoints: [{ index: 1, type: 'swingHigh' }],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -53,9 +52,9 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect swing low',
       testcase: {
         data: [
-          this.createEnrichedDataPoint({ x: 1, y: 3 }),
-          this.createEnrichedDataPoint({ x: 2, y: 2 }),
-          this.createEnrichedDataPoint({ x: 3, y: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 3 }),
         ],
         expectedSwingPoints: [{ index: 1, type: 'swingLow' }],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -68,9 +67,9 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect swing low (close values)',
       testcase: {
         data: [
-          this.createEnrichedDataPoint({ x: 1, y: 3 }),
-          this.createEnrichedDataPoint({ x: 2, y: 2.91 }), // close to 3
-          this.createEnrichedDataPoint({ x: 3, y: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 2.91 }), // close to 3
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 3 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -83,9 +82,9 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect swing low (significant difference)',
       testcase: {
         data: [
-          this.createEnrichedDataPoint({ x: 1, y: 3 }),
-          this.createEnrichedDataPoint({ x: 2, y: 1.5 }),
-          this.createEnrichedDataPoint({ x: 3, y: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 1.5 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 3 }),
         ],
         expectedSwingPoints: [
           {
@@ -103,11 +102,11 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect multiple swing points',
       testcase: {
         data: [
-          this.createEnrichedDataPoint({ x: 1, y: 1 }),
-          this.createEnrichedDataPoint({ x: 2, y: 3 }),
-          this.createEnrichedDataPoint({ x: 3, y: 2 }),
-          this.createEnrichedDataPoint({ x: 4, y: 4 }),
-          this.createEnrichedDataPoint({ x: 5, y: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 4 }),
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 3 }),
         ],
         expectedSwingPoints: [
           { index: 1, type: 'swingHigh' },
@@ -124,11 +123,11 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect multiple swing points (close values)',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 1, y: 1 }),
-          new EnrichedDataPoint({ x: 2, y: 1.09 }), // close to 1
-          new EnrichedDataPoint({ x: 3, y: 1.01 }), // close to 1.09
-          new EnrichedDataPoint({ x: 4, y: 1.08 }), // close to 1.01
-          new EnrichedDataPoint({ x: 5, y: 1.05 }), // close to 1.08
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 1.09 }), // close to 1
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 1.01 }), // close to 1.09
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 1.08 }), // close to 1.01
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 1.05 }), // close to 1.08
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -141,11 +140,11 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect multiple swing points (significant difference)',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 1, y: 1 }),
-          new EnrichedDataPoint({ x: 2, y: 3 }),
-          new EnrichedDataPoint({ x: 3, y: 1 }),
-          new EnrichedDataPoint({ x: 4, y: 4 }),
-          new EnrichedDataPoint({ x: 5, y: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 4 }),
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 1 }),
         ],
         expectedSwingPoints: [
           { index: 1, type: 'swingHigh' },
@@ -162,9 +161,9 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect no swing points - flatline - equal values',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 1, y: 1 }),
-          new EnrichedDataPoint({ x: 2, y: 1 }),
-          new EnrichedDataPoint({ x: 3, y: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 1 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -177,9 +176,9 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect no swing points - flatline - close values',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 1, y: 1 }),
-          new EnrichedDataPoint({ x: 2, y: 1.01 }),
-          new EnrichedDataPoint({ x: 3, y: 0.99 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 1.01 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 0.99 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -192,9 +191,9 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect no swing points - ascending',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 1, y: 1 }),
-          new EnrichedDataPoint({ x: 2, y: 2 }),
-          new EnrichedDataPoint({ x: 3, y: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 3 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -207,9 +206,9 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect no swing points - descending',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 1, y: 3 }),
-          new EnrichedDataPoint({ x: 2, y: 2 }),
-          new EnrichedDataPoint({ x: 3, y: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 1 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -222,9 +221,9 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect plateau high',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 1, y: 2 }),
-          new EnrichedDataPoint({ x: 2, y: 2 }),
-          new EnrichedDataPoint({ x: 3, y: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 3 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -237,9 +236,9 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect plateau low',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 1, y: 2 }),
-          new EnrichedDataPoint({ x: 2, y: 2 }),
-          new EnrichedDataPoint({ x: 3, y: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 1 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -252,9 +251,9 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect low plateau',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 1, y: 1 }),
-          new EnrichedDataPoint({ x: 2, y: 2 }),
-          new EnrichedDataPoint({ x: 3, y: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 2 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -267,9 +266,9 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect high plateau',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 1, y: 3 }),
-          new EnrichedDataPoint({ x: 2, y: 2 }),
-          new EnrichedDataPoint({ x: 3, y: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 2 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -282,15 +281,15 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect swing high with window size',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 1, y: 6 }),
-          new EnrichedDataPoint({ x: 2, y: 2 }),
-          new EnrichedDataPoint({ x: 3, y: 4 }),
-          new EnrichedDataPoint({ x: 4, y: 2 }),
-          new EnrichedDataPoint({ x: 5, y: 5 }),
-          new EnrichedDataPoint({ x: 6, y: 2 }),
-          new EnrichedDataPoint({ x: 7, y: 3 }),
-          new EnrichedDataPoint({ x: 8, y: 4 }),
-          new EnrichedDataPoint({ x: 9, y: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 6 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 4 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 5 }),
+          this.createEnrichedDataPoint({ priceDate: '6', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '7', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '8', closePrice: 4 }),
+          this.createEnrichedDataPoint({ priceDate: '9', closePrice: 2 }),
         ],
         expectedSwingPoints: [{ index: 4, type: 'swingHigh' }],
         settings: { relativeThreshold: 0.1, windowSize: 3 },
@@ -303,13 +302,13 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect swing high with windowSize=3 (centered peak)',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 1, y: 1 }),
-          new EnrichedDataPoint({ x: 2, y: 2 }),
-          new EnrichedDataPoint({ x: 3, y: 3 }),
-          new EnrichedDataPoint({ x: 4, y: 10 }), // swing high
-          new EnrichedDataPoint({ x: 5, y: 3 }),
-          new EnrichedDataPoint({ x: 6, y: 2 }),
-          new EnrichedDataPoint({ x: 7, y: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 10 }), // swing high
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '6', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '7', closePrice: 1 }),
         ],
         expectedSwingPoints: [{ index: 3, type: 'swingHigh' }],
         settings: { relativeThreshold: 0.1, windowSize: 3 },
@@ -322,13 +321,13 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect swing low with windowSize=3 (centered valley)',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 1, y: 10 }),
-          new EnrichedDataPoint({ x: 2, y: 7 }),
-          new EnrichedDataPoint({ x: 3, y: 5 }),
-          new EnrichedDataPoint({ x: 4, y: 1 }), // swing low
-          new EnrichedDataPoint({ x: 5, y: 5 }),
-          new EnrichedDataPoint({ x: 6, y: 7 }),
-          new EnrichedDataPoint({ x: 7, y: 10 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 10 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 7 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 5 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 1 }), // swing low
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 5 }),
+          this.createEnrichedDataPoint({ priceDate: '6', closePrice: 7 }),
+          this.createEnrichedDataPoint({ priceDate: '7', closePrice: 10 }),
         ],
         expectedSwingPoints: [{ index: 3, type: 'swingLow' }],
         settings: { relativeThreshold: 0.1, windowSize: 3 },
@@ -341,13 +340,13 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'no swing high with windowSize=3 (peak not high enough)',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 1, y: 1 }),
-          new EnrichedDataPoint({ x: 2, y: 2 }),
-          new EnrichedDataPoint({ x: 3, y: 4 }),
-          new EnrichedDataPoint({ x: 4, y: 3.1 }), // not highest
-          new EnrichedDataPoint({ x: 5, y: 3 }),
-          new EnrichedDataPoint({ x: 6, y: 2 }),
-          new EnrichedDataPoint({ x: 7, y: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 4 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 3.1 }), // not highest
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '6', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '7', closePrice: 1 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 3 },
@@ -360,13 +359,13 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'no swing low with windowSize=3 (valley not low enough)',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 1, y: 10 }),
-          new EnrichedDataPoint({ x: 2, y: 7 }),
-          new EnrichedDataPoint({ x: 3, y: 5 }),
-          new EnrichedDataPoint({ x: 4, y: 4.9 }), // not lowest
-          new EnrichedDataPoint({ x: 5, y: 4.8 }),
-          new EnrichedDataPoint({ x: 6, y: 7 }),
-          new EnrichedDataPoint({ x: 7, y: 10 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 10 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 7 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 5 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 4.9 }), // not lowest
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 4.8 }),
+          this.createEnrichedDataPoint({ priceDate: '6', closePrice: 7 }),
+          this.createEnrichedDataPoint({ priceDate: '7', closePrice: 10 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 3 },
@@ -379,15 +378,15 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect upward to plateau with windowSize=2',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 0, y: 5 }),
-          new EnrichedDataPoint({ x: 1, y: 6 }),
-          new EnrichedDataPoint({ x: 2, y: 10 }),
-          new EnrichedDataPoint({ x: 3, y: 12 }),
-          new EnrichedDataPoint({ x: 4, y: 15 }),
-          new EnrichedDataPoint({ x: 5, y: 15.05 }),
-          new EnrichedDataPoint({ x: 6, y: 14.95 }),
-          new EnrichedDataPoint({ x: 7, y: 18 }),
-          new EnrichedDataPoint({ x: 8, y: 19 }),
+          this.createEnrichedDataPoint({ priceDate: '0', closePrice: 5 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 6 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 10 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 12 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 15 }),
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 15.05 }),
+          this.createEnrichedDataPoint({ priceDate: '6', closePrice: 14.95 }),
+          this.createEnrichedDataPoint({ priceDate: '7', closePrice: 18 }),
+          this.createEnrichedDataPoint({ priceDate: '8', closePrice: 19 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
@@ -400,15 +399,15 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect downwardToPlateau with windowSize=2',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 0, y: 25 }),
-          new EnrichedDataPoint({ x: 1, y: 24 }),
-          new EnrichedDataPoint({ x: 2, y: 20 }),
-          new EnrichedDataPoint({ x: 3, y: 18 }),
-          new EnrichedDataPoint({ x: 4, y: 15 }),
-          new EnrichedDataPoint({ x: 5, y: 15.05 }),
-          new EnrichedDataPoint({ x: 6, y: 14.95 }),
-          new EnrichedDataPoint({ x: 7, y: 12 }),
-          new EnrichedDataPoint({ x: 8, y: 11 }),
+          this.createEnrichedDataPoint({ priceDate: '0', closePrice: 25 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 24 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 20 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 18 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 15 }),
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 15.05 }),
+          this.createEnrichedDataPoint({ priceDate: '6', closePrice: 14.95 }),
+          this.createEnrichedDataPoint({ priceDate: '7', closePrice: 12 }),
+          this.createEnrichedDataPoint({ priceDate: '8', closePrice: 11 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
@@ -421,15 +420,15 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect plateauToUpward with windowSize=2',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 0, y: 5 }),
-          new EnrichedDataPoint({ x: 1, y: 6 }),
-          new EnrichedDataPoint({ x: 2, y: 9.95 }),
-          new EnrichedDataPoint({ x: 3, y: 10.05 }),
-          new EnrichedDataPoint({ x: 4, y: 10 }),
-          new EnrichedDataPoint({ x: 5, y: 12 }),
-          new EnrichedDataPoint({ x: 6, y: 14 }),
-          new EnrichedDataPoint({ x: 7, y: 18 }),
-          new EnrichedDataPoint({ x: 8, y: 19 }),
+          this.createEnrichedDataPoint({ priceDate: '0', closePrice: 5 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 6 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 9.95 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 10.05 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 10 }),
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 12 }),
+          this.createEnrichedDataPoint({ priceDate: '6', closePrice: 14 }),
+          this.createEnrichedDataPoint({ priceDate: '7', closePrice: 18 }),
+          this.createEnrichedDataPoint({ priceDate: '8', closePrice: 19 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
@@ -442,15 +441,15 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect plateauToDownward with windowSize=2',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 0, y: 20 }),
-          new EnrichedDataPoint({ x: 1, y: 19 }),
-          new EnrichedDataPoint({ x: 2, y: 15.05 }),
-          new EnrichedDataPoint({ x: 3, y: 14.95 }),
-          new EnrichedDataPoint({ x: 4, y: 15 }),
-          new EnrichedDataPoint({ x: 5, y: 13 }),
-          new EnrichedDataPoint({ x: 6, y: 11 }),
-          new EnrichedDataPoint({ x: 7, y: 8 }),
-          new EnrichedDataPoint({ x: 8, y: 7 }),
+          this.createEnrichedDataPoint({ priceDate: '0', closePrice: 20 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 19 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 15.05 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 14.95 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 15 }),
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 13 }),
+          this.createEnrichedDataPoint({ priceDate: '6', closePrice: 11 }),
+          this.createEnrichedDataPoint({ priceDate: '7', closePrice: 8 }),
+          this.createEnrichedDataPoint({ priceDate: '8', closePrice: 7 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
@@ -463,15 +462,15 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'fail upwardToPlateau with windowSize=2 (trend fail)',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 0, y: 5 }),
-          new EnrichedDataPoint({ x: 1, y: 6 }),
-          new EnrichedDataPoint({ x: 2, y: 11.5 }),
-          new EnrichedDataPoint({ x: 3, y: 12 }),
-          new EnrichedDataPoint({ x: 4, y: 15 }),
-          new EnrichedDataPoint({ x: 5, y: 15.05 }),
-          new EnrichedDataPoint({ x: 6, y: 14.95 }),
-          new EnrichedDataPoint({ x: 7, y: 18 }),
-          new EnrichedDataPoint({ x: 8, y: 19 }),
+          this.createEnrichedDataPoint({ priceDate: '0', closePrice: 5 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 6 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 11.5 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 12 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 15 }),
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 15.05 }),
+          this.createEnrichedDataPoint({ priceDate: '6', closePrice: 14.95 }),
+          this.createEnrichedDataPoint({ priceDate: '7', closePrice: 18 }),
+          this.createEnrichedDataPoint({ priceDate: '8', closePrice: 19 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
@@ -484,15 +483,15 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'fail upwardToPlateau with windowSize=2 (plateau fail)',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 0, y: 5 }),
-          new EnrichedDataPoint({ x: 1, y: 6 }),
-          new EnrichedDataPoint({ x: 2, y: 10 }),
-          new EnrichedDataPoint({ x: 3, y: 12 }),
-          new EnrichedDataPoint({ x: 4, y: 15 }),
-          new EnrichedDataPoint({ x: 5, y: 15.05 }),
-          new EnrichedDataPoint({ x: 6, y: 17 }),
-          new EnrichedDataPoint({ x: 7, y: 18 }),
-          new EnrichedDataPoint({ x: 8, y: 19 }),
+          this.createEnrichedDataPoint({ priceDate: '0', closePrice: 5 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 6 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 10 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 12 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 15 }),
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 15.05 }),
+          this.createEnrichedDataPoint({ priceDate: '6', closePrice: 17 }),
+          this.createEnrichedDataPoint({ priceDate: '7', closePrice: 18 }),
+          this.createEnrichedDataPoint({ priceDate: '8', closePrice: 19 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
@@ -505,13 +504,13 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'fail plateauToUpward with windowSize=2 (trend fail)',
       testcase: {
         data: [
-          new EnrichedDataPoint({ x: 0, y: 1 }),
-          new EnrichedDataPoint({ x: 1, y: 1.5 }),
-          new EnrichedDataPoint({ x: 2, y: 2 }),
-          new EnrichedDataPoint({ x: 3, y: 2 }),
-          new EnrichedDataPoint({ x: 4, y: 3 }),
-          new EnrichedDataPoint({ x: 5, y: 4 }),
-          new EnrichedDataPoint({ x: 6, y: 5 }),
+          this.createEnrichedDataPoint({ priceDate: '0', closePrice: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 1.5 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 4 }),
+          this.createEnrichedDataPoint({ priceDate: '6', closePrice: 5 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
@@ -524,10 +523,10 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'no swingpoint - upward to plateau followed by upward trend - windowSize=1',
       testcase: {
         data: [
-          this.createEnrichedDataPoint({ x: 1, y: 2 }),
-          this.createEnrichedDataPoint({ x: 2, y: 3 }),
-          this.createEnrichedDataPoint({ x: 3, y: 3 }),
-          this.createEnrichedDataPoint({ x: 4, y: 4 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 4 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -539,14 +538,14 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'no swingpoint - upward to plateau followed by upward trend - windowSize=2',
       testcase: {
         data: [
-          this.createEnrichedDataPoint({ x: 1, y: 1 }),
-          this.createEnrichedDataPoint({ x: 2, y: 2 }),
-          this.createEnrichedDataPoint({ x: 3, y: 3 }),
-          this.createEnrichedDataPoint({ x: 4, y: 3 }),
-          this.createEnrichedDataPoint({ x: 5, y: 3 }),
-          this.createEnrichedDataPoint({ x: 6, y: 3 }),
-          this.createEnrichedDataPoint({ x: 7, y: 4 }),
-          this.createEnrichedDataPoint({ x: 8, y: 5 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '6', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '7', closePrice: 4 }),
+          this.createEnrichedDataPoint({ priceDate: '8', closePrice: 5 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
@@ -558,10 +557,10 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'swingpoint - upward plateau followed by downward trend - windowSize=1',
       testcase: {
         data: [
-          this.createEnrichedDataPoint({ x: 1, y: 2 }),
-          this.createEnrichedDataPoint({ x: 2, y: 3 }),
-          this.createEnrichedDataPoint({ x: 3, y: 3 }),
-          this.createEnrichedDataPoint({ x: 4, y: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 2 }),
         ],
         expectedSwingPoints: [{ index: 1, type: 'swingHigh' }],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -573,14 +572,14 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'swingHigh - upward to plateau followed by downward trend - windowSize=2',
       testcase: {
         data: [
-          this.createEnrichedDataPoint({ x: 1, y: 1 }),
-          this.createEnrichedDataPoint({ x: 2, y: 2 }),
-          this.createEnrichedDataPoint({ x: 3, y: 3 }),
-          this.createEnrichedDataPoint({ x: 4, y: 3 }),
-          this.createEnrichedDataPoint({ x: 5, y: 3 }),
-          this.createEnrichedDataPoint({ x: 6, y: 3 }),
-          this.createEnrichedDataPoint({ x: 7, y: 2 }),
-          this.createEnrichedDataPoint({ x: 8, y: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '6', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '7', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '8', closePrice: 1 }),
         ],
         expectedSwingPoints: [{ index: 2, type: 'swingHigh' }],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
@@ -592,10 +591,10 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'swingLow - downward to plateau followed by upward trend - windowSize=1',
       testcase: {
         data: [
-          this.createEnrichedDataPoint({ x: 1, y: 4 }),
-          this.createEnrichedDataPoint({ x: 2, y: 3 }),
-          this.createEnrichedDataPoint({ x: 3, y: 3 }),
-          this.createEnrichedDataPoint({ x: 4, y: 4 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 4 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 4 }),
         ],
         expectedSwingPoints: [{ index: 1, type: 'swingLow' }],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -607,14 +606,14 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'swingLow - downward to plateau followed by upward trend - windowSize=2',
       testcase: {
         data: [
-          this.createEnrichedDataPoint({ x: 1, y: 5 }),
-          this.createEnrichedDataPoint({ x: 2, y: 4 }),
-          this.createEnrichedDataPoint({ x: 3, y: 3 }),
-          this.createEnrichedDataPoint({ x: 4, y: 3 }),
-          this.createEnrichedDataPoint({ x: 5, y: 3 }),
-          this.createEnrichedDataPoint({ x: 6, y: 3 }),
-          this.createEnrichedDataPoint({ x: 7, y: 4 }),
-          this.createEnrichedDataPoint({ x: 8, y: 5 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 5 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 4 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '6', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '7', closePrice: 4 }),
+          this.createEnrichedDataPoint({ priceDate: '8', closePrice: 5 }),
         ],
         expectedSwingPoints: [{ index: 2, type: 'swingLow' }],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
@@ -626,10 +625,10 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'no swingpoint - downward to plateau followed by downward trend - windowSize=1',
       testcase: {
         data: [
-          this.createEnrichedDataPoint({ x: 1, y: 4 }),
-          this.createEnrichedDataPoint({ x: 2, y: 3 }),
-          this.createEnrichedDataPoint({ x: 3, y: 3 }),
-          this.createEnrichedDataPoint({ x: 4, y: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 4 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 1 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
@@ -641,14 +640,14 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'no swingpoint - downward to plateau followed by downward trend - windowSize=2',
       testcase: {
         data: [
-          this.createEnrichedDataPoint({ x: 1, y: 5 }),
-          this.createEnrichedDataPoint({ x: 2, y: 4 }),
-          this.createEnrichedDataPoint({ x: 3, y: 3 }),
-          this.createEnrichedDataPoint({ x: 4, y: 3 }),
-          this.createEnrichedDataPoint({ x: 5, y: 3 }),
-          this.createEnrichedDataPoint({ x: 6, y: 3 }),
-          this.createEnrichedDataPoint({ x: 7, y: 2 }),
-          this.createEnrichedDataPoint({ x: 8, y: 1 }),
+          this.createEnrichedDataPoint({ priceDate: '1', closePrice: 5 }),
+          this.createEnrichedDataPoint({ priceDate: '2', closePrice: 4 }),
+          this.createEnrichedDataPoint({ priceDate: '3', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '4', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '5', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '6', closePrice: 3 }),
+          this.createEnrichedDataPoint({ priceDate: '7', closePrice: 2 }),
+          this.createEnrichedDataPoint({ priceDate: '8', closePrice: 1 }),
         ],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
