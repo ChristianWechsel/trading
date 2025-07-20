@@ -1,4 +1,4 @@
-import { CreateTestData } from 'src/utils/test-utils';
+import { CreateTestData } from '../../../utils/test-utils';
 import { AverageTrueRangeTestCase } from './average-true-range.spec';
 
 export class AverageTrueRangeTestdata extends CreateTestData {

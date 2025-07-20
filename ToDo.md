@@ -18,6 +18,8 @@
   https://www.investopedia.com/terms/a/atr.asp
 
   Integrationstest, welche alle Steps umfasst, ATR, SwingPoint, TrendDetection, TrendChannelCalc => Das Zusammenspiel aller Teile abtesten. Insb, da Context geändert wurde.
+  enrichedDataPoints: EnrichedDataPoint[];
+  -TrendDataMetadata => start und end sollte idealerweise OHCLV Datum sein, dann habe ich Zugriff auf date als ISOString und als ms since epoche, was auch unnötige KOnvertierungen erspart. Alternativ ein EnrichedDataPoint ist.
 
 # TradingCharts
 
