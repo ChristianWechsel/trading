@@ -1,4 +1,7 @@
-import { EnrichedDataPoint } from '../analysis/core/enriched-data-point';
+import {
+  EnrichedDataPoint,
+  SwingPointType,
+} from '../analysis/core/enriched-data-point';
 import { OHLCV, OHLCVEntity } from '../data-aggregation/ohlcv.entity';
 
 export class CreateTestData {
@@ -16,5 +19,15 @@ export class CreateTestData {
       volume: 0,
     };
     return new EnrichedDataPoint(new OHLCV({ ...defaultData, ...ohlcv }));
+  }
+  protected createEnrichedDataPointWithSwingPoints(
+    ohlcv: Partial<OHLCVEntity>,
+    type: SwingPointType | null,
+  ): EnrichedDataPoint {
+    const enrichedDataPoint = this.createEnrichedDataPoint(ohlcv);
+    if (type) {
+      enrichedDataPoint.setSwingPointType(type);
+    }
+    return enrichedDataPoint;
   }
 }

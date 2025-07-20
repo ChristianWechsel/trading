@@ -51,11 +51,11 @@ export class TrendDetection implements AnalysisStep {
           swingPointType: enrichedDataPoint.getSwingPointType()!,
           point: {
             x: new ComparableNumber(
-              enrichedDataPoint.x,
+              enrichedDataPoint.getDataPoint().getPriceEpochTime(),
               this.options.relativeThreshold,
             ),
             y: new ComparableNumber(
-              enrichedDataPoint.y,
+              enrichedDataPoint.getDataPoint().getClosePrice(),
               this.options.relativeThreshold,
             ),
           },
@@ -68,8 +68,14 @@ export class TrendDetection implements AnalysisStep {
     }
 
     const data = rawData.map<DataPoint<ComparableNumber>>((point) => ({
-      x: new ComparableNumber(point.x, this.options.relativeThreshold),
-      y: new ComparableNumber(point.y, this.options.relativeThreshold),
+      x: new ComparableNumber(
+        point.getDataPoint().getPriceEpochTime(),
+        this.options.relativeThreshold,
+      ),
+      y: new ComparableNumber(
+        point.getDataPoint().getClosePrice(),
+        this.options.relativeThreshold,
+      ),
     }));
     return { swingPoints, data };
   }
