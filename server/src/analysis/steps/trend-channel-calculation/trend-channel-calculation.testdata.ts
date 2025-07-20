@@ -1,31 +1,25 @@
-import { DataPoint } from '../../core/analysis.interface';
-import {
-  EnrichedDataPoint,
-  SwingPointType,
-} from '../../core/enriched-data-point';
+import { CreateTestData } from 'src/utils/test-utils';
+import { EnrichedDataPoint } from '../../core/enriched-data-point';
 import { TrendChannelTestCase } from './trend-channel-calculation.spec';
 
-export class TrendChannelCalculationTestdata {
-  private createEnrichedDataPoint(
-    dataPoint: DataPoint<number>,
-    type: SwingPointType | null,
-  ): EnrichedDataPoint {
-    const enrichedDataPoint = new EnrichedDataPoint(dataPoint);
-    if (type) {
-      enrichedDataPoint.setSwingPointType(type);
-    }
-    return enrichedDataPoint;
-  }
-
+export class TrendChannelCalculationTestdata extends CreateTestData {
   private calcSlope(
-    point1: DataPoint<number>,
-    point2: DataPoint<number>,
+    point1: EnrichedDataPoint,
+    point2: EnrichedDataPoint,
   ): number {
-    return (point2.y - point1.y) / (point2.x - point1.x);
+    return (
+      (point2.getDataPoint().getClosePrice() -
+        point1.getDataPoint().getClosePrice()) /
+      (point2.getDataPoint().getPriceDateEpochTime() -
+        point1.getDataPoint().getPriceDateEpochTime())
+    );
   }
 
-  private calcYIntercept(point: DataPoint<number>, slope: number): number {
-    return point.y - slope * point.x;
+  private calcYIntercept(point: EnrichedDataPoint, slope: number): number {
+    return (
+      point.getDataPoint().getClosePrice() -
+      slope * point.getDataPoint().getPriceDateEpochTime()
+    );
   }
 
   noTrends(): TrendChannelTestCase {
@@ -42,35 +36,55 @@ export class TrendChannelCalculationTestdata {
   }
 
   simpleUpwardTrend(): TrendChannelTestCase {
-    const pointA = { x: 1, y: 10 };
-    const pointB = { x: 2, y: 20 };
-    const pointC = { x: 3, y: 12 };
-    const slope = this.calcSlope(pointC, pointA);
+    const primarySwingPointA = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '1', closePrice: 10 },
+      'swingLow',
+    );
+    const secondarySwingPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '2', closePrice: 20 },
+      'swingHigh',
+    );
+    const primarySwingPointB = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '3', closePrice: 12 },
+      'swingLow',
+    );
+    const endPoint = this.createEnrichedDataPointWithSwingPoints(
+      { priceDate: '5', closePrice: 14 },
+      'swingLow',
+    );
 
+    const slope = this.calcSlope(primarySwingPointB, primarySwingPointA);
     return {
       name: 'should calculate channel for a simple upward trend',
       testcase: {
         initialContext: {
           enrichedDataPoints: [
-            this.createEnrichedDataPoint(pointA, 'swingLow'),
-            this.createEnrichedDataPoint(pointB, 'swingHigh'),
-            this.createEnrichedDataPoint(pointC, 'swingLow'),
-            this.createEnrichedDataPoint({ x: 4, y: 22 }, 'swingHigh'),
-            this.createEnrichedDataPoint({ x: 5, y: 14 }, 'swingLow'),
+            primarySwingPointA,
+            secondarySwingPoint,
+            primarySwingPointB,
+            this.createEnrichedDataPointWithSwingPoints(
+              { priceDate: '4', closePrice: 22 },
+              'swingHigh',
+            ),
+            endPoint,
           ],
           trends: [
-            { type: 'upward', startPoint: { x: pointA.x }, endPoint: { x: 5 } },
+            {
+              type: 'upward',
+              startPoint: primarySwingPointA,
+              endPoint,
+            },
           ],
         },
         expectedChannels: [
           {
             trendLine: {
               slope,
-              yIntercept: this.calcYIntercept(pointA, slope),
+              yIntercept: this.calcYIntercept(primarySwingPointA, slope),
             },
             returnLine: {
               slope,
-              yIntercept: this.calcYIntercept(pointB, slope),
+              yIntercept: this.calcYIntercept(secondarySwingPoint, slope),
             },
           },
         ],
@@ -88,11 +102,17 @@ export class TrendChannelCalculationTestdata {
       testcase: {
         initialContext: {
           enrichedDataPoints: [
-            this.createEnrichedDataPoint(pointA, 'swingHigh'),
-            this.createEnrichedDataPoint(pointB, 'swingLow'),
-            this.createEnrichedDataPoint(pointC, 'swingHigh'),
-            this.createEnrichedDataPoint({ x: 4, y: 8 }, 'swingLow'),
-            this.createEnrichedDataPoint({ x: 5, y: 16 }, 'swingHigh'),
+            this.createEnrichedDataPointWithSwingPoints(pointA, 'swingHigh'),
+            this.createEnrichedDataPointWithSwingPoints(pointB, 'swingLow'),
+            this.createEnrichedDataPointWithSwingPoints(pointC, 'swingHigh'),
+            this.createEnrichedDataPointWithSwingPoints(
+              { x: 4, y: 8 },
+              'swingLow',
+            ),
+            this.createEnrichedDataPointWithSwingPoints(
+              { x: 5, y: 16 },
+              'swingHigh',
+            ),
           ],
           trends: [
             {
@@ -135,12 +155,12 @@ export class TrendChannelCalculationTestdata {
       testcase: {
         initialContext: {
           enrichedDataPoints: [
-            this.createEnrichedDataPoint(pointA, 'swingLow'),
-            this.createEnrichedDataPoint(pointB, 'swingHigh'),
-            this.createEnrichedDataPoint(pointC, 'swingLow'),
-            this.createEnrichedDataPoint(pointD, 'swingHigh'),
-            this.createEnrichedDataPoint(pointE, 'swingLow'),
-            this.createEnrichedDataPoint(pointF, 'swingHigh'),
+            this.createEnrichedDataPointWithSwingPoints(pointA, 'swingLow'),
+            this.createEnrichedDataPointWithSwingPoints(pointB, 'swingHigh'),
+            this.createEnrichedDataPointWithSwingPoints(pointC, 'swingLow'),
+            this.createEnrichedDataPointWithSwingPoints(pointD, 'swingHigh'),
+            this.createEnrichedDataPointWithSwingPoints(pointE, 'swingLow'),
+            this.createEnrichedDataPointWithSwingPoints(pointF, 'swingHigh'),
           ],
           trends: [
             {
@@ -201,12 +221,12 @@ export class TrendChannelCalculationTestdata {
       testcase: {
         initialContext: {
           enrichedDataPoints: [
-            this.createEnrichedDataPoint(pointA1, 'swingLow'),
-            this.createEnrichedDataPoint(pointB1, 'swingHigh'),
-            this.createEnrichedDataPoint(pointC1, 'swingLow'),
-            this.createEnrichedDataPoint(pointA2, 'swingLow'),
-            this.createEnrichedDataPoint(pointB2, 'swingHigh'),
-            this.createEnrichedDataPoint(pointC2, 'swingLow'),
+            this.createEnrichedDataPointWithSwingPoints(pointA1, 'swingLow'),
+            this.createEnrichedDataPointWithSwingPoints(pointB1, 'swingHigh'),
+            this.createEnrichedDataPointWithSwingPoints(pointC1, 'swingLow'),
+            this.createEnrichedDataPointWithSwingPoints(pointA2, 'swingLow'),
+            this.createEnrichedDataPointWithSwingPoints(pointB2, 'swingHigh'),
+            this.createEnrichedDataPointWithSwingPoints(pointC2, 'swingLow'),
           ],
           trends: [
             {
@@ -261,13 +281,22 @@ export class TrendChannelCalculationTestdata {
       testcase: {
         initialContext: {
           enrichedDataPoints: [
-            this.createEnrichedDataPoint(pointA, 'swingLow'),
-            this.createEnrichedDataPoint({ x: 1.5, y: 15 }, null),
-            this.createEnrichedDataPoint(pointB, 'swingHigh'),
-            this.createEnrichedDataPoint({ x: 2.5, y: 16 }, null),
-            this.createEnrichedDataPoint(pointC, 'swingLow'),
-            this.createEnrichedDataPoint({ x: 3.5, y: 18 }, null),
-            this.createEnrichedDataPoint(pointD, 'swingHigh'),
+            this.createEnrichedDataPointWithSwingPoints(pointA, 'swingLow'),
+            this.createEnrichedDataPointWithSwingPoints(
+              { x: 1.5, y: 15 },
+              null,
+            ),
+            this.createEnrichedDataPointWithSwingPoints(pointB, 'swingHigh'),
+            this.createEnrichedDataPointWithSwingPoints(
+              { x: 2.5, y: 16 },
+              null,
+            ),
+            this.createEnrichedDataPointWithSwingPoints(pointC, 'swingLow'),
+            this.createEnrichedDataPointWithSwingPoints(
+              { x: 3.5, y: 18 },
+              null,
+            ),
+            this.createEnrichedDataPointWithSwingPoints(pointD, 'swingHigh'),
           ],
           trends: [
             {
@@ -306,9 +335,9 @@ export class TrendChannelCalculationTestdata {
       testcase: {
         initialContext: {
           enrichedDataPoints: [
-            this.createEnrichedDataPoint(pointA, 'swingLow'),
-            this.createEnrichedDataPoint(pointB, 'swingHigh'),
-            this.createEnrichedDataPoint(pointC, 'swingLow'),
+            this.createEnrichedDataPointWithSwingPoints(pointA, 'swingLow'),
+            this.createEnrichedDataPointWithSwingPoints(pointB, 'swingHigh'),
+            this.createEnrichedDataPointWithSwingPoints(pointC, 'swingLow'),
           ],
           trends: [
             {
@@ -347,11 +376,11 @@ export class TrendChannelCalculationTestdata {
       testcase: {
         initialContext: {
           enrichedDataPoints: [
-            this.createEnrichedDataPoint({ x: 1, y: 99 }, null),
-            this.createEnrichedDataPoint({ x: 2, y: 88 }, null),
-            this.createEnrichedDataPoint(pointA, 'swingLow'),
-            this.createEnrichedDataPoint(pointB, 'swingHigh'),
-            this.createEnrichedDataPoint(pointC, 'swingLow'),
+            this.createEnrichedDataPointWithSwingPoints({ x: 1, y: 99 }, null),
+            this.createEnrichedDataPointWithSwingPoints({ x: 2, y: 88 }, null),
+            this.createEnrichedDataPointWithSwingPoints(pointA, 'swingLow'),
+            this.createEnrichedDataPointWithSwingPoints(pointB, 'swingHigh'),
+            this.createEnrichedDataPointWithSwingPoints(pointC, 'swingLow'),
           ],
           trends: [
             {
@@ -390,11 +419,11 @@ export class TrendChannelCalculationTestdata {
       testcase: {
         initialContext: {
           enrichedDataPoints: [
-            this.createEnrichedDataPoint(pointA, 'swingLow'),
-            this.createEnrichedDataPoint(pointB, 'swingHigh'),
-            this.createEnrichedDataPoint(pointC, 'swingLow'),
-            this.createEnrichedDataPoint({ x: 4, y: 77 }, null),
-            this.createEnrichedDataPoint({ x: 5, y: 66 }, null),
+            this.createEnrichedDataPointWithSwingPoints(pointA, 'swingLow'),
+            this.createEnrichedDataPointWithSwingPoints(pointB, 'swingHigh'),
+            this.createEnrichedDataPointWithSwingPoints(pointC, 'swingLow'),
+            this.createEnrichedDataPointWithSwingPoints({ x: 4, y: 77 }, null),
+            this.createEnrichedDataPointWithSwingPoints({ x: 5, y: 66 }, null),
           ],
           trends: [
             {

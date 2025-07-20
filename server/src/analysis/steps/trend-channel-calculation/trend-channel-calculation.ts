@@ -18,10 +18,15 @@ export class TrendChannelCalculation implements AnalysisStep {
 
     for (const trend of context.trends) {
       // Determine the range of the trend
-      const startX = trend.startPoint.x;
-      const endX = trend.endPoint?.x;
+      const startX = trend.startPoint;
+      const endX = trend.endPoint;
       const pointsInTrend = context.enrichedDataPoints.filter(
-        (p) => p.x >= startX && (endX === undefined || p.x <= endX),
+        (p) =>
+          p.getDataPoint().getPriceDateEpochTime() >=
+            startX.getDataPoint().getPriceDateEpochTime() &&
+          (endX === undefined ||
+            p.getDataPoint().getPriceDateEpochTime() <=
+              endX.getDataPoint().getPriceDateEpochTime()),
       );
 
       if (trend.type === 'upward') {
@@ -64,7 +69,11 @@ export class TrendChannelCalculation implements AnalysisStep {
 
     // Find the first secondary swing that lies *between* the two primary swings.
     const returnPoint = secondarySwings.find(
-      (p) => p.x > trendPointA.x && p.x < trendPointB.x,
+      (p) =>
+        p.getDataPoint().getPriceDateEpochTime() >
+          trendPointA.getDataPoint().getPriceDateEpochTime() &&
+        p.getDataPoint().getPriceDateEpochTime() <
+          trendPointB.getDataPoint().getPriceDateEpochTime(),
     );
 
     // If no such point exists, we can't form a valid channel.
@@ -74,14 +83,21 @@ export class TrendChannelCalculation implements AnalysisStep {
 
     // Calculate slope and intercepts
     const slope =
-      (trendPointB.y - trendPointA.y) / (trendPointB.x - trendPointA.x);
+      (trendPointB.getDataPoint().getClosePrice() -
+        trendPointA.getDataPoint().getClosePrice()) /
+      (trendPointB.getDataPoint().getPriceDateEpochTime() -
+        trendPointA.getDataPoint().getPriceDateEpochTime());
     const trendLine = {
       slope,
-      yIntercept: trendPointA.y - slope * trendPointA.x,
+      yIntercept:
+        trendPointA.getDataPoint().getClosePrice() -
+        slope * trendPointA.getDataPoint().getPriceDateEpochTime(),
     };
     const returnLine = {
       slope,
-      yIntercept: returnPoint.y - slope * returnPoint.x,
+      yIntercept:
+        returnPoint.getDataPoint().getClosePrice() -
+        slope * returnPoint.getDataPoint().getPriceDateEpochTime(),
     };
 
     return { trendLine, returnLine };
