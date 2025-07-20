@@ -16,10 +16,6 @@ export class TrendDetectionTestdata extends CreateTestData {
         { priceDate: '2', closePrice: 2 },
         'swingLow',
       ),
-      this.createEnrichedDataPointWithSwingPoints(
-        { priceDate: '3', closePrice: 3 },
-        null,
-      ),
     ];
   }
 
@@ -272,15 +268,15 @@ export class TrendDetectionTestdata extends CreateTestData {
       testcase: {
         data: [
           this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '1', closePrice: 3 },
+            { priceDate: '1', closePrice: 7 },
             'swingHigh',
           ),
           this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '2', closePrice: 2 },
+            { priceDate: '2', closePrice: 6 },
             'swingLow',
           ),
           this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '3', closePrice: 1 },
+            { priceDate: '3', closePrice: 5 },
             'swingHigh',
           ),
           this.createEnrichedDataPointWithSwingPoints(
@@ -288,15 +284,15 @@ export class TrendDetectionTestdata extends CreateTestData {
             null,
           ),
           this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '5', closePrice: 5 },
+            { priceDate: '5', closePrice: 3 },
             null,
           ),
           this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '6', closePrice: 6 },
+            { priceDate: '6', closePrice: 2 },
             null,
           ),
           this.createEnrichedDataPointWithSwingPoints(
-            { priceDate: '7', closePrice: 7 },
+            { priceDate: '7', closePrice: 1 },
             null,
           ),
         ],
