@@ -17,6 +17,8 @@
 - => Average True Range nach Weller Wilders. Da ATR in kurzen Intervallen berechnet wird, müsste die SwingPointAnalyse für jeden DataPoint den aktuellen Wert der ATR verwenden => ein fester Wert via Construtor ist nur als Fallback geeignet ()kann aber auch für Tests verwendet werden).
   https://www.investopedia.com/terms/a/atr.asp
 
+  Integrationstest, welche alle Steps umfasst, ATR, SwingPoint, TrendDetection, TrendChannelCalc => Das Zusammenspiel aller Teile abtesten. Insb, da Context geändert wurde.
+
 # TradingCharts
 
 - Auswahl der Charts Linien oder Candlestick
@@ -26,11 +28,11 @@
 - Liniencharts z.B. auf Bais open, close, max, min Kurs, wenn candleStick data vorliegen
 - Idee: Verwendung von Art Toolbox, in welcher schematisch verschiedene Charts
   vorhanden sind. Diese kann man mit Drag & Drop in Seite ziehen und damit die gewünschte Chartart erhalten.
-- chart und analyse sind in .pug, .js und .css sehr ähnlich. Daher sollte man gemeinsame Aspekte herausschneiden.
+- chart und analyse sind in .pug, .js und .css sehr ähnlich. Daher sollte man gemeinsame Aspekte herausschneiden. Gilt auch auch für module data-provide und analysis.
 - SwingPoints als Label dem Chart hinzufügen
 - Trendkanäle hinzufügen
 - Seite für Auswahl der Optionen, dann submit, dann neue Seite öffnen => evtl. kann man
-  dadurch auch ServerSide Rendering nutzen, um Last auf Server zu nehmen (ThinClient)
+  dadurch auch ServerSide Rendering nutzen, um Last auf Server zu nehmen (ThinClient) => Variablen von pug nutzen, um daten einzuschleußen.
 - Trendkanäle mit Checkbox anbieten und gezielt in Chart einblenden lassen. Alle Trendkanäle einblenden hat im ersten Versuch nicht geklappt
 
 # ToDo UI
