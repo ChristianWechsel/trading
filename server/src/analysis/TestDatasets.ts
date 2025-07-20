@@ -1,17 +1,6 @@
-import { OHLCV } from '../data-aggregation/ohlcv.entity';
+import { OHLCV, OHLCVEntity } from '../data-aggregation/ohlcv.entity';
 import { TestData } from './analysis.int.testdata';
 import { EnrichedDataPoint, SwingPointType } from './core/enriched-data-point';
-
-type RawEod = {
-  securityId: number;
-  priceDate: string;
-  openPrice: string;
-  highPrice: string;
-  lowPrice: string;
-  closePrice: string;
-  adjustedClosePrice: string;
-  volume: string;
-};
 
 export class TestDatasets {
   getMCD_US_19800317_19800601(): Pick<TestData, 'data' | 'expected'> {
@@ -37,46 +26,25 @@ export class TestDatasets {
   }
 
   private mapToEnrichedDataPoint(item: {
-    dataPoint: RawEod;
+    dataPoint: OHLCVEntity;
     swingPoint: SwingPointType;
   }) {
-    const enrichedDataPoint = new EnrichedDataPoint({
-      x: new Date(item.dataPoint.priceDate).getTime(),
-      y: parseFloat(item.dataPoint.closePrice),
-    });
+    const enrichedDataPoint = new EnrichedDataPoint(
+      this.mapRawEodToEodPrice(item.dataPoint),
+    );
     if (item.swingPoint) {
       enrichedDataPoint.setSwingPointType(item.swingPoint);
     }
     return enrichedDataPoint;
   }
 
-  private mapRawEodToEodPrice(raw: RawEod): OHLCV {
-    const {
-      adjustedClosePrice,
-      closePrice,
-      highPrice,
-      lowPrice,
-      openPrice,
-      priceDate,
-      securityId,
-      volume,
-    } = raw;
-
-    return new OHLCV({
-      adjustedClosePrice: parseFloat(adjustedClosePrice),
-      closePrice: parseFloat(closePrice),
-      highPrice: parseFloat(highPrice),
-      lowPrice: parseFloat(lowPrice),
-      openPrice: parseFloat(openPrice),
-      priceDate: priceDate,
-      securityId,
-      volume: parseInt(volume, 10),
-    });
+  private mapRawEodToEodPrice(raw: OHLCVEntity): OHLCV {
+    return new OHLCV(raw);
   }
 }
 
 const MCD_US_19800317_19800601: {
-  dataPoint: RawEod;
+  dataPoint: OHLCVEntity;
   swingPoint: SwingPointType;
 }[] = [
   // 0
@@ -824,7 +792,7 @@ const MCD_US_19800317_19800601: {
 ];
 
 const MCD_US_19800601_19801231: {
-  dataPoint: RawEod;
+  dataPoint: OHLCVEntity;
   swingPoint: SwingPointType;
 }[] = [
   // 0
