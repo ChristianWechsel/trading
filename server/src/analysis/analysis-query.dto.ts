@@ -20,6 +20,9 @@ const allSteps: Step[] = [
   'TrendChannelCalculation',
 ];
 
+type YValueSource = 'open' | 'high' | 'low' | 'close';
+const yValueSourceValues: YValueSource[] = ['open', 'high', 'low', 'close'];
+
 export class SwingPointDetectionOptionsDto {
   @IsOptional()
   @IsNumber()
@@ -63,6 +66,10 @@ export class StepOptionsDto {
   @ValidateNested()
   @Type(() => AverageTrueRangeOptionsDto)
   averageTrueRange?: AverageTrueRangeOptionsDto;
+
+  @IsOptional()
+  @IsEnum(yValueSourceValues)
+  yValueSource?: YValueSource;
 }
 
 export class AnalysisQueryDto {

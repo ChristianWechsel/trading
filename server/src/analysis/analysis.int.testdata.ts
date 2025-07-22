@@ -60,4 +60,104 @@ export class AnalysisIntTestData {
       ...this.testDatasets.getMCD_US_19800601_19801231(),
     };
   }
+
+  getDataYSelectOpen(): TestData {
+    return {
+      dto: {
+        dataAggregation: {
+          ticker: {
+            symbol: 'MCD',
+            exchange: 'US',
+          },
+          range: {
+            from: '1980-01-01',
+            to: '1980-12-31',
+          },
+        },
+        steps: ['SwingPointDetection'],
+        stepOptions: {
+          swingPointDetection: { relativeThreshold: 0.01 },
+          trendDetection: { relativeThreshold: 0.01 },
+          averageTrueRange: { period: 2 },
+          yValueSource: 'open',
+        },
+      },
+      ...this.testDatasets.getYValueSourceOpen(),
+    };
+  }
+
+  getDataYSelectClose(): TestData {
+    return {
+      dto: {
+        dataAggregation: {
+          ticker: {
+            symbol: 'MCD',
+            exchange: 'US',
+          },
+          range: {
+            from: '1980-01-01',
+            to: '1980-12-31',
+          },
+        },
+        steps: ['SwingPointDetection'],
+        stepOptions: {
+          swingPointDetection: { relativeThreshold: 0.01 },
+          trendDetection: { relativeThreshold: 0.01 },
+          averageTrueRange: { period: 2 },
+          yValueSource: 'close',
+        },
+      },
+      ...this.testDatasets.getYValueSourceClose(),
+    };
+  }
+
+  getDataYSelectHigh(): TestData {
+    return {
+      dto: {
+        dataAggregation: {
+          ticker: {
+            symbol: 'MCD',
+            exchange: 'US',
+          },
+          range: {
+            from: '1980-01-01',
+            to: '1980-12-31',
+          },
+        },
+        steps: ['SwingPointDetection'],
+        stepOptions: {
+          swingPointDetection: { relativeThreshold: 0.01 },
+          trendDetection: { relativeThreshold: 0.01 },
+          averageTrueRange: { period: 2 },
+          yValueSource: 'high',
+        },
+      },
+      ...this.testDatasets.getYValueSourceHigh(),
+    };
+  }
+
+  getDataYSelectLow(): TestData {
+    return {
+      dto: {
+        dataAggregation: {
+          ticker: {
+            symbol: 'MCD',
+            exchange: 'US',
+          },
+          range: {
+            from: '1980-01-01',
+            to: '1980-12-31',
+          },
+        },
+        steps: ['SwingPointDetection'],
+        stepOptions: {
+          swingPointDetection: { relativeThreshold: 0.01 },
+          trendDetection: { relativeThreshold: 0.01 },
+          averageTrueRange: { period: 2 },
+          yValueSource: 'low',
+        },
+      },
+      ...this.testDatasets.getYValueSourceLow(),
+    };
+  }
 }

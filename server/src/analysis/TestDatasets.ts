@@ -25,6 +25,50 @@ export class TestDatasets {
     };
   }
 
+  getYValueSourceClose(): Pick<TestData, 'data' | 'expected'> {
+    return {
+      data: YValueSourceClose.map<OHLCV>((item) =>
+        this.mapRawEodToEodPrice(item.dataPoint),
+      ),
+      expected: YValueSourceClose.map<EnrichedDataPoint>((item) => {
+        return this.mapToEnrichedDataPoint(item);
+      }),
+    };
+  }
+
+  getYValueSourceOpen(): Pick<TestData, 'data' | 'expected'> {
+    return {
+      data: YValueSourceOpen.map<OHLCV>((item) =>
+        this.mapRawEodToEodPrice(item.dataPoint),
+      ),
+      expected: YValueSourceOpen.map<EnrichedDataPoint>((item) => {
+        return this.mapToEnrichedDataPoint(item);
+      }),
+    };
+  }
+
+  getYValueSourceHigh(): Pick<TestData, 'data' | 'expected'> {
+    return {
+      data: YValueSourceHigh.map<OHLCV>((item) =>
+        this.mapRawEodToEodPrice(item.dataPoint),
+      ),
+      expected: YValueSourceHigh.map<EnrichedDataPoint>((item) => {
+        return this.mapToEnrichedDataPoint(item);
+      }),
+    };
+  }
+
+  getYValueSourceLow(): Pick<TestData, 'data' | 'expected'> {
+    return {
+      data: YValueSourceLow.map<OHLCV>((item) =>
+        this.mapRawEodToEodPrice(item.dataPoint),
+      ),
+      expected: YValueSourceLow.map<EnrichedDataPoint>((item) => {
+        return this.mapToEnrichedDataPoint(item);
+      }),
+    };
+  }
+
   private mapToEnrichedDataPoint(item: {
     dataPoint: OHLCVEntity;
     swingPoint: SwingPointType;
@@ -2878,6 +2922,194 @@ const MCD_US_19800601_19801231: {
       closePrice: 164.5416,
       adjustedClosePrice: 0.5899,
       volume: 498012,
+    },
+    swingPoint: null,
+  },
+];
+
+const YValueSourceClose: {
+  dataPoint: OHLCVEntity;
+  swingPoint: SwingPointType;
+}[] = [
+  {
+    dataPoint: {
+      securityId: 1,
+      priceDate: '1980-01-02',
+      openPrice: 0,
+      highPrice: 0,
+      lowPrice: 0,
+      closePrice: 1,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+
+    swingPoint: null,
+  },
+  {
+    dataPoint: {
+      securityId: 1,
+      priceDate: '1980-01-03',
+      openPrice: 0,
+      highPrice: 0,
+      lowPrice: 0,
+      closePrice: 10,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+
+    swingPoint: 'swingHigh',
+  },
+  {
+    dataPoint: {
+      securityId: 1,
+      priceDate: '1980-01-04',
+      openPrice: 0,
+      highPrice: 0,
+      lowPrice: 0,
+      closePrice: 1,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+    swingPoint: null,
+  },
+];
+
+const YValueSourceOpen: {
+  dataPoint: OHLCVEntity;
+  swingPoint: SwingPointType;
+}[] = [
+  {
+    dataPoint: {
+      securityId: 1,
+      priceDate: '1980-01-02',
+      openPrice: 1,
+      highPrice: 0,
+      lowPrice: 0,
+      closePrice: 0,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+
+    swingPoint: null,
+  },
+  {
+    dataPoint: {
+      securityId: 1,
+      priceDate: '1980-01-03',
+      openPrice: 10,
+      highPrice: 0,
+      lowPrice: 0,
+      closePrice: 0,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+
+    swingPoint: 'swingHigh',
+  },
+  {
+    dataPoint: {
+      securityId: 1,
+      priceDate: '1980-01-04',
+      openPrice: 1,
+      highPrice: 0,
+      lowPrice: 0,
+      closePrice: 0,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+    swingPoint: null,
+  },
+];
+
+const YValueSourceHigh: {
+  dataPoint: OHLCVEntity;
+  swingPoint: SwingPointType;
+}[] = [
+  {
+    dataPoint: {
+      securityId: 1,
+      priceDate: '1980-01-02',
+      openPrice: 0,
+      highPrice: 1,
+      lowPrice: 0,
+      closePrice: 0,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+
+    swingPoint: null,
+  },
+  {
+    dataPoint: {
+      securityId: 1,
+      priceDate: '1980-01-03',
+      openPrice: 0,
+      highPrice: 10,
+      lowPrice: 0,
+      closePrice: 0,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+
+    swingPoint: 'swingHigh',
+  },
+  {
+    dataPoint: {
+      securityId: 1,
+      priceDate: '1980-01-04',
+      openPrice: 0,
+      highPrice: 1,
+      lowPrice: 0,
+      closePrice: 0,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+    swingPoint: null,
+  },
+];
+
+const YValueSourceLow: {
+  dataPoint: OHLCVEntity;
+  swingPoint: SwingPointType;
+}[] = [
+  {
+    dataPoint: {
+      securityId: 1,
+      priceDate: '1980-01-02',
+      openPrice: 0,
+      highPrice: 0,
+      lowPrice: 1,
+      closePrice: 0,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+
+    swingPoint: null,
+  },
+  {
+    dataPoint: {
+      securityId: 1,
+      priceDate: '1980-01-03',
+      openPrice: 0,
+      highPrice: 0,
+      lowPrice: 10,
+      closePrice: 0,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+
+    swingPoint: 'swingHigh',
+  },
+  {
+    dataPoint: {
+      securityId: 1,
+      priceDate: '1980-01-04',
+      openPrice: 0,
+      highPrice: 0,
+      lowPrice: 1,
+      closePrice: 0,
+      adjustedClosePrice: 0,
+      volume: 0,
     },
     swingPoint: null,
   },
