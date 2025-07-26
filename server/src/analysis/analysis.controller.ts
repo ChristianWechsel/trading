@@ -11,10 +11,10 @@ export class AnalysisController {
   ) {}
 
   @Post()
-  async performAnalysis(@Body() body: AnalysisQueryDto) {
+  async performAnalysis(@Body() query: AnalysisQueryDto) {
     const ohlcvs = await this.dataAggregationService.loadAndUpdateIfNeeded(
-      body.dataAggregation,
+      query.dataAggregation,
     );
-    return this.analysisService.performAnalysis(body, ohlcvs);
+    return this.analysisService.performAnalysis(query, ohlcvs);
   }
 }
