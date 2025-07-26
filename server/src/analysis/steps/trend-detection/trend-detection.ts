@@ -1,6 +1,6 @@
+import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
 import { analysisConfig } from '../../config/analysis.config';
 import {
-  AnalysisContext,
   AnalysisStep,
   Step,
   TrendDataMetadata,
@@ -33,12 +33,12 @@ export class TrendDetection implements AnalysisStep {
     }
   }
 
-  execute(context: AnalysisContext): void {
-    const rawData = context.enrichedDataPoints;
+  execute(context: AnalysisContextClass): void {
+    const rawData = context.getEnrichedDataPoints();
     const { swingPoints, data } = this.generateSwingPointsAndData(rawData);
     const trendsMetadata = this.detectTrends(swingPoints, data);
-    context.trends = trendsMetadata.map(
-      (trendMetadata) => trendMetadata.trendData,
+    context.setTrends(
+      trendsMetadata.map((trendMetadata) => trendMetadata.trendData),
     );
   }
 

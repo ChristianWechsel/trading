@@ -1,9 +1,6 @@
 import { analysisConfig } from '../../../analysis/config/analysis.config';
-import {
-  AnalysisContext,
-  AnalysisStep,
-  Step,
-} from '../../core/analysis.interface';
+import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
+import { AnalysisStep, Step } from '../../core/analysis.interface';
 import {
   EnrichedDataPoint,
   SwingPointType,
@@ -40,8 +37,8 @@ export class SwingPointDetection implements AnalysisStep {
     }
   }
 
-  execute(context: AnalysisContext): void {
-    const data = context.enrichedDataPoints;
+  execute(context: AnalysisContextClass): void {
+    const data = context.getEnrichedDataPoints();
     this.checkData(data);
     this.getSwingPoints(data);
   }

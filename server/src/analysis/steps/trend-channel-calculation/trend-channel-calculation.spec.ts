@@ -1,3 +1,5 @@
+import { AnalysisQueryDto } from '../../../analysis/analysis-query.dto';
+import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
 import { AnalysisContext, TrendChannel } from '../../core/analysis.interface';
 import { TrendChannelCalculation } from './trend-channel-calculation';
 import { TrendChannelCalculationTestdata } from './trend-channel-calculation.testdata';
@@ -24,9 +26,12 @@ describe('TrendChannelCalculation', () => {
     testData.leadingPoints(),
     testData.trailingPoints(),
   ])('$name', ({ testcase }) => {
-    const context = testcase.initialContext;
+    const context = new AnalysisContextClass(
+      {} as AnalysisQueryDto,
+      testcase.initialContext.enrichedDataPoints.map((dp) => dp.getDataPoint()),
+    );
     new TrendChannelCalculation().execute(context);
-    const actualTrendChannels = context.trends?.map((t) => t.channel);
+    const actualTrendChannels = context.getTrends().map((t) => t.channel);
     expect(actualTrendChannels).toEqual(testcase.expectedChannels);
   });
 });

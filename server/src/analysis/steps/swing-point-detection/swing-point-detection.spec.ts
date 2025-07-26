@@ -1,3 +1,5 @@
+import { AnalysisQueryDto } from '../../../analysis/analysis-query.dto';
+import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
 import { OHLCV, OHLCVEntity } from '../../../data-aggregation/ohlcv.entity';
 import {
   EnrichedDataPoint,
@@ -61,9 +63,11 @@ describe('SwingPointDetection', () => {
     testData.downwardPlateauDownward_window2(),
   ])('$name', ({ testcase }) => {
     const swingPointDetection = new SwingPointDetection(testcase.settings);
-    swingPointDetection.execute({
-      enrichedDataPoints: testcase.data,
-    });
+    const context = new AnalysisContextClass(
+      {} as AnalysisQueryDto,
+      testcase.data.map((dp) => dp.getDataPoint()),
+    );
+    swingPointDetection.execute(context);
 
     const areSwingPointsAsExpected = testcase.data.every(
       (elementResult, idxResult) => {
@@ -141,13 +145,15 @@ describe('SwingPointDetection', () => {
   ])(
     'does not throw for minimum valid data length (windowSize=$windowSize, dataLength=$dataLength)',
     ({ windowSize, dataLength }) => {
+      const context = new AnalysisContextClass(
+        {} as AnalysisQueryDto,
+        new Array<EnrichedDataPoint>(dataLength)
+          .fill(createEnrichedDataPoint({}))
+          .map<OHLCV>((dp) => dp.getDataPoint()),
+      );
       expect(() =>
         new SwingPointDetection({ relativeThreshold: 0.1, windowSize }).execute(
-          {
-            enrichedDataPoints: new Array<EnrichedDataPoint>(dataLength).fill(
-              createEnrichedDataPoint({}),
-            ),
-          },
+          context,
         ),
       ).not.toThrow();
     },
@@ -159,14 +165,16 @@ describe('SwingPointDetection', () => {
   ])(
     'throws error for too short data (windowSize=$windowSize, dataLength=$dataLength)',
     ({ windowSize, dataLength }) => {
-      const data = new Array<EnrichedDataPoint>(dataLength).fill(
-        createEnrichedDataPoint({}),
+      const context = new AnalysisContextClass(
+        {} as AnalysisQueryDto,
+        new Array<EnrichedDataPoint>(dataLength)
+          .fill(createEnrichedDataPoint({}))
+          .map<OHLCV>((dp) => dp.getDataPoint()),
       );
+
       expect(() =>
         new SwingPointDetection({ relativeThreshold: 0.1, windowSize }).execute(
-          {
-            enrichedDataPoints: data,
-          },
+          context,
         ),
       ).toThrow();
     },

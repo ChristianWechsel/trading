@@ -25,6 +25,10 @@ export class AnalysisContextClass {
     return this.trends;
   }
 
+  setTrends(trends: TrendDataMetadata['trendData'][]): void {
+    this.trends = trends;
+  }
+
   buildYValueAccessor(): (dataPoint: EnrichedDataPoint) => number {
     return (dataPoint: EnrichedDataPoint) => {
       switch (this.query.stepOptions?.yValueSource) {

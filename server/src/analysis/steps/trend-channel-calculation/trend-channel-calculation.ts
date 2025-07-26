@@ -2,8 +2,8 @@ import {
   EnrichedDataPoint,
   SwingPointType,
 } from 'src/analysis/core/enriched-data-point';
+import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
 import {
-  AnalysisContext,
   AnalysisStep,
   Step,
   TrendChannel,
@@ -13,21 +13,23 @@ export class TrendChannelCalculation implements AnalysisStep {
   name: Step = 'TrendChannelCalculation';
   dependsOn: Step[] = ['TrendDetection'];
 
-  execute(context: AnalysisContext): void {
-    if (!context.trends || context.trends.length === 0) return;
+  execute(context: AnalysisContextClass): void {
+    if (!context.getTrends() || context.getTrends().length === 0) return;
 
-    for (const trend of context.trends) {
+    for (const trend of context.getTrends()) {
       // Determine the range of the trend
       const startX = trend.startPoint;
       const endX = trend.endPoint;
-      const pointsInTrend = context.enrichedDataPoints.filter(
-        (p) =>
-          p.getDataPoint().getPriceDateEpochTime() >=
-            startX.getDataPoint().getPriceDateEpochTime() &&
-          (endX === undefined ||
-            p.getDataPoint().getPriceDateEpochTime() <=
-              endX.getDataPoint().getPriceDateEpochTime()),
-      );
+      const pointsInTrend = context
+        .getEnrichedDataPoints()
+        .filter(
+          (p) =>
+            p.getDataPoint().getPriceDateEpochTime() >=
+              startX.getDataPoint().getPriceDateEpochTime() &&
+            (endX === undefined ||
+              p.getDataPoint().getPriceDateEpochTime() <=
+                endX.getDataPoint().getPriceDateEpochTime()),
+        );
 
       if (trend.type === 'upward') {
         trend.channel = this.calculateChannelForSequence(

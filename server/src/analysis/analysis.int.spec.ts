@@ -33,7 +33,7 @@ describe('Analysis (Integration)', () => {
 
     const result = await controller.performAnalysis(testData.dto);
 
-    const resultObjects = result.enrichedDataPoints.map((r) => ({
+    const resultObjects = result.getEnrichedDataPoints().map((r) => ({
       dataPoint: r.getDataPoint(),
       swingPointType: r.getSwingPointType(),
     }));
@@ -67,7 +67,7 @@ describe('Analysis (Integration)', () => {
     controller = moduleRef.get<AnalysisController>(AnalysisController);
 
     const result = await controller.performAnalysis(testData.dto);
-    const resultObjects = result.enrichedDataPoints.map((r) => ({
+    const resultObjects = result.getEnrichedDataPoints().map((r) => ({
       dataPoint: r.getDataPoint(),
       swingPointType: r.getSwingPointType(),
     }));
@@ -102,7 +102,7 @@ describe('Analysis (Integration)', () => {
 
     const result = await controller.performAnalysis(testData.dto);
 
-    const resultObjects = result.enrichedDataPoints.map((r) => ({
+    const resultObjects = result.getEnrichedDataPoints().map((r) => ({
       dataPoint: r.getDataPoint(),
       swingPointType: r.getSwingPointType(),
     }));
@@ -137,7 +137,7 @@ describe('Analysis (Integration)', () => {
 
     const result = await controller.performAnalysis(testData.dto);
 
-    const resultObjects = result.enrichedDataPoints.map((r) => ({
+    const resultObjects = result.getEnrichedDataPoints().map((r) => ({
       dataPoint: r.getDataPoint(),
       swingPointType: r.getSwingPointType(),
     }));
@@ -172,7 +172,7 @@ describe('Analysis (Integration)', () => {
 
     const result = await controller.performAnalysis(testData.dto);
 
-    const resultObjects = result.enrichedDataPoints.map((r) => ({
+    const resultObjects = result.getEnrichedDataPoints().map((r) => ({
       dataPoint: r.getDataPoint(),
       swingPointType: r.getSwingPointType(),
     }));
@@ -185,7 +185,7 @@ describe('Analysis (Integration)', () => {
     expect(resultObjects).toEqual(expectedObjects);
   });
 
-  it.only('select y value: low', async () => {
+  it('select y value: low', async () => {
     const testData = analysisIntTestData.getDataYSelectLow();
     const mockDataAggregationService: IDataAggregationService = {
       loadAndUpdateIfNeeded: () => Promise.resolve(testData.data),
@@ -207,7 +207,7 @@ describe('Analysis (Integration)', () => {
 
     const result = await controller.performAnalysis(testData.dto);
 
-    const resultDataPoints = result.enrichedDataPoints.map((r) => ({
+    const resultDataPoints = result.getEnrichedDataPoints().map((r) => ({
       dataPoint: r.getDataPoint(),
       swingPointType: r.getSwingPointType(),
       averageTrueRange: r.getAverageTrueRange(),

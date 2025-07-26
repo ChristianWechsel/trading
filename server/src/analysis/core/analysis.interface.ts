@@ -1,3 +1,4 @@
+import { AnalysisContextClass } from './analysis-context';
 import { EnrichedDataPoint } from './enriched-data-point';
 
 export type AnalysisContext = {
@@ -27,7 +28,7 @@ type Line = {
 };
 
 export interface AnalysisStep {
-  execute(context: AnalysisContext): void;
+  execute(context: AnalysisContextClass): void;
   readonly dependsOn: Step[];
   readonly name: Step;
 }

@@ -1,5 +1,7 @@
 # ToDo List
 
+# analysis-pipeline.spec.ts => AnalysisContext entfernen
+
 # Context um OHLCV erweitern
 
 - Bereitstellung von enrichedDataPoints überdenken. Evtl sollte enriched DataPoint ein Wrapper sein,

@@ -1,10 +1,7 @@
+import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
 import { OHLCV } from '../../../data-aggregation/ohlcv.entity';
 import { analysisConfig } from '../../config/analysis.config';
-import {
-  AnalysisContext,
-  AnalysisStep,
-  Step,
-} from '../../core/analysis.interface';
+import { AnalysisStep, Step } from '../../core/analysis.interface';
 import { EnrichedDataPoint } from '../../core/enriched-data-point';
 
 export class AverageTrueRange implements AnalysisStep {
@@ -21,8 +18,8 @@ export class AverageTrueRange implements AnalysisStep {
     }
   }
 
-  execute(context: AnalysisContext): void {
-    const data = context.enrichedDataPoints;
+  execute(context: AnalysisContextClass): void {
+    const data = context.getEnrichedDataPoints();
     this.checkData(data);
     this.getAverageTrueRange(data);
   }
