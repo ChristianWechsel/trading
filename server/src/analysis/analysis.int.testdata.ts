@@ -38,6 +38,7 @@ export class AnalysisIntTestData {
       ...this.testDatasets.getMCD_US_19800317_19800601(),
     };
   }
+
   getMCDUSHistoricalData1980SecondHalf(): TestData {
     return {
       dto: {

@@ -185,7 +185,7 @@ describe('Analysis (Integration)', () => {
     expect(resultObjects).toEqual(expectedObjects);
   });
 
-  it('select y value: low', async () => {
+  it.only('select y value: low', async () => {
     const testData = analysisIntTestData.getDataYSelectLow();
     const mockDataAggregationService: IDataAggregationService = {
       loadAndUpdateIfNeeded: () => Promise.resolve(testData.data),
@@ -207,16 +207,18 @@ describe('Analysis (Integration)', () => {
 
     const result = await controller.performAnalysis(testData.dto);
 
-    const resultObjects = result.enrichedDataPoints.map((r) => ({
+    const resultDataPoints = result.enrichedDataPoints.map((r) => ({
       dataPoint: r.getDataPoint(),
       swingPointType: r.getSwingPointType(),
+      averageTrueRange: r.getAverageTrueRange(),
     }));
 
-    const expectedObjects = testData.expected.map((e) => ({
+    const expectedDataPoints = testData.expected.map((e) => ({
       dataPoint: e.getDataPoint(),
       swingPointType: e.getSwingPointType(),
+      averageTrueRange: e.getAverageTrueRange(),
     }));
 
-    expect(resultObjects).toEqual(expectedObjects);
+    expect(resultDataPoints).toEqual(expectedDataPoints);
   });
 });

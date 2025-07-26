@@ -38,8 +38,3 @@ export type Step =
   | 'TrendChannelCalculation'
   | 'TrendDetection'
   | 'AverageTrueRange';
-
-export type DataPoint<T> = {
-  x: T;
-  y: T;
-};

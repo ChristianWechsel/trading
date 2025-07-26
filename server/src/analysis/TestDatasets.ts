@@ -3398,7 +3398,7 @@ const YValueSourceLow: TestDataSource = {
         adjustedClosePrice: 0,
         volume: 0,
       },
-      averageTrueRange: 0,
+      averageTrueRange: 5,
       swingPoint: 'swingLow',
     },
     {
@@ -3412,7 +3412,7 @@ const YValueSourceLow: TestDataSource = {
         adjustedClosePrice: 0,
         volume: 0,
       },
-      averageTrueRange: 0,
+      averageTrueRange: 7.5,
       swingPoint: 'swingHigh',
     },
     {
@@ -3426,7 +3426,7 @@ const YValueSourceLow: TestDataSource = {
         adjustedClosePrice: 0,
         volume: 0,
       },
-      averageTrueRange: 0,
+      averageTrueRange: 7.25,
       swingPoint: 'swingLow',
     },
     {
@@ -3440,7 +3440,7 @@ const YValueSourceLow: TestDataSource = {
         adjustedClosePrice: 0,
         volume: 0,
       },
-      averageTrueRange: 0,
+      averageTrueRange: 9.625,
       swingPoint: null,
     },
   ],
