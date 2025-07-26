@@ -3,6 +3,8 @@ import { AnalysisQueryDto } from '../analysis-query.dto';
 import { TrendDataMetadata } from './analysis.interface';
 import { EnrichedDataPoint } from './enriched-data-point';
 
+export type YValueAccessor = (dataPoint: EnrichedDataPoint) => number;
+
 export class AnalysisContextClass {
   private enrichedDataPoints: EnrichedDataPoint[];
   private trends: TrendDataMetadata['trendData'][];
@@ -29,7 +31,7 @@ export class AnalysisContextClass {
     this.trends = trends;
   }
 
-  buildYValueAccessor(): (dataPoint: EnrichedDataPoint) => number {
+  buildYValueAccessor(): YValueAccessor {
     return (dataPoint: EnrichedDataPoint) => {
       switch (this.query.stepOptions?.yValueSource) {
         case 'close':

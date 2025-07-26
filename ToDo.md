@@ -2,6 +2,10 @@
 
 # analysis-pipeline.spec.ts => AnalysisContext entfernen
 
+# server/src/analysis/core/enriched-data-point.ts => SwingPointType null aus Union entfernen
+
+# server/src/analysis/analysis.int.spec.ts die Trends prüfen
+
 # Context um OHLCV erweitern
 
 - Bereitstellung von enrichedDataPoints überdenken. Evtl sollte enriched DataPoint ein Wrapper sein,

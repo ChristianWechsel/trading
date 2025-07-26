@@ -1,4 +1,7 @@
-import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
+import {
+  AnalysisContextClass,
+  YValueAccessor,
+} from '../../../analysis/core/analysis-context';
 import { analysisConfig } from '../../config/analysis.config';
 import {
   AnalysisStep,
@@ -34,24 +37,35 @@ export class TrendDetection implements AnalysisStep {
   }
 
   execute(context: AnalysisContextClass): void {
+    const yValueAccessor = context.buildYValueAccessor();
     const rawData = context.getEnrichedDataPoints();
-    const { swingPoints, data } = this.generateSwingPointsAndData(rawData);
+    const { swingPoints, data } = this.generateSwingPointsAndData(
+      rawData,
+      yValueAccessor,
+    );
     const trendsMetadata = this.detectTrends(swingPoints, data);
     context.setTrends(
       trendsMetadata.map((trendMetadata) => trendMetadata.trendData),
     );
   }
 
-  private generateSwingPointsAndData(rawData: EnrichedDataPoint[]) {
+  private generateSwingPointsAndData(
+    rawData: EnrichedDataPoint[],
+    yValueAccessor: YValueAccessor,
+  ) {
     const swingPoints = rawData
-      .filter((datum) => datum.getSwingPointType() !== null)
+      .filter(
+        (datum) =>
+          datum.getSwingPointType() !== undefined &&
+          datum.getSwingPointType() !== null,
+      )
       .map<SwingPointData>((enrichedDataPoint) => {
         return {
           swingPointType: enrichedDataPoint.getSwingPointType()!,
           point: {
             enrichedDataPoint,
             priceComparisonValue: new ComparableNumber(
-              enrichedDataPoint.getDataPoint().getClosePrice(),
+              yValueAccessor(enrichedDataPoint),
               this.options.relativeThreshold,
             ),
           },
@@ -66,7 +80,7 @@ export class TrendDetection implements AnalysisStep {
     const data = rawData.map<SwingPointData['point']>((enrichedDataPoint) => ({
       enrichedDataPoint,
       priceComparisonValue: new ComparableNumber(
-        enrichedDataPoint.getDataPoint().getClosePrice(),
+        yValueAccessor(enrichedDataPoint),
         this.options.relativeThreshold,
       ),
     }));

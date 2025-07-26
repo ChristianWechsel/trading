@@ -1,5 +1,8 @@
 import { analysisConfig } from '../../../analysis/config/analysis.config';
-import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
+import {
+  AnalysisContextClass,
+  YValueAccessor,
+} from '../../../analysis/core/analysis-context';
 import { AnalysisStep, Step } from '../../core/analysis.interface';
 import {
   EnrichedDataPoint,
@@ -39,8 +42,9 @@ export class SwingPointDetection implements AnalysisStep {
 
   execute(context: AnalysisContextClass): void {
     const data = context.getEnrichedDataPoints();
+    const yValueAccessor = context.buildYValueAccessor();
     this.checkData(data);
-    this.getSwingPoints(data);
+    this.getSwingPoints(data, yValueAccessor);
   }
 
   private checkData(data: EnrichedDataPoint[]) {
@@ -51,16 +55,20 @@ export class SwingPointDetection implements AnalysisStep {
     }
   }
 
-  private getSwingPoints(data: EnrichedDataPoint[]) {
+  private getSwingPoints(
+    data: EnrichedDataPoint[],
+    yValueAccessor: YValueAccessor,
+  ) {
     let idx = this.options.windowSize;
     while (idx < data.length - this.options.windowSize) {
       const { previousPoints, nextPoints } = this.getSurroundingPoints(
         idx,
         data,
+        yValueAccessor,
       );
       const currentPoint = data[idx];
       const currentComparableNumber = this.createComparableNumber(
-        currentPoint.getDataPoint().getClosePrice(),
+        yValueAccessor(currentPoint),
       );
 
       if (
@@ -108,19 +116,21 @@ export class SwingPointDetection implements AnalysisStep {
     }
   }
 
-  private getSurroundingPoints(idx: number, data: EnrichedDataPoint[]) {
+  private getSurroundingPoints(
+    idx: number,
+    data: EnrichedDataPoint[],
+    yValueAccessor: YValueAccessor,
+  ) {
     const previousPoints = new Array<ComparableNumber>(this.options.windowSize);
     const nextPoints = new Array<ComparableNumber>(this.options.windowSize);
 
     let idxWindowSize = 0;
     while (idxWindowSize < this.options.windowSize) {
       previousPoints[idxWindowSize] = this.createComparableNumber(
-        data[idx - this.options.windowSize + idxWindowSize]
-          .getDataPoint()
-          .getClosePrice(),
+        yValueAccessor(data[idx - this.options.windowSize + idxWindowSize]),
       );
       nextPoints[idxWindowSize] = this.createComparableNumber(
-        data[idx + idxWindowSize + 1].getDataPoint().getClosePrice(),
+        yValueAccessor(data[idx + idxWindowSize + 1]),
       );
       idxWindowSize++;
     }

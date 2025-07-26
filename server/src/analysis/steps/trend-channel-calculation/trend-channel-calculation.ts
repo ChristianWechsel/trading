@@ -2,7 +2,10 @@ import {
   EnrichedDataPoint,
   SwingPointType,
 } from 'src/analysis/core/enriched-data-point';
-import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
+import {
+  AnalysisContextClass,
+  YValueAccessor,
+} from '../../../analysis/core/analysis-context';
 import {
   AnalysisStep,
   Step,
@@ -14,9 +17,11 @@ export class TrendChannelCalculation implements AnalysisStep {
   dependsOn: Step[] = ['TrendDetection'];
 
   execute(context: AnalysisContextClass): void {
-    if (!context.getTrends() || context.getTrends().length === 0) return;
+    const trends = context.getTrends();
+    if (!trends || trends.length === 0) return;
 
-    for (const trend of context.getTrends()) {
+    const yValueAccessor = context.buildYValueAccessor();
+    for (const trend of trends) {
       // Determine the range of the trend
       const startX = trend.startPoint;
       const endX = trend.endPoint;
@@ -36,12 +41,14 @@ export class TrendChannelCalculation implements AnalysisStep {
           pointsInTrend,
           'swingLow',
           'swingHigh',
+          yValueAccessor,
         );
       } else if (trend.type === 'downward') {
         trend.channel = this.calculateChannelForSequence(
           pointsInTrend,
           'swingHigh',
           'swingLow',
+          yValueAccessor,
         );
       } else {
         trend.channel = undefined;
@@ -53,6 +60,7 @@ export class TrendChannelCalculation implements AnalysisStep {
     pointsInTrend: EnrichedDataPoint[],
     primaryType: SwingPointType,
     secondaryType: SwingPointType,
+    yValueAccessor: YValueAccessor,
   ): TrendChannel | undefined {
     const primarySwings = pointsInTrend.filter(
       (p) => p.getSwingPointType() === primaryType,
@@ -85,20 +93,19 @@ export class TrendChannelCalculation implements AnalysisStep {
 
     // Calculate slope and intercepts
     const slope =
-      (trendPointB.getDataPoint().getClosePrice() -
-        trendPointA.getDataPoint().getClosePrice()) /
+      (yValueAccessor(trendPointB) - yValueAccessor(trendPointA)) /
       (trendPointB.getDataPoint().getPriceDateEpochTime() -
         trendPointA.getDataPoint().getPriceDateEpochTime());
     const trendLine = {
       slope,
       yIntercept:
-        trendPointA.getDataPoint().getClosePrice() -
+        yValueAccessor(trendPointA) -
         slope * trendPointA.getDataPoint().getPriceDateEpochTime(),
     };
     const returnLine = {
       slope,
       yIntercept:
-        returnPoint.getDataPoint().getClosePrice() -
+        yValueAccessor(returnPoint) -
         slope * returnPoint.getDataPoint().getPriceDateEpochTime(),
     };
 

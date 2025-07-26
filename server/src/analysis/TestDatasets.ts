@@ -19,9 +19,7 @@ export class TestDatasets {
         this.mapRawEodToEodPrice(item.datum),
       ),
       expected: MCD_US_19800317_19800601.points.map<EnrichedDataPoint>(
-        (item) => {
-          return this.mapToEnrichedDataPoint(item);
-        },
+        this.getExpected(),
       ),
     };
   }
@@ -32,9 +30,7 @@ export class TestDatasets {
         this.mapRawEodToEodPrice(item.datum),
       ),
       expected: MCD_US_19800601_19801231.points.map<EnrichedDataPoint>(
-        (item) => {
-          return this.mapToEnrichedDataPoint(item);
-        },
+        this.getExpected(),
       ),
     };
   }
@@ -44,9 +40,9 @@ export class TestDatasets {
       data: YValueSourceClose.points.map<OHLCV>((item) =>
         this.mapRawEodToEodPrice(item.datum),
       ),
-      expected: YValueSourceClose.points.map<EnrichedDataPoint>((item) => {
-        return this.mapToEnrichedDataPoint(item);
-      }),
+      expected: YValueSourceClose.points.map<EnrichedDataPoint>(
+        this.getExpected(),
+      ),
     };
   }
 
@@ -55,9 +51,9 @@ export class TestDatasets {
       data: YValueSourceOpen.points.map<OHLCV>((item) =>
         this.mapRawEodToEodPrice(item.datum),
       ),
-      expected: YValueSourceOpen.points.map<EnrichedDataPoint>((item) => {
-        return this.mapToEnrichedDataPoint(item);
-      }),
+      expected: YValueSourceOpen.points.map<EnrichedDataPoint>(
+        this.getExpected(),
+      ),
     };
   }
 
@@ -66,9 +62,9 @@ export class TestDatasets {
       data: YValueSourceHigh.points.map<OHLCV>((item) =>
         this.mapRawEodToEodPrice(item.datum),
       ),
-      expected: YValueSourceHigh.points.map<EnrichedDataPoint>((item) => {
-        return this.mapToEnrichedDataPoint(item);
-      }),
+      expected: YValueSourceHigh.points.map<EnrichedDataPoint>(
+        this.getExpected(),
+      ),
     };
   }
 
@@ -77,23 +73,29 @@ export class TestDatasets {
       data: YValueSourceLow.points.map<OHLCV>((item) =>
         this.mapRawEodToEodPrice(item.datum),
       ),
-      expected: YValueSourceLow.points.map<EnrichedDataPoint>((item) => {
-        return this.mapToEnrichedDataPoint(item);
-      }),
+      expected: YValueSourceLow.points.map<EnrichedDataPoint>(
+        this.getExpected(),
+      ),
     };
   }
 
-  private mapToEnrichedDataPoint(item: {
+  private getExpected(): (item: {
     datum: OHLCVEntity;
     swingPoint: SwingPointType;
-  }) {
-    const enrichedDataPoint = new EnrichedDataPoint(
-      this.mapRawEodToEodPrice(item.datum),
-    );
-    if (item.swingPoint) {
-      enrichedDataPoint.setSwingPointType(item.swingPoint);
-    }
-    return enrichedDataPoint;
+    averageTrueRange: number;
+  }) => EnrichedDataPoint {
+    return (item) => {
+      const enrichedDataPoint = new EnrichedDataPoint(
+        this.mapRawEodToEodPrice(item.datum),
+      );
+      if (item.swingPoint) {
+        enrichedDataPoint.setSwingPointType(item.swingPoint);
+      }
+      if (item.averageTrueRange) {
+        enrichedDataPoint.setAverageTrueRange(item.averageTrueRange);
+      }
+      return enrichedDataPoint;
+    };
   }
 
   private mapRawEodToEodPrice(raw: OHLCVEntity): OHLCV {

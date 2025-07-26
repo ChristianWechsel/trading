@@ -29,7 +29,7 @@ export class AnalysisIntTestData {
             to: '1980-06-01',
           },
         },
-        steps: ['SwingPointDetection'],
+        steps: ['TrendChannelCalculation'],
         stepOptions: {
           swingPointDetection: { relativeThreshold: 0.005 },
           trendDetection: { relativeThreshold: 0.005 },
@@ -52,7 +52,7 @@ export class AnalysisIntTestData {
             to: '1980-12-31',
           },
         },
-        steps: ['SwingPointDetection'],
+        steps: ['TrendChannelCalculation'],
         stepOptions: {
           swingPointDetection: { relativeThreshold: 0.01 },
           trendDetection: { relativeThreshold: 0.01 },
@@ -75,7 +75,7 @@ export class AnalysisIntTestData {
             to: '1980-12-31',
           },
         },
-        steps: ['TrendDetection'],
+        steps: ['TrendChannelCalculation'],
         stepOptions: {
           swingPointDetection: { relativeThreshold: 0.01 },
           trendDetection: { relativeThreshold: 0.01 },
@@ -100,7 +100,7 @@ export class AnalysisIntTestData {
             to: '1980-12-31',
           },
         },
-        steps: ['TrendDetection'],
+        steps: ['TrendChannelCalculation'],
         stepOptions: {
           swingPointDetection: { relativeThreshold: 0.01 },
           trendDetection: { relativeThreshold: 0.01 },
@@ -125,7 +125,7 @@ export class AnalysisIntTestData {
             to: '1980-12-31',
           },
         },
-        steps: ['TrendDetection'],
+        steps: ['TrendChannelCalculation'],
         stepOptions: {
           swingPointDetection: { relativeThreshold: 0.01 },
           trendDetection: { relativeThreshold: 0.01 },
@@ -150,7 +150,7 @@ export class AnalysisIntTestData {
             to: '1980-12-31',
           },
         },
-        steps: ['TrendDetection'],
+        steps: ['TrendChannelCalculation'],
         stepOptions: {
           swingPointDetection: { relativeThreshold: 0.01 },
           trendDetection: { relativeThreshold: 0.01 },
