@@ -1,4 +1,4 @@
-import { OHLCV } from 'src/data-aggregation/ohlcv.entity';
+import { OHLCV } from '../../data-aggregation/ohlcv.entity';
 import { AnalysisContext, AnalysisStep } from './analysis.interface';
 import { EnrichedDataPoint } from './enriched-data-point';
 

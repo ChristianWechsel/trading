@@ -1,4 +1,4 @@
-import { OHLCV } from 'src/data-aggregation/ohlcv.entity';
+import { OHLCV } from '../../data-aggregation/ohlcv.entity';
 
 export class EnrichedDataPoint {
   private swingPointType?: SwingPointType;
