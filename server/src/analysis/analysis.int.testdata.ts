@@ -74,7 +74,7 @@ export class AnalysisIntTestData {
             to: '1980-12-31',
           },
         },
-        steps: ['SwingPointDetection'],
+        steps: ['TrendDetection'],
         stepOptions: {
           swingPointDetection: { relativeThreshold: 0.01 },
           trendDetection: { relativeThreshold: 0.01 },
@@ -99,7 +99,7 @@ export class AnalysisIntTestData {
             to: '1980-12-31',
           },
         },
-        steps: ['SwingPointDetection'],
+        steps: ['TrendDetection'],
         stepOptions: {
           swingPointDetection: { relativeThreshold: 0.01 },
           trendDetection: { relativeThreshold: 0.01 },
@@ -124,7 +124,7 @@ export class AnalysisIntTestData {
             to: '1980-12-31',
           },
         },
-        steps: ['SwingPointDetection'],
+        steps: ['TrendDetection'],
         stepOptions: {
           swingPointDetection: { relativeThreshold: 0.01 },
           trendDetection: { relativeThreshold: 0.01 },
@@ -149,7 +149,7 @@ export class AnalysisIntTestData {
             to: '1980-12-31',
           },
         },
-        steps: ['SwingPointDetection'],
+        steps: ['TrendDetection'],
         stepOptions: {
           swingPointDetection: { relativeThreshold: 0.01 },
           trendDetection: { relativeThreshold: 0.01 },

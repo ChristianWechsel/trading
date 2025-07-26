@@ -1,6 +1,16 @@
 import { OHLCV, OHLCVEntity } from '../data-aggregation/ohlcv.entity';
 import { TestData } from './analysis.int.testdata';
+import { TrendDataMetadata } from './core/analysis.interface';
 import { EnrichedDataPoint, SwingPointType } from './core/enriched-data-point';
+
+type TestDataSource = {
+  points: {
+    datum: OHLCVEntity;
+    swingPoint: SwingPointType;
+    averageTrueRange: number;
+  }[];
+  trends: TrendDataMetadata['trendData'][];
+};
 
 export class TestDatasets {
   getMCD_US_19800317_19800601(): Pick<TestData, 'data' | 'expected'> {
@@ -2927,75 +2937,89 @@ const MCD_US_19800601_19801231: {
   },
 ];
 
-const YValueSourceClose: {
-  dataPoint: OHLCVEntity;
-  swingPoint: SwingPointType;
-}[] = [
+
+
+const YValueSourceClose: TestDataSource = {
+  points: [
+    {
+      datum: {
+        securityId: 1,
+        priceDate: '1980-01-02',
+        openPrice: 0,
+        highPrice: 0,
+        lowPrice: 0,
+        closePrice: 10,
+        adjustedClosePrice: 0,
+        volume: 0,
+      },
+      averageTrueRange: 0,
+      swingPoint: null,
+    },
+    {
+      datum: {
+        securityId: 1,
+        priceDate: '1980-01-03',
+        openPrice: 0,
+        highPrice: 0,
+        lowPrice: 0,
+        closePrice: 5,
+        adjustedClosePrice: 0,
+        volume: 0,
+      },
+      averageTrueRange: 0,
+      swingPoint: 'swingLow',
+    },
+    {
+      datum: {
+        securityId: 1,
+        priceDate: '1980-01-04',
+        openPrice: 0,
+        highPrice: 0,
+        lowPrice: 0,
+        closePrice: 10,
+        adjustedClosePrice: 0,
+        volume: 0,
+      },
+      averageTrueRange:0
+      swingPoint: 'swingHigh',
+    },
+    {
+      datum: {
+        securityId: 1,
+        priceDate: '1980-01-05',
+        openPrice: 0,
+        highPrice: 0,
+        lowPrice: 0,
+        closePrice: 7,
+        adjustedClosePrice: 0,
+        volume: 0,
+      },
+      averageTrueRange: 0,
+      swingPoint: 'swingLow',
+    },
+    {
+      datum: {
+        securityId: 1,
+        priceDate: '1980-01-06',
+        openPrice: 0,
+        highPrice: 0,
+        lowPrice: 0,
+        closePrice: 12,
+        adjustedClosePrice: 0,
+        volume: 0,
+      },
+      averageTrueRange: 0,
+      swingPoint: null,
+    },
+  ],
+  trends: [],
+};
+
+const YValueSourceOpen: TestDataSource = {points:[
   {
-    dataPoint: {
+    datum: {
       securityId: 1,
       priceDate: '1980-01-02',
-      openPrice: 0,
-      highPrice: 0,
-      lowPrice: 0,
-      closePrice: 1,
-      adjustedClosePrice: 0,
-      volume: 0,
-    },
-
-    swingPoint: null,
-  },
-  {
-    dataPoint: {
-      securityId: 1,
-      priceDate: '1980-01-03',
-      openPrice: 0,
-      highPrice: 0,
-      lowPrice: 0,
-      closePrice: 10,
-      adjustedClosePrice: 0,
-      volume: 0,
-    },
-
-    swingPoint: 'swingHigh',
-  },
-  {
-    dataPoint: {
-      securityId: 1,
-      priceDate: '1980-01-04',
-      openPrice: 0,
-      highPrice: 0,
-      lowPrice: 0,
-      closePrice: 1,
-      adjustedClosePrice: 0,
-      volume: 0,
-    },
-    swingPoint: null,
-  },
-];
-
-const YValueSourceOpen: {
-  dataPoint: OHLCVEntity;
-  swingPoint: SwingPointType;
-}[] = [
-  {
-    dataPoint: {
-      securityId: 1,
-      priceDate: '1980-01-02',
-      openPrice: 1,
-      highPrice: 0,
-      lowPrice: 0,
-      closePrice: 0,
-      adjustedClosePrice: 0,
-      volume: 0,
-    },
-
-    swingPoint: null,
-  },
-  {
-    dataPoint: {
-      securityId: 1,
-      priceDate: '1980-01-03',
       openPrice: 10,
       highPrice: 0,
       lowPrice: 0,
@@ -3003,46 +3027,72 @@ const YValueSourceOpen: {
       adjustedClosePrice: 0,
       volume: 0,
     },
-
-    swingPoint: 'swingHigh',
+averageTrueRange: 0,
+    swingPoint: null,
   },
   {
-    dataPoint: {
+    datum: {
       securityId: 1,
-      priceDate: '1980-01-04',
-      openPrice: 1,
+      priceDate: '1980-01-03',
+      openPrice: 5,
       highPrice: 0,
       lowPrice: 0,
       closePrice: 0,
       adjustedClosePrice: 0,
       volume: 0,
     },
-    swingPoint: null,
+    averageTrueRange: 0,
+    swingPoint: 'swingLow',
   },
-];
-
-const YValueSourceHigh: {
-  dataPoint: OHLCVEntity;
-  swingPoint: SwingPointType;
-}[] = [
   {
-    dataPoint: {
+    datum: {
       securityId: 1,
-      priceDate: '1980-01-02',
-      openPrice: 0,
-      highPrice: 1,
+      priceDate: '1980-01-04',
+      openPrice: 10,
+      highPrice: 0,
       lowPrice: 0,
       closePrice: 0,
       adjustedClosePrice: 0,
       volume: 0,
     },
-
-    swingPoint: null,
+    averageTrueRange:0,
+    swingPoint: 'swingHigh',
   },
   {
-    dataPoint: {
+    datum: {
       securityId: 1,
-      priceDate: '1980-01-03',
+      priceDate: '1980-01-05',
+      openPrice: 7,
+      highPrice: 0,
+      lowPrice: 0,
+      closePrice: 0,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+    averageTrueRange: 0,
+    swingPoint: 'swingLow',
+  },
+  {
+    datum: {
+      securityId: 1,
+      priceDate: '1980-01-06',
+      openPrice: 12,
+      highPrice: 0,
+      lowPrice: 0,
+      closePrice: 0,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+    averageTrueRange: 0,
+    swingPoint: null,
+  },
+],trends:[]};
+
+const YValueSourceHigh: TestDataSource = {points:[
+  {
+    datum : {
+      securityId: 1,
+      priceDate: '1980-01-02',
       openPrice: 0,
       highPrice: 10,
       lowPrice: 0,
@@ -3050,46 +3100,72 @@ const YValueSourceHigh: {
       adjustedClosePrice: 0,
       volume: 0,
     },
-
-    swingPoint: 'swingHigh',
+averageTrueRange: 0,
+    swingPoint: null,
   },
   {
-    dataPoint: {
+    datum: {
       securityId: 1,
-      priceDate: '1980-01-04',
+      priceDate: '1980-01-03',
       openPrice: 0,
-      highPrice: 1,
+      highPrice: 5,
       lowPrice: 0,
       closePrice: 0,
       adjustedClosePrice: 0,
       volume: 0,
     },
-    swingPoint: null,
+averageTrueRange:0,
+    swingPoint: 'swingLow',
   },
-];
-
-const YValueSourceLow: {
-  dataPoint: OHLCVEntity;
-  swingPoint: SwingPointType;
-}[] = [
   {
-    dataPoint: {
+    datum: {
       securityId: 1,
-      priceDate: '1980-01-02',
+      priceDate: '1980-01-04',
       openPrice: 0,
-      highPrice: 0,
-      lowPrice: 1,
+      highPrice: 10,
+      lowPrice: 0,
       closePrice: 0,
       adjustedClosePrice: 0,
       volume: 0,
     },
-
-    swingPoint: null,
+    averageTrueRange: 0,
+    swingPoint: 'swingHigh',
   },
   {
-    dataPoint: {
+    datum: {
       securityId: 1,
-      priceDate: '1980-01-03',
+      priceDate: '1980-01-05',
+      openPrice: 0,
+      highPrice: 7,
+      lowPrice: 0,
+      closePrice: 0,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+    averageTrueRange: 0,
+    swingPoint: 'swingLow',
+  },
+  {
+    datum: {
+      securityId: 1,
+      priceDate: '1980-01-06',
+      openPrice: 0,
+      highPrice: 12,
+      lowPrice: 0,
+      closePrice: 0,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+    averageTrueRange: 0,
+    swingPoint: null,
+  },
+],trends:[]};
+
+const YValueSourceLow: TestDataSource = {points:[
+  {
+    datum: {
+      securityId: 1,
+      priceDate: '1980-01-02',
       openPrice: 0,
       highPrice: 0,
       lowPrice: 10,
@@ -3097,20 +3173,63 @@ const YValueSourceLow: {
       adjustedClosePrice: 0,
       volume: 0,
     },
-
-    swingPoint: 'swingHigh',
+averageTrueRange: 0,
+    swingPoint: null,
   },
   {
-    dataPoint: {
+    datum: {
       securityId: 1,
-      priceDate: '1980-01-04',
+      priceDate: '1980-01-03',
       openPrice: 0,
       highPrice: 0,
-      lowPrice: 1,
+      lowPrice: 5,
       closePrice: 0,
       adjustedClosePrice: 0,
       volume: 0,
     },
+averageTrueRange:0,
+    swingPoint: 'swingLow',
+  },
+  {
+    datum: {
+      securityId: 1,
+      priceDate: '1980-01-04',
+      openPrice: 0,
+      highPrice: 0,
+      lowPrice: 10,
+      closePrice: 0,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+    averageTrueRange: 0,
+    swingPoint: 'swingHigh',
+  },
+  {
+    datum: {
+      securityId: 1,
+      priceDate: '1980-01-05',
+      openPrice: 0,
+      highPrice: 0,
+      lowPrice: 7,
+      closePrice: 0,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+    averageTrueRange: 0,
+    swingPoint: 'swingLow',
+  },
+  {
+    datum: {
+      securityId: 1,
+      priceDate: '1980-01-06',
+      openPrice: 0,
+      highPrice: 0,
+      lowPrice: 12,
+      closePrice: 0,
+      adjustedClosePrice: 0,
+      volume: 0,
+    },
+    averageTrueRange: 0,
     swingPoint: null,
   },
-];
+],trends:[]};
