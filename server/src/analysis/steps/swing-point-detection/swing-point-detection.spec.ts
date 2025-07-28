@@ -17,6 +17,7 @@ export type SwingPointTestCase = {
       relativeThreshold: number;
       windowSize: number;
     };
+    context: AnalysisContextClass;
   };
 };
 
@@ -63,28 +64,19 @@ describe('SwingPointDetection', () => {
     testData.downwardPlateauDownward_window2(),
   ])('$name', ({ testcase }) => {
     const swingPointDetection = new SwingPointDetection(testcase.settings);
-    const context = new AnalysisContextClass(
-      {} as AnalysisQueryDto,
-      testcase.data.map((dp) => dp.getDataPoint()),
-    );
-    swingPointDetection.execute(context);
+    swingPointDetection.execute(testcase.context);
 
-    const areSwingPointsAsExpected = testcase.data.every(
-      (elementResult, idxResult) => {
-        const idxExpectedSwingPoint = testcase.expectedSwingPoints.findIndex(
-          (expected) => expected.index === idxResult,
-        );
-        if (idxExpectedSwingPoint > -1) {
-          return (
-            elementResult.getSwingPointType() ===
-            testcase.expectedSwingPoints[idxExpectedSwingPoint].type
-          );
-        }
-        return elementResult.getSwingPointType() === undefined;
-      },
-    );
-
-    expect(areSwingPointsAsExpected).toEqual(true);
+    testcase.context.getEnrichedDataPoints().forEach((dp, idx) => {
+      const actualSwingPointType = dp.getSwingPointType();
+      const expectedSwingPoint = testcase.expectedSwingPoints.find(
+        (esp) => esp.index === idx,
+      );
+      if (expectedSwingPoint) {
+        expect(actualSwingPointType).toBe(expectedSwingPoint.type);
+      } else {
+        expect(actualSwingPointType).toBeUndefined();
+      }
+    });
   });
 
   it.each([0, 0.5, 1])(

@@ -52,6 +52,19 @@ export class CreateTestData {
     return new OHLCV({ ...defaultData, ...ohlcv });
   }
 
+  protected createContextOf(
+    ohlcvs: Partial<OHLCVEntity>[],
+  ): AnalysisContextClass {
+    const context = new AnalysisContextClass(
+      {
+        steps: [],
+        dataAggregation: { ticker: { exchange: '', symbol: '' } },
+      },
+      ohlcvs.map<OHLCV>((item) => this.createOHLCV(item)),
+    );
+
+    return context;
+  }
   protected createContext(ohlcvs: OHLCVRecord[]): AnalysisContextClass {
     const context = new AnalysisContextClass(
       {
