@@ -5,6 +5,11 @@ import {
 } from '../analysis/core/enriched-data-point';
 import { OHLCV, OHLCVEntity } from '../data-aggregation/ohlcv.entity';
 
+export type OHLCVRecord = {
+  ohlcv: OHLCV;
+  swingPointType?: SwingPointType;
+};
+
 export class CreateTestData {
   protected createEnrichedDataPoint(
     ohlcv: Partial<OHLCVEntity>,
@@ -47,9 +52,7 @@ export class CreateTestData {
     return new OHLCV({ ...defaultData, ...ohlcv });
   }
 
-  protected createContext(
-    ohlcvs: { ohlcv: OHLCV; swingPointType?: SwingPointType }[],
-  ): AnalysisContextClass {
+  protected createContext(ohlcvs: OHLCVRecord[]): AnalysisContextClass {
     const context = new AnalysisContextClass(
       {
         steps: [],
@@ -65,5 +68,13 @@ export class CreateTestData {
       }
     });
     return context;
+  }
+
+  protected createEnrichedDataPointOf(ohlcv: OHLCVRecord): EnrichedDataPoint {
+    const edp = new EnrichedDataPoint(ohlcv.ohlcv);
+    if (ohlcv.swingPointType) {
+      edp.setSwingPointType(ohlcv.swingPointType);
+    }
+    return edp;
   }
 }
