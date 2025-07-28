@@ -1,224 +1,226 @@
-import { CreateTestData } from '../../../utils/test-utils';
-import { EnrichedDataPoint } from '../../core/enriched-data-point';
+import { OHLCV } from 'src/data-aggregation/ohlcv.entity';
+import { CreateTestData, OHLCVRecord } from '../../../utils/test-utils';
 import { TrendChannelTestCase } from './trend-channel-calculation.spec';
 
 export class TrendChannelCalculationTestdata extends CreateTestData {
-  private calcSlope(
-    point1: EnrichedDataPoint,
-    point2: EnrichedDataPoint,
-  ): number {
+  private calcSlope(point1: OHLCV, point2: OHLCV): number {
     return (
-      (point2.getDataPoint().getClosePrice() -
-        point1.getDataPoint().getClosePrice()) /
-      (point2.getDataPoint().getPriceDateEpochTime() -
-        point1.getDataPoint().getPriceDateEpochTime())
+      (point2.getClosePrice() - point1.getClosePrice()) /
+      (point2.getPriceDateEpochTime() - point1.getPriceDateEpochTime())
     );
   }
 
-  private calcYIntercept(point: EnrichedDataPoint, slope: number): number {
-    return (
-      point.getDataPoint().getClosePrice() -
-      slope * point.getDataPoint().getPriceDateEpochTime()
-    );
+  private calcYIntercept(point: OHLCV, slope: number): number {
+    return point.getClosePrice() - slope * point.getPriceDateEpochTime();
   }
 
   noTrends(): TrendChannelTestCase {
+    const context = this.createContext([]);
     return {
       name: 'should do nothing if no trends are present',
       testcase: {
-        initialContext: {
-          enrichedDataPoints: [],
-          trends: [],
-        },
         expectedChannels: [],
+        context,
       },
     };
   }
 
   simpleUpwardTrend(): TrendChannelTestCase {
-    const primarySwingPointA = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '1', closePrice: 10 },
-      'swingLow',
-    );
-    const secondarySwingPoint = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '2', closePrice: 20 },
-      'swingHigh',
-    );
-    const primarySwingPointB = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '3', closePrice: 12 },
-      'swingLow',
-    );
-    const endPoint = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '5', closePrice: 14 },
-      'swingLow',
-    );
+    const primarySwingPointA: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 10 }),
+      swingPointType: 'swingLow',
+    };
+    const secondarySwingPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 20 }),
+      swingPointType: 'swingHigh',
+    };
+    const primarySwingPointB: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 12 }),
+      swingPointType: 'swingLow',
+    };
+    const endPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 14 }),
+      swingPointType: 'swingLow',
+    };
+    const context = this.createContext([
+      primarySwingPointA,
+      secondarySwingPoint,
+      primarySwingPointB,
+      {
+        ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 22 }),
+        swingPointType: 'swingHigh',
+      },
+      endPoint,
+    ]);
+    context.setTrends([
+      {
+        type: 'upward',
+        startPoint: this.createEnrichedDataPointOf(primarySwingPointA),
+        endPoint: this.createEnrichedDataPointOf(endPoint),
+      },
+    ]);
 
-    const slope = this.calcSlope(primarySwingPointB, primarySwingPointA);
+    const slope = this.calcSlope(
+      primarySwingPointB.ohlcv,
+      primarySwingPointA.ohlcv,
+    );
     return {
       name: 'should calculate channel for a simple upward trend',
       testcase: {
-        initialContext: {
-          enrichedDataPoints: [
-            primarySwingPointA,
-            secondarySwingPoint,
-            primarySwingPointB,
-            this.createEnrichedDataPointWithSwingPoints(
-              { priceDate: '4', closePrice: 22 },
-              'swingHigh',
-            ),
-            endPoint,
-          ],
-          trends: [
-            {
-              type: 'upward',
-              startPoint: primarySwingPointA,
-              endPoint,
-            },
-          ],
-        },
         expectedChannels: [
           {
             trendLine: {
               slope,
-              yIntercept: this.calcYIntercept(primarySwingPointA, slope),
+              yIntercept: this.calcYIntercept(primarySwingPointA.ohlcv, slope),
             },
             returnLine: {
               slope,
-              yIntercept: this.calcYIntercept(secondarySwingPoint, slope),
+              yIntercept: this.calcYIntercept(secondarySwingPoint.ohlcv, slope),
             },
           },
         ],
+        context,
       },
     };
   }
 
   simpleDownwardTrend(): TrendChannelTestCase {
-    const primarySwingPointA = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '1', closePrice: 20 },
-      'swingHigh',
-    );
-    const secondarySwingPoint = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '2', closePrice: 10 },
-      'swingLow',
-    );
-    const primarySwingPointB = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '3', closePrice: 18 },
-      'swingHigh',
-    );
-    const endPoint = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '5', closePrice: 16 },
-      'swingHigh',
-    );
+    const primarySwingPointA: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 20 }),
+      swingPointType: 'swingHigh',
+    };
+    const secondarySwingPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 10 }),
+      swingPointType: 'swingLow',
+    };
+    const primarySwingPointB: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 18 }),
+      swingPointType: 'swingHigh',
+    };
+    const endPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 16 }),
+      swingPointType: 'swingHigh',
+    };
 
-    const slope = this.calcSlope(primarySwingPointB, primarySwingPointA);
+    const context = this.createContext([
+      primarySwingPointA,
+      secondarySwingPoint,
+      primarySwingPointB,
+      {
+        ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 8 }),
+        swingPointType: 'swingLow',
+      },
+      endPoint,
+    ]);
+    context.setTrends([
+      {
+        type: 'downward',
+        startPoint: this.createEnrichedDataPointOf(primarySwingPointA),
+        endPoint: this.createEnrichedDataPointOf(endPoint),
+      },
+    ]);
+
+    const slope = this.calcSlope(
+      primarySwingPointB.ohlcv,
+      primarySwingPointA.ohlcv,
+    );
     return {
       name: 'should calculate channel for a simple downward trend',
       testcase: {
-        initialContext: {
-          enrichedDataPoints: [
-            primarySwingPointA,
-            secondarySwingPoint,
-            primarySwingPointB,
-            this.createEnrichedDataPointWithSwingPoints(
-              { priceDate: '4', closePrice: 8 },
-              'swingLow',
-            ),
-            endPoint,
-          ],
-          trends: [
-            {
-              type: 'downward',
-              startPoint: primarySwingPointA,
-              endPoint,
-            },
-          ],
-        },
         expectedChannels: [
           {
             trendLine: {
               slope,
-              yIntercept: this.calcYIntercept(primarySwingPointA, slope),
+              yIntercept: this.calcYIntercept(primarySwingPointA.ohlcv, slope),
             },
             returnLine: {
               slope,
-              yIntercept: this.calcYIntercept(secondarySwingPoint, slope),
+              yIntercept: this.calcYIntercept(secondarySwingPoint.ohlcv, slope),
             },
           },
         ],
+        context,
       },
     };
   }
 
   // mehrere Trends, überlappend
   overlappingTrends(): TrendChannelTestCase {
-    const pointA = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '1', closePrice: 10 },
-      'swingLow',
-    );
-    const pointB = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '2', closePrice: 20 },
-      'swingHigh',
-    );
-    const pointC = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '3', closePrice: 12 },
-      'swingLow',
-    );
-    const pointD = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '4', closePrice: 22 },
-      'swingHigh',
-    );
-    const pointE = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '5', closePrice: 14 },
-      'swingLow',
-    );
-    const pointF = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '6', closePrice: 24 },
-      'swingHigh',
-    );
+    const pointA: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 10 }),
+      swingPointType: 'swingLow',
+    };
+    const pointB: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 20 }),
+      swingPointType: 'swingHigh',
+    };
+    const pointC: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 12 }),
+      swingPointType: 'swingLow',
+    };
+    const pointD: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 22 }),
+      swingPointType: 'swingHigh',
+    };
+    const pointE: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 14 }),
+      swingPointType: 'swingLow',
+    };
+    const pointF: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 24 }),
+      swingPointType: 'swingHigh',
+    };
 
-    const slope1 = this.calcSlope(pointC, pointA);
-    const slope2 = this.calcSlope(pointE, pointC);
+    const context = this.createContext([
+      pointA,
+      pointB,
+      pointC,
+      pointD,
+      pointE,
+      pointF,
+    ]);
+    context.setTrends([
+      {
+        type: 'upward',
+        startPoint: this.createEnrichedDataPointOf(pointA),
+        endPoint: this.createEnrichedDataPointOf(pointE),
+      },
+      {
+        type: 'upward',
+        startPoint: this.createEnrichedDataPointOf(pointC),
+        endPoint: this.createEnrichedDataPointOf(pointF),
+      },
+    ]);
+
+    const slope1 = this.calcSlope(pointC.ohlcv, pointA.ohlcv);
+    const slope2 = this.calcSlope(pointE.ohlcv, pointC.ohlcv);
 
     return {
       name: 'should handle overlapping trends',
       testcase: {
-        initialContext: {
-          enrichedDataPoints: [pointA, pointB, pointC, pointD, pointE, pointF],
-          trends: [
-            {
-              type: 'upward',
-              startPoint: pointA,
-              endPoint: pointE,
-            },
-            {
-              type: 'upward',
-              startPoint: pointC,
-              endPoint: pointF,
-            },
-          ],
-        },
         expectedChannels: [
           {
             trendLine: {
               slope: slope1,
-              yIntercept: this.calcYIntercept(pointA, slope1),
+              yIntercept: this.calcYIntercept(pointA.ohlcv, slope1),
             },
             returnLine: {
               slope: slope1,
-              yIntercept: this.calcYIntercept(pointB, slope1),
+              yIntercept: this.calcYIntercept(pointB.ohlcv, slope1),
             },
           },
           {
             trendLine: {
               slope: slope2,
-              yIntercept: this.calcYIntercept(pointC, slope2),
+              yIntercept: this.calcYIntercept(pointC.ohlcv, slope2),
             },
             returnLine: {
               slope: slope2,
-              yIntercept: this.calcYIntercept(pointD, slope2),
+              yIntercept: this.calcYIntercept(pointD.ohlcv, slope2),
             },
           },
         ],
+        context,
       },
     };
   }
@@ -226,312 +228,312 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
   // mehrere Trends, getrennt
   separatedTrends(): TrendChannelTestCase {
     // Erster Trend: drei SwingPoints
-    const pointA1 = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '1', closePrice: 10 },
-      'swingLow',
-    );
-    const pointB1 = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '2', closePrice: 20 },
-      'swingHigh',
-    );
-    const pointC1 = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '3', closePrice: 12 },
-      'swingLow',
-    );
+    const pointA1: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 10 }),
+      swingPointType: 'swingLow',
+    };
+    const pointB1: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 20 }),
+      swingPointType: 'swingHigh',
+    };
+    const pointC1: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 12 }),
+      swingPointType: 'swingLow',
+    };
 
     // Zweiter Trend: drei SwingPoints
-    const pointA2 = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '10', closePrice: 30 },
-      'swingLow',
-    );
-    const pointB2 = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '11', closePrice: 40 },
-      'swingHigh',
-    );
-    const pointC2 = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '12', closePrice: 32 },
-      'swingLow',
-    );
+    const pointA2: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '10', closePrice: 30 }),
+      swingPointType: 'swingLow',
+    };
+    const pointB2: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '11', closePrice: 40 }),
+      swingPointType: 'swingHigh',
+    };
+    const pointC2: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '12', closePrice: 32 }),
+      swingPointType: 'swingLow',
+    };
 
-    const slope1 = this.calcSlope(pointC1, pointA1);
-    const slope2 = this.calcSlope(pointC2, pointA2);
+    const context = this.createContext([
+      pointA1,
+      pointB1,
+      pointC1,
+      pointA2,
+      pointB2,
+      pointC2,
+    ]);
+    context.setTrends([
+      {
+        type: 'upward',
+        startPoint: this.createEnrichedDataPointOf(pointA1),
+        endPoint: this.createEnrichedDataPointOf(pointC1),
+      },
+      {
+        type: 'upward',
+        startPoint: this.createEnrichedDataPointOf(pointA2),
+        endPoint: this.createEnrichedDataPointOf(pointC2),
+      },
+    ]);
+
+    const slope1 = this.calcSlope(pointC1.ohlcv, pointA1.ohlcv);
+    const slope2 = this.calcSlope(pointC2.ohlcv, pointA2.ohlcv);
 
     return {
       name: 'should handle separated trends',
       testcase: {
-        initialContext: {
-          enrichedDataPoints: [
-            pointA1,
-            pointB1,
-            pointC1,
-            pointA2,
-            pointB2,
-            pointC2,
-          ],
-          trends: [
-            {
-              type: 'upward',
-              startPoint: pointA1,
-              endPoint: pointC1,
-            },
-            {
-              type: 'upward',
-              startPoint: pointA2,
-              endPoint: pointC2,
-            },
-          ],
-        },
         expectedChannels: [
           {
             trendLine: {
               slope: slope1,
-              yIntercept: this.calcYIntercept(pointA1, slope1),
+              yIntercept: this.calcYIntercept(pointA1.ohlcv, slope1),
             },
             returnLine: {
               slope: slope1,
-              yIntercept: this.calcYIntercept(pointB1, slope1),
+              yIntercept: this.calcYIntercept(pointB1.ohlcv, slope1),
             },
           },
           {
             trendLine: {
               slope: slope2,
-              yIntercept: this.calcYIntercept(pointA2, slope2),
+              yIntercept: this.calcYIntercept(pointA2.ohlcv, slope2),
             },
             returnLine: {
               slope: slope2,
-              yIntercept: this.calcYIntercept(pointB2, slope2),
+              yIntercept: this.calcYIntercept(pointB2.ohlcv, slope2),
             },
           },
         ],
+        context,
       },
     };
   }
 
   // mehrere Datenpunkte zwischen swing points
   multiplePointsBetweenSwings(): TrendChannelTestCase {
-    const pointA = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '1', closePrice: 10 },
-      'swingLow',
-    );
-    const pointB = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '2', closePrice: 20 },
-      'swingHigh',
-    );
-    const pointC = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '3', closePrice: 12 },
-      'swingLow',
-    );
-    const pointD = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '4', closePrice: 22 },
-      'swingHigh',
-    );
+    const pointA: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 10 }),
+      swingPointType: 'swingLow',
+    };
+    const pointB: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 20 }),
+      swingPointType: 'swingHigh',
+    };
+    const pointC: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 12 }),
+      swingPointType: 'swingLow',
+    };
+    const pointD: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 22 }),
+      swingPointType: 'swingHigh',
+    };
 
-    const slope = this.calcSlope(pointC, pointA);
+    const context = this.createContext([
+      pointA,
+      {
+        ohlcv: this.createOHLCV({ priceDate: '1.5', closePrice: 15 }),
+        swingPointType: null,
+      },
+      pointB,
+      {
+        ohlcv: this.createOHLCV({ priceDate: '2.5', closePrice: 16 }),
+        swingPointType: null,
+      },
+      pointC,
+      {
+        ohlcv: this.createOHLCV({ priceDate: '3.5', closePrice: 18 }),
+        swingPointType: null,
+      },
+      pointD,
+    ]);
+    context.setTrends([
+      {
+        type: 'upward',
+        startPoint: this.createEnrichedDataPointOf(pointA),
+        endPoint: this.createEnrichedDataPointOf(pointD),
+      },
+    ]);
+
+    const slope = this.calcSlope(pointC.ohlcv, pointA.ohlcv);
 
     return {
       name: 'should handle multiple points between swing points',
       testcase: {
-        initialContext: {
-          enrichedDataPoints: [
-            pointA,
-            this.createEnrichedDataPointWithSwingPoints(
-              { priceDate: '1.5', closePrice: 15 },
-              null,
-            ),
-            pointB,
-            this.createEnrichedDataPointWithSwingPoints(
-              { priceDate: '2.5', closePrice: 16 },
-              null,
-            ),
-            pointC,
-            this.createEnrichedDataPointWithSwingPoints(
-              { priceDate: '3.5', closePrice: 18 },
-              null,
-            ),
-            pointD,
-          ],
-          trends: [
-            {
-              type: 'upward',
-              startPoint: pointA,
-              endPoint: pointD,
-            },
-          ],
-        },
         expectedChannels: [
           {
             trendLine: {
               slope,
-              yIntercept: this.calcYIntercept(pointA, slope),
+              yIntercept: this.calcYIntercept(pointA.ohlcv, slope),
             },
             returnLine: {
               slope,
-              yIntercept: this.calcYIntercept(pointB, slope),
+              yIntercept: this.calcYIntercept(pointB.ohlcv, slope),
             },
           },
         ],
+        context,
       },
     };
   }
 
   // Kommazahlen für x und y Werte
   decimalValues(): TrendChannelTestCase {
-    const pointA = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '1.1', closePrice: 10.5 },
-      'swingLow',
-    );
-    const pointB = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '2.2', closePrice: 20.7 },
-      'swingHigh',
-    );
-    const pointC = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '3.3', closePrice: 12.9 },
-      'swingLow',
-    );
+    const pointA: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '1.1', closePrice: 10.5 }),
+      swingPointType: 'swingLow',
+    };
+    const pointB: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '2.2', closePrice: 20.7 }),
+      swingPointType: 'swingHigh',
+    };
+    const pointC: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3.3', closePrice: 12.9 }),
+      swingPointType: 'swingLow',
+    };
 
-    const slope = this.calcSlope(pointC, pointA);
+    const context = this.createContext([pointA, pointB, pointC]);
+    context.setTrends([
+      {
+        type: 'upward',
+        startPoint: this.createEnrichedDataPointOf(pointA),
+        endPoint: this.createEnrichedDataPointOf(pointC),
+      },
+    ]);
+
+    const slope = this.calcSlope(pointC.ohlcv, pointA.ohlcv);
 
     return {
       name: 'should handle decimal x and y values',
       testcase: {
-        initialContext: {
-          enrichedDataPoints: [pointA, pointB, pointC],
-          trends: [
-            {
-              type: 'upward',
-              startPoint: pointA,
-              endPoint: pointC,
-            },
-          ],
-        },
         expectedChannels: [
           {
             trendLine: {
               slope,
-              yIntercept: this.calcYIntercept(pointA, slope),
+              yIntercept: this.calcYIntercept(pointA.ohlcv, slope),
             },
             returnLine: {
               slope,
-              yIntercept: this.calcYIntercept(pointB, slope),
+              yIntercept: this.calcYIntercept(pointB.ohlcv, slope),
             },
           },
         ],
+        context,
       },
     };
   }
 
   // es vorauslaufende Points, welche aber nicht zum Trend gehören
   leadingPoints(): TrendChannelTestCase {
-    const pointA = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '3', closePrice: 10 },
-      'swingLow',
-    );
-    const pointB = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '4', closePrice: 20 },
-      'swingHigh',
-    );
-    const pointC = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '5', closePrice: 12 },
-      'swingLow',
-    );
+    const pointA: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 10 }),
+      swingPointType: 'swingLow',
+    };
+    const pointB: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 20 }),
+      swingPointType: 'swingHigh',
+    };
+    const pointC: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 12 }),
+      swingPointType: 'swingLow',
+    };
 
-    const slope = this.calcSlope(pointC, pointA);
+    const context = this.createContext([
+      {
+        ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 99 }),
+        swingPointType: null,
+      },
+      {
+        ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 88 }),
+        swingPointType: null,
+      },
+      pointA,
+      pointB,
+      pointC,
+    ]);
+    context.setTrends([
+      {
+        type: 'upward',
+        startPoint: this.createEnrichedDataPointOf(pointA),
+        endPoint: this.createEnrichedDataPointOf(pointC),
+      },
+    ]);
+
+    const slope = this.calcSlope(pointC.ohlcv, pointA.ohlcv);
 
     return {
       name: 'should ignore leading points not in trend',
       testcase: {
-        initialContext: {
-          enrichedDataPoints: [
-            this.createEnrichedDataPointWithSwingPoints(
-              { priceDate: '1', closePrice: 99 },
-              null,
-            ),
-            this.createEnrichedDataPointWithSwingPoints(
-              { priceDate: '2', closePrice: 88 },
-              null,
-            ),
-            pointA,
-            pointB,
-            pointC,
-          ],
-          trends: [
-            {
-              type: 'upward',
-              startPoint: pointA,
-              endPoint: pointC,
-            },
-          ],
-        },
         expectedChannels: [
           {
             trendLine: {
               slope,
-              yIntercept: this.calcYIntercept(pointA, slope),
+              yIntercept: this.calcYIntercept(pointA.ohlcv, slope),
             },
             returnLine: {
               slope,
-              yIntercept: this.calcYIntercept(pointB, slope),
+              yIntercept: this.calcYIntercept(pointB.ohlcv, slope),
             },
           },
         ],
+        context,
       },
     };
   }
 
   // es gibt nachlaufende Points, welche aber nicht zum Trend gehören
   trailingPoints(): TrendChannelTestCase {
-    const pointA = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '1', closePrice: 10 },
-      'swingLow',
-    );
-    const pointB = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '2', closePrice: 20 },
-      'swingHigh',
-    );
-    const pointC = this.createEnrichedDataPointWithSwingPoints(
-      { priceDate: '3', closePrice: 12 },
-      'swingLow',
-    );
+    const pointA: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 10 }),
+      swingPointType: 'swingLow',
+    };
+    const pointB: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 20 }),
+      swingPointType: 'swingHigh',
+    };
+    const pointC: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 12 }),
+      swingPointType: 'swingLow',
+    };
 
-    const slope = this.calcSlope(pointC, pointA);
+    const context = this.createContext([
+      pointA,
+      pointB,
+      pointC,
+      {
+        ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 77 }),
+        swingPointType: null,
+      },
+      {
+        ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 66 }),
+        swingPointType: null,
+      },
+    ]);
+    context.setTrends([
+      {
+        type: 'upward',
+        startPoint: this.createEnrichedDataPointOf(pointA),
+        endPoint: this.createEnrichedDataPointOf(pointC),
+      },
+    ]);
+
+    const slope = this.calcSlope(pointC.ohlcv, pointA.ohlcv);
 
     return {
       name: 'should ignore trailing points not in trend',
       testcase: {
-        initialContext: {
-          enrichedDataPoints: [
-            pointA,
-            pointB,
-            pointC,
-            this.createEnrichedDataPointWithSwingPoints(
-              { priceDate: '4', closePrice: 77 },
-              null,
-            ),
-            this.createEnrichedDataPointWithSwingPoints(
-              { priceDate: '5', closePrice: 66 },
-              null,
-            ),
-          ],
-          trends: [
-            {
-              type: 'upward',
-              startPoint: pointA,
-              endPoint: pointC,
-            },
-          ],
-        },
         expectedChannels: [
           {
             trendLine: {
               slope,
-              yIntercept: this.calcYIntercept(pointA, slope),
+              yIntercept: this.calcYIntercept(pointA.ohlcv, slope),
             },
             returnLine: {
               slope,
-              yIntercept: this.calcYIntercept(pointB, slope),
+              yIntercept: this.calcYIntercept(pointB.ohlcv, slope),
             },
           },
         ],
+        context,
       },
     };
   }
