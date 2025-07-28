@@ -1,3 +1,4 @@
+import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
 import { CreateTestData } from '../../../utils/test-utils';
 import { EnrichedDataPoint } from '../../core/enriched-data-point';
 import { TrendTestCase } from './trend-detection.spec';
@@ -76,6 +77,10 @@ export class TrendDetectionTestdata extends CreateTestData {
       { priceDate: '3', closePrice: 3 },
       'swingLow',
     );
+    const context = new AnalysisContextClass(
+      { steps: [], dataAggregation: { ticker: { exchange: '', symbol: '' } } },
+      [startPoint, endPoint],
+    );
     return {
       name: 'upward trend',
       testcase: {
@@ -89,6 +94,7 @@ export class TrendDetectionTestdata extends CreateTestData {
         ],
         expectedTrends: [{ type: 'upward', startPoint, endPoint }],
         settings: { relativeThreshold: 0.01 },
+        context,
       },
     };
   }

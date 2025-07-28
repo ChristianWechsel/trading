@@ -1,3 +1,4 @@
+import { AnalysisContextClass } from '../analysis/core/analysis-context';
 import {
   EnrichedDataPoint,
   SwingPointType,
@@ -20,6 +21,7 @@ export class CreateTestData {
     };
     return new EnrichedDataPoint(new OHLCV({ ...defaultData, ...ohlcv }));
   }
+
   protected createEnrichedDataPointWithSwingPoints(
     ohlcv: Partial<OHLCVEntity>,
     type: SwingPointType | null,
@@ -29,5 +31,39 @@ export class CreateTestData {
       enrichedDataPoint.setSwingPointType(type);
     }
     return enrichedDataPoint;
+  }
+
+  protected createOHLCV(ohlcv: Partial<OHLCVEntity>): OHLCV {
+    const defaultData: OHLCVEntity = {
+      securityId: 0,
+      priceDate: '1970-01-01',
+      openPrice: 0,
+      highPrice: 0,
+      lowPrice: 0,
+      closePrice: 0,
+      adjustedClosePrice: 0,
+      volume: 0,
+    };
+    return new OHLCV({ ...defaultData, ...ohlcv });
+  }
+
+  protected createContext(
+    ohlcvs: { ohlcv: OHLCV; swingPointType?: SwingPointType }[],
+  ): AnalysisContextClass {
+    const context = new AnalysisContextClass(
+      {
+        steps: [],
+        dataAggregation: { ticker: { exchange: '', symbol: '' } },
+      },
+      ohlcvs.map<OHLCV>((item) => item.ohlcv),
+    );
+    const enrichedDataPoints = context.getEnrichedDataPoints();
+    ohlcvs.forEach((item, index) => {
+      if (item.swingPointType) {
+        const enrichedDataPoint = enrichedDataPoints[index];
+        enrichedDataPoint.setSwingPointType(item.swingPointType);
+      }
+    });
+    return context;
   }
 }

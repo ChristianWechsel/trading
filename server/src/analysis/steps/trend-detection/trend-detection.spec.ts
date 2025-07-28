@@ -14,6 +14,7 @@ export type TrendTestCase = {
     settings: {
       relativeThreshold: number;
     };
+    context: AnalysisContextClass;
   };
 };
 
