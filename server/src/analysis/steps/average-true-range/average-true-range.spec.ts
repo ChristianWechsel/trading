@@ -2,16 +2,16 @@ import { OHLCV } from '../../../data-aggregation/ohlcv.entity';
 import { AnalysisQueryDto } from '../../analysis-query.dto';
 import { analysisConfig } from '../../config/analysis.config';
 import { AnalysisContextClass } from '../../core/analysis-context';
-import { EnrichedDataPoint } from '../../core/enriched-data-point';
 import { AverageTrueRange } from './average-true-range';
 import { AverageTrueRangeTestdata } from './average-true-range.testdata';
 
 export type AverageTrueRangeTestCase = {
   name: string;
   setting: { period: number };
-  testcase: {
-    dataPoint: EnrichedDataPoint;
-    expectedATR?: number;
+  context: AnalysisContextClass;
+  expected: {
+    index: number;
+    atr: number;
   }[];
 };
 
@@ -125,20 +125,17 @@ describe('AverageTrueRange', () => {
       testData.minimumPeriod_todayHighClosingYesterday(),
       testData.minimumPeriod_todayLowClosingYesterday(),
       testData.period5_with10datapoints(),
-    ])('$name', ({ setting, testcase }) => {
-      expect.assertions(testcase.length);
-
+    ])('$name', ({ setting, context, expected }) => {
+      expect.assertions(expected.length + 1);
       const atr = new AverageTrueRange(setting);
-      const ohlcvs = testcase.map((tc) => tc.dataPoint.getDataPoint());
-      const context = new AnalysisContextClass(query, ohlcvs);
       atr.execute(context);
-      context.getEnrichedDataPoints().forEach((dataPoint, index) => {
-        if (testcase[index].expectedATR !== undefined) {
-          expect(dataPoint.getAverageTrueRange()).toBeCloseTo(
-            testcase[index].expectedATR,
-          );
+      context.getEnrichedDataPoints().forEach((dp, idx) => {
+        const actualATR = dp.getAverageTrueRange();
+        const expectedATR = expected.find((atr) => atr.index == idx);
+        if (expectedATR) {
+          expect(actualATR).toBeCloseTo(expectedATR.atr, 2);
         } else {
-          expect(dataPoint.getAverageTrueRange()).toBeUndefined();
+          expect(actualATR).toBeUndefined();
         }
       });
     });

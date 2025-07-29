@@ -11,7 +11,6 @@ import { SwingPointDetectionTestdata } from './swing-point-detection.testdata';
 export type SwingPointTestCase = {
   name: string;
   testcase: {
-    data: EnrichedDataPoint[];
     expectedSwingPoints: { index: number; type: SwingPointType }[];
     settings: {
       relativeThreshold: number;

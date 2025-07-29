@@ -6,7 +6,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect swing high',
       testcase: {
-        data: [],
         expectedSwingPoints: [{ index: 1, type: 'swingHigh' }],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -22,7 +21,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect swing high (close values)',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -38,7 +36,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect swing high (significant difference)',
       testcase: {
-        data: [],
         expectedSwingPoints: [{ index: 1, type: 'swingHigh' }],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -54,7 +51,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect swing low',
       testcase: {
-        data: [],
         expectedSwingPoints: [{ index: 1, type: 'swingLow' }],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -70,7 +66,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect swing low (close values)',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -86,7 +81,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect swing low (significant difference)',
       testcase: {
-        data: [],
         expectedSwingPoints: [
           {
             index: 1,
@@ -107,7 +101,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect multiple swing points',
       testcase: {
-        data: [],
         expectedSwingPoints: [
           { index: 1, type: 'swingHigh' },
           { index: 2, type: 'swingLow' },
@@ -129,7 +122,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect multiple swing points (close values)',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -147,7 +139,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect multiple swing points (significant difference)',
       testcase: {
-        data: [],
         expectedSwingPoints: [
           { index: 1, type: 'swingHigh' },
           { index: 2, type: 'swingLow' },
@@ -169,7 +160,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect no swing points - flatline - equal values',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -185,7 +175,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect no swing points - flatline - close values',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -201,7 +190,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect no swing points - ascending',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -217,7 +205,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect no swing points - descending',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -233,7 +220,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect plateau high',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -249,7 +235,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect plateau low',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -265,7 +250,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect low plateau',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -281,7 +265,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect high plateau',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -297,7 +280,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect swing high with window size',
       testcase: {
-        data: [],
         expectedSwingPoints: [{ index: 4, type: 'swingHigh' }],
         settings: { relativeThreshold: 0.1, windowSize: 3 },
         context: this.createContextOf([
@@ -319,7 +301,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect swing high with windowSize=3 (centered peak)',
       testcase: {
-        data: [],
         expectedSwingPoints: [{ index: 3, type: 'swingHigh' }],
         settings: { relativeThreshold: 0.1, windowSize: 3 },
         context: this.createContextOf([
@@ -339,7 +320,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect swing low with windowSize=3 (centered valley)',
       testcase: {
-        data: [],
         expectedSwingPoints: [{ index: 3, type: 'swingLow' }],
         settings: { relativeThreshold: 0.1, windowSize: 3 },
         context: this.createContextOf([
@@ -359,7 +339,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'no swing high with windowSize=3 (peak not high enough)',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 3 },
         context: this.createContextOf([
@@ -379,7 +358,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'no swing low with windowSize=3 (valley not low enough)',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 3 },
         context: this.createContextOf([
@@ -399,7 +377,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect upward to plateau with windowSize=2',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
         context: this.createContextOf([
@@ -421,7 +398,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect downwardToPlateau with windowSize=2',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
         context: this.createContextOf([
@@ -443,7 +419,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect plateauToUpward with windowSize=2',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
         context: this.createContextOf([
@@ -465,7 +440,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'detect plateauToDownward with windowSize=2',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
         context: this.createContextOf([
@@ -487,7 +461,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'fail upwardToPlateau with windowSize=2 (trend fail)',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
         context: this.createContextOf([
@@ -509,7 +482,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'fail upwardToPlateau with windowSize=2 (plateau fail)',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
         context: this.createContextOf([
@@ -531,7 +503,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'fail plateauToUpward with windowSize=2 (trend fail)',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
         context: this.createContextOf([
@@ -551,7 +522,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'no swingpoint - upward to plateau followed by upward trend - windowSize=1',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -567,7 +537,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'no swingpoint - upward to plateau followed by upward trend - windowSize=2',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
         context: this.createContextOf([
@@ -587,7 +556,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'swingpoint - upward plateau followed by downward trend - windowSize=1',
       testcase: {
-        data: [],
         expectedSwingPoints: [{ index: 1, type: 'swingHigh' }],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -603,7 +571,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'swingHigh - upward to plateau followed by downward trend - windowSize=2',
       testcase: {
-        data: [],
         expectedSwingPoints: [{ index: 2, type: 'swingHigh' }],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
         context: this.createContextOf([
@@ -623,7 +590,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'swingLow - downward to plateau followed by upward trend - windowSize=1',
       testcase: {
-        data: [],
         expectedSwingPoints: [{ index: 1, type: 'swingLow' }],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -639,7 +605,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'swingLow - downward to plateau followed by upward trend - windowSize=2',
       testcase: {
-        data: [],
         expectedSwingPoints: [{ index: 2, type: 'swingLow' }],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
         context: this.createContextOf([
@@ -659,7 +624,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'no swingpoint - downward to plateau followed by downward trend - windowSize=1',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 1 },
         context: this.createContextOf([
@@ -675,7 +639,6 @@ export class SwingPointDetectionTestdata extends CreateTestData {
     return {
       name: 'no swingpoint - downward to plateau followed by downward trend - windowSize=2',
       testcase: {
-        data: [],
         expectedSwingPoints: [],
         settings: { relativeThreshold: 0.1, windowSize: 2 },
         context: this.createContextOf([
