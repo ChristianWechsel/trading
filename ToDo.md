@@ -1,5 +1,49 @@
 # ToDo List
 
+## Architektur-Refactoring: Context-basierte Konfiguration
+
+### 1. AnalysisContextClass erweitern
+
+- [ ] Factory-Methoden für ComparableNumber hinzufügen (createSwingPointComparableNumber, createTrendDetectionComparableNumber)
+- [ ] Standardwerte-Methoden implementieren (getSwingPointDetectionOptions, getTrendDetectionOptions, getAverageTrueRangeOptions)
+- [ ] Validierungsmethoden in Context verlagern (validateSwingPointDetectionOptions, validateTrendDetectionOptions)
+- [ ] ATR-Verfügbarkeits-Prüfung implementieren (isATRAvailable, getATRValueForDataPoint)
+
+### 2. ComparableNumber-System erweitern
+
+- [ ] ATRComparableNumber-Klasse erstellen (mit atrValue und atrFactor)
+- [ ] RelativeComparableNumber beibehalten für Fallback
+- [ ] Factory-Logik: ATR-basiert wenn verfügbar, sonst relativ
+
+### 3. Steps vereinfachen
+
+- [ ] Constructor-Parameter aus allen Steps entfernen
+- [ ] SwingPointDetection: Constructor-Logik entfernen, Context-basierte Konfiguration verwenden
+- [ ] TrendDetection: Constructor-Logik entfernen, Context-basierte Konfiguration verwenden
+- [ ] AverageTrueRange: Constructor-Logik entfernen, Context-basierte Konfiguration verwenden
+- [ ] Validierungen aus Steps in Context verlagern
+
+### 4. AnalysisBuilder anpassen
+
+- [ ] Standardwerte-Konfiguration entfernen
+- [ ] Factory-Methoden vereinfachen (keine Parameter mehr an Step-Constructors)
+- [ ] StepConfiguration-Type möglicherweise entfernen
+
+### 5. DTOs erweitern
+
+- [ ] atrFactor zu SwingPointDetectionOptionsDto hinzufügen
+- [ ] atrFactor zu TrendDetectionOptionsDto hinzufügen
+- [ ] Validierungen für atrFactor implementieren
+
+### 6. Tests anpassen
+
+- [ ] Alle Step-Tests auf parameterlose Constructors umstellen
+- [ ] Context-Mock für Tests erstellen
+- [ ] Factory-Tests für ComparableNumber hinzufügen
+- [ ] Integrationstests für ATR/Relative-Threshold-Auswahl
+
+### 7. Bestehende ToDos
+
 Für IntTest SwingPointData soll der ATR dynamisch übergeben werden und es soll möglich sein, diesen Wert gezielt festzulegen, um fixe Rahmenbedingungen vorzugeben
 ATR wird bei SwingPoint und Trenderkennung benötigt, da hier mit THreshold gearbeitet wird, was eine signifikaten Änderung darstellt.
 Im Konstruktor der Steps werden die Fallbackwerte definiert, wenn kWert nicht via DTO von Client kommt.
