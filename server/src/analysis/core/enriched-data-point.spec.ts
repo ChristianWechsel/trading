@@ -24,9 +24,6 @@ describe('EnrichedDataPoint', () => {
 
     edp.setSwingPointType('swingHigh');
     expect(edp.getSwingPointType()).toBe('swingHigh');
-
-    edp.setSwingPointType(null);
-    expect(edp.getSwingPointType()).toBeNull();
   });
 
   it('should get and set averageTrueRange', () => {

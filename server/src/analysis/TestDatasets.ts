@@ -6,7 +6,7 @@ import { EnrichedDataPoint, SwingPointType } from './core/enriched-data-point';
 type TestDataSource = {
   points: {
     datum: OHLCVEntity;
-    swingPoint: SwingPointType;
+    swingPoint?: SwingPointType;
     averageTrueRange: number;
   }[];
   trends: TrendDataMetadata['trendData'][];
@@ -117,7 +117,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.3792,
         volume: 1422012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 1
@@ -132,7 +132,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.3843,
         volume: 3517212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 2 swingHigh
@@ -162,7 +162,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.3843,
         volume: 750012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 4
@@ -177,7 +177,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.3805,
         volume: 586812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 5 swingLow
@@ -207,7 +207,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.3779,
         volume: 672000,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 7
@@ -222,7 +222,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.3817,
         volume: 963612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 8
@@ -237,7 +237,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.3843,
         volume: 342012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 9
@@ -252,7 +252,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4087,
         volume: 1294812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 10 swingHigh
@@ -297,7 +297,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4253,
         volume: 668412,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 13 swingHigh
@@ -357,7 +357,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4253,
         volume: 670812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 17
@@ -372,7 +372,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4241,
         volume: 1220412,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 18
@@ -387,7 +387,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4189,
         volume: 818412,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 19 swingLow
@@ -417,7 +417,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4138,
         volume: 682812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 21
@@ -432,7 +432,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4138,
         volume: 933612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 22
@@ -447,7 +447,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4138,
         volume: 378012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 23
@@ -462,7 +462,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4138,
         volume: 429612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 24
@@ -477,7 +477,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4126,
         volume: 706812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 25
@@ -492,7 +492,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4305,
         volume: 1513212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 26 swingHigh
@@ -522,7 +522,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4382,
         volume: 1382400,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 28
@@ -537,7 +537,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.433,
         volume: 1390812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 29 swingLow
@@ -567,7 +567,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4253,
         volume: 508800,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 31
@@ -582,7 +582,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4368,
         volume: 2659200,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 32
@@ -597,7 +597,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4407,
         volume: 997212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 33
@@ -612,7 +612,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4497,
         volume: 462012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 34 swingHigh
@@ -687,7 +687,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4509,
         volume: 217212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 39
@@ -702,7 +702,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.456,
         volume: 559212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 40
@@ -717,7 +717,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4689,
         volume: 2302812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 41
@@ -732,7 +732,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4778,
         volume: 1814400,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 42
@@ -747,7 +747,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4792,
         volume: 1215612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 43
@@ -762,7 +762,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4792,
         volume: 993600,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 44
@@ -777,7 +777,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4804,
         volume: 709212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 45
@@ -792,7 +792,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4855,
         volume: 1104000,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 46
@@ -807,7 +807,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4842,
         volume: 1617600,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 47
@@ -822,7 +822,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.483,
         volume: 1095612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 48 swingHigh
@@ -852,7 +852,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.483,
         volume: 1569600,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 50
@@ -867,7 +867,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4842,
         volume: 598812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 51
@@ -882,7 +882,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4792,
         volume: 2584812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 52
@@ -897,7 +897,7 @@ const MCD_US_19800317_19800601: TestDataSource = {
         adjustedClosePrice: 0.4804,
         volume: 721212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
   ],
@@ -918,7 +918,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.4792,
         volume: 1486812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 1
@@ -933,7 +933,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.4753,
         volume: 800412,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 2
@@ -948,7 +948,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.4842,
         volume: 871212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 3
@@ -963,7 +963,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.481,
         volume: 1708800,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 4
@@ -978,7 +978,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.4836,
         volume: 902400,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 5
@@ -993,7 +993,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5177,
         volume: 637212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 6
@@ -1008,7 +1008,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5203,
         volume: 620412,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 7
@@ -1023,7 +1023,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5311,
         volume: 1572012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 8
@@ -1038,7 +1038,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5339,
         volume: 661212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 9
@@ -1053,7 +1053,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5352,
         volume: 954012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 10 swingHigh
@@ -1083,7 +1083,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5487,
         volume: 2350812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 12
@@ -1098,7 +1098,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5379,
         volume: 3193212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 13 swingLow
@@ -1128,7 +1128,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5284,
         volume: 358812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 15
@@ -1143,7 +1143,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5352,
         volume: 975612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 16
@@ -1158,7 +1158,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5352,
         volume: 390012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 17 swingHigh
@@ -1188,7 +1188,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5311,
         volume: 961212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 19
@@ -1203,7 +1203,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5311,
         volume: 924012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 20 swingLow
@@ -1248,7 +1248,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.519,
         volume: 2052012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 23
@@ -1263,7 +1263,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5217,
         volume: 194412,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 24
@@ -1278,7 +1278,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5243,
         volume: 1056120,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 25
@@ -1293,7 +1293,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5243,
         volume: 1611612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 26
@@ -1308,7 +1308,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5284,
         volume: 1155612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 27
@@ -1323,7 +1323,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5271,
         volume: 750012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 28 swingLow
@@ -1353,7 +1353,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.519,
         volume: 370812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 30
@@ -1368,7 +1368,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5311,
         volume: 579612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 31 swingHigh
@@ -1398,7 +1398,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5339,
         volume: 1860012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 33
@@ -1413,7 +1413,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5298,
         volume: 900012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 34
@@ -1428,7 +1428,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.523,
         volume: 2251200,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 35 swingLow
@@ -1458,7 +1458,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5136,
         volume: 676800,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 37 swingHigh
@@ -1488,7 +1488,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5007,
         volume: 1918812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 39 swingLow
@@ -1518,7 +1518,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5201,
         volume: 1450812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 41 swingHigh
@@ -1548,7 +1548,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5473,
         volume: 1236012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 43
@@ -1563,7 +1563,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5345,
         volume: 1462812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 44 swingLow
@@ -1593,7 +1593,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.523,
         volume: 2540412,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 46
@@ -1608,7 +1608,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.523,
         volume: 1375212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 47
@@ -1623,7 +1623,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.523,
         volume: 1632000,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 48
@@ -1638,7 +1638,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.543,
         volume: 2433600,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 49
@@ -1653,7 +1653,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5602,
         volume: 3916800,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 50 swingHigh
@@ -1683,7 +1683,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.583,
         volume: 2142012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 52 swingLow
@@ -1728,7 +1728,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5744,
         volume: 1062012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 55
@@ -1743,7 +1743,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5645,
         volume: 475200,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 56 swingLow
@@ -1773,7 +1773,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5516,
         volume: 1017600,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 58
@@ -1788,7 +1788,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5573,
         volume: 828012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 59 swingHigh
@@ -1818,7 +1818,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5687,
         volume: 537600,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 61
@@ -1833,7 +1833,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5645,
         volume: 270012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 62
@@ -1848,7 +1848,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5544,
         volume: 940800,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 63 swingLow
@@ -1878,7 +1878,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5473,
         volume: 682812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 65
@@ -1893,7 +1893,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5544,
         volume: 525612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 66 swingHigh
@@ -1923,7 +1923,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.543,
         volume: 1056000,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 68
@@ -1938,7 +1938,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5415,
         volume: 1142400,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 69 swingLow
@@ -1968,7 +1968,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.533,
         volume: 559212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 71
@@ -1983,7 +1983,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5359,
         volume: 892800,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 72
@@ -1998,7 +1998,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5345,
         volume: 946812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 73
@@ -2013,7 +2013,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5359,
         volume: 578412,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 74
@@ -2028,7 +2028,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5458,
         volume: 877212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 75
@@ -2043,7 +2043,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5631,
         volume: 1201212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 76 swingHigh
@@ -2073,7 +2073,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5658,
         volume: 1012800,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 78
@@ -2088,7 +2088,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5701,
         volume: 1021212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 79
@@ -2103,7 +2103,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5744,
         volume: 1294812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 80
@@ -2118,7 +2118,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5701,
         volume: 1112412,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 81
@@ -2133,7 +2133,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5672,
         volume: 784812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 82
@@ -2148,7 +2148,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5573,
         volume: 525612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 83
@@ -2163,7 +2163,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5458,
         volume: 739200,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 84
@@ -2178,7 +2178,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5458,
         volume: 277212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 85
@@ -2193,7 +2193,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5487,
         volume: 336000,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 86
@@ -2208,7 +2208,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5487,
         volume: 1008000,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 87 swingLow
@@ -2253,7 +2253,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5473,
         volume: 488412,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 90
@@ -2268,7 +2268,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5401,
         volume: 1707612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 91
@@ -2283,7 +2283,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.543,
         volume: 784812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 92
@@ -2298,7 +2298,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5373,
         volume: 386412,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 93 swingLow
@@ -2343,7 +2343,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5345,
         volume: 2466012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 96
@@ -2358,7 +2358,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5373,
         volume: 942012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 97
@@ -2373,7 +2373,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5302,
         volume: 1936812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 98
@@ -2388,7 +2388,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5273,
         volume: 735612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 99
@@ -2403,7 +2403,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5273,
         volume: 771612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 100
@@ -2418,7 +2418,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.523,
         volume: 1196412,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 101
@@ -2433,7 +2433,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5244,
         volume: 423612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 102 swingLow
@@ -2463,7 +2463,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5059,
         volume: 1606812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 104
@@ -2478,7 +2478,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5093,
         volume: 885612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 105
@@ -2493,7 +2493,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.508,
         volume: 1322412,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 106
@@ -2508,7 +2508,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5339,
         volume: 618012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 107
@@ -2523,7 +2523,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5294,
         volume: 910812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 108
@@ -2538,7 +2538,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5355,
         volume: 558012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 109
@@ -2553,7 +2553,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5431,
         volume: 802812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 110 swingHigh
@@ -2598,7 +2598,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.537,
         volume: 952812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 113
@@ -2613,7 +2613,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5325,
         volume: 1104000,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 114
@@ -2628,7 +2628,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5339,
         volume: 874812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 115
@@ -2643,7 +2643,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5339,
         volume: 2373612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 116
@@ -2658,7 +2658,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5339,
         volume: 2410812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 117
@@ -2673,7 +2673,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5294,
         volume: 3015612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 118
@@ -2688,7 +2688,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.531,
         volume: 1162812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 119
@@ -2703,7 +2703,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.537,
         volume: 2151612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 120
@@ -2718,7 +2718,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5475,
         volume: 3012012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 121 swingHigh
@@ -2748,7 +2748,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5687,
         volume: 2176812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 123
@@ -2763,7 +2763,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5687,
         volume: 1149612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 124
@@ -2778,7 +2778,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5673,
         volume: 1718400,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 125
@@ -2793,7 +2793,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5582,
         volume: 1689600,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 126
@@ -2808,7 +2808,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5551,
         volume: 920412,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 127 swingLow
@@ -2838,7 +2838,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5431,
         volume: 1618812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 129
@@ -2853,7 +2853,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5461,
         volume: 1394412,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 130
@@ -2868,7 +2868,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5537,
         volume: 1269612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 131 swingHigh
@@ -2898,7 +2898,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5491,
         volume: 963612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 133
@@ -2913,7 +2913,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5491,
         volume: 1836012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 134
@@ -2928,7 +2928,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5461,
         volume: 1100412,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 135
@@ -2943,7 +2943,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5506,
         volume: 985212,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 136
@@ -2958,7 +2958,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5551,
         volume: 1044012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 137
@@ -2973,7 +2973,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5537,
         volume: 471612,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 138
@@ -2988,7 +2988,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5506,
         volume: 2644800,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 139 swingLow
@@ -3018,7 +3018,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5401,
         volume: 1672812,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 141
@@ -3033,7 +3033,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5415,
         volume: 403200,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 142
@@ -3048,7 +3048,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5597,
         volume: 938412,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 143
@@ -3063,7 +3063,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5567,
         volume: 696000,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 144 swingHigh
@@ -3093,7 +3093,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5613,
         volume: 378012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 146 swingLow
@@ -3123,7 +3123,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5703,
         volume: 450012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
     // 148
@@ -3138,7 +3138,7 @@ const MCD_US_19800601_19801231: TestDataSource = {
         adjustedClosePrice: 0.5899,
         volume: 498012,
       },
-      swingPoint: null,
+
       averageTrueRange: 0,
     },
   ],
@@ -3159,7 +3159,6 @@ const YValueSourceClose: TestDataSource = {
         volume: 0,
       },
       averageTrueRange: 0,
-      swingPoint: null,
     },
     {
       datum: {
@@ -3215,7 +3214,6 @@ const YValueSourceClose: TestDataSource = {
         volume: 0,
       },
       averageTrueRange: 0,
-      swingPoint: null,
     },
   ],
   trends: [],
@@ -3235,7 +3233,6 @@ const YValueSourceOpen: TestDataSource = {
         volume: 0,
       },
       averageTrueRange: 0,
-      swingPoint: null,
     },
     {
       datum: {
@@ -3291,7 +3288,6 @@ const YValueSourceOpen: TestDataSource = {
         volume: 0,
       },
       averageTrueRange: 0,
-      swingPoint: null,
     },
   ],
   trends: [],
@@ -3311,7 +3307,6 @@ const YValueSourceHigh: TestDataSource = {
         volume: 0,
       },
       averageTrueRange: 0,
-      swingPoint: null,
     },
     {
       datum: {
@@ -3367,7 +3362,6 @@ const YValueSourceHigh: TestDataSource = {
         volume: 0,
       },
       averageTrueRange: 0,
-      swingPoint: null,
     },
   ],
   trends: [],
@@ -3387,7 +3381,6 @@ const YValueSourceLow: TestDataSource = {
         volume: 0,
       },
       averageTrueRange: 0,
-      swingPoint: null,
     },
     {
       datum: {
@@ -3443,7 +3436,6 @@ const YValueSourceLow: TestDataSource = {
         volume: 0,
       },
       averageTrueRange: 9.625,
-      swingPoint: null,
     },
   ],
   trends: [],

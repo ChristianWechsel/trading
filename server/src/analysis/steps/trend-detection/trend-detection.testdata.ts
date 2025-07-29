@@ -317,7 +317,6 @@ export class TrendDetectionTestdata extends CreateTestData {
     };
     const endPoint: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '7', closePrice: 7 }),
-      swingPointType: null,
     };
     const context = this.createContext([
       startPoint,
@@ -331,15 +330,12 @@ export class TrendDetectionTestdata extends CreateTestData {
       },
       {
         ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 4 }),
-        swingPointType: null,
       },
       {
         ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 5 }),
-        swingPointType: null,
       },
       {
         ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 6 }),
-        swingPointType: null,
       },
       endPoint,
     ]);
@@ -367,7 +363,6 @@ export class TrendDetectionTestdata extends CreateTestData {
     };
     const endPoint: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '7', closePrice: 1 }),
-      swingPointType: null,
     };
     const context = this.createContext([
       startPoint,
@@ -381,15 +376,12 @@ export class TrendDetectionTestdata extends CreateTestData {
       },
       {
         ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 4 }),
-        swingPointType: null,
       },
       {
         ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 3 }),
-        swingPointType: null,
       },
       {
         ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 2 }),
-        swingPointType: null,
       },
       endPoint,
     ]);

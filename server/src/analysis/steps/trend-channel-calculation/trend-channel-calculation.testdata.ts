@@ -332,17 +332,14 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
       pointA,
       {
         ohlcv: this.createOHLCV({ priceDate: '1.5', closePrice: 15 }),
-        swingPointType: null,
       },
       pointB,
       {
         ohlcv: this.createOHLCV({ priceDate: '2.5', closePrice: 16 }),
-        swingPointType: null,
       },
       pointC,
       {
         ohlcv: this.createOHLCV({ priceDate: '3.5', closePrice: 18 }),
-        swingPointType: null,
       },
       pointD,
     ]);
@@ -440,11 +437,9 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
     const context = this.createContext([
       {
         ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 99 }),
-        swingPointType: null,
       },
       {
         ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 88 }),
-        swingPointType: null,
       },
       pointA,
       pointB,
@@ -501,11 +496,9 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
       pointC,
       {
         ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 77 }),
-        swingPointType: null,
       },
       {
         ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 66 }),
-        swingPointType: null,
       },
     ]);
     context.setTrends([

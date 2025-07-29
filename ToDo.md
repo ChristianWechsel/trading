@@ -1,7 +1,5 @@
 # ToDo List
 
-# server/src/analysis/core/enriched-data-point.ts => SwingPointType null aus Union entfernen
-
 # server/src/analysis/analysis.int.spec.ts die Trends prüfen
 
 # Context um OHLCV erweitern
