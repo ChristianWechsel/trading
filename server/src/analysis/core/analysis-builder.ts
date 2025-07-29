@@ -8,8 +8,12 @@ import { AnalysisPipeline } from './analysis-pipeline';
 import { AnalysisStep, Step } from './analysis.interface';
 
 type StepConfiguration = {
-  swingPointDetection: { relativeThreshold: number; windowSize: number };
-  trendDetection: { relativeThreshold: number };
+  swingPointDetection: {
+    relativeThreshold: number;
+    windowSize: number;
+    atrFactor: number;
+  };
+  trendDetection: { relativeThreshold: number; atrFactor: number };
   averageTrueRange: { period: number };
 };
 
@@ -19,9 +23,13 @@ export class AnalysisBuilder {
 
   constructor(options?: StepOptionsDto) {
     const defaultConfiguration: StepConfiguration = {
-      swingPointDetection: { relativeThreshold: 0.01, windowSize: 1 },
-      trendDetection: { relativeThreshold: 0.01 },
-      averageTrueRange: { period: 14 },
+      swingPointDetection: {
+        relativeThreshold: 0.01,
+        windowSize: 1,
+        atrFactor: 1,
+      },
+      trendDetection: { relativeThreshold: 0.01, atrFactor: 1 },
+      averageTrueRange: { period: 20 },
     };
     this.configuration = {
       swingPointDetection: {

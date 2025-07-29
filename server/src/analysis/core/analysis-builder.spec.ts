@@ -78,9 +78,11 @@ describe('AnalysisBuilder', () => {
       expect(swingPointDetectionMock).toHaveBeenCalledWith({
         relativeThreshold: 0.01,
         windowSize: 1,
+        atrFactor: 1,
       });
       expect(trendDetectionMock).toHaveBeenCalledWith({
         relativeThreshold: 0.01,
+        atrFactor: 1,
       });
     });
 
@@ -103,11 +105,13 @@ describe('AnalysisBuilder', () => {
       expect(swingPointDetectionMock).toHaveBeenCalledWith({
         relativeThreshold: 0.01,
         windowSize: 10,
+        atrFactor: 1,
       });
 
       // relativeThreshold wurde überschrieben
       expect(trendDetectionMock).toHaveBeenCalledWith({
         relativeThreshold: 0.05,
+        atrFactor: 1,
       });
     });
 
@@ -127,9 +131,11 @@ describe('AnalysisBuilder', () => {
       expect(swingPointDetectionMock).toHaveBeenCalledWith({
         relativeThreshold: 0.02,
         windowSize: 5,
+        atrFactor: 1,
       });
       expect(trendDetectionMock).toHaveBeenCalledWith({
         relativeThreshold: 0.01,
+        atrFactor: 1,
       });
     });
   });
