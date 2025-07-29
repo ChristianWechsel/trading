@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsPositive,
   Max,
   Min,
   ValidateNested,
@@ -34,6 +35,11 @@ export class SwingPointDetectionOptionsDto {
   @IsNumber()
   @Min(analysisConfig.swingPointDetection.MIN_WINDOW_SIZE)
   windowSize?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  atrFactor?: number;
 }
 
 export class TrendDetectionOptionsDto {
@@ -42,6 +48,11 @@ export class TrendDetectionOptionsDto {
   @Min(analysisConfig.comparableNumber.MIN_THRESHOLD)
   @Max(analysisConfig.comparableNumber.MAX_THRESHOLD)
   relativeThreshold?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  atrFactor?: number;
 }
 
 export class AverageTrueRangeOptionsDto {

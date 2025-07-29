@@ -1,7 +1,9 @@
 # ToDo List
 
 Für IntTest SwingPointData soll der ATR dynamisch übergeben werden und es soll möglich sein, diesen Wert gezielt festzulegen, um fixe Rahmenbedingungen vorzugeben
-ATR wird bei SwingPoint und Trenderkennung benötigt, da hier mit THreshold gearbeitet wird, was eine signifikaten Änderung darstellt
+ATR wird bei SwingPoint und Trenderkennung benötigt, da hier mit THreshold gearbeitet wird, was eine signifikaten Änderung darstellt.
+Im Konstruktor der Steps werden die Fallbackwerte definiert, wenn kWert nicht via DTO von Client kommt.
+SwingPointDetection und TrendDetection verwenden faktor \* atr als relative Threshold => relativeThreshold entweder entfernen oder als Fallback verwenden.
 
 # Integationstest für analysis für MCD.US von 17.03.1980 bis 01.06.1980
 
