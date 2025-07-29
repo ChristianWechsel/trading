@@ -33,5 +33,4 @@ export type SwingPointType =
   | 'plateauToUpward' // previous == current < next
   | 'plateauToDownward' // previous == current > next
   | 'upwardToPlateau' // previous < current == next
-  | 'downwardToPlateau' // previous > current == next;
-  | null; // no swing point detected
+  | 'downwardToPlateau'; // previous > current == next; // no swing point detected

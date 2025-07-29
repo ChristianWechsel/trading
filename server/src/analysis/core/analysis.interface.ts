@@ -1,11 +1,6 @@
 import { AnalysisContextClass } from './analysis-context';
 import { EnrichedDataPoint } from './enriched-data-point';
 
-export type AnalysisContext = {
-  enrichedDataPoints: EnrichedDataPoint[];
-  trends?: TrendDataMetadata['trendData'][];
-};
-
 export type TrendDataMetadata = {
   trendData: {
     type: 'upward' | 'downward';

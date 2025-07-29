@@ -1,5 +1,5 @@
 import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
-import { AnalysisContext } from '../../../analysis/core/analysis.interface';
+import { TrendDataMetadata } from '../../../analysis/core/analysis.interface';
 import { analysisConfig } from '../../config/analysis.config';
 import { TrendDetection } from './trend-detection';
 import { TrendDetectionTestdata } from './trend-detection.testdata';
@@ -7,7 +7,7 @@ import { TrendDetectionTestdata } from './trend-detection.testdata';
 export type TrendTestCase = {
   name: string;
   testcase: {
-    expectedTrends: AnalysisContext['trends'];
+    expectedTrends: TrendDataMetadata['trendData'][];
     settings: {
       relativeThreshold: number;
     };
