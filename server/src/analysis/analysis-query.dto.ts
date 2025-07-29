@@ -21,7 +21,7 @@ const allSteps: Step[] = [
   'TrendChannelCalculation',
 ];
 
-type YValueSource = 'open' | 'high' | 'low' | 'close';
+export type YValueSource = 'open' | 'high' | 'low' | 'close';
 const yValueSourceValues: YValueSource[] = ['open', 'high', 'low', 'close'];
 
 export class SwingPointDetectionOptionsDto {
