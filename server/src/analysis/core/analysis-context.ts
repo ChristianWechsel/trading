@@ -23,13 +23,17 @@ export class AnalysisContextClass {
     relativeThreshold: number;
     windowSize: number;
     atrFactor: number;
+    period: number;
   };
 
   constructor(query: AnalysisQueryDto, ohlcvs: OHLCV[]) {
     this.options = new Options({
-      averageTrueRange: new AverageTrueRangeOptions({
-        period: query.stepOptions?.averageTrueRange?.period,
-      }),
+      averageTrueRange: new AverageTrueRangeOptions(
+        {
+          period: query.stepOptions?.averageTrueRange?.period,
+        },
+        this.defaults,
+      ),
       swingPointDetection: new SwingPointDetectionOptions(
         {
           relativeThreshold:
@@ -57,6 +61,7 @@ export class AnalysisContextClass {
       relativeThreshold: 0.01,
       windowSize: 1,
       atrFactor: 1,
+      period: 20,
     };
   }
 

@@ -28,10 +28,13 @@ export class Options {
 }
 
 export class AverageTrueRangeOptions {
-  constructor(private options: Partial<{ period: number }>) {}
+  constructor(
+    private options: Partial<{ period: number }>,
+    private defaults: { period: number },
+  ) {}
 
   getPeriod() {
-    return this.options.period;
+    return this.options.period ?? this.defaults.period;
   }
 }
 
