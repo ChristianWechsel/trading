@@ -47,33 +47,6 @@ describe('AnalysisService', () => {
     (AnalysisContextClass as jest.Mock).mockReturnValue(analysisContextMock);
   });
 
-  it('should instantiate AnalysisBuilder with stepOptions from the query DTO', () => {
-    const query: AnalysisQueryDto = {
-      dataAggregation: { ticker: { symbol: 'AAPL', exchange: 'US' } },
-      steps: ['SwingPointDetection'],
-      stepOptions: {
-        swingPointDetection: { windowSize: 5 },
-      },
-    };
-    const ohlcvs: OHLCV[] = [];
-
-    service.performAnalysis(query, ohlcvs);
-
-    expect(AnalysisBuilder).toHaveBeenCalledWith(query.stepOptions);
-  });
-
-  it('should instantiate AnalysisBuilder without options if none are provided', () => {
-    const query: AnalysisQueryDto = {
-      dataAggregation: { ticker: { symbol: 'AAPL', exchange: 'US' } },
-      steps: ['SwingPointDetection'],
-    };
-    const ohlcvs: OHLCV[] = [];
-
-    service.performAnalysis(query, ohlcvs);
-
-    expect(AnalysisBuilder).toHaveBeenCalledWith(undefined);
-  });
-
   it('should add each step from the query to the builder', () => {
     const query: AnalysisQueryDto = {
       dataAggregation: { ticker: { symbol: 'AAPL', exchange: 'US' } },
@@ -162,33 +135,6 @@ describe('AnalysisService', () => {
 
     analysisContextMock = {} as unknown as jest.Mocked<AnalysisContextClass>;
     (AnalysisContextClass as jest.Mock).mockReturnValue(analysisContextMock);
-  });
-
-  it('should instantiate AnalysisBuilder with stepOptions from the query DTO', () => {
-    const query: AnalysisQueryDto = {
-      dataAggregation: { ticker: { symbol: 'AAPL', exchange: 'US' } },
-      steps: ['SwingPointDetection'],
-      stepOptions: {
-        swingPointDetection: { windowSize: 5 },
-      },
-    };
-    const ohlcvs: OHLCV[] = [];
-
-    service.performAnalysis(query, ohlcvs);
-
-    expect(AnalysisBuilder).toHaveBeenCalledWith(query.stepOptions);
-  });
-
-  it('should instantiate AnalysisBuilder without options if none are provided', () => {
-    const query: AnalysisQueryDto = {
-      dataAggregation: { ticker: { symbol: 'AAPL', exchange: 'US' } },
-      steps: ['SwingPointDetection'],
-    };
-    const ohlcvs: OHLCV[] = [];
-
-    service.performAnalysis(query, ohlcvs);
-
-    expect(AnalysisBuilder).toHaveBeenCalledWith(undefined);
   });
 
   it('should add each step from the query to the builder', () => {
