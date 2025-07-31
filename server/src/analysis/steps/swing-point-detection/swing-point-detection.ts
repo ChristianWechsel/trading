@@ -1,8 +1,4 @@
-import { analysisConfig } from '../../../analysis/config/analysis.config';
-import {
-  AnalysisContextClass,
-  YValueAccessor,
-} from '../../../analysis/core/analysis-context';
+import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
 import { AnalysisStep, Step } from '../../core/analysis.interface';
 import {
   EnrichedDataPoint,
@@ -18,57 +14,42 @@ export class SwingPointDetection implements AnalysisStep {
     type: SwingPointType;
   } | null;
 
-  constructor(
-    private options: { relativeThreshold: number; windowSize: number },
-  ) {
-    const { relativeThreshold, windowSize } = options;
-    if (
-      relativeThreshold < analysisConfig.comparableNumber.MIN_THRESHOLD ||
-      relativeThreshold > analysisConfig.comparableNumber.MAX_THRESHOLD
-    ) {
-      throw new Error(
-        `relativeThreshold must be between ${analysisConfig.comparableNumber.MIN_THRESHOLD} and ${analysisConfig.comparableNumber.MAX_THRESHOLD}`,
-      );
-    }
-    if (
-      !Number.isInteger(windowSize) ||
-      windowSize < analysisConfig.swingPointDetection.MIN_WINDOW_SIZE
-    ) {
-      throw new Error(
-        `windowSize must be a natural number >= ${analysisConfig.swingPointDetection.MIN_WINDOW_SIZE}`,
-      );
-    }
-  }
-
   execute(context: AnalysisContextClass): void {
     const data = context.getEnrichedDataPoints();
-    const yValueAccessor = context.buildYValueAccessor();
-    this.checkData(data);
-    this.getSwingPoints(data, yValueAccessor);
+    this.checkData(
+      data,
+      context.getOptions().getSwingPointDetection().getWindowSize(),
+    );
+    this.getSwingPoints(data, context);
   }
 
-  private checkData(data: EnrichedDataPoint[]) {
-    if (data.length < 2 * this.options.windowSize + 1) {
+  private checkData(data: EnrichedDataPoint[], windowSize: number) {
+    if (data.length < 2 * windowSize + 1) {
       throw new Error(
-        `data must have at least ${2 * this.options.windowSize + 1} points for windowSize=${this.options.windowSize}`,
+        `data must have at least ${2 * windowSize + 1} points for windowSize=${windowSize}`,
       );
     }
   }
 
   private getSwingPoints(
     data: EnrichedDataPoint[],
-    yValueAccessor: YValueAccessor,
+    context: AnalysisContextClass,
   ) {
-    let idx = this.options.windowSize;
-    while (idx < data.length - this.options.windowSize) {
+    let idx = context.getOptions().getSwingPointDetection().getWindowSize();
+    while (
+      idx <
+      data.length -
+        context.getOptions().getSwingPointDetection().getWindowSize()
+    ) {
       const { previousPoints, nextPoints } = this.getSurroundingPoints(
         idx,
         data,
-        yValueAccessor,
+        context,
       );
       const currentPoint = data[idx];
       const currentComparableNumber = this.createComparableNumber(
-        yValueAccessor(currentPoint),
+        currentPoint,
+        context,
       );
 
       if (
@@ -119,26 +100,45 @@ export class SwingPointDetection implements AnalysisStep {
   private getSurroundingPoints(
     idx: number,
     data: EnrichedDataPoint[],
-    yValueAccessor: YValueAccessor,
+    context: AnalysisContextClass,
   ) {
-    const previousPoints = new Array<ComparableNumber>(this.options.windowSize);
-    const nextPoints = new Array<ComparableNumber>(this.options.windowSize);
+    const previousPoints = new Array<ComparableNumber>(
+      context.getOptions().getSwingPointDetection().getWindowSize(),
+    );
+    const nextPoints = new Array<ComparableNumber>(
+      context.getOptions().getSwingPointDetection().getWindowSize(),
+    );
 
     let idxWindowSize = 0;
-    while (idxWindowSize < this.options.windowSize) {
+    while (
+      idxWindowSize <
+      context.getOptions().getSwingPointDetection().getWindowSize()
+    ) {
       previousPoints[idxWindowSize] = this.createComparableNumber(
-        yValueAccessor(data[idx - this.options.windowSize + idxWindowSize]),
+        data[
+          idx -
+            context.getOptions().getSwingPointDetection().getWindowSize() +
+            idxWindowSize
+        ],
+        context,
       );
       nextPoints[idxWindowSize] = this.createComparableNumber(
-        yValueAccessor(data[idx + idxWindowSize + 1]),
+        data[idx + idxWindowSize + 1],
+        context,
       );
       idxWindowSize++;
     }
     return { previousPoints, nextPoints };
   }
 
-  private createComparableNumber(value: number) {
-    return new ComparableNumber(value, this.options.relativeThreshold);
+  private createComparableNumber(
+    enrichedDataPoint: EnrichedDataPoint,
+    context: AnalysisContextClass,
+  ) {
+    return context.buildComparableNumber({
+      enrichedDataPoint,
+      step: this.name,
+    });
   }
 
   private isSwingHigh(

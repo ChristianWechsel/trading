@@ -1,10 +1,5 @@
-import { AnalysisQueryDto } from '../../../analysis/analysis-query.dto';
 import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
-import { OHLCV, OHLCVEntity } from '../../../data-aggregation/ohlcv.entity';
-import {
-  EnrichedDataPoint,
-  SwingPointType,
-} from '../../core/enriched-data-point';
+import { SwingPointType } from '../../core/enriched-data-point';
 import { SwingPointDetection } from './swing-point-detection';
 import { SwingPointDetectionTestdata } from './swing-point-detection.testdata';
 
@@ -12,10 +7,6 @@ export type SwingPointTestCase = {
   name: string;
   testcase: {
     expectedSwingPoints: { index: number; type: SwingPointType }[];
-    settings: {
-      relativeThreshold: number;
-      windowSize: number;
-    };
     context: AnalysisContextClass;
   };
 };
@@ -62,8 +53,7 @@ describe('SwingPointDetection', () => {
     testData.downwardPlateauDownward_window1(),
     testData.downwardPlateauDownward_window2(),
   ])('$name', ({ testcase }) => {
-    const swingPointDetection = new SwingPointDetection(testcase.settings);
-    swingPointDetection.execute(testcase.context);
+    new SwingPointDetection().execute(testcase.context);
 
     testcase.context.getEnrichedDataPoints().forEach((dp, idx) => {
       const actualSwingPointType = dp.getSwingPointType();
@@ -77,113 +67,4 @@ describe('SwingPointDetection', () => {
       }
     });
   });
-
-  it.each([0, 0.5, 1])(
-    'does not throw for relativeThreshold=%p',
-    (threshold) => {
-      expect(
-        () =>
-          new SwingPointDetection({
-            relativeThreshold: threshold,
-            windowSize: 1,
-          }),
-      ).not.toThrow();
-    },
-  );
-
-  it.each([-0.1, -1, 1.01, 2])(
-    'throws error for out-of-bounds relativeThreshold=%p',
-    (threshold) => {
-      expect(
-        () =>
-          new SwingPointDetection({
-            relativeThreshold: threshold,
-            windowSize: 1,
-          }),
-      ).toThrow();
-    },
-  );
-
-  it.each([1, 2, 10])(
-    'does not throw for valid windowSize=%p',
-    (windowSize) => {
-      expect(
-        () =>
-          new SwingPointDetection({
-            relativeThreshold: 0.1,
-            windowSize,
-          }),
-      ).not.toThrow();
-    },
-  );
-
-  it.each([0, -1, -5, 1.5, 2.7, 0.99])(
-    'throws error for invalid windowSize=%p',
-    (windowSize) => {
-      expect(
-        () =>
-          new SwingPointDetection({
-            relativeThreshold: 0.1,
-            windowSize,
-          }),
-      ).toThrow();
-    },
-  );
-
-  it.each([
-    { windowSize: 1, dataLength: 3 },
-    { windowSize: 2, dataLength: 5 },
-  ])(
-    'does not throw for minimum valid data length (windowSize=$windowSize, dataLength=$dataLength)',
-    ({ windowSize, dataLength }) => {
-      const context = new AnalysisContextClass(
-        {} as AnalysisQueryDto,
-        new Array<EnrichedDataPoint>(dataLength)
-          .fill(createEnrichedDataPoint({}))
-          .map<OHLCV>((dp) => dp.getDataPoint()),
-      );
-      expect(() =>
-        new SwingPointDetection({ relativeThreshold: 0.1, windowSize }).execute(
-          context,
-        ),
-      ).not.toThrow();
-    },
-  );
-
-  it.each([
-    { windowSize: 1, dataLength: 2 },
-    { windowSize: 2, dataLength: 4 },
-  ])(
-    'throws error for too short data (windowSize=$windowSize, dataLength=$dataLength)',
-    ({ windowSize, dataLength }) => {
-      const context = new AnalysisContextClass(
-        {} as AnalysisQueryDto,
-        new Array<EnrichedDataPoint>(dataLength)
-          .fill(createEnrichedDataPoint({}))
-          .map<OHLCV>((dp) => dp.getDataPoint()),
-      );
-
-      expect(() =>
-        new SwingPointDetection({ relativeThreshold: 0.1, windowSize }).execute(
-          context,
-        ),
-      ).toThrow();
-    },
-  );
 });
-
-function createEnrichedDataPoint(
-  ohlcv: Partial<OHLCVEntity>,
-): EnrichedDataPoint {
-  const defaultData: OHLCVEntity = {
-    securityId: 0,
-    priceDate: '1970-01-01',
-    openPrice: 0,
-    highPrice: 0,
-    lowPrice: 0,
-    closePrice: 0,
-    adjustedClosePrice: 0,
-    volume: 0,
-  };
-  return new EnrichedDataPoint(new OHLCV({ ...defaultData, ...ohlcv }));
-}

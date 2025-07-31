@@ -48,7 +48,6 @@ export class SwingPointDetectionOptions {
     private defaults: {
       relativeThreshold: number;
       windowSize: number;
-      atrFactor: number;
     },
   ) {}
 
@@ -61,7 +60,7 @@ export class SwingPointDetectionOptions {
   }
 
   getAtrFactor() {
-    return this.options.atrFactor ?? this.defaults.atrFactor;
+    return this.options.atrFactor;
   }
 }
 
@@ -73,7 +72,6 @@ export class TrendDetectionOptions {
     }>,
     private defaults: {
       relativeThreshold: number;
-      atrFactor: number;
     },
   ) {}
 
@@ -82,6 +80,6 @@ export class TrendDetectionOptions {
   }
 
   getAtrFactor() {
-    return this.options.atrFactor ?? this.defaults.atrFactor;
+    return this.options.atrFactor;
   }
 }

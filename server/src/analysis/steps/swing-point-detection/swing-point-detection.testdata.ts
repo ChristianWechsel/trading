@@ -7,12 +7,20 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect swing high',
       testcase: {
         expectedSwingPoints: [{ index: 1, type: 'swingHigh' }],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 2 },
-          { priceDate: '2', closePrice: 3 },
-          { priceDate: '3', closePrice: 2 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 2 },
+            { priceDate: '2', closePrice: 3 },
+            { priceDate: '3', closePrice: 2 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -22,12 +30,20 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect swing high (close values)',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 2 },
-          { priceDate: '2', closePrice: 2.09 }, // close to 2
-          { priceDate: '3', closePrice: 2 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 2 },
+            { priceDate: '2', closePrice: 2.09 }, // close to 2
+            { priceDate: '3', closePrice: 2 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -37,12 +53,20 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect swing high (significant difference)',
       testcase: {
         expectedSwingPoints: [{ index: 1, type: 'swingHigh' }],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 2 },
-          { priceDate: '2', closePrice: 3 },
-          { priceDate: '3', closePrice: 1.5 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 2 },
+            { priceDate: '2', closePrice: 3 },
+            { priceDate: '3', closePrice: 1.5 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -52,12 +76,20 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect swing low',
       testcase: {
         expectedSwingPoints: [{ index: 1, type: 'swingLow' }],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 3 },
-          { priceDate: '2', closePrice: 2 },
-          { priceDate: '3', closePrice: 3 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 3 },
+            { priceDate: '2', closePrice: 2 },
+            { priceDate: '3', closePrice: 3 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -67,12 +99,20 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect swing low (close values)',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 3 },
-          { priceDate: '2', closePrice: 2.91 }, // close to 3
-          { priceDate: '3', closePrice: 3 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 3 },
+            { priceDate: '2', closePrice: 2.91 }, // close to 3
+            { priceDate: '3', closePrice: 3 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -87,12 +127,20 @@ export class SwingPointDetectionTestdata extends CreateTestData {
             type: 'swingLow',
           },
         ],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 3 },
-          { priceDate: '2', closePrice: 1.5 },
-          { priceDate: '3', closePrice: 3 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 3 },
+            { priceDate: '2', closePrice: 1.5 },
+            { priceDate: '3', closePrice: 3 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -106,14 +154,22 @@ export class SwingPointDetectionTestdata extends CreateTestData {
           { index: 2, type: 'swingLow' },
           { index: 3, type: 'swingHigh' },
         ],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 1 },
-          { priceDate: '2', closePrice: 3 },
-          { priceDate: '3', closePrice: 2 },
-          { priceDate: '4', closePrice: 4 },
-          { priceDate: '5', closePrice: 3 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 1 },
+            { priceDate: '2', closePrice: 3 },
+            { priceDate: '3', closePrice: 2 },
+            { priceDate: '4', closePrice: 4 },
+            { priceDate: '5', closePrice: 3 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -123,14 +179,22 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect multiple swing points (close values)',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 1 },
-          { priceDate: '2', closePrice: 1.09 }, // close to 1
-          { priceDate: '3', closePrice: 1.01 }, // close to 1.09
-          { priceDate: '4', closePrice: 1.08 }, // close to 1.01
-          { priceDate: '5', closePrice: 1.05 }, // close to 1.08
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 1 },
+            { priceDate: '2', closePrice: 1.09 }, // close to 1
+            { priceDate: '3', closePrice: 1.01 }, // close to 1.09
+            { priceDate: '4', closePrice: 1.08 }, // close to 1.01
+            { priceDate: '5', closePrice: 1.05 }, // close to 1.08
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -144,14 +208,22 @@ export class SwingPointDetectionTestdata extends CreateTestData {
           { index: 2, type: 'swingLow' },
           { index: 3, type: 'swingHigh' },
         ],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 1 },
-          { priceDate: '2', closePrice: 3 },
-          { priceDate: '3', closePrice: 1 },
-          { priceDate: '4', closePrice: 4 },
-          { priceDate: '5', closePrice: 1 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 1 },
+            { priceDate: '2', closePrice: 3 },
+            { priceDate: '3', closePrice: 1 },
+            { priceDate: '4', closePrice: 4 },
+            { priceDate: '5', closePrice: 1 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -161,12 +233,20 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect no swing points - flatline - equal values',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 1 },
-          { priceDate: '2', closePrice: 1 },
-          { priceDate: '3', closePrice: 1 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 1 },
+            { priceDate: '2', closePrice: 1 },
+            { priceDate: '3', closePrice: 1 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -176,12 +256,20 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect no swing points - flatline - close values',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 1 },
-          { priceDate: '2', closePrice: 1.01 },
-          { priceDate: '3', closePrice: 0.99 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 1 },
+            { priceDate: '2', closePrice: 1.01 },
+            { priceDate: '3', closePrice: 0.99 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -191,12 +279,20 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect no swing points - ascending',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 1 },
-          { priceDate: '2', closePrice: 2 },
-          { priceDate: '3', closePrice: 3 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 1 },
+            { priceDate: '2', closePrice: 2 },
+            { priceDate: '3', closePrice: 3 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -206,12 +302,20 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect no swing points - descending',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 3 },
-          { priceDate: '2', closePrice: 2 },
-          { priceDate: '3', closePrice: 1 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 3 },
+            { priceDate: '2', closePrice: 2 },
+            { priceDate: '3', closePrice: 1 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -221,12 +325,20 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect plateau high',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 2 },
-          { priceDate: '2', closePrice: 2 },
-          { priceDate: '3', closePrice: 3 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 2 },
+            { priceDate: '2', closePrice: 2 },
+            { priceDate: '3', closePrice: 3 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -236,12 +348,20 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect plateau low',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 2 },
-          { priceDate: '2', closePrice: 2 },
-          { priceDate: '3', closePrice: 1 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 2 },
+            { priceDate: '2', closePrice: 2 },
+            { priceDate: '3', closePrice: 1 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -251,12 +371,20 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect low plateau',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 1 },
-          { priceDate: '2', closePrice: 2 },
-          { priceDate: '3', closePrice: 2 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 1 },
+            { priceDate: '2', closePrice: 2 },
+            { priceDate: '3', closePrice: 2 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -266,12 +394,20 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect high plateau',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 3 },
-          { priceDate: '2', closePrice: 2 },
-          { priceDate: '3', closePrice: 2 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 3 },
+            { priceDate: '2', closePrice: 2 },
+            { priceDate: '3', closePrice: 2 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -281,18 +417,26 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect swing high with window size',
       testcase: {
         expectedSwingPoints: [{ index: 4, type: 'swingHigh' }],
-        settings: { relativeThreshold: 0.1, windowSize: 3 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 6 },
-          { priceDate: '2', closePrice: 2 },
-          { priceDate: '3', closePrice: 4 },
-          { priceDate: '4', closePrice: 2 },
-          { priceDate: '5', closePrice: 5 },
-          { priceDate: '6', closePrice: 2 },
-          { priceDate: '7', closePrice: 3 },
-          { priceDate: '8', closePrice: 4 },
-          { priceDate: '9', closePrice: 2 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 6 },
+            { priceDate: '2', closePrice: 2 },
+            { priceDate: '3', closePrice: 4 },
+            { priceDate: '4', closePrice: 2 },
+            { priceDate: '5', closePrice: 5 },
+            { priceDate: '6', closePrice: 2 },
+            { priceDate: '7', closePrice: 3 },
+            { priceDate: '8', closePrice: 4 },
+            { priceDate: '9', closePrice: 2 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 3 },
+            },
+          },
+        ),
       },
     };
   }
@@ -302,16 +446,24 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect swing high with windowSize=3 (centered peak)',
       testcase: {
         expectedSwingPoints: [{ index: 3, type: 'swingHigh' }],
-        settings: { relativeThreshold: 0.1, windowSize: 3 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 1 },
-          { priceDate: '2', closePrice: 2 },
-          { priceDate: '3', closePrice: 3 },
-          { priceDate: '4', closePrice: 10 }, // swing high
-          { priceDate: '5', closePrice: 3 },
-          { priceDate: '6', closePrice: 2 },
-          { priceDate: '7', closePrice: 1 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 1 },
+            { priceDate: '2', closePrice: 2 },
+            { priceDate: '3', closePrice: 3 },
+            { priceDate: '4', closePrice: 10 }, // swing high
+            { priceDate: '5', closePrice: 3 },
+            { priceDate: '6', closePrice: 2 },
+            { priceDate: '7', closePrice: 1 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 3 },
+            },
+          },
+        ),
       },
     };
   }
@@ -321,16 +473,24 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect swing low with windowSize=3 (centered valley)',
       testcase: {
         expectedSwingPoints: [{ index: 3, type: 'swingLow' }],
-        settings: { relativeThreshold: 0.1, windowSize: 3 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 10 },
-          { priceDate: '2', closePrice: 7 },
-          { priceDate: '3', closePrice: 5 },
-          { priceDate: '4', closePrice: 1 }, // swing low
-          { priceDate: '5', closePrice: 5 },
-          { priceDate: '6', closePrice: 7 },
-          { priceDate: '7', closePrice: 10 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 10 },
+            { priceDate: '2', closePrice: 7 },
+            { priceDate: '3', closePrice: 5 },
+            { priceDate: '4', closePrice: 1 }, // swing low
+            { priceDate: '5', closePrice: 5 },
+            { priceDate: '6', closePrice: 7 },
+            { priceDate: '7', closePrice: 10 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 3 },
+            },
+          },
+        ),
       },
     };
   }
@@ -340,16 +500,24 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'no swing high with windowSize=3 (peak not high enough)',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 3 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 1 },
-          { priceDate: '2', closePrice: 2 },
-          { priceDate: '3', closePrice: 4 },
-          { priceDate: '4', closePrice: 3.1 }, // not highest
-          { priceDate: '5', closePrice: 3 },
-          { priceDate: '6', closePrice: 2 },
-          { priceDate: '7', closePrice: 1 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 1 },
+            { priceDate: '2', closePrice: 2 },
+            { priceDate: '3', closePrice: 4 },
+            { priceDate: '4', closePrice: 3.1 }, // not highest
+            { priceDate: '5', closePrice: 3 },
+            { priceDate: '6', closePrice: 2 },
+            { priceDate: '7', closePrice: 1 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 3 },
+            },
+          },
+        ),
       },
     };
   }
@@ -359,16 +527,24 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'no swing low with windowSize=3 (valley not low enough)',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 3 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 10 },
-          { priceDate: '2', closePrice: 7 },
-          { priceDate: '3', closePrice: 5 },
-          { priceDate: '4', closePrice: 4.9 }, // not lowest
-          { priceDate: '5', closePrice: 4.8 },
-          { priceDate: '6', closePrice: 7 },
-          { priceDate: '7', closePrice: 10 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 10 },
+            { priceDate: '2', closePrice: 7 },
+            { priceDate: '3', closePrice: 5 },
+            { priceDate: '4', closePrice: 4.9 }, // not lowest
+            { priceDate: '5', closePrice: 4.8 },
+            { priceDate: '6', closePrice: 7 },
+            { priceDate: '7', closePrice: 10 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 3 },
+            },
+          },
+        ),
       },
     };
   }
@@ -378,18 +554,26 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect upward to plateau with windowSize=2',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 2 },
-        context: this.createContextOf([
-          { priceDate: '0', closePrice: 5 },
-          { priceDate: '1', closePrice: 6 },
-          { priceDate: '2', closePrice: 10 },
-          { priceDate: '3', closePrice: 12 },
-          { priceDate: '4', closePrice: 15 },
-          { priceDate: '5', closePrice: 15.05 },
-          { priceDate: '6', closePrice: 14.95 },
-          { priceDate: '7', closePrice: 18 },
-          { priceDate: '8', closePrice: 19 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '0', closePrice: 5 },
+            { priceDate: '1', closePrice: 6 },
+            { priceDate: '2', closePrice: 10 },
+            { priceDate: '3', closePrice: 12 },
+            { priceDate: '4', closePrice: 15 },
+            { priceDate: '5', closePrice: 15.05 },
+            { priceDate: '6', closePrice: 14.95 },
+            { priceDate: '7', closePrice: 18 },
+            { priceDate: '8', closePrice: 19 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 2 },
+            },
+          },
+        ),
       },
     };
   }
@@ -399,18 +583,26 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect downwardToPlateau with windowSize=2',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 2 },
-        context: this.createContextOf([
-          { priceDate: '0', closePrice: 25 },
-          { priceDate: '1', closePrice: 24 },
-          { priceDate: '2', closePrice: 20 },
-          { priceDate: '3', closePrice: 18 },
-          { priceDate: '4', closePrice: 15 },
-          { priceDate: '5', closePrice: 15.05 },
-          { priceDate: '6', closePrice: 14.95 },
-          { priceDate: '7', closePrice: 12 },
-          { priceDate: '8', closePrice: 11 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '0', closePrice: 25 },
+            { priceDate: '1', closePrice: 24 },
+            { priceDate: '2', closePrice: 20 },
+            { priceDate: '3', closePrice: 18 },
+            { priceDate: '4', closePrice: 15 },
+            { priceDate: '5', closePrice: 15.05 },
+            { priceDate: '6', closePrice: 14.95 },
+            { priceDate: '7', closePrice: 12 },
+            { priceDate: '8', closePrice: 11 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 2 },
+            },
+          },
+        ),
       },
     };
   }
@@ -420,18 +612,26 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect plateauToUpward with windowSize=2',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 2 },
-        context: this.createContextOf([
-          { priceDate: '0', closePrice: 5 },
-          { priceDate: '1', closePrice: 6 },
-          { priceDate: '2', closePrice: 9.95 },
-          { priceDate: '3', closePrice: 10.05 },
-          { priceDate: '4', closePrice: 10 },
-          { priceDate: '5', closePrice: 12 },
-          { priceDate: '6', closePrice: 14 },
-          { priceDate: '7', closePrice: 18 },
-          { priceDate: '8', closePrice: 19 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '0', closePrice: 5 },
+            { priceDate: '1', closePrice: 6 },
+            { priceDate: '2', closePrice: 9.95 },
+            { priceDate: '3', closePrice: 10.05 },
+            { priceDate: '4', closePrice: 10 },
+            { priceDate: '5', closePrice: 12 },
+            { priceDate: '6', closePrice: 14 },
+            { priceDate: '7', closePrice: 18 },
+            { priceDate: '8', closePrice: 19 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 2 },
+            },
+          },
+        ),
       },
     };
   }
@@ -441,18 +641,26 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'detect plateauToDownward with windowSize=2',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 2 },
-        context: this.createContextOf([
-          { priceDate: '0', closePrice: 20 },
-          { priceDate: '1', closePrice: 19 },
-          { priceDate: '2', closePrice: 15.05 },
-          { priceDate: '3', closePrice: 14.95 },
-          { priceDate: '4', closePrice: 15 },
-          { priceDate: '5', closePrice: 13 },
-          { priceDate: '6', closePrice: 11 },
-          { priceDate: '7', closePrice: 8 },
-          { priceDate: '8', closePrice: 7 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '0', closePrice: 20 },
+            { priceDate: '1', closePrice: 19 },
+            { priceDate: '2', closePrice: 15.05 },
+            { priceDate: '3', closePrice: 14.95 },
+            { priceDate: '4', closePrice: 15 },
+            { priceDate: '5', closePrice: 13 },
+            { priceDate: '6', closePrice: 11 },
+            { priceDate: '7', closePrice: 8 },
+            { priceDate: '8', closePrice: 7 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 2 },
+            },
+          },
+        ),
       },
     };
   }
@@ -462,18 +670,26 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'fail upwardToPlateau with windowSize=2 (trend fail)',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 2 },
-        context: this.createContextOf([
-          { priceDate: '0', closePrice: 5 },
-          { priceDate: '1', closePrice: 6 },
-          { priceDate: '2', closePrice: 11.5 },
-          { priceDate: '3', closePrice: 12 },
-          { priceDate: '4', closePrice: 15 },
-          { priceDate: '5', closePrice: 15.05 },
-          { priceDate: '6', closePrice: 14.95 },
-          { priceDate: '7', closePrice: 18 },
-          { priceDate: '8', closePrice: 19 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '0', closePrice: 5 },
+            { priceDate: '1', closePrice: 6 },
+            { priceDate: '2', closePrice: 11.5 },
+            { priceDate: '3', closePrice: 12 },
+            { priceDate: '4', closePrice: 15 },
+            { priceDate: '5', closePrice: 15.05 },
+            { priceDate: '6', closePrice: 14.95 },
+            { priceDate: '7', closePrice: 18 },
+            { priceDate: '8', closePrice: 19 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 2 },
+            },
+          },
+        ),
       },
     };
   }
@@ -483,18 +699,26 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'fail upwardToPlateau with windowSize=2 (plateau fail)',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 2 },
-        context: this.createContextOf([
-          { priceDate: '0', closePrice: 5 },
-          { priceDate: '1', closePrice: 6 },
-          { priceDate: '2', closePrice: 10 },
-          { priceDate: '3', closePrice: 12 },
-          { priceDate: '4', closePrice: 15 },
-          { priceDate: '5', closePrice: 15.05 },
-          { priceDate: '6', closePrice: 17 },
-          { priceDate: '7', closePrice: 18 },
-          { priceDate: '8', closePrice: 19 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '0', closePrice: 5 },
+            { priceDate: '1', closePrice: 6 },
+            { priceDate: '2', closePrice: 10 },
+            { priceDate: '3', closePrice: 12 },
+            { priceDate: '4', closePrice: 15 },
+            { priceDate: '5', closePrice: 15.05 },
+            { priceDate: '6', closePrice: 17 },
+            { priceDate: '7', closePrice: 18 },
+            { priceDate: '8', closePrice: 19 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 2 },
+            },
+          },
+        ),
       },
     };
   }
@@ -504,16 +728,24 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'fail plateauToUpward with windowSize=2 (trend fail)',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 2 },
-        context: this.createContextOf([
-          { priceDate: '0', closePrice: 1 },
-          { priceDate: '1', closePrice: 1.5 },
-          { priceDate: '2', closePrice: 2 },
-          { priceDate: '3', closePrice: 2 },
-          { priceDate: '4', closePrice: 3 },
-          { priceDate: '5', closePrice: 4 },
-          { priceDate: '6', closePrice: 5 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '0', closePrice: 1 },
+            { priceDate: '1', closePrice: 1.5 },
+            { priceDate: '2', closePrice: 2 },
+            { priceDate: '3', closePrice: 2 },
+            { priceDate: '4', closePrice: 3 },
+            { priceDate: '5', closePrice: 4 },
+            { priceDate: '6', closePrice: 5 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 2 },
+            },
+          },
+        ),
       },
     };
   }
@@ -523,13 +755,21 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'no swingpoint - upward to plateau followed by upward trend - windowSize=1',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 2 },
-          { priceDate: '2', closePrice: 3 },
-          { priceDate: '3', closePrice: 3 },
-          { priceDate: '4', closePrice: 4 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 2 },
+            { priceDate: '2', closePrice: 3 },
+            { priceDate: '3', closePrice: 3 },
+            { priceDate: '4', closePrice: 4 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -538,17 +778,25 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'no swingpoint - upward to plateau followed by upward trend - windowSize=2',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 2 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 1 },
-          { priceDate: '2', closePrice: 2 },
-          { priceDate: '3', closePrice: 3 },
-          { priceDate: '4', closePrice: 3 },
-          { priceDate: '5', closePrice: 3 },
-          { priceDate: '6', closePrice: 3 },
-          { priceDate: '7', closePrice: 4 },
-          { priceDate: '8', closePrice: 5 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 1 },
+            { priceDate: '2', closePrice: 2 },
+            { priceDate: '3', closePrice: 3 },
+            { priceDate: '4', closePrice: 3 },
+            { priceDate: '5', closePrice: 3 },
+            { priceDate: '6', closePrice: 3 },
+            { priceDate: '7', closePrice: 4 },
+            { priceDate: '8', closePrice: 5 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 2 },
+            },
+          },
+        ),
       },
     };
   }
@@ -557,13 +805,21 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'swingpoint - upward plateau followed by downward trend - windowSize=1',
       testcase: {
         expectedSwingPoints: [{ index: 1, type: 'swingHigh' }],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 2 },
-          { priceDate: '2', closePrice: 3 },
-          { priceDate: '3', closePrice: 3 },
-          { priceDate: '4', closePrice: 2 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 2 },
+            { priceDate: '2', closePrice: 3 },
+            { priceDate: '3', closePrice: 3 },
+            { priceDate: '4', closePrice: 2 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -572,17 +828,25 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'swingHigh - upward to plateau followed by downward trend - windowSize=2',
       testcase: {
         expectedSwingPoints: [{ index: 2, type: 'swingHigh' }],
-        settings: { relativeThreshold: 0.1, windowSize: 2 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 1 },
-          { priceDate: '2', closePrice: 2 },
-          { priceDate: '3', closePrice: 3 },
-          { priceDate: '4', closePrice: 3 },
-          { priceDate: '5', closePrice: 3 },
-          { priceDate: '6', closePrice: 3 },
-          { priceDate: '7', closePrice: 2 },
-          { priceDate: '8', closePrice: 1 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 1 },
+            { priceDate: '2', closePrice: 2 },
+            { priceDate: '3', closePrice: 3 },
+            { priceDate: '4', closePrice: 3 },
+            { priceDate: '5', closePrice: 3 },
+            { priceDate: '6', closePrice: 3 },
+            { priceDate: '7', closePrice: 2 },
+            { priceDate: '8', closePrice: 1 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 2 },
+            },
+          },
+        ),
       },
     };
   }
@@ -591,13 +855,21 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'swingLow - downward to plateau followed by upward trend - windowSize=1',
       testcase: {
         expectedSwingPoints: [{ index: 1, type: 'swingLow' }],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 4 },
-          { priceDate: '2', closePrice: 3 },
-          { priceDate: '3', closePrice: 3 },
-          { priceDate: '4', closePrice: 4 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 4 },
+            { priceDate: '2', closePrice: 3 },
+            { priceDate: '3', closePrice: 3 },
+            { priceDate: '4', closePrice: 4 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -606,17 +878,25 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'swingLow - downward to plateau followed by upward trend - windowSize=2',
       testcase: {
         expectedSwingPoints: [{ index: 2, type: 'swingLow' }],
-        settings: { relativeThreshold: 0.1, windowSize: 2 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 5 },
-          { priceDate: '2', closePrice: 4 },
-          { priceDate: '3', closePrice: 3 },
-          { priceDate: '4', closePrice: 3 },
-          { priceDate: '5', closePrice: 3 },
-          { priceDate: '6', closePrice: 3 },
-          { priceDate: '7', closePrice: 4 },
-          { priceDate: '8', closePrice: 5 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 5 },
+            { priceDate: '2', closePrice: 4 },
+            { priceDate: '3', closePrice: 3 },
+            { priceDate: '4', closePrice: 3 },
+            { priceDate: '5', closePrice: 3 },
+            { priceDate: '6', closePrice: 3 },
+            { priceDate: '7', closePrice: 4 },
+            { priceDate: '8', closePrice: 5 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 2 },
+            },
+          },
+        ),
       },
     };
   }
@@ -625,13 +905,21 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'no swingpoint - downward to plateau followed by downward trend - windowSize=1',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 1 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 4 },
-          { priceDate: '2', closePrice: 3 },
-          { priceDate: '3', closePrice: 3 },
-          { priceDate: '4', closePrice: 1 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 4 },
+            { priceDate: '2', closePrice: 3 },
+            { priceDate: '3', closePrice: 3 },
+            { priceDate: '4', closePrice: 1 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 1 },
+            },
+          },
+        ),
       },
     };
   }
@@ -640,17 +928,25 @@ export class SwingPointDetectionTestdata extends CreateTestData {
       name: 'no swingpoint - downward to plateau followed by downward trend - windowSize=2',
       testcase: {
         expectedSwingPoints: [],
-        settings: { relativeThreshold: 0.1, windowSize: 2 },
-        context: this.createContextOf([
-          { priceDate: '1', closePrice: 5 },
-          { priceDate: '2', closePrice: 4 },
-          { priceDate: '3', closePrice: 3 },
-          { priceDate: '4', closePrice: 3 },
-          { priceDate: '5', closePrice: 3 },
-          { priceDate: '6', closePrice: 3 },
-          { priceDate: '7', closePrice: 2 },
-          { priceDate: '8', closePrice: 1 },
-        ]),
+        context: this.createContextOf(
+          [
+            { priceDate: '1', closePrice: 5 },
+            { priceDate: '2', closePrice: 4 },
+            { priceDate: '3', closePrice: 3 },
+            { priceDate: '4', closePrice: 3 },
+            { priceDate: '5', closePrice: 3 },
+            { priceDate: '6', closePrice: 3 },
+            { priceDate: '7', closePrice: 2 },
+            { priceDate: '8', closePrice: 1 },
+          ],
+          {
+            steps: [],
+            dataAggregation: { ticker: { exchange: '', symbol: '' } },
+            stepOptions: {
+              swingPointDetection: { relativeThreshold: 0.1, windowSize: 2 },
+            },
+          },
+        ),
       },
     };
   }

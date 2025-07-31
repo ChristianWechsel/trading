@@ -22,7 +22,6 @@ export class AnalysisContextClass {
   private defaults: {
     relativeThreshold: number;
     windowSize: number;
-    atrFactor: number;
     period: number;
   };
 
@@ -60,7 +59,6 @@ export class AnalysisContextClass {
     this.defaults = {
       relativeThreshold: 0.01,
       windowSize: 1,
-      atrFactor: 1,
       period: 20,
     };
   }

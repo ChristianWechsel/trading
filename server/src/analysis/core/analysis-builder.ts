@@ -76,7 +76,7 @@ export class AnalysisBuilder {
       case 'MovingAverage':
         return new MovingAverage();
       case 'SwingPointDetection':
-        return new SwingPointDetection(this.configuration.swingPointDetection);
+        return new SwingPointDetection();
       case 'TrendDetection':
         return new TrendDetection(this.configuration.trendDetection);
       case 'TrendChannelCalculation':
