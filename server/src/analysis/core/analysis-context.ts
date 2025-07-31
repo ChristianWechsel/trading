@@ -26,6 +26,12 @@ export class AnalysisContextClass {
   };
 
   constructor(query: AnalysisQueryDto, ohlcvs: OHLCV[]) {
+    this.defaults = {
+      relativeThreshold: 0.01,
+      windowSize: 1,
+      period: 20,
+    };
+
     this.options = new Options({
       averageTrueRange: new AverageTrueRangeOptions(
         {
@@ -56,11 +62,6 @@ export class AnalysisContextClass {
       .map((ohlcv) => ohlcv.clone())
       .map((ohlcv) => new EnrichedDataPoint(ohlcv));
     this.trends = [];
-    this.defaults = {
-      relativeThreshold: 0.01,
-      windowSize: 1,
-      period: 20,
-    };
   }
 
   getOptions(): Options {
