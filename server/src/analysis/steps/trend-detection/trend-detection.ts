@@ -1,7 +1,4 @@
-import {
-  AnalysisContextClass,
-  YValueAccessor,
-} from '../../../analysis/core/analysis-context';
+import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
 import { analysisConfig } from '../../config/analysis.config';
 import {
   AnalysisStep,
@@ -9,7 +6,6 @@ import {
   TrendDataMetadata,
 } from '../../core/analysis.interface';
 import { EnrichedDataPoint } from '../../core/enriched-data-point';
-import { ComparableNumber } from '../utils/comparable-number/comparable-number';
 import { TrendDetectionStateMachine } from './trend-detection-state-machine';
 import {
   DownwardTrendConfirmed,
@@ -24,24 +20,11 @@ export class TrendDetection implements AnalysisStep {
   name: Step = 'TrendDetection';
   dependsOn: Step[] = ['SwingPointDetection'];
 
-  constructor(private options: { relativeThreshold: number }) {
-    const { relativeThreshold } = options;
-    if (
-      relativeThreshold < analysisConfig.comparableNumber.MIN_THRESHOLD ||
-      relativeThreshold > analysisConfig.comparableNumber.MAX_THRESHOLD
-    ) {
-      throw new Error(
-        `relativeThreshold must be between ${analysisConfig.comparableNumber.MIN_THRESHOLD} and ${analysisConfig.comparableNumber.MAX_THRESHOLD}`,
-      );
-    }
-  }
-
   execute(context: AnalysisContextClass): void {
-    const yValueAccessor = context.buildYValueAccessor();
     const rawData = context.getEnrichedDataPoints();
     const { swingPoints, data } = this.generateSwingPointsAndData(
       rawData,
-      yValueAccessor,
+      context,
     );
     const trendsMetadata = this.detectTrends(swingPoints, data);
     context.setTrends(
@@ -51,7 +34,7 @@ export class TrendDetection implements AnalysisStep {
 
   private generateSwingPointsAndData(
     rawData: EnrichedDataPoint[],
-    yValueAccessor: YValueAccessor,
+    context: AnalysisContextClass,
   ) {
     const swingPoints = rawData
       .filter(
@@ -64,10 +47,10 @@ export class TrendDetection implements AnalysisStep {
           swingPointType: enrichedDataPoint.getSwingPointType()!,
           point: {
             enrichedDataPoint,
-            priceComparisonValue: new ComparableNumber(
-              yValueAccessor(enrichedDataPoint),
-              this.options.relativeThreshold,
-            ),
+            priceComparisonValue: context.buildComparableNumber({
+              enrichedDataPoint,
+              step: this.name,
+            }),
           },
         };
       });
@@ -79,10 +62,10 @@ export class TrendDetection implements AnalysisStep {
 
     const data = rawData.map<SwingPointData['point']>((enrichedDataPoint) => ({
       enrichedDataPoint,
-      priceComparisonValue: new ComparableNumber(
-        yValueAccessor(enrichedDataPoint),
-        this.options.relativeThreshold,
-      ),
+      priceComparisonValue: context.buildComparableNumber({
+        enrichedDataPoint,
+        step: this.name,
+      }),
     }));
     return { swingPoints, data };
   }

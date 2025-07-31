@@ -67,12 +67,15 @@ export class CreateTestData {
 
     return context;
   }
-  protected createContext(ohlcvs: OHLCVRecord[]): AnalysisContextClass {
+  protected createContext(
+    ohlcvs: OHLCVRecord[],
+    options: AnalysisQueryDto = {
+      steps: [],
+      dataAggregation: { ticker: { exchange: '', symbol: '' } },
+    },
+  ): AnalysisContextClass {
     const context = new AnalysisContextClass(
-      {
-        steps: [],
-        dataAggregation: { ticker: { exchange: '', symbol: '' } },
-      },
+      options,
       ohlcvs.map<OHLCV>((item) => item.ohlcv),
     );
     const enrichedDataPoints = context.getEnrichedDataPoints();

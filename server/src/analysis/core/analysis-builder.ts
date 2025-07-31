@@ -1,4 +1,3 @@
-import { StepOptionsDto } from '../analysis-query.dto';
 import { AverageTrueRange } from '../steps/average-true-range/average-true-range';
 import { MovingAverage } from '../steps/moving-average';
 import { SwingPointDetection } from '../steps/swing-point-detection/swing-point-detection';
@@ -7,45 +6,8 @@ import { TrendDetection } from '../steps/trend-detection/trend-detection';
 import { AnalysisPipeline } from './analysis-pipeline';
 import { AnalysisStep, Step } from './analysis.interface';
 
-type StepConfiguration = {
-  swingPointDetection: {
-    relativeThreshold: number;
-    windowSize: number;
-    atrFactor: number;
-  };
-  trendDetection: { relativeThreshold: number; atrFactor: number };
-  averageTrueRange: { period: number };
-};
-
 export class AnalysisBuilder {
   private steps: AnalysisStep[] = [];
-  private configuration: StepConfiguration;
-
-  constructor(options?: StepOptionsDto) {
-    const defaultConfiguration: StepConfiguration = {
-      swingPointDetection: {
-        relativeThreshold: 0.01,
-        windowSize: 1,
-        atrFactor: 1,
-      },
-      trendDetection: { relativeThreshold: 0.01, atrFactor: 1 },
-      averageTrueRange: { period: 20 },
-    };
-    this.configuration = {
-      swingPointDetection: {
-        ...defaultConfiguration.swingPointDetection,
-        ...(options?.swingPointDetection ?? {}),
-      },
-      trendDetection: {
-        ...defaultConfiguration.trendDetection,
-        ...(options?.trendDetection ?? {}),
-      },
-      averageTrueRange: {
-        ...defaultConfiguration.averageTrueRange,
-        ...(options?.averageTrueRange ?? {}),
-      },
-    };
-  }
 
   addStep(step: Step): void {
     if (!this.has(step)) {
@@ -78,7 +40,7 @@ export class AnalysisBuilder {
       case 'SwingPointDetection':
         return new SwingPointDetection();
       case 'TrendDetection':
-        return new TrendDetection(this.configuration.trendDetection);
+        return new TrendDetection();
       case 'TrendChannelCalculation':
         return new TrendChannelCalculation();
       case 'AverageTrueRange':
