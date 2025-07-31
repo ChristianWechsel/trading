@@ -42,18 +42,23 @@ export class SwingPointDetectionOptions {
       windowSize: number;
       atrFactor: number;
     }>,
+    private defaults: {
+      relativeThreshold: number;
+      windowSize: number;
+      atrFactor: number;
+    },
   ) {}
 
   getRelativeThreshold() {
-    return this.options.relativeThreshold;
+    return this.options.relativeThreshold ?? this.defaults.relativeThreshold;
   }
 
   getWindowSize() {
-    return this.options.windowSize;
+    return this.options.windowSize ?? this.defaults.windowSize;
   }
 
   getAtrFactor() {
-    return this.options.atrFactor;
+    return this.options.atrFactor ?? this.defaults.atrFactor;
   }
 }
 
@@ -63,13 +68,17 @@ export class TrendDetectionOptions {
       relativeThreshold: number;
       atrFactor: number;
     }>,
+    private defaults: {
+      relativeThreshold: number;
+      atrFactor: number;
+    },
   ) {}
 
   getRelativeThreshold() {
-    return this.options.relativeThreshold;
+    return this.options.relativeThreshold ?? this.defaults.relativeThreshold;
   }
 
   getAtrFactor() {
-    return this.options.atrFactor;
+    return this.options.atrFactor ?? this.defaults.atrFactor;
   }
 }
