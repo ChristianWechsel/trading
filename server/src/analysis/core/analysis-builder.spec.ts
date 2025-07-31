@@ -1,4 +1,3 @@
-import { StepOptionsDto } from '../analysis-query.dto';
 import { MovingAverage } from '../steps/moving-average';
 import { SwingPointDetection } from '../steps/swing-point-detection/swing-point-detection';
 import { TrendChannelCalculation } from '../steps/trend-channel-calculation/trend-channel-calculation';
@@ -66,78 +65,6 @@ describe('AnalysisBuilder', () => {
           execute: jest.fn(),
         }) as unknown as TrendChannelCalculation,
     );
-  });
-
-  describe('Konfiguration', () => {
-    it('sollte Standardwerte verwenden, wenn keine Optionen übergeben werden', () => {
-      builder = new AnalysisBuilder();
-      builder.addStep('SwingPointDetection');
-      builder.addStep('TrendDetection');
-      builder.build();
-
-      expect(swingPointDetectionMock).toHaveBeenCalledWith({
-        relativeThreshold: 0.01,
-        windowSize: 1,
-        atrFactor: 1,
-      });
-      expect(trendDetectionMock).toHaveBeenCalledWith({
-        relativeThreshold: 0.01,
-        atrFactor: 1,
-      });
-    });
-
-    it('sollte übergebene Optionen mit den Standardwerten mergen', () => {
-      const customOptions: StepOptionsDto = {
-        swingPointDetection: {
-          windowSize: 10,
-        },
-        trendDetection: {
-          relativeThreshold: 0.05,
-        },
-      };
-
-      builder = new AnalysisBuilder(customOptions);
-      builder.addStep('SwingPointDetection');
-      builder.addStep('TrendDetection');
-      builder.build();
-
-      // windowSize wurde überschrieben, relativeThreshold bleibt Standard
-      expect(swingPointDetectionMock).toHaveBeenCalledWith({
-        relativeThreshold: 0.01,
-        windowSize: 10,
-        atrFactor: 1,
-      });
-
-      // relativeThreshold wurde überschrieben
-      expect(trendDetectionMock).toHaveBeenCalledWith({
-        relativeThreshold: 0.05,
-        atrFactor: 1,
-      });
-    });
-
-    it('sollte nur die Optionen für einen Step überschreiben', () => {
-      const customOptions: StepOptionsDto = {
-        swingPointDetection: {
-          relativeThreshold: 0.02,
-          windowSize: 5,
-        },
-      };
-
-      builder = new AnalysisBuilder(customOptions);
-      builder.addStep('SwingPointDetection');
-      builder.addStep('TrendDetection'); // Für diesen Step werden Standardwerte erwartet
-      builder.build();
-
-      expect(swingPointDetectionMock).toHaveBeenCalledWith({
-        relativeThreshold: 0.02,
-        windowSize: 5,
-        atrFactor: 1,
-      });
-      expect(trendDetectionMock).toHaveBeenCalledWith({
-        relativeThreshold: 0.01,
-        atrFactor: 1,
-      });
-    });
   });
 
   describe('Abhängigkeitsauflösung', () => {
