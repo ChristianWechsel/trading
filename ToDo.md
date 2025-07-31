@@ -4,42 +4,42 @@
 
 ### 1. AnalysisContextClass erweitern
 
-- [ ] Factory-Methoden für ComparableNumber hinzufügen (createSwingPointComparableNumber, createTrendDetectionComparableNumber)
-- [ ] Standardwerte-Methoden implementieren (getSwingPointDetectionOptions, getTrendDetectionOptions, getAverageTrueRangeOptions)
-- [ ] Validierungsmethoden in Context verlagern (validateSwingPointDetectionOptions, validateTrendDetectionOptions)
-- [ ] ATR-Verfügbarkeits-Prüfung implementieren (isATRAvailable, getATRValueForDataPoint)
+- [x] Factory-Methoden für ComparableNumber hinzufügen (createSwingPointComparableNumber, createTrendDetectionComparableNumber)
+- [x] Standardwerte-Methoden implementieren (getSwingPointDetectionOptions, getTrendDetectionOptions, getAverageTrueRangeOptions)
+- [x] Validierungsmethoden in Context verlagern (validateSwingPointDetectionOptions, validateTrendDetectionOptions)
+- [x] ATR-Verfügbarkeits-Prüfung implementieren (isATRAvailable, getATRValueForDataPoint)
 
 ### 2. ComparableNumber-System erweitern
 
-- [ ] ATRComparableNumber-Klasse erstellen (mit atrValue und atrFactor)
-- [ ] RelativeComparableNumber beibehalten für Fallback
-- [ ] Factory-Logik: ATR-basiert wenn verfügbar, sonst relativ
+- [x] ATRComparableNumber-Klasse erstellen (mit atrValue und atrFactor)
+- [x] RelativeComparableNumber beibehalten für Fallback
+- [x] Factory-Logik: ATR-basiert wenn verfügbar, sonst relativ
 
 ### 3. Steps vereinfachen
 
-- [ ] Constructor-Parameter aus allen Steps entfernen
-- [ ] SwingPointDetection: Constructor-Logik entfernen, Context-basierte Konfiguration verwenden
-- [ ] TrendDetection: Constructor-Logik entfernen, Context-basierte Konfiguration verwenden
-- [ ] AverageTrueRange: Constructor-Logik entfernen, Context-basierte Konfiguration verwenden
-- [ ] Validierungen aus Steps in Context verlagern
+- [x] Constructor-Parameter aus allen Steps entfernen
+- [x] SwingPointDetection: Constructor-Logik entfernen, Context-basierte Konfiguration verwenden
+- [x] TrendDetection: Constructor-Logik entfernen, Context-basierte Konfiguration verwenden
+- [x] AverageTrueRange: Constructor-Logik entfernen, Context-basierte Konfiguration verwenden
+- [x] Validierungen aus Steps in Context verlagern
 
 ### 4. AnalysisBuilder anpassen
 
-- [ ] Standardwerte-Konfiguration entfernen
-- [ ] Factory-Methoden vereinfachen (keine Parameter mehr an Step-Constructors)
-- [ ] StepConfiguration-Type möglicherweise entfernen
+- [x] Standardwerte-Konfiguration entfernen
+- [x] Factory-Methoden vereinfachen (keine Parameter mehr an Step-Constructors)
+- [x] StepConfiguration-Type möglicherweise entfernen
 
 ### 5. DTOs erweitern
 
-- [ ] atrFactor zu SwingPointDetectionOptionsDto hinzufügen
-- [ ] atrFactor zu TrendDetectionOptionsDto hinzufügen
-- [ ] Validierungen für atrFactor implementieren
+- [x] atrFactor zu SwingPointDetectionOptionsDto hinzufügen
+- [x] atrFactor zu TrendDetectionOptionsDto hinzufügen
+- [x] Validierungen für atrFactor implementieren
 
 ### 6. Tests anpassen
 
-- [ ] Alle Step-Tests auf parameterlose Constructors umstellen
-- [ ] Context-Mock für Tests erstellen
-- [ ] Factory-Tests für ComparableNumber hinzufügen
+- [x] Alle Step-Tests auf parameterlose Constructors umstellen
+- [x] Context-Mock für Tests erstellen
+- [x] Factory-Tests für ComparableNumber hinzufügen
 - [ ] Integrationstests für ATR/Relative-Threshold-Auswahl
 
 ### 7. Bestehende ToDos
