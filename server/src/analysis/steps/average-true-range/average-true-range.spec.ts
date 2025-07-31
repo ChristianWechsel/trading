@@ -1,13 +1,11 @@
 import { OHLCV } from '../../../data-aggregation/ohlcv.entity';
 import { AnalysisQueryDto } from '../../analysis-query.dto';
-import { analysisConfig } from '../../config/analysis.config';
 import { AnalysisContextClass } from '../../core/analysis-context';
 import { AverageTrueRange } from './average-true-range';
 import { AverageTrueRangeTestdata } from './average-true-range.testdata';
 
 export type AverageTrueRangeTestCase = {
   name: string;
-  setting: { period: number };
   context: AnalysisContextClass;
   expected: {
     index: number;
@@ -16,52 +14,18 @@ export type AverageTrueRangeTestCase = {
 };
 
 describe('AverageTrueRange', () => {
-  let query: AnalysisQueryDto;
-
-  beforeEach(() => {
-    query = {} as AnalysisQueryDto;
-  });
+  const query: AnalysisQueryDto = {
+    steps: [],
+    dataAggregation: { ticker: { exchange: '', symbol: '' } },
+    stepOptions: { averageTrueRange: { period: 10 } },
+  };
 
   describe('checks', () => {
-    it('should throw if period is below the minimum period', () => {
-      expect(
-        () =>
-          new AverageTrueRange({
-            period: analysisConfig.averageTrueRange.MIN_PERIOD - 1,
-          }),
-      ).toThrow(
-        `Period must be a natural number >= ${analysisConfig.averageTrueRange.MIN_PERIOD}`,
-      );
-    });
-
-    it('should not throw if period is exactly at the minimum period', () => {
-      expect(
-        () =>
-          new AverageTrueRange({
-            period: analysisConfig.averageTrueRange.MIN_PERIOD,
-          }),
-      ).not.toThrow();
-    });
-
-    it('should throw if period is not an integer', () => {
-      expect(() => new AverageTrueRange({ period: 14.34 })).toThrow(
-        `Period must be a natural number >= ${analysisConfig.averageTrueRange.MIN_PERIOD}`,
-      );
-    });
-
-    it('should not throw if period is a valid integer above minimum', () => {
-      expect(
-        () =>
-          new AverageTrueRange({
-            period: analysisConfig.averageTrueRange.MIN_PERIOD + 5,
-          }),
-      ).not.toThrow();
-    });
-
     it('should throw if enrichedDataPoints are less than period', () => {
-      const period = 10;
-      const atr = new AverageTrueRange({ period });
-      const ohlcvs = new Array<OHLCV>(period - 1).fill(
+      const atr = new AverageTrueRange();
+      const ohlcvs = new Array<OHLCV>(
+        query.stepOptions!.averageTrueRange!.period! - 1,
+      ).fill(
         new OHLCV({
           securityId: 0,
           priceDate: '1970-01-01',
@@ -75,14 +39,15 @@ describe('AverageTrueRange', () => {
       );
       const context = new AnalysisContextClass(query, ohlcvs);
       expect(() => atr.execute(context)).toThrow(
-        `Not enough data points for period=${period}`,
+        `Not enough data points for period=${query.stepOptions!.averageTrueRange!.period!}`,
       );
     });
 
     it('should not throw if enrichedDataPoints are equal to period', () => {
-      const period = 10;
-      const atr = new AverageTrueRange({ period });
-      const ohlcvs = new Array<OHLCV>(period).fill(
+      const atr = new AverageTrueRange();
+      const ohlcvs = new Array<OHLCV>(
+        query.stepOptions!.averageTrueRange!.period!,
+      ).fill(
         new OHLCV({
           securityId: 0,
           priceDate: '1970-01-01',
@@ -99,9 +64,10 @@ describe('AverageTrueRange', () => {
     });
 
     it('should not throw if enrichedDataPoints are more than period', () => {
-      const period = 10;
-      const atr = new AverageTrueRange({ period });
-      const ohlcvs = new Array<OHLCV>(period + 1).fill(
+      const atr = new AverageTrueRange();
+      const ohlcvs = new Array<OHLCV>(
+        query.stepOptions!.averageTrueRange!.period! + 1,
+      ).fill(
         new OHLCV({
           securityId: 0,
           priceDate: '1970-01-01',
@@ -125,9 +91,9 @@ describe('AverageTrueRange', () => {
       testData.minimumPeriod_todayHighClosingYesterday(),
       testData.minimumPeriod_todayLowClosingYesterday(),
       testData.period5_with10datapoints(),
-    ])('$name', ({ setting, context, expected }) => {
+    ])('$name', ({ context, expected }) => {
       expect.assertions(expected.length + 1);
-      const atr = new AverageTrueRange(setting);
+      const atr = new AverageTrueRange();
       atr.execute(context);
       context.getEnrichedDataPoints().forEach((dp, idx) => {
         const actualATR = dp.getAverageTrueRange();

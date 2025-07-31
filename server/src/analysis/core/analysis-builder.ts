@@ -82,7 +82,7 @@ export class AnalysisBuilder {
       case 'TrendChannelCalculation':
         return new TrendChannelCalculation();
       case 'AverageTrueRange':
-        return new AverageTrueRange(this.configuration.averageTrueRange);
+        return new AverageTrueRange();
       default:
         throw new Error(`Unknown analysis step`);
     }

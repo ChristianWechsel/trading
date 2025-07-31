@@ -1,3 +1,4 @@
+import { AnalysisQueryDto } from 'src/analysis/analysis-query.dto';
 import { AnalysisContextClass } from '../analysis/core/analysis-context';
 import {
   EnrichedDataPoint,
@@ -54,12 +55,13 @@ export class CreateTestData {
 
   protected createContextOf(
     ohlcvs: Partial<OHLCVEntity>[],
+    options: AnalysisQueryDto = {
+      steps: [],
+      dataAggregation: { ticker: { exchange: '', symbol: '' } },
+    },
   ): AnalysisContextClass {
     const context = new AnalysisContextClass(
-      {
-        steps: [],
-        dataAggregation: { ticker: { exchange: '', symbol: '' } },
-      },
+      options,
       ohlcvs.map<OHLCV>((item) => this.createOHLCV(item)),
     );
 

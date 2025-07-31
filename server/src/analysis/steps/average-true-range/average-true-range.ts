@@ -10,36 +10,27 @@ export class AverageTrueRange implements AnalysisStep {
 
   private readonly startPeriod = analysisConfig.averageTrueRange.MIN_PERIOD - 1;
 
-  constructor(private options: { period: number }) {
-    if (!Number.isInteger(this.options.period) || this.options.period < 2) {
-      throw new Error(
-        `Period must be a natural number >= ${analysisConfig.averageTrueRange.MIN_PERIOD}`,
-      );
-    }
-  }
-
   execute(context: AnalysisContextClass): void {
     const data = context.getEnrichedDataPoints();
-    this.checkData(data);
-    this.getAverageTrueRange(data);
+    const period = context.getOptions().getAverageTrueRange().getPeriod();
+    this.checkData(data, period);
+    this.getAverageTrueRange(data, period);
   }
 
-  private checkData(data: EnrichedDataPoint[]) {
-    if (data.length < this.options.period) {
-      throw new Error(
-        `Not enough data points for period=${this.options.period}`,
-      );
+  private checkData(data: EnrichedDataPoint[], period: number) {
+    if (data.length < period) {
+      throw new Error(`Not enough data points for period=${period}`);
     }
   }
 
-  private getAverageTrueRange(data: EnrichedDataPoint[]) {
+  private getAverageTrueRange(data: EnrichedDataPoint[], period: number) {
     let n = this.startPeriod;
 
     // Berechnung des True Range für die ersten Perioden
     let accumulatedTrueRangeFirstPeriod = 0;
     let previousATR = 0;
 
-    while (n <= this.options.period - 1) {
+    while (n <= period - 1) {
       const previous = data[n - 1];
       const current = data[n];
       const calculatedTrueRange = this.calculateTrueRange(
@@ -63,8 +54,7 @@ export class AverageTrueRange implements AnalysisStep {
         current.getDataPoint(),
       );
       const averageTrueRange =
-        (previousATR * (this.options.period - 1) + calculatedTrueRange) /
-        this.options.period;
+        (previousATR * (period - 1) + calculatedTrueRange) / period;
 
       current.setAverageTrueRange(averageTrueRange);
       previousATR = averageTrueRange;

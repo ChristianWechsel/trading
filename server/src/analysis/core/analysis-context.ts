@@ -65,6 +65,10 @@ export class AnalysisContextClass {
     };
   }
 
+  getOptions(): Options {
+    return this.options;
+  }
+
   getEnrichedDataPoints(): EnrichedDataPoint[] {
     return this.enrichedDataPoints;
   }
