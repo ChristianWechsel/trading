@@ -9,15 +9,16 @@ import {
   SwingPointDetectionOptions,
   TrendDetectionOptions,
 } from './analysis-options';
-import { Step, TrendDataMetadata } from './analysis.interface';
+import { Step, TradingSignal, TrendDataMetadata } from './analysis.interface';
 import { EnrichedDataPoint } from './enriched-data-point';
 
 export type YValueAccessor = (dataPoint: EnrichedDataPoint) => number;
 
 export class AnalysisContextClass {
+  private options: Options;
   private enrichedDataPoints: EnrichedDataPoint[];
   private trends: TrendDataMetadata['trendData'][];
-  private options: Options;
+  private tradingSignals: TradingSignal[];
 
   private defaults: {
     relativeThreshold: number;
@@ -62,6 +63,7 @@ export class AnalysisContextClass {
       .map((ohlcv) => ohlcv.clone())
       .map((ohlcv) => new EnrichedDataPoint(ohlcv));
     this.trends = [];
+    this.tradingSignals = [];
   }
 
   getOptions(): Options {
@@ -78,6 +80,14 @@ export class AnalysisContextClass {
 
   setTrends(trends: TrendDataMetadata['trendData'][]): void {
     this.trends = trends;
+  }
+
+  addTradingSignals(signal: TradingSignal): void {
+    this.tradingSignals.push(signal);
+  }
+
+  getTradingSignals(): TradingSignal[] {
+    return this.tradingSignals;
   }
 
   buildYValueAccessor(): YValueAccessor {

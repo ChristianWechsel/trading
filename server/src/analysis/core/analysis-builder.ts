@@ -1,6 +1,7 @@
 import { AverageTrueRange } from '../steps/average-true-range/average-true-range';
 import { MovingAverage } from '../steps/moving-average';
 import { SwingPointDetection } from '../steps/swing-point-detection/swing-point-detection';
+import { TradingSignal } from '../steps/trading-signal/trading-signal';
 import { TrendChannelCalculation } from '../steps/trend-channel-calculation/trend-channel-calculation';
 import { TrendDetection } from '../steps/trend-detection/trend-detection';
 import { AnalysisPipeline } from './analysis-pipeline';
@@ -45,6 +46,8 @@ export class AnalysisBuilder {
         return new TrendChannelCalculation();
       case 'AverageTrueRange':
         return new AverageTrueRange();
+      case 'TradingSignal':
+        return new TradingSignal();
       default:
         throw new Error(`Unknown analysis step`);
     }

@@ -33,4 +33,11 @@ export type Step =
   | 'SwingPointDetection'
   | 'TrendChannelCalculation'
   | 'TrendDetection'
-  | 'AverageTrueRange';
+  | 'AverageTrueRange'
+  | 'TradingSignal';
+
+export type TradingSignal = {
+  type: 'buy' | 'sell';
+  dataPoint: EnrichedDataPoint;
+  reason: 'Upward trend started' | 'Upward trend ended';
+};
