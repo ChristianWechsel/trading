@@ -11,8 +11,9 @@ describe('Analysis (Integration)', () => {
 
   beforeEach(async () => {});
 
-  it('MCD.US 1980-03-17 - 1980-06-01', async () => {
-    const testData = analysisIntTestData.getMCDUSHistoricalData1980FirstHalf();
+  it('MCD.US 1980-03-17 - 1980-06-01 - RelativeThreshold', async () => {
+    const testData =
+      analysisIntTestData.getMCDUSHistoricalData1980FirstHalfRelativeThreshold();
     const mockDataAggregationService: IDataAggregationService = {
       loadAndUpdateIfNeeded: () => Promise.resolve(testData.data),
       importAndSaveData: jest.fn(),
