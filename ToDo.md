@@ -1,8 +1,91 @@
 # ToDo List
 
-# Trenderkennung muss auch Punkte liefern: Trendbestätigung und Warnung Trendbruch
+## Analyse-Engine: Modulare Handelssimulation
 
-# Int Test für alle Steps erweitern. um trading-signal
+**Ziel:** Eine flexible Backtesting-Engine schaffen, bei der Handelslogik (Sizing, Risk-Management) konfigurierbar ist und alle Ergebnisse zentral im `AnalysisContext` gespeichert werden.
+
+### 1. Kernkomponenten der Simulation
+
+- **`Account` Klasse:**
+
+  - **Zweck:** Verwaltet ausschließlich das Kapital (Bargeld).
+  - **Verantwortlichkeiten:** `initialCapital`, `currentCash`, `debit(amount)`, `credit(amount)`.
+
+- **`Position` Klasse:**
+
+  - **Zweck:** Repräsentiert eine offene Investition.
+  - **Verantwortlichkeiten:** `symbol`, `shares`, `entryPrice`, `entryDate`, `stopLossPrice`.
+
+- **`Portfolio` Klasse:**
+  - **Zweck:** Koordiniert `Account` und `Position`en.
+  - **Verantwortlichkeiten:** Hält eine `Account`-Instanz und eine Liste von `Position`en. Bietet Methoden wie `openPosition(...)`, `closePosition(...)`, `hasOpenPosition()`.
+
+### 2. Konfigurierbare Strategien
+
+- **`PositionSizingStrategy` (Funktionstyp):**
+
+  - **Signatur:** `(cash: number, price: number) => number` (gibt Anzahl der Aktien zurück).
+  - **Beispiele:** `AllInSizing`, `FixedAmountSizing`.
+
+- **`StopLossStrategy` (Funktionstyp):**
+  - **Signatur:** `(entryPrice: number, dataPoint: EnrichedDataPoint) => number` (gibt Stop-Preis zurück).
+  - **Beispiele:** `PercentageStopLoss`, `ATRStopLoss`.
+
+### 3. Integration in den `AnalysisContext`
+
+- Der `AnalysisContext` wird erweitert und hält:
+  - `private portfolio: Portfolio;`
+  - `private account: Account;`
+  - `private positionSizingStrategy: PositionSizingStrategy;`
+  - `private stopLossStrategy: StopLossStrategy;`
+- Der `constructor` des `AnalysisContext` initialisiert diese Objekte basierend auf der `AnalysisQueryDto`.
+
+### 4. Ablauf in `Trading.execute()`
+
+Die `Trading`-Klasse wird zur reinen Simulations-Engine, die die Komponenten aus dem `Context` nutzt.
+
+```typescript
+// Pseudocode für Trading.execute(context)
+
+const portfolio = context.getPortfolio();
+const account = context.getAccount();
+const positionSizingStrategy = context.getPositionSizingStrategy();
+const stopLossStrategy = context.getStopLossStrategy();
+
+const allDataPoints = context.getEnrichedDataPoints();
+const signals = context.getTradingSignalsAsMap(); // Helper-Methode im Context
+
+for (const dataPoint of allDataPoints) {
+  const openPosition = portfolio.getOpenPosition();
+
+  // 1. Stop-Loss prüfen
+  if (openPosition && dataPoint.lowPrice <= openPosition.stopLossPrice) {
+    portfolio.closePosition(openPosition.stopLossPrice);
+    // Trade im Context speichern...
+    continue;
+  }
+
+  const signal = signals.get(dataPoint.priceDate);
+
+  // 2. Verkaufssignal prüfen
+  if (openPosition && signal === "sell") {
+    portfolio.closePosition(dataPoint.closePrice);
+    // Trade im Context speichern...
+  }
+
+  // 3. Kaufsignal prüfen
+  else if (!openPosition && signal === "buy") {
+    const shares = positionSizingStrategy(
+      account.getCash(),
+      dataPoint.closePrice
+    );
+    if (shares > 0) {
+      const stopLoss = stopLossStrategy(dataPoint.closePrice, dataPoint);
+      portfolio.openPosition(shares, dataPoint.closePrice, stopLoss);
+    }
+  }
+}
+```
 
 # TradingCharts
 
