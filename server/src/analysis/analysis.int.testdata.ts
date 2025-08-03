@@ -203,7 +203,7 @@ export class AnalysisIntTestData {
             to: '2023-06-01',
           },
         },
-        steps: ['TrendChannelCalculation', 'TradingSignal'],
+        steps: ['Trading', 'TrendChannelCalculation'],
         stepOptions: {
           swingPointDetection: { atrFactor: 0.1 },
           trendDetection: { atrFactor: 0.1 },

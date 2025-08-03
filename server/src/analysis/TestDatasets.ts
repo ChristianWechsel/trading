@@ -3697,7 +3697,12 @@ const FullAnalysisWithATR: TestDataSource = {
       },
     },
   ],
-  trades: [],
+  trades: [
+    new Trade({
+      entry: { date: '2023-01-06', price: 112 },
+      exit: { date: '2023-01-12', price: 124 },
+    }),
+  ],
 };
 
 function getEnrichedData(params: {
