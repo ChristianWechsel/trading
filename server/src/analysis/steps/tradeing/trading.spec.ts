@@ -40,7 +40,10 @@ describe('Trading', () => {
 
   it('should not create a trade with only a buy signal', () => {
     const buySignal: SignalForTrade = {
-      dataPoint: createTestData.createEnrichedDataPoint({ closePrice: 100 }),
+      dataPoint: createTestData.createEnrichedDataPoint({
+        priceDate: '2023-01-01',
+        closePrice: 100,
+      }),
       reason: 'Upward trend started',
       type: 'buy',
     };
@@ -50,7 +53,7 @@ describe('Trading', () => {
     expect(context.getTrades()).toHaveLength(0);
   });
 
-  it.only('should create a trade from a buy and a subsequent sell signal', () => {
+  it('should create a trade from a buy and a subsequent sell signal', () => {
     const buySignal: SignalForTrade = {
       dataPoint: createTestData.createEnrichedDataPoint({
         priceDate: '2023-01-01',
@@ -79,7 +82,10 @@ describe('Trading', () => {
 
   it('should ignore a sell signal without a preceding buy signal', () => {
     const sellSignal: SignalForTrade = {
-      dataPoint: createTestData.createEnrichedDataPoint({ closePrice: 110 }),
+      dataPoint: createTestData.createEnrichedDataPoint({
+        priceDate: '2023-01-01',
+        closePrice: 110,
+      }),
       reason: 'Upward trend ended',
       type: 'sell',
     };
@@ -91,17 +97,26 @@ describe('Trading', () => {
 
   it('should ignore consecutive buy signals and use the first one', () => {
     const buySignal1: SignalForTrade = {
-      dataPoint: createTestData.createEnrichedDataPoint({ closePrice: 100 }),
+      dataPoint: createTestData.createEnrichedDataPoint({
+        priceDate: '2023-01-01',
+        closePrice: 100,
+      }),
       reason: 'Upward trend started',
       type: 'buy',
     };
     const buySignal2: SignalForTrade = {
-      dataPoint: createTestData.createEnrichedDataPoint({ closePrice: 105 }),
+      dataPoint: createTestData.createEnrichedDataPoint({
+        priceDate: '2023-01-02',
+        closePrice: 105,
+      }),
       reason: 'Upward trend started',
       type: 'buy',
     };
     const sellSignal: SignalForTrade = {
-      dataPoint: createTestData.createEnrichedDataPoint({ closePrice: 110 }),
+      dataPoint: createTestData.createEnrichedDataPoint({
+        priceDate: '2023-01-03',
+        closePrice: 110,
+      }),
       reason: 'Upward trend ended',
       type: 'sell',
     };
@@ -117,22 +132,34 @@ describe('Trading', () => {
 
   it('should handle multiple completed trades', () => {
     const buySignal1: SignalForTrade = {
-      dataPoint: createTestData.createEnrichedDataPoint({ closePrice: 100 }),
+      dataPoint: createTestData.createEnrichedDataPoint({
+        priceDate: '2023-01-01',
+        closePrice: 100,
+      }),
       reason: 'Upward trend started',
       type: 'buy',
     };
     const sellSignal1: SignalForTrade = {
-      dataPoint: createTestData.createEnrichedDataPoint({ closePrice: 110 }),
+      dataPoint: createTestData.createEnrichedDataPoint({
+        priceDate: '2023-01-02',
+        closePrice: 110,
+      }),
       reason: 'Upward trend ended',
       type: 'sell',
     };
     const buySignal2: SignalForTrade = {
-      dataPoint: createTestData.createEnrichedDataPoint({ closePrice: 95 }),
+      dataPoint: createTestData.createEnrichedDataPoint({
+        priceDate: '2023-01-03',
+        closePrice: 95,
+      }),
       reason: 'Upward trend started',
       type: 'buy',
     };
     const sellSignal2: SignalForTrade = {
-      dataPoint: createTestData.createEnrichedDataPoint({ closePrice: 105 }),
+      dataPoint: createTestData.createEnrichedDataPoint({
+        priceDate: '2023-01-04',
+        closePrice: 105,
+      }),
       reason: 'Upward trend ended',
       type: 'sell',
     };
