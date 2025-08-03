@@ -38,7 +38,7 @@ export type Step =
   | 'AverageTrueRange'
   | 'TradingSignal';
 
-export type TradingSignal = {
+export type SignalForTrade = {
   type: 'buy' | 'sell';
   dataPoint: EnrichedDataPoint;
   reason: 'Upward trend started' | 'Upward trend ended';

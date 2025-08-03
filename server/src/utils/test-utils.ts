@@ -12,7 +12,7 @@ export type OHLCVRecord = {
 };
 
 export class CreateTestData {
-  protected createEnrichedDataPoint(
+  public createEnrichedDataPoint(
     ohlcv: Partial<OHLCVEntity>,
   ): EnrichedDataPoint {
     const defaultData: OHLCVEntity = {

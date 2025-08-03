@@ -1,116 +1,162 @@
+import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
+import {
+  SignalForTrade,
+  TrendDataMetadata,
+} from '../../../analysis/core/analysis.interface';
+import { CreateTestData } from '../../../utils/test-utils';
 import { TradingSignal } from './trading-signal';
 
 describe('TradingSignal', () => {
   let tradingSignal: TradingSignal;
-  let context: any;
+  const context: AnalysisContextClass = new AnalysisContextClass(
+    {
+      dataAggregation: { ticker: { exchange: '', symbol: '' } },
+      steps: ['TradingSignal'],
+    },
+    [],
+  );
+  const createTestData = new CreateTestData();
+
+  const spyGetTrends = jest.spyOn(context, 'getTrends');
+  const spyAddTradingSignals = jest.spyOn(context, 'addTradingSignals');
 
   beforeEach(() => {
     tradingSignal = new TradingSignal();
-    context = {
-      getTrends: jest.fn(),
-      addTradingSignals: jest.fn(),
-    };
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should do nothing if getTrends returns undefined', () => {
-    context.getTrends.mockReturnValue(undefined);
+    spyGetTrends.mockReturnValue([]);
     tradingSignal.execute(context);
-    expect(context.addTradingSignals).not.toHaveBeenCalled();
+    expect(spyAddTradingSignals).not.toHaveBeenCalled();
   });
 
   it('should do nothing if getTrends returns empty array', () => {
-    context.getTrends.mockReturnValue([]);
+    spyGetTrends.mockReturnValue([]);
     tradingSignal.execute(context);
-    expect(context.addTradingSignals).not.toHaveBeenCalled();
+    expect(spyAddTradingSignals).not.toHaveBeenCalled();
   });
 
-  it('should add buy and sell signals for upward trend with endPoint', () => {
-    const trend = {
+  it('should add buy and sell signals for upward trend with end', () => {
+    const trend: TrendDataMetadata['trendData'] = {
       type: 'upward',
-      startPoint: { x: 1, y: 2 },
-      endPoint: { x: 3, y: 4 },
+      start: createTestData.createEnrichedDataPoint({
+        priceDate: '1',
+        closePrice: 2,
+      }),
+      end: createTestData.createEnrichedDataPoint({
+        priceDate: '3',
+        closePrice: 4,
+      }),
     };
-    context.getTrends.mockReturnValue([trend]);
+    spyGetTrends.mockReturnValue([trend]);
     tradingSignal.execute(context);
 
-    expect(context.addTradingSignals).toHaveBeenCalledWith({
+    expect(spyAddTradingSignals).toHaveBeenCalledWith<[SignalForTrade]>({
       type: 'buy',
-      dataPoint: trend.startPoint,
+      dataPoint: trend.start,
       reason: 'Upward trend started',
     });
-    expect(context.addTradingSignals).toHaveBeenCalledWith({
+    expect(spyAddTradingSignals).toHaveBeenCalledWith<[SignalForTrade]>({
       type: 'sell',
-      dataPoint: trend.endPoint,
+      dataPoint: trend.end!,
       reason: 'Upward trend ended',
     });
-    expect(context.addTradingSignals).toHaveBeenCalledTimes(2);
+    expect(spyAddTradingSignals).toHaveBeenCalledTimes(2);
   });
 
-  it('should add only buy signal for upward trend without endPoint', () => {
-    const trend = {
+  it('should add only buy signal for upward trend without end', () => {
+    const trend: TrendDataMetadata['trendData'] = {
       type: 'upward',
-      startPoint: { x: 1, y: 2 },
-      endPoint: undefined,
+      start: createTestData.createEnrichedDataPoint({
+        priceDate: '1',
+        closePrice: 2,
+      }),
+      end: undefined,
     };
-    context.getTrends.mockReturnValue([trend]);
+    spyGetTrends.mockReturnValue([trend]);
     tradingSignal.execute(context);
 
-    expect(context.addTradingSignals).toHaveBeenCalledWith({
+    expect(spyAddTradingSignals).toHaveBeenCalledWith({
       type: 'buy',
-      dataPoint: trend.startPoint,
+      dataPoint: trend.start,
       reason: 'Upward trend started',
     });
-    expect(context.addTradingSignals).toHaveBeenCalledTimes(1);
+    expect(spyAddTradingSignals).toHaveBeenCalledTimes(1);
   });
 
   it('should not add signals for non-upward trends', () => {
-    const trend = {
+    const trend: TrendDataMetadata['trendData'] = {
       type: 'downward',
-      startPoint: { x: 1, y: 2 },
-      endPoint: { x: 3, y: 4 },
+      start: createTestData.createEnrichedDataPoint({
+        priceDate: '1',
+        closePrice: 2,
+      }),
+      end: createTestData.createEnrichedDataPoint({
+        priceDate: '3',
+        closePrice: 4,
+      }),
     };
-    context.getTrends.mockReturnValue([trend]);
+    spyGetTrends.mockReturnValue([trend]);
     tradingSignal.execute(context);
 
-    expect(context.addTradingSignals).not.toHaveBeenCalled();
+    expect(spyAddTradingSignals).not.toHaveBeenCalled();
   });
 
   it('should handle multiple trends correctly', () => {
-    const trends = [
+    const trends: TrendDataMetadata['trendData'][] = [
       {
         type: 'upward',
-        startPoint: { x: 1, y: 2 },
-        endPoint: { x: 3, y: 4 },
+        start: createTestData.createEnrichedDataPoint({
+          priceDate: '1',
+          closePrice: 2,
+        }),
+        end: createTestData.createEnrichedDataPoint({
+          priceDate: '3',
+          closePrice: 4,
+        }),
       },
       {
         type: 'downward',
-        startPoint: { x: 5, y: 6 },
-        endPoint: { x: 7, y: 8 },
+        start: createTestData.createEnrichedDataPoint({
+          priceDate: '5',
+          closePrice: 6,
+        }),
+        end: createTestData.createEnrichedDataPoint({
+          priceDate: '7',
+          closePrice: 8,
+        }),
       },
       {
         type: 'upward',
-        startPoint: { x: 9, y: 10 },
-        endPoint: undefined,
+        start: createTestData.createEnrichedDataPoint({
+          priceDate: '9',
+          closePrice: 10,
+        }),
+        end: undefined,
       },
     ];
-    context.getTrends.mockReturnValue(trends);
+    spyGetTrends.mockReturnValue(trends);
     tradingSignal.execute(context);
 
-    expect(context.addTradingSignals).toHaveBeenCalledWith({
+    expect(spyAddTradingSignals).toHaveBeenCalledWith<[SignalForTrade]>({
       type: 'buy',
-      dataPoint: trends[0].startPoint,
+      dataPoint: trends[0].start,
       reason: 'Upward trend started',
     });
-    expect(context.addTradingSignals).toHaveBeenCalledWith({
+    expect(spyAddTradingSignals).toHaveBeenCalledWith<[SignalForTrade]>({
       type: 'sell',
-      dataPoint: trends[0].endPoint,
+      dataPoint: trends[0].end!,
       reason: 'Upward trend ended',
     });
-    expect(context.addTradingSignals).toHaveBeenCalledWith({
+    expect(spyAddTradingSignals).toHaveBeenCalledWith<[SignalForTrade]>({
       type: 'buy',
-      dataPoint: trends[2].startPoint,
+      dataPoint: trends[2].start,
       reason: 'Upward trend started',
     });
-    expect(context.addTradingSignals).toHaveBeenCalledTimes(3);
+    expect(spyAddTradingSignals).toHaveBeenCalledTimes(3);
   });
 });
