@@ -1,5 +1,7 @@
 # ToDo List
 
+# Trenderkennung muss auch Punkte liefern: Trendbestätigung und Warnung Trendbruch
+
 # TradingCharts
 
 - Auswahl der Charts Linien oder Candlestick
