@@ -10,6 +10,7 @@ import { TrendDetectionStateMachine } from './trend-detection-state-machine';
 import {
   DownwardTrendConfirmed,
   DownwardTrendWarning,
+  State,
   TrendBroken,
   UpwardTrendConfirmed,
   UpwardTrendWarning,
@@ -78,19 +79,7 @@ export class TrendDetection implements AnalysisStep {
 
     const stateMachine = new TrendDetectionStateMachine(
       ({ newState, oldState, memory }) => {
-        // Erste Trendbestätigung
-        if (
-          (newState instanceof UpwardTrendConfirmed &&
-            !(
-              oldState instanceof UpwardTrendWarning ||
-              oldState instanceof UpwardTrendConfirmed
-            )) ||
-          (newState instanceof DownwardTrendConfirmed &&
-            !(
-              oldState instanceof DownwardTrendWarning ||
-              oldState instanceof DownwardTrendConfirmed
-            ))
-        ) {
+        if (this.isTrendConfirmed(newState, oldState)) {
           const trendDefiningPoints = memory.getLatest(3);
           const start =
             trendDefiningPoints[0].swingPoint.point.enrichedDataPoint;
@@ -107,13 +96,7 @@ export class TrendDetection implements AnalysisStep {
             },
             metaddata: { statusTrend: 'ongoing' },
           });
-        } else if (
-          // erste Warnung stellt potenzielles Ende des Trends dar
-          (newState instanceof UpwardTrendWarning ||
-            newState instanceof DownwardTrendWarning) &&
-          (oldState instanceof UpwardTrendConfirmed ||
-            oldState instanceof DownwardTrendConfirmed)
-        ) {
+        } else if (this.isTrendWarningTriggered(newState, oldState)) {
           const lastTrend = trends[trends.length - 1];
           const [pointBeforeWarning, warningPoint] = memory.getLatest(2);
           lastTrend.trendData.end =
@@ -127,25 +110,14 @@ export class TrendDetection implements AnalysisStep {
               warningPoint.swingPoint.point.enrichedDataPoint,
             ];
           }
-        } else if (
-          // Warnung hat sich nicht bestätigt, Trend geht weiter.
-          (newState instanceof UpwardTrendConfirmed ||
-            newState instanceof DownwardTrendConfirmed) &&
-          (oldState instanceof UpwardTrendWarning ||
-            oldState instanceof DownwardTrendWarning)
-        ) {
+        } else if (this.isTrendWarningCleared(newState, oldState)) {
           const lastTrend = trends[trends.length - 1];
           const currentPoint = memory.getLast();
           if (currentPoint) {
             lastTrend.trendData.end =
               currentPoint.swingPoint.point.enrichedDataPoint; // Ende wird auf aktuellen Punkt gesetzt
           }
-        } else if (
-          // Trendbruch eingetreten
-          newState instanceof TrendBroken &&
-          (oldState instanceof UpwardTrendWarning ||
-            oldState instanceof DownwardTrendWarning)
-        ) {
+        } else if (this.isTrendBroken(newState, oldState)) {
           const lastTrend = trends[trends.length - 1];
           lastTrend.metaddata.statusTrend = 'finished';
         }
@@ -163,5 +135,49 @@ export class TrendDetection implements AnalysisStep {
     }
 
     return trends;
+  }
+
+  private isTrendConfirmed(newState: State, oldState: State | undefined) {
+    return (
+      (newState instanceof UpwardTrendConfirmed &&
+        !(
+          oldState instanceof UpwardTrendWarning ||
+          oldState instanceof UpwardTrendConfirmed
+        )) ||
+      (newState instanceof DownwardTrendConfirmed &&
+        !(
+          oldState instanceof DownwardTrendWarning ||
+          oldState instanceof DownwardTrendConfirmed
+        ))
+    );
+  }
+
+  private isTrendWarningTriggered(
+    newState: State,
+    oldState: State | undefined,
+  ) {
+    return (
+      (newState instanceof UpwardTrendWarning ||
+        newState instanceof DownwardTrendWarning) &&
+      (oldState instanceof UpwardTrendConfirmed ||
+        oldState instanceof DownwardTrendConfirmed)
+    );
+  }
+
+  private isTrendWarningCleared(newState: State, oldState: State | undefined) {
+    return (
+      (newState instanceof UpwardTrendConfirmed ||
+        newState instanceof DownwardTrendConfirmed) &&
+      (oldState instanceof UpwardTrendWarning ||
+        oldState instanceof DownwardTrendWarning)
+    );
+  }
+
+  private isTrendBroken(newState: State, oldState: State | undefined) {
+    return (
+      newState instanceof TrendBroken &&
+      (oldState instanceof UpwardTrendWarning ||
+        oldState instanceof DownwardTrendWarning)
+    );
   }
 }
