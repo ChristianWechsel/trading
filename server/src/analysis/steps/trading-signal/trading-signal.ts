@@ -11,9 +11,11 @@ export class TradingSignal implements AnalysisStep {
 
     for (const trend of trends) {
       if (trend.type === 'upward') {
+        // Kaufsignal für den Tag der Trendbestätigung
+        const buySignalDataPoint = trend.confirmation || trend.start;
         context.addTradingSignals({
           type: 'buy',
-          dataPoint: trend.start,
+          dataPoint: buySignalDataPoint,
           reason: 'Upward trend started',
         });
 

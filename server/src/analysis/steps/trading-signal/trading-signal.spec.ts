@@ -40,7 +40,39 @@ describe('TradingSignal', () => {
     expect(spyAddTradingSignals).not.toHaveBeenCalled();
   });
 
-  it('should add buy and sell signals for upward trend with end', () => {
+  it('should add buy signal at confirmation point and sell signal for upward trend with end', () => {
+    const trend: TrendDataMetadata['trendData'] = {
+      type: 'upward',
+      start: createTestData.createEnrichedDataPoint({
+        priceDate: '1',
+        closePrice: 2,
+      }),
+      confirmation: createTestData.createEnrichedDataPoint({
+        priceDate: '2',
+        closePrice: 3,
+      }),
+      end: createTestData.createEnrichedDataPoint({
+        priceDate: '4',
+        closePrice: 5,
+      }),
+    };
+    spyGetTrends.mockReturnValue([trend]);
+    tradingSignal.execute(context);
+
+    expect(spyAddTradingSignals).toHaveBeenCalledWith<[SignalForTrade]>({
+      type: 'buy',
+      dataPoint: trend.confirmation!,
+      reason: 'Upward trend started',
+    });
+    expect(spyAddTradingSignals).toHaveBeenCalledWith<[SignalForTrade]>({
+      type: 'sell',
+      dataPoint: trend.end!,
+      reason: 'Upward trend ended',
+    });
+    expect(spyAddTradingSignals).toHaveBeenCalledTimes(2);
+  });
+
+  it('should add buy signal at start point when no confirmation point exists', () => {
     const trend: TrendDataMetadata['trendData'] = {
       type: 'upward',
       start: createTestData.createEnrichedDataPoint({
@@ -68,12 +100,16 @@ describe('TradingSignal', () => {
     expect(spyAddTradingSignals).toHaveBeenCalledTimes(2);
   });
 
-  it('should add only buy signal for upward trend without end', () => {
+  it('should add only buy signal at confirmation point for upward trend without end', () => {
     const trend: TrendDataMetadata['trendData'] = {
       type: 'upward',
       start: createTestData.createEnrichedDataPoint({
         priceDate: '1',
         closePrice: 2,
+      }),
+      confirmation: createTestData.createEnrichedDataPoint({
+        priceDate: '2',
+        closePrice: 3,
       }),
       end: undefined,
     };
@@ -82,7 +118,7 @@ describe('TradingSignal', () => {
 
     expect(spyAddTradingSignals).toHaveBeenCalledWith({
       type: 'buy',
-      dataPoint: trend.start,
+      dataPoint: trend.confirmation!,
       reason: 'Upward trend started',
     });
     expect(spyAddTradingSignals).toHaveBeenCalledTimes(1);
@@ -114,6 +150,10 @@ describe('TradingSignal', () => {
           priceDate: '1',
           closePrice: 2,
         }),
+        confirmation: createTestData.createEnrichedDataPoint({
+          priceDate: '2',
+          closePrice: 2.5,
+        }),
         end: createTestData.createEnrichedDataPoint({
           priceDate: '3',
           closePrice: 4,
@@ -136,6 +176,10 @@ describe('TradingSignal', () => {
           priceDate: '9',
           closePrice: 10,
         }),
+        confirmation: createTestData.createEnrichedDataPoint({
+          priceDate: '10',
+          closePrice: 11,
+        }),
         end: undefined,
       },
     ];
@@ -144,7 +188,7 @@ describe('TradingSignal', () => {
 
     expect(spyAddTradingSignals).toHaveBeenCalledWith<[SignalForTrade]>({
       type: 'buy',
-      dataPoint: trends[0].start,
+      dataPoint: trends[0].confirmation!,
       reason: 'Upward trend started',
     });
     expect(spyAddTradingSignals).toHaveBeenCalledWith<[SignalForTrade]>({
@@ -154,7 +198,7 @@ describe('TradingSignal', () => {
     });
     expect(spyAddTradingSignals).toHaveBeenCalledWith<[SignalForTrade]>({
       type: 'buy',
-      dataPoint: trends[2].start,
+      dataPoint: trends[2].confirmation!,
       reason: 'Upward trend started',
     });
     expect(spyAddTradingSignals).toHaveBeenCalledTimes(3);
