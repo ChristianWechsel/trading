@@ -1,5 +1,5 @@
-import { AnalysisContextClass } from 'src/analysis/core/analysis-context';
-import { AnalysisStep, Step } from 'src/analysis/core/analysis.interface';
+import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
+import { AnalysisStep, Step } from '../../../analysis/core/analysis.interface';
 
 export class TradingSignal implements AnalysisStep {
   dependsOn: Step[] = ['TrendDetection'];

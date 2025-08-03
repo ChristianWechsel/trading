@@ -2,6 +2,8 @@
 
 # Trenderkennung muss auch Punkte liefern: Trendbestätigung und Warnung Trendbruch
 
+# Int Test für alle Steps erweitern. um trading-signal
+
 # TradingCharts
 
 - Auswahl der Charts Linien oder Candlestick

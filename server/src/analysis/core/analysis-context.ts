@@ -11,6 +11,7 @@ import {
 } from './analysis-options';
 import { SignalForTrade, Step, TrendDataMetadata } from './analysis.interface';
 import { EnrichedDataPoint } from './enriched-data-point';
+import { Trade } from './trade';
 
 export type YValueAccessor = (dataPoint: EnrichedDataPoint) => number;
 
@@ -19,6 +20,7 @@ export class AnalysisContextClass {
   private enrichedDataPoints: EnrichedDataPoint[];
   private trends: TrendDataMetadata['trendData'][];
   private tradingSignals: SignalForTrade[];
+  private trades: Trade[];
 
   private defaults: {
     relativeThreshold: number;
@@ -64,6 +66,7 @@ export class AnalysisContextClass {
       .map((ohlcv) => new EnrichedDataPoint(ohlcv));
     this.trends = [];
     this.tradingSignals = [];
+    this.trades = [];
   }
 
   getOptions(): Options {
@@ -88,6 +91,14 @@ export class AnalysisContextClass {
 
   getTradingSignals(): SignalForTrade[] {
     return this.tradingSignals;
+  }
+
+  addTrade(trade: Trade): void {
+    this.trades.push(trade);
+  }
+
+  getTrades(): Trade[] {
+    return this.trades;
   }
 
   buildYValueAccessor(): YValueAccessor {

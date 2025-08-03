@@ -36,7 +36,8 @@ export type Step =
   | 'TrendChannelCalculation'
   | 'TrendDetection'
   | 'AverageTrueRange'
-  | 'TradingSignal';
+  | 'TradingSignal'
+  | 'Trading';
 
 export type SignalForTrade = {
   type: 'buy' | 'sell';
