@@ -3656,6 +3656,35 @@ const FullAnalysisWithATR: TestDataSource = {
           volume: 1000,
         }),
       }),
+      end: getEnrichedData({
+        atr: 6.8798828125,
+        dataPoint: new OHLCV({
+          adjustedClosePrice: 119,
+          closePrice: 119,
+          highPrice: 124,
+          lowPrice: 118,
+          openPrice: 124,
+          priceDate: '2023-01-12',
+          securityId: 1,
+          volume: 1000,
+        }),
+      }),
+      warnings: [
+        getEnrichedData({
+          atr: 7.759765625,
+          swingPointType: 'swingHigh',
+          dataPoint: new OHLCV({
+            adjustedClosePrice: 124,
+            closePrice: 124,
+            highPrice: 125,
+            lowPrice: 116,
+            openPrice: 116,
+            priceDate: '2023-01-11',
+            securityId: 1,
+            volume: 1000,
+          }),
+        }),
+      ],
       channel: {
         returnLine: {
           slope: 1.1574074074074074e-8,
