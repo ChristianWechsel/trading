@@ -1,12 +1,16 @@
 import { OHLCV } from '../data-aggregation/ohlcv.entity';
 import { AnalysisQueryDto } from './analysis-query.dto';
+import { TrendDataMetadata } from './core/analysis.interface';
 import { EnrichedDataPoint } from './core/enriched-data-point';
+import { Trade } from './core/trade';
 import { TestDatasets } from './TestDatasets';
 
 export type TestData = {
   dto: AnalysisQueryDto;
   data: OHLCV[];
   expected: EnrichedDataPoint[];
+  expectedTrends?: TrendDataMetadata['trendData'][];
+  expectedTrades?: Trade[];
 };
 
 export class AnalysisIntTestData {
@@ -182,6 +186,32 @@ export class AnalysisIntTestData {
         },
       },
       ...this.testDatasets.getYValueSourceLow(),
+    };
+  }
+
+  getFullAnalysisWithATR(): TestData {
+    const dataset = this.testDatasets.getFullAnalysisWithATRData();
+    return {
+      dto: {
+        dataAggregation: {
+          ticker: {
+            symbol: 'MCD',
+            exchange: 'US',
+          },
+          range: {
+            from: '2023-01-01',
+            to: '2023-01-05',
+          },
+        },
+        steps: ['TrendChannelCalculation', 'TradingSignal'],
+        stepOptions: {
+          swingPointDetection: { atrFactor: 0.5 },
+          trendDetection: { atrFactor: 0.5 },
+          averageTrueRange: { period: 2 },
+          yValueSource: 'high',
+        },
+      },
+      ...dataset,
     };
   }
 }

@@ -222,4 +222,48 @@ describe('Analysis (Integration)', () => {
 
     expect(resultDataPoints).toEqual(expectedDataPoints);
   });
+
+  it('should perform a full analysis with all steps using ATR', async () => {
+    const testData = analysisIntTestData.getFullAnalysisWithATR();
+    const mockDataAggregationService: IDataAggregationService = {
+      loadAndUpdateIfNeeded: () => Promise.resolve(testData.data),
+      importAndSaveData: jest.fn(),
+      loadData: jest.fn(),
+    };
+    const moduleRef = await Test.createTestingModule({
+      controllers: [AnalysisController],
+      providers: [
+        AnalysisService,
+        {
+          provide: DataAggregationService,
+          useValue: mockDataAggregationService,
+        },
+      ],
+    }).compile();
+
+    controller = moduleRef.get<AnalysisController>(AnalysisController);
+
+    const result = await controller.performAnalysis(testData.dto);
+
+    const resultDataPoints = result.getEnrichedDataPoints().map((r) => ({
+      dataPoint: r.getDataPoint(),
+      swingPointType: r.getSwingPointType(),
+      averageTrueRange: r.getAverageTrueRange(),
+    }));
+    const expectedDataPoints = testData.expected.map((e) => ({
+      dataPoint: e.getDataPoint(),
+      swingPointType: e.getSwingPointType(),
+      averageTrueRange: e.getAverageTrueRange(),
+    }));
+
+    const actualTrends = result.getTrends();
+    const expectedTrends = testData.expectedTrends || [];
+
+    const actualTrades = result.getTrades();
+    const expectedTrades = testData.expectedTrades || [];
+
+    expect(resultDataPoints).toEqual(expectedDataPoints);
+    expect(actualTrends).toEqual(expectedTrends);
+    expect(actualTrades).toEqual(expectedTrades);
+  });
 });
