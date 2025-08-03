@@ -92,14 +92,18 @@ export class TrendDetection implements AnalysisStep {
             ))
         ) {
           const trendDefiningPoints = memory.getLatest(3);
+          const start =
+            trendDefiningPoints[0].swingPoint.point.enrichedDataPoint;
+          const end = trendDefiningPoints[2].swingPoint.point.enrichedDataPoint;
           trends.push({
             trendData: {
               type:
                 newState instanceof UpwardTrendConfirmed
                   ? 'upward'
                   : 'downward',
-              start: trendDefiningPoints[0].swingPoint.point.enrichedDataPoint,
-              end: trendDefiningPoints[2].swingPoint.point.enrichedDataPoint,
+              start,
+              end,
+              confirmation: end,
             },
             metaddata: { statusTrend: 'ongoing' },
           });
@@ -111,9 +115,18 @@ export class TrendDetection implements AnalysisStep {
             oldState instanceof DownwardTrendConfirmed)
         ) {
           const lastTrend = trends[trends.length - 1];
-          const [pointBeforeWarning] = memory.getLatest(2);
+          const [pointBeforeWarning, warningPoint] = memory.getLatest(2);
           lastTrend.trendData.end =
             pointBeforeWarning.swingPoint.point.enrichedDataPoint; // Ende wird auf letzten Punkt vor Warnung gesetzt
+          if (Array.isArray(lastTrend.trendData.warnings)) {
+            lastTrend.trendData.warnings?.push(
+              warningPoint.swingPoint.point.enrichedDataPoint,
+            );
+          } else {
+            lastTrend.trendData.warnings = [
+              warningPoint.swingPoint.point.enrichedDataPoint,
+            ];
+          }
         } else if (
           // Warnung hat sich nicht bestätigt, Trend geht weiter.
           (newState instanceof UpwardTrendConfirmed ||

@@ -196,6 +196,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             type: 'upward',
             start: this.createEnrichedDataPointOf(startPoint),
             end: this.createEnrichedDataPointOf(endPoint),
+            confirmation: this.createEnrichedDataPointOf(endPoint),
           },
         ],
         context,
@@ -235,6 +236,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             type: 'downward',
             start: this.createEnrichedDataPointOf(startPoint),
             end: this.createEnrichedDataPointOf(endPoint),
+            confirmation: this.createEnrichedDataPointOf(endPoint),
           },
         ],
         context,
@@ -375,6 +377,10 @@ export class TrendDetectionTestdata extends CreateTestData {
       ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 1 }),
       swingPointType: 'swingLow',
     };
+    const confirmationPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 3 }),
+      swingPointType: 'swingLow',
+    };
     const endPoint: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '7', closePrice: 7 }),
     };
@@ -385,10 +391,7 @@ export class TrendDetectionTestdata extends CreateTestData {
           ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 2 }),
           swingPointType: 'swingHigh',
         },
-        {
-          ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 3 }),
-          swingPointType: 'swingLow',
-        },
+        confirmationPoint,
         {
           ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 4 }),
         },
@@ -414,6 +417,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             type: 'upward',
             start: this.createEnrichedDataPointOf(startPoint),
             end: this.createEnrichedDataPointOf(endPoint),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint),
           },
         ],
         context,
@@ -427,6 +431,10 @@ export class TrendDetectionTestdata extends CreateTestData {
       ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 7 }),
       swingPointType: 'swingHigh',
     };
+    const confirmationPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 5 }),
+      swingPointType: 'swingHigh',
+    };
     const endPoint: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '7', closePrice: 1 }),
     };
@@ -437,10 +445,7 @@ export class TrendDetectionTestdata extends CreateTestData {
           ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 6 }),
           swingPointType: 'swingLow',
         },
-        {
-          ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 5 }),
-          swingPointType: 'swingHigh',
-        },
+        confirmationPoint,
         {
           ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 4 }),
         },
@@ -466,6 +471,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             type: 'downward',
             start: this.createEnrichedDataPointOf(startPoint),
             end: this.createEnrichedDataPointOf(endPoint),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint),
           },
         ],
         context,
@@ -479,6 +485,10 @@ export class TrendDetectionTestdata extends CreateTestData {
       ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 1 }),
       swingPointType: 'swingLow',
     };
+    const confirmationPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 3 }),
+      swingPointType: 'swingLow',
+    };
     const endPoint: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 5 }),
       swingPointType: 'swingHigh',
@@ -490,10 +500,7 @@ export class TrendDetectionTestdata extends CreateTestData {
           ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 2 }),
           swingPointType: 'swingHigh',
         },
-        {
-          ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 3 }),
-          swingPointType: 'swingLow',
-        },
+        confirmationPoint,
         {
           ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 4 }),
           swingPointType: 'swingHigh',
@@ -518,6 +525,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             type: 'upward',
             start: this.createEnrichedDataPointOf(startPoint),
             end: this.createEnrichedDataPointOf(endPoint),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint),
           },
         ],
         context,
@@ -531,9 +539,17 @@ export class TrendDetectionTestdata extends CreateTestData {
       ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 1 }),
       swingPointType: 'swingLow',
     };
+    const confirmationPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 2 }),
+      swingPointType: 'swingLow',
+    };
     const endPoint: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 4 }),
       swingPointType: 'swingHigh',
+    };
+    const warningPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 1 }),
+      swingPointType: 'swingLow',
     };
     const context = this.createContext(
       [
@@ -542,15 +558,9 @@ export class TrendDetectionTestdata extends CreateTestData {
           ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 3 }),
           swingPointType: 'swingHigh',
         },
-        {
-          ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 2 }),
-          swingPointType: 'swingLow',
-        }, // Confirmed Up
+        confirmationPoint, // Confirmed Up
         endPoint, // Continuation (Peak)
-        {
-          ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 1 }),
-          swingPointType: 'swingLow',
-        }, // WARNING: tieferes Tief
+        warningPoint, // WARNING: tieferes Tief
         {
           ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 3 }),
           swingPointType: 'swingHigh',
@@ -570,6 +580,8 @@ export class TrendDetectionTestdata extends CreateTestData {
             type: 'upward',
             start: this.createEnrichedDataPointOf(startPoint),
             end: this.createEnrichedDataPointOf(endPoint),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint),
+            warnings: [this.createEnrichedDataPointOf(warningPoint)],
           },
         ],
         context,
@@ -583,6 +595,10 @@ export class TrendDetectionTestdata extends CreateTestData {
       ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 7 }),
       swingPointType: 'swingHigh',
     };
+    const confirmationPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 5 }),
+      swingPointType: 'swingHigh',
+    };
     const endPoint: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 2 }),
       swingPointType: 'swingLow',
@@ -594,10 +610,7 @@ export class TrendDetectionTestdata extends CreateTestData {
           ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 6 }),
           swingPointType: 'swingLow',
         },
-        {
-          ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 5 }),
-          swingPointType: 'swingHigh',
-        },
+        confirmationPoint,
         {
           ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 4 }),
           swingPointType: 'swingLow',
@@ -622,6 +635,7 @@ export class TrendDetectionTestdata extends CreateTestData {
             type: 'downward',
             start: this.createEnrichedDataPointOf(startPoint),
             end: this.createEnrichedDataPointOf(endPoint),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint),
           },
         ],
         context,
@@ -635,9 +649,17 @@ export class TrendDetectionTestdata extends CreateTestData {
       ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 7 }),
       swingPointType: 'swingHigh',
     };
+    const confirmationPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 6 }),
+      swingPointType: 'swingHigh',
+    };
     const endPoint: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 1 }),
       swingPointType: 'swingLow',
+    };
+    const warningPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 8 }),
+      swingPointType: 'swingHigh',
     };
     const context = this.createContext(
       [
@@ -646,15 +668,9 @@ export class TrendDetectionTestdata extends CreateTestData {
           ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 2 }),
           swingPointType: 'swingLow',
         },
-        {
-          ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 6 }),
-          swingPointType: 'swingHigh',
-        }, // Confirmed Down
+        confirmationPoint, // Confirmed Down
         endPoint, // Continuation (Talsohle)
-        {
-          ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 8 }),
-          swingPointType: 'swingHigh',
-        }, // WARNING: höheres Hoch
+        warningPoint, // WARNING: höheres Hoch
         {
           ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 3 }),
           swingPointType: 'swingLow',
@@ -674,6 +690,8 @@ export class TrendDetectionTestdata extends CreateTestData {
             type: 'downward',
             start: this.createEnrichedDataPointOf(startPoint),
             end: this.createEnrichedDataPointOf(endPoint),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint),
+            warnings: [this.createEnrichedDataPointOf(warningPoint)],
           },
         ],
         context,
@@ -689,6 +707,14 @@ export class TrendDetectionTestdata extends CreateTestData {
       ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 10 }),
       swingPointType: 'swingLow',
     };
+    const confirmationPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 12 }),
+      swingPointType: 'swingLow',
+    };
+    const warningPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 11 }),
+      swingPointType: 'swingLow',
+    };
     const endPoint: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '7', closePrice: 15 }),
       swingPointType: 'swingLow',
@@ -700,18 +726,12 @@ export class TrendDetectionTestdata extends CreateTestData {
           ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 20 }),
           swingPointType: 'swingHigh',
         },
-        {
-          ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 12 }),
-          swingPointType: 'swingLow',
-        },
+        confirmationPoint,
         {
           ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 22 }),
           swingPointType: 'swingHigh',
         },
-        {
-          ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 11 }),
-          swingPointType: 'swingLow',
-        }, // WARNING: tieferes Tief
+        warningPoint, // WARNING: tieferes Tief
         {
           ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 25 }),
           swingPointType: 'swingHigh',
@@ -732,6 +752,8 @@ export class TrendDetectionTestdata extends CreateTestData {
             type: 'upward',
             start: this.createEnrichedDataPointOf(startPoint),
             end: this.createEnrichedDataPointOf(endPoint),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint),
+            warnings: [this.createEnrichedDataPointOf(warningPoint)],
           },
         ],
         context,
@@ -749,9 +771,17 @@ export class TrendDetectionTestdata extends CreateTestData {
       ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 20 }),
       swingPointType: 'swingHigh',
     };
+    const confirmationPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 18 }),
+      swingPointType: 'swingHigh',
+    };
     const endPoint: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 8 }),
       swingPointType: 'swingLow',
+    };
+    const warningPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 19 }),
+      swingPointType: 'swingHigh',
     };
     const context = this.createContext(
       [
@@ -760,15 +790,9 @@ export class TrendDetectionTestdata extends CreateTestData {
           ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 10 }),
           swingPointType: 'swingLow',
         },
-        {
-          ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 18 }),
-          swingPointType: 'swingHigh',
-        }, // Confirmed
+        confirmationPoint, // Confirmed
         endPoint, // Continuation (Talsohle)
-        {
-          ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 19 }),
-          swingPointType: 'swingHigh',
-        }, // WARNING: höheres Hoch
+        warningPoint, // WARNING: höheres Hoch
         {
           ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 9 }),
           swingPointType: 'swingLow',
@@ -788,6 +812,8 @@ export class TrendDetectionTestdata extends CreateTestData {
             type: 'downward',
             start: this.createEnrichedDataPointOf(startPoint),
             end: this.createEnrichedDataPointOf(endPoint),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint),
+            warnings: [this.createEnrichedDataPointOf(warningPoint)],
           },
         ],
         context,
@@ -803,6 +829,14 @@ export class TrendDetectionTestdata extends CreateTestData {
       ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 20 }),
       swingPointType: 'swingHigh',
     };
+    const confirmationPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 18 }),
+      swingPointType: 'swingHigh',
+    };
+    const warningPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 19 }),
+      swingPointType: 'swingHigh',
+    };
     const endPoint: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '7', closePrice: 15 }),
       swingPointType: 'swingHigh',
@@ -814,18 +848,12 @@ export class TrendDetectionTestdata extends CreateTestData {
           ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 10 }),
           swingPointType: 'swingLow',
         },
-        {
-          ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 18 }),
-          swingPointType: 'swingHigh',
-        },
+        confirmationPoint,
         {
           ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 8 }),
           swingPointType: 'swingLow',
         },
-        {
-          ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 19 }),
-          swingPointType: 'swingHigh',
-        }, // WARNING: höheres Hoch
+        warningPoint, // WARNING: höheres Hoch
         {
           ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 5 }),
           swingPointType: 'swingLow',
@@ -846,6 +874,8 @@ export class TrendDetectionTestdata extends CreateTestData {
             type: 'downward',
             start: this.createEnrichedDataPointOf(startPoint),
             end: this.createEnrichedDataPointOf(endPoint),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint),
+            warnings: [this.createEnrichedDataPointOf(warningPoint)],
           },
         ],
         context,
@@ -857,12 +887,20 @@ export class TrendDetectionTestdata extends CreateTestData {
    * Ein sauberer Aufwärtstrend wird von einem sauberen Abwärtstrend gefolgt.
    */
   upwardTrendFollowedByDownwardTrend(): TrendTestCase {
-    const startPoint: OHLCVRecord = {
+    const startPoint1: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 10 }),
+      swingPointType: 'swingLow',
+    };
+    const confirmationPoint1: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 12 }),
       swingPointType: 'swingLow',
     };
     const swingPoint: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 22 }),
+      swingPointType: 'swingHigh',
+    };
+    const confirmationPoint2: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 18 }),
       swingPointType: 'swingHigh',
     };
     const endPoint: OHLCVRecord = {
@@ -871,24 +909,18 @@ export class TrendDetectionTestdata extends CreateTestData {
     };
     const context = this.createContext(
       [
-        startPoint,
+        startPoint1,
         {
           ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 20 }),
           swingPointType: 'swingHigh',
         },
-        {
-          ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 12 }),
-          swingPointType: 'swingLow',
-        },
+        confirmationPoint1,
         swingPoint,
         {
           ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 11 }),
           swingPointType: 'swingLow',
         },
-        {
-          ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 18 }),
-          swingPointType: 'swingHigh',
-        },
+        confirmationPoint2,
         endPoint,
       ],
       {
@@ -903,13 +935,15 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'upward',
-            start: this.createEnrichedDataPointOf(startPoint),
+            start: this.createEnrichedDataPointOf(startPoint1),
             end: this.createEnrichedDataPointOf(swingPoint),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint1),
           },
           {
             type: 'downward',
             start: this.createEnrichedDataPointOf(swingPoint),
             end: this.createEnrichedDataPointOf(endPoint),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint2),
           },
         ],
         context,
@@ -921,12 +955,20 @@ export class TrendDetectionTestdata extends CreateTestData {
    * Ein sauberer Abwärtstrend wird von einem sauberen Aufwärtstrend gefolgt.
    */
   downwardTrendFollowedByUpwardTrend(): TrendTestCase {
-    const startPoint: OHLCVRecord = {
+    const startPoint1: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 30 }),
+      swingPointType: 'swingHigh',
+    };
+    const confirmationPoint1: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 28 }),
       swingPointType: 'swingHigh',
     };
     const swingPoint: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 18 }),
+      swingPointType: 'swingLow',
+    };
+    const confirmationPoint2: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 21 }),
       swingPointType: 'swingLow',
     };
     const endPoint: OHLCVRecord = {
@@ -935,24 +977,18 @@ export class TrendDetectionTestdata extends CreateTestData {
     };
     const context = this.createContext(
       [
-        startPoint,
+        startPoint1,
         {
           ohlcv: this.createOHLCV({ priceDate: '2', closePrice: 20 }),
           swingPointType: 'swingLow',
         },
-        {
-          ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 28 }),
-          swingPointType: 'swingHigh',
-        },
+        confirmationPoint1,
         swingPoint,
         {
           ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 29 }),
           swingPointType: 'swingHigh',
         },
-        {
-          ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 21 }),
-          swingPointType: 'swingLow',
-        },
+        confirmationPoint2,
         endPoint,
       ],
       {
@@ -967,13 +1003,15 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'downward',
-            start: this.createEnrichedDataPointOf(startPoint),
+            start: this.createEnrichedDataPointOf(startPoint1),
             end: this.createEnrichedDataPointOf(swingPoint),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint1),
           },
           {
             type: 'upward',
             start: this.createEnrichedDataPointOf(swingPoint),
             end: this.createEnrichedDataPointOf(endPoint),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint2),
           },
         ],
         context,
@@ -991,12 +1029,20 @@ export class TrendDetectionTestdata extends CreateTestData {
       ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 10 }),
       swingPointType: 'swingLow',
     };
+    const confirmationPoint1: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 12 }),
+      swingPointType: 'swingLow',
+    };
     const endPoint1: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 12 }),
       swingPointType: 'swingLow',
     };
     const startPoint2: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 16 }),
+      swingPointType: 'swingHigh',
+    };
+    const confirmationPoint2: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '8', closePrice: 14 }),
       swingPointType: 'swingHigh',
     };
     const endPoint2: OHLCVRecord = {
@@ -1045,11 +1091,13 @@ export class TrendDetectionTestdata extends CreateTestData {
             type: 'upward',
             start: this.createEnrichedDataPointOf(startPoint1),
             end: this.createEnrichedDataPointOf(endPoint1),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint1),
           },
           {
             type: 'downward',
             start: this.createEnrichedDataPointOf(startPoint2),
             end: this.createEnrichedDataPointOf(endPoint2),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint2),
           },
         ],
         context,
@@ -1066,12 +1114,24 @@ export class TrendDetectionTestdata extends CreateTestData {
       ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 10 }),
       swingPointType: 'swingLow',
     };
+    const confirmationPoint1: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 12 }),
+      swingPointType: 'swingLow',
+    };
     const endPoint1: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 12 }),
       swingPointType: 'swingLow',
     };
+    const warningPoint1: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 11 }),
+      swingPointType: 'swingHigh',
+    };
     const startPoint2: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '10', closePrice: 25 }),
+      swingPointType: 'swingHigh',
+    };
+    const confirmationPoint2: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '12', closePrice: 22 }),
       swingPointType: 'swingHigh',
     };
     const endPoint2: OHLCVRecord = {
@@ -1088,10 +1148,7 @@ export class TrendDetectionTestdata extends CreateTestData {
         },
         endPoint1, // Confirmed Up, Peak
         // 2. Bruch des Aufwärtstrends
-        {
-          ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 11 }),
-          swingPointType: 'swingHigh',
-        }, // Warning
+        warningPoint1, // Warning
         {
           ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 8 }),
           swingPointType: 'swingLow',
@@ -1137,11 +1194,13 @@ export class TrendDetectionTestdata extends CreateTestData {
             type: 'upward',
             start: this.createEnrichedDataPointOf(startPoint1),
             end: this.createEnrichedDataPointOf(endPoint1),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint1),
           },
           {
             type: 'downward',
             start: this.createEnrichedDataPointOf(startPoint2),
             end: this.createEnrichedDataPointOf(endPoint2),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint2),
           },
         ],
         context,
@@ -1231,9 +1290,17 @@ export class TrendDetectionTestdata extends CreateTestData {
       ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 100 }),
       swingPointType: 'swingLow',
     };
+    const confirmationPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 105 }),
+      swingPointType: 'swingLow',
+    };
     const endPoint: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 108 }),
       swingPointType: 'swingLow',
+    };
+    const warningPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 116 }),
+      swingPointType: 'swingHigh',
     };
     const context = this.createContext(
       [
@@ -1243,18 +1310,10 @@ export class TrendDetectionTestdata extends CreateTestData {
           swingPointType: 'swingHigh',
         },
         {
-          ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 105 }),
-          swingPointType: 'swingLow',
-        }, // Confirmed
-        {
           ohlcv: this.createOHLCV({ priceDate: '4', closePrice: 115 }),
           swingPointType: 'swingHigh',
         }, // Continuation, Peak
         endPoint, // Confirmed
-        {
-          ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 116 }),
-          swingPointType: 'swingHigh',
-        }, // WARNING: stagnating High
         {
           ohlcv: this.createOHLCV({ priceDate: '7', closePrice: 109 }),
           swingPointType: 'swingLow',
@@ -1274,6 +1333,8 @@ export class TrendDetectionTestdata extends CreateTestData {
             type: 'upward',
             start: this.createEnrichedDataPointOf(startPoint),
             end: this.createEnrichedDataPointOf(endPoint),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint),
+            warnings: [this.createEnrichedDataPointOf(warningPoint)],
           },
         ],
         context,
@@ -1291,9 +1352,17 @@ export class TrendDetectionTestdata extends CreateTestData {
       ohlcv: this.createOHLCV({ priceDate: '1', closePrice: 100 }),
       swingPointType: 'swingHigh',
     };
+    const confirmationPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '3', closePrice: 95 }),
+      swingPointType: 'swingHigh',
+    };
     const endPoint: OHLCVRecord = {
       ohlcv: this.createOHLCV({ priceDate: '5', closePrice: 92 }),
       swingPointType: 'swingHigh',
+    };
+    const warningPoint: OHLCVRecord = {
+      ohlcv: this.createOHLCV({ priceDate: '6', closePrice: 84.5 }),
+      swingPointType: 'swingLow',
     };
     const context = this.createContext(
       [
@@ -1340,6 +1409,8 @@ export class TrendDetectionTestdata extends CreateTestData {
             type: 'downward',
             start: this.createEnrichedDataPointOf(startPoint),
             end: this.createEnrichedDataPointOf(endPoint),
+            confirmation: this.createEnrichedDataPointOf(confirmationPoint),
+            warnings: [this.createEnrichedDataPointOf(warningPoint)],
           },
         ],
         context,
