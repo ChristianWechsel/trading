@@ -200,13 +200,13 @@ export class AnalysisIntTestData {
           },
           range: {
             from: '2023-01-01',
-            to: '2023-01-05',
+            to: '2023-06-01',
           },
         },
         steps: ['TrendChannelCalculation', 'TradingSignal'],
         stepOptions: {
-          swingPointDetection: { atrFactor: 0.5 },
-          trendDetection: { atrFactor: 0.5 },
+          swingPointDetection: { atrFactor: 0.1 },
+          trendDetection: { atrFactor: 0.1 },
           averageTrueRange: { period: 2 },
           yValueSource: 'high',
         },

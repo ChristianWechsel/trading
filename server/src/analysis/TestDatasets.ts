@@ -3486,7 +3486,7 @@ const FullAnalysisWithATR: TestDataSource = {
         volume: 1000,
       },
       swingPoint: 'swingHigh',
-      averageTrueRange: 8,
+      averageTrueRange: 9,
     },
     {
       datum: {
@@ -3514,7 +3514,7 @@ const FullAnalysisWithATR: TestDataSource = {
         volume: 1000,
       },
       swingPoint: 'swingHigh',
-      averageTrueRange: 8.25,
+      averageTrueRange: 9.25,
     },
     {
       datum: {
@@ -3527,76 +3527,159 @@ const FullAnalysisWithATR: TestDataSource = {
         adjustedClosePrice: 110,
         volume: 1000,
       },
+      averageTrueRange: 7.625,
+    },
+    {
+      datum: {
+        securityId: 1,
+        priceDate: '2023-01-06',
+        openPrice: 110,
+        highPrice: 112,
+        lowPrice: 107,
+        closePrice: 111,
+        adjustedClosePrice: 111,
+        volume: 1000,
+      },
       swingPoint: 'swingLow',
-      averageTrueRange: 7.875,
+      averageTrueRange: 6.3125,
+    },
+    {
+      datum: {
+        securityId: 1,
+        priceDate: '2023-01-07',
+        openPrice: 111,
+        highPrice: 120,
+        lowPrice: 110,
+        closePrice: 118,
+        adjustedClosePrice: 118,
+        volume: 1000,
+      },
+      averageTrueRange: 8.15625,
+    },
+    {
+      datum: {
+        securityId: 1,
+        priceDate: '2023-01-08',
+        openPrice: 118,
+        highPrice: 125,
+        lowPrice: 117,
+        closePrice: 123,
+        adjustedClosePrice: 123,
+        volume: 1000,
+      },
+      swingPoint: 'swingHigh',
+      averageTrueRange: 8.078125,
+    },
+    {
+      datum: {
+        securityId: 1,
+        priceDate: '2023-01-09',
+        openPrice: 123,
+        highPrice: 124,
+        lowPrice: 118,
+        closePrice: 120,
+        adjustedClosePrice: 120,
+        volume: 1000,
+      },
+      averageTrueRange: 7.0390625,
+    },
+    {
+      datum: {
+        securityId: 1,
+        priceDate: '2023-01-10',
+        openPrice: 120,
+        highPrice: 121,
+        lowPrice: 115,
+        closePrice: 116,
+        adjustedClosePrice: 116,
+        volume: 1000,
+      },
+      swingPoint: 'swingLow',
+      averageTrueRange: 6.51953125,
+    },
+    {
+      datum: {
+        securityId: 1,
+        priceDate: '2023-01-11',
+        openPrice: 116,
+        highPrice: 125,
+        lowPrice: 116,
+        closePrice: 124,
+        adjustedClosePrice: 124,
+        volume: 1000,
+      },
+      swingPoint: 'swingHigh',
+      averageTrueRange: 7.759765625,
+    },
+    {
+      datum: {
+        securityId: 1,
+        priceDate: '2023-01-12',
+        openPrice: 124,
+        highPrice: 124,
+        lowPrice: 118,
+        closePrice: 119,
+        adjustedClosePrice: 119,
+        volume: 1000,
+      },
+      averageTrueRange: 6.8798828125,
     },
   ],
   trends: [
     {
       type: 'upward',
-      start: new EnrichedDataPoint(
-        new OHLCV({
-          securityId: 1,
-          priceDate: '2023-01-02',
-          openPrice: 102,
-          highPrice: 110,
-          lowPrice: 101,
-          closePrice: 108,
-          adjustedClosePrice: 108,
-          volume: 1000,
-        }),
-      ),
-      end: new EnrichedDataPoint(
-        new OHLCV({
-          securityId: 1,
-          priceDate: '2023-01-04',
-          openPrice: 105,
-          highPrice: 115,
-          lowPrice: 104,
-          closePrice: 112,
-          adjustedClosePrice: 112,
-          volume: 1000,
-        }),
-      ),
-    },
-    {
-      type: 'upward',
-      start: new EnrichedDataPoint(
-        new OHLCV({
-          securityId: 1,
-          priceDate: '2023-01-03',
-          openPrice: 108,
+      start: getEnrichedData({
+        atr: 7.5,
+        swingPointType: 'swingLow',
+        dataPoint: new OHLCV({
+          adjustedClosePrice: 105,
+          closePrice: 105,
           highPrice: 109,
           lowPrice: 103,
-          closePrice: 105,
-          adjustedClosePrice: 105,
-          volume: 1000,
-        }),
-      ),
-      end: new EnrichedDataPoint(
-        new OHLCV({
+          openPrice: 108,
+          priceDate: '2023-01-03',
           securityId: 1,
-          priceDate: '2023-01-05',
-          openPrice: 112,
-          highPrice: 114,
-          lowPrice: 108,
-          closePrice: 110,
-          adjustedClosePrice: 110,
           volume: 1000,
         }),
-      ),
+      }),
+      confirmation: getEnrichedData({
+        atr: 6.3125,
+        swingPointType: 'swingLow',
+        dataPoint: new OHLCV({
+          adjustedClosePrice: 111,
+          closePrice: 111,
+          highPrice: 112,
+          lowPrice: 107,
+          openPrice: 110,
+          priceDate: '2023-01-06',
+          securityId: 1,
+          volume: 1000,
+        }),
+      }),
+      channel: {
+        returnLine: {
+          slope: 1.1574074074074074e-8,
+          yIntercept: -19246,
+        },
+        trendLine: {
+          slope: 1.1574074074074074e-8,
+          yIntercept: -19251,
+        },
+      },
     },
   ],
-  trades: [
-    new Trade({
-      entry: {
-        date: '2023-01-04',
-        price: 110,
-      },
-      exit: {
-        date: '2023-01-05',
-        price: 108,
-      },
-    }),
-  ],
+  trades: [],
 };
+
+function getEnrichedData(params: {
+  dataPoint: OHLCV;
+  atr: number;
+  swingPointType?: SwingPointType;
+}): EnrichedDataPoint {
+  const edp = new EnrichedDataPoint(params.dataPoint);
+  edp.setAverageTrueRange(params.atr);
+  if (params.swingPointType) {
+    edp.setSwingPointType(params.swingPointType);
+  }
+  return edp;
+}
