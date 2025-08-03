@@ -23,8 +23,8 @@ export class TrendChannelCalculation implements AnalysisStep {
     const yValueAccessor = context.buildYValueAccessor();
     for (const trend of trends) {
       // Determine the range of the trend
-      const startX = trend.startPoint;
-      const endX = trend.endPoint;
+      const startX = trend.start;
+      const endX = trend.end;
       const pointsInTrend = context
         .getEnrichedDataPoints()
         .filter(

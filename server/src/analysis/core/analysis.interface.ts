@@ -4,8 +4,10 @@ import { EnrichedDataPoint } from './enriched-data-point';
 export type TrendDataMetadata = {
   trendData: {
     type: 'upward' | 'downward';
-    startPoint: EnrichedDataPoint;
-    endPoint?: EnrichedDataPoint;
+    start: EnrichedDataPoint;
+    end?: EnrichedDataPoint;
+    confirmation?: EnrichedDataPoint;
+    warnings?: EnrichedDataPoint[];
     channel?: TrendChannel;
   };
   metaddata: { statusTrend: 'ongoing' | 'finished' };

@@ -55,8 +55,8 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
     context.setTrends([
       {
         type: 'upward',
-        startPoint: this.createEnrichedDataPointOf(primarySwingPointA),
-        endPoint: this.createEnrichedDataPointOf(endPoint),
+        start: this.createEnrichedDataPointOf(primarySwingPointA),
+        end: this.createEnrichedDataPointOf(endPoint),
       },
     ]);
 
@@ -115,8 +115,8 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
     context.setTrends([
       {
         type: 'downward',
-        startPoint: this.createEnrichedDataPointOf(primarySwingPointA),
-        endPoint: this.createEnrichedDataPointOf(endPoint),
+        start: this.createEnrichedDataPointOf(primarySwingPointA),
+        end: this.createEnrichedDataPointOf(endPoint),
       },
     ]);
 
@@ -182,13 +182,13 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
     context.setTrends([
       {
         type: 'upward',
-        startPoint: this.createEnrichedDataPointOf(pointA),
-        endPoint: this.createEnrichedDataPointOf(pointE),
+        start: this.createEnrichedDataPointOf(pointA),
+        end: this.createEnrichedDataPointOf(pointE),
       },
       {
         type: 'upward',
-        startPoint: this.createEnrichedDataPointOf(pointC),
-        endPoint: this.createEnrichedDataPointOf(pointF),
+        start: this.createEnrichedDataPointOf(pointC),
+        end: this.createEnrichedDataPointOf(pointF),
       },
     ]);
 
@@ -266,13 +266,13 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
     context.setTrends([
       {
         type: 'upward',
-        startPoint: this.createEnrichedDataPointOf(pointA1),
-        endPoint: this.createEnrichedDataPointOf(pointC1),
+        start: this.createEnrichedDataPointOf(pointA1),
+        end: this.createEnrichedDataPointOf(pointC1),
       },
       {
         type: 'upward',
-        startPoint: this.createEnrichedDataPointOf(pointA2),
-        endPoint: this.createEnrichedDataPointOf(pointC2),
+        start: this.createEnrichedDataPointOf(pointA2),
+        end: this.createEnrichedDataPointOf(pointC2),
       },
     ]);
 
@@ -346,8 +346,8 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
     context.setTrends([
       {
         type: 'upward',
-        startPoint: this.createEnrichedDataPointOf(pointA),
-        endPoint: this.createEnrichedDataPointOf(pointD),
+        start: this.createEnrichedDataPointOf(pointA),
+        end: this.createEnrichedDataPointOf(pointD),
       },
     ]);
 
@@ -392,8 +392,8 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
     context.setTrends([
       {
         type: 'upward',
-        startPoint: this.createEnrichedDataPointOf(pointA),
-        endPoint: this.createEnrichedDataPointOf(pointC),
+        start: this.createEnrichedDataPointOf(pointA),
+        end: this.createEnrichedDataPointOf(pointC),
       },
     ]);
 
@@ -448,8 +448,8 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
     context.setTrends([
       {
         type: 'upward',
-        startPoint: this.createEnrichedDataPointOf(pointA),
-        endPoint: this.createEnrichedDataPointOf(pointC),
+        start: this.createEnrichedDataPointOf(pointA),
+        end: this.createEnrichedDataPointOf(pointC),
       },
     ]);
 
@@ -504,8 +504,8 @@ export class TrendChannelCalculationTestdata extends CreateTestData {
     context.setTrends([
       {
         type: 'upward',
-        startPoint: this.createEnrichedDataPointOf(pointA),
-        endPoint: this.createEnrichedDataPointOf(pointC),
+        start: this.createEnrichedDataPointOf(pointA),
+        end: this.createEnrichedDataPointOf(pointC),
       },
     ]);
 

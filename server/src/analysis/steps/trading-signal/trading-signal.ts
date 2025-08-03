@@ -13,14 +13,14 @@ export class TradingSignal implements AnalysisStep {
       if (trend.type === 'upward') {
         context.addTradingSignals({
           type: 'buy',
-          dataPoint: trend.startPoint,
+          dataPoint: trend.start,
           reason: 'Upward trend started',
         });
 
-        if (trend.endPoint) {
+        if (trend.end) {
           context.addTradingSignals({
             type: 'sell',
-            dataPoint: trend.endPoint,
+            dataPoint: trend.end,
             reason: 'Upward trend ended',
           });
         }

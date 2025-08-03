@@ -194,8 +194,8 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'upward',
-            startPoint: this.createEnrichedDataPointOf(startPoint),
-            endPoint: this.createEnrichedDataPointOf(endPoint),
+            start: this.createEnrichedDataPointOf(startPoint),
+            end: this.createEnrichedDataPointOf(endPoint),
           },
         ],
         context,
@@ -233,8 +233,8 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'downward',
-            startPoint: this.createEnrichedDataPointOf(startPoint),
-            endPoint: this.createEnrichedDataPointOf(endPoint),
+            start: this.createEnrichedDataPointOf(startPoint),
+            end: this.createEnrichedDataPointOf(endPoint),
           },
         ],
         context,
@@ -412,8 +412,8 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'upward',
-            startPoint: this.createEnrichedDataPointOf(startPoint),
-            endPoint: this.createEnrichedDataPointOf(endPoint),
+            start: this.createEnrichedDataPointOf(startPoint),
+            end: this.createEnrichedDataPointOf(endPoint),
           },
         ],
         context,
@@ -464,8 +464,8 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'downward',
-            startPoint: this.createEnrichedDataPointOf(startPoint),
-            endPoint: this.createEnrichedDataPointOf(endPoint),
+            start: this.createEnrichedDataPointOf(startPoint),
+            end: this.createEnrichedDataPointOf(endPoint),
           },
         ],
         context,
@@ -516,8 +516,8 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'upward',
-            startPoint: this.createEnrichedDataPointOf(startPoint),
-            endPoint: this.createEnrichedDataPointOf(endPoint),
+            start: this.createEnrichedDataPointOf(startPoint),
+            end: this.createEnrichedDataPointOf(endPoint),
           },
         ],
         context,
@@ -568,8 +568,8 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'upward',
-            startPoint: this.createEnrichedDataPointOf(startPoint),
-            endPoint: this.createEnrichedDataPointOf(endPoint),
+            start: this.createEnrichedDataPointOf(startPoint),
+            end: this.createEnrichedDataPointOf(endPoint),
           },
         ],
         context,
@@ -620,8 +620,8 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'downward',
-            startPoint: this.createEnrichedDataPointOf(startPoint),
-            endPoint: this.createEnrichedDataPointOf(endPoint),
+            start: this.createEnrichedDataPointOf(startPoint),
+            end: this.createEnrichedDataPointOf(endPoint),
           },
         ],
         context,
@@ -672,8 +672,8 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'downward',
-            startPoint: this.createEnrichedDataPointOf(startPoint),
-            endPoint: this.createEnrichedDataPointOf(endPoint),
+            start: this.createEnrichedDataPointOf(startPoint),
+            end: this.createEnrichedDataPointOf(endPoint),
           },
         ],
         context,
@@ -730,8 +730,8 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'upward',
-            startPoint: this.createEnrichedDataPointOf(startPoint),
-            endPoint: this.createEnrichedDataPointOf(endPoint),
+            start: this.createEnrichedDataPointOf(startPoint),
+            end: this.createEnrichedDataPointOf(endPoint),
           },
         ],
         context,
@@ -786,8 +786,8 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'downward',
-            startPoint: this.createEnrichedDataPointOf(startPoint),
-            endPoint: this.createEnrichedDataPointOf(endPoint),
+            start: this.createEnrichedDataPointOf(startPoint),
+            end: this.createEnrichedDataPointOf(endPoint),
           },
         ],
         context,
@@ -844,8 +844,8 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'downward',
-            startPoint: this.createEnrichedDataPointOf(startPoint),
-            endPoint: this.createEnrichedDataPointOf(endPoint),
+            start: this.createEnrichedDataPointOf(startPoint),
+            end: this.createEnrichedDataPointOf(endPoint),
           },
         ],
         context,
@@ -903,13 +903,13 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'upward',
-            startPoint: this.createEnrichedDataPointOf(startPoint),
-            endPoint: this.createEnrichedDataPointOf(swingPoint),
+            start: this.createEnrichedDataPointOf(startPoint),
+            end: this.createEnrichedDataPointOf(swingPoint),
           },
           {
             type: 'downward',
-            startPoint: this.createEnrichedDataPointOf(swingPoint),
-            endPoint: this.createEnrichedDataPointOf(endPoint),
+            start: this.createEnrichedDataPointOf(swingPoint),
+            end: this.createEnrichedDataPointOf(endPoint),
           },
         ],
         context,
@@ -967,13 +967,13 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'downward',
-            startPoint: this.createEnrichedDataPointOf(startPoint),
-            endPoint: this.createEnrichedDataPointOf(swingPoint),
+            start: this.createEnrichedDataPointOf(startPoint),
+            end: this.createEnrichedDataPointOf(swingPoint),
           },
           {
             type: 'upward',
-            startPoint: this.createEnrichedDataPointOf(swingPoint),
-            endPoint: this.createEnrichedDataPointOf(endPoint),
+            start: this.createEnrichedDataPointOf(swingPoint),
+            end: this.createEnrichedDataPointOf(endPoint),
           },
         ],
         context,
@@ -1043,13 +1043,13 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'upward',
-            startPoint: this.createEnrichedDataPointOf(startPoint1),
-            endPoint: this.createEnrichedDataPointOf(endPoint1),
+            start: this.createEnrichedDataPointOf(startPoint1),
+            end: this.createEnrichedDataPointOf(endPoint1),
           },
           {
             type: 'downward',
-            startPoint: this.createEnrichedDataPointOf(startPoint2),
-            endPoint: this.createEnrichedDataPointOf(endPoint2),
+            start: this.createEnrichedDataPointOf(startPoint2),
+            end: this.createEnrichedDataPointOf(endPoint2),
           },
         ],
         context,
@@ -1135,13 +1135,13 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'upward',
-            startPoint: this.createEnrichedDataPointOf(startPoint1),
-            endPoint: this.createEnrichedDataPointOf(endPoint1),
+            start: this.createEnrichedDataPointOf(startPoint1),
+            end: this.createEnrichedDataPointOf(endPoint1),
           },
           {
             type: 'downward',
-            startPoint: this.createEnrichedDataPointOf(startPoint2),
-            endPoint: this.createEnrichedDataPointOf(endPoint2),
+            start: this.createEnrichedDataPointOf(startPoint2),
+            end: this.createEnrichedDataPointOf(endPoint2),
           },
         ],
         context,
@@ -1272,8 +1272,8 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'upward',
-            startPoint: this.createEnrichedDataPointOf(startPoint),
-            endPoint: this.createEnrichedDataPointOf(endPoint),
+            start: this.createEnrichedDataPointOf(startPoint),
+            end: this.createEnrichedDataPointOf(endPoint),
           },
         ],
         context,
@@ -1338,8 +1338,8 @@ export class TrendDetectionTestdata extends CreateTestData {
         expectedTrends: [
           {
             type: 'downward',
-            startPoint: this.createEnrichedDataPointOf(startPoint),
-            endPoint: this.createEnrichedDataPointOf(endPoint),
+            start: this.createEnrichedDataPointOf(startPoint),
+            end: this.createEnrichedDataPointOf(endPoint),
           },
         ],
         context,
