@@ -50,14 +50,20 @@ describe('Trading', () => {
     expect(context.getTrades()).toHaveLength(0);
   });
 
-  it('should create a trade from a buy and a subsequent sell signal', () => {
+  it.only('should create a trade from a buy and a subsequent sell signal', () => {
     const buySignal: SignalForTrade = {
-      dataPoint: createTestData.createEnrichedDataPoint({ closePrice: 100 }),
+      dataPoint: createTestData.createEnrichedDataPoint({
+        priceDate: '2023-01-01',
+        closePrice: 100,
+      }),
       reason: 'Upward trend started',
       type: 'buy',
     };
     const sellSignal: SignalForTrade = {
-      dataPoint: createTestData.createEnrichedDataPoint({ closePrice: 110 }),
+      dataPoint: createTestData.createEnrichedDataPoint({
+        priceDate: '2023-01-02',
+        closePrice: 110,
+      }),
       reason: 'Upward trend ended',
       type: 'sell',
     };

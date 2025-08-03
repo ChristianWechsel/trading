@@ -1,8 +1,15 @@
+type TradeRecord = {
+  date: string;
+  price: number;
+};
+
+type TradeTransaction = {
+  entry: TradeRecord;
+  exit: TradeRecord;
+};
+
 export class Trade {
-  constructor(
-    private entry: { entryDate: string; entryPrice: number },
-    private exit: { exitDate: string; exitPrice: number },
-  ) {}
+  constructor(private transaction: TradeTransaction) {}
 
   isProfitable(): boolean {
     return this.calculateProfit() > 0;
@@ -13,6 +20,6 @@ export class Trade {
   }
 
   private calculateProfit(): number {
-    return this.exit.exitPrice - this.entry.entryPrice;
+    return this.transaction.exit.price - this.transaction.entry.price;
   }
 }
