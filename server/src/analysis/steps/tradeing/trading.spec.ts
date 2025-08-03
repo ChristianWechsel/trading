@@ -1,24 +1,27 @@
 import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
 import { SignalForTrade } from '../../../analysis/core/analysis.interface';
+import { Trade } from '../../../analysis/core/trade';
 import { CreateTestData } from '../../../utils/test-utils';
 import { Trading } from './trading';
 
 describe('Trading', () => {
   let trading: Trading;
   const createTestData = new CreateTestData();
-  const context: AnalysisContextClass = new AnalysisContextClass(
-    {
-      dataAggregation: { ticker: { exchange: '', symbol: '' } },
-      steps: ['TradingSignal'],
-    },
-    [],
-  );
-
-  const spyGetTradingSignals = jest.spyOn(context, 'getTradingSignals');
-  const spyAddTrade = jest.spyOn(context, 'addTrade');
+  let context: AnalysisContextClass;
+  let spyGetTradingSignals: jest.SpyInstance<SignalForTrade[], [], any>;
+  let spyAddTrade: jest.SpyInstance<void, [trade: Trade], any>;
 
   beforeEach(() => {
     trading = new Trading();
+    context = new AnalysisContextClass(
+      {
+        dataAggregation: { ticker: { exchange: '', symbol: '' } },
+        steps: ['TradingSignal'],
+      },
+      [],
+    );
+    spyGetTradingSignals = jest.spyOn(context, 'getTradingSignals');
+    spyAddTrade = jest.spyOn(context, 'addTrade');
   });
 
   afterEach(() => {
@@ -73,10 +76,19 @@ describe('Trading', () => {
     spyGetTradingSignals.mockReturnValue([buySignal, sellSignal]);
     trading.execute(context);
     expect(spyAddTrade).toHaveBeenCalledTimes(1);
-    expect(spyAddTrade).toHaveBeenCalledWith({
-      entry: buySignal,
-      exit: sellSignal,
-    });
+
+    expect(spyAddTrade).toHaveBeenCalledWith(
+      new Trade({
+        entry: {
+          date: buySignal.dataPoint.getDataPoint().getPriceDateIsoDate(),
+          price: context.buildYValueAccessor()(buySignal.dataPoint),
+        },
+        exit: {
+          date: sellSignal.dataPoint.getDataPoint().getPriceDateIsoDate(),
+          price: context.buildYValueAccessor()(sellSignal.dataPoint),
+        },
+      }),
+    );
     expect(context.getTrades()).toHaveLength(1);
   });
 
@@ -123,10 +135,19 @@ describe('Trading', () => {
     spyGetTradingSignals.mockReturnValue([buySignal1, buySignal2, sellSignal]);
     trading.execute(context);
     expect(spyAddTrade).toHaveBeenCalledTimes(1);
-    expect(spyAddTrade).toHaveBeenCalledWith({
-      entry: buySignal1,
-      exit: sellSignal,
-    });
+
+    expect(spyAddTrade).toHaveBeenCalledWith(
+      new Trade({
+        entry: {
+          date: buySignal1.dataPoint.getDataPoint().getPriceDateIsoDate(),
+          price: context.buildYValueAccessor()(buySignal1.dataPoint),
+        },
+        exit: {
+          date: sellSignal.dataPoint.getDataPoint().getPriceDateIsoDate(),
+          price: context.buildYValueAccessor()(sellSignal.dataPoint),
+        },
+      }),
+    );
     expect(context.getTrades()).toHaveLength(1);
   });
 
@@ -171,14 +192,33 @@ describe('Trading', () => {
     ]);
     trading.execute(context);
     expect(spyAddTrade).toHaveBeenCalledTimes(2);
-    expect(spyAddTrade).toHaveBeenCalledWith({
-      entry: buySignal1,
-      exit: sellSignal1,
-    });
-    expect(spyAddTrade).toHaveBeenCalledWith({
-      entry: buySignal2,
-      exit: sellSignal2,
-    });
+
+    expect(spyAddTrade).toHaveBeenNthCalledWith(
+      1,
+      new Trade({
+        entry: {
+          date: buySignal1.dataPoint.getDataPoint().getPriceDateIsoDate(),
+          price: context.buildYValueAccessor()(buySignal1.dataPoint),
+        },
+        exit: {
+          date: sellSignal1.dataPoint.getDataPoint().getPriceDateIsoDate(),
+          price: context.buildYValueAccessor()(sellSignal1.dataPoint),
+        },
+      }),
+    );
+    expect(spyAddTrade).toHaveBeenNthCalledWith(
+      2,
+      new Trade({
+        entry: {
+          date: buySignal2.dataPoint.getDataPoint().getPriceDateIsoDate(),
+          price: context.buildYValueAccessor()(buySignal2.dataPoint),
+        },
+        exit: {
+          date: sellSignal2.dataPoint.getDataPoint().getPriceDateIsoDate(),
+          price: context.buildYValueAccessor()(sellSignal2.dataPoint),
+        },
+      }),
+    );
     expect(context.getTrades()).toHaveLength(2);
   });
 });
