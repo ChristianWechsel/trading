@@ -11,3 +11,5 @@ export type RiskManagement = (
   dataPoint: EnrichedDataPoint,
   yValueAccessor: YValueAccessor,
 ) => number;
+
+export type SelectorRiskManagement = 'atr-based' | 'fixed-percentage';

@@ -13,6 +13,8 @@ import {
 import { DataAggregationDto } from '../data-aggregation/data-aggregation.dto';
 import { analysisConfig } from './config/analysis.config';
 import { Step } from './core/analysis.interface';
+import { SelectorMoneyManagement } from './core/money-management/money-management.interface';
+import { SelectorRiskManagement } from './core/risk-management/risk-management.interface';
 
 const allSteps: Step[] = [
   'MovingAverage',
@@ -23,6 +25,16 @@ const allSteps: Step[] = [
 
 export type YValueSource = 'open' | 'high' | 'low' | 'close';
 const yValueSourceValues: YValueSource[] = ['open', 'high', 'low', 'close'];
+
+export const selectorMoneyManagementValues: SelectorMoneyManagement[] = [
+  'all-in',
+  'fixed-fractional',
+];
+
+export const selectorRiskManagementValues: SelectorRiskManagement[] = [
+  'atr-based',
+  'fixed-percentage',
+];
 
 export class SwingPointDetectionOptionsDto {
   @IsOptional()
@@ -83,11 +95,19 @@ export class StepOptionsDto {
   yValueSource?: YValueSource;
 }
 
-export class AccountDto {
+export class TradingDto {
   @IsOptional()
   @IsNumber()
-  @IsPositive(0)
+  @IsPositive()
   initialCapital?: number;
+
+  @IsOptional()
+  @IsEnum(selectorMoneyManagementValues)
+  moneyManagement?: SelectorMoneyManagement;
+
+  @IsOptional()
+  @IsEnum(selectorRiskManagementValues)
+  riskManagement?: SelectorRiskManagement;
 }
 
 export class AnalysisQueryDto {
@@ -107,6 +127,6 @@ export class AnalysisQueryDto {
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => AccountDto)
-  account?: AccountDto;
+  @Type(() => TradingDto)
+  trading?: TradingDto;
 }

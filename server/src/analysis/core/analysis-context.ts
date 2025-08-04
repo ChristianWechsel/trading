@@ -13,6 +13,18 @@ import {
 } from './analysis-options';
 import { SignalForTrade, Step, TrendDataMetadata } from './analysis.interface';
 import { EnrichedDataPoint } from './enriched-data-points/enriched-data-point';
+import { allInSizing } from './money-management/all-in';
+import { fixedFractionalSizing } from './money-management/fixed-fractional';
+import {
+  MoneyManagement,
+  SelectorMoneyManagement,
+} from './money-management/money-management.interface';
+import { atrStopLoss } from './risk-management/atr-stopp-loss';
+import { percentageStopLoss } from './risk-management/percentage-stop-loss';
+import {
+  RiskManagement,
+  SelectorRiskManagement,
+} from './risk-management/risk-management.interface';
 
 import { Trade } from './trade/trade';
 
@@ -66,7 +78,7 @@ export class AnalysisContextClass {
         this.defaults,
       ),
       yValueSource: query.stepOptions?.yValueSource ?? 'close',
-      account: new AccountOptions(query.account?.initialCapital, this.defaults),
+      account: new AccountOptions(query.trading?.initialCapital, this.defaults),
     });
 
     this.enrichedDataPoints = ohlcvs
@@ -169,6 +181,36 @@ export class AnalysisContextClass {
 
       default:
         return this.defaults.relativeThreshold;
+    }
+  }
+
+  private selectMoneyManagement(
+    selector: SelectorMoneyManagement,
+  ): MoneyManagement {
+    switch (selector) {
+      case 'all-in':
+        return allInSizing;
+
+      case 'fixed-fractional':
+        return fixedFractionalSizing;
+
+      default:
+        throw new Error(`Unknown money management strategy`);
+    }
+  }
+
+  private selectRiskManagement(
+    selector: SelectorRiskManagement,
+  ): RiskManagement {
+    switch (selector) {
+      case 'atr-based':
+        return atrStopLoss;
+
+      case 'fixed-percentage':
+        return percentageStopLoss;
+
+      default:
+        throw new Error(`Unknown risk management strategy`);
     }
   }
 }

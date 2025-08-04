@@ -5,3 +5,5 @@
  * @returns The number of shares to purchase.
  */
 export type MoneyManagement = (cash: number, price: number) => number;
+
+export type SelectorMoneyManagement = 'all-in' | 'fixed-fractional';
