@@ -2,7 +2,7 @@ import { OHLCV } from '../../data-aggregation/ohlcv.entity';
 import { AnalysisQueryDto } from '../analysis-query.dto';
 import { AnalysisContextClass } from './analysis-context';
 import { TrendDataMetadata } from './analysis.interface';
-import { EnrichedDataPoint } from './enriched-data-point';
+import { EnrichedDataPoint } from './enriched-data-points/enriched-data-point';
 
 describe('AnalysisContextClass', () => {
   let query: AnalysisQueryDto;

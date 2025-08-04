@@ -1,5 +1,5 @@
 import { AnalysisContextClass } from './analysis-context';
-import { EnrichedDataPoint } from './enriched-data-point';
+import { EnrichedDataPoint } from './enriched-data-points/enriched-data-point';
 
 export type TrendDataMetadata = {
   trendData: {

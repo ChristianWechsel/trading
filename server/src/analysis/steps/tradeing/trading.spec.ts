@@ -1,7 +1,7 @@
 import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
 import { SignalForTrade } from '../../../analysis/core/analysis.interface';
-import { Trade } from '../../../analysis/core/trade';
 import { CreateTestData } from '../../../utils/test-utils';
+import { Trade } from '../../core/trade/trade';
 import { Trading } from './trading';
 
 describe('Trading', () => {

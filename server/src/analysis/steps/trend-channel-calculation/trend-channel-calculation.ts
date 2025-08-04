@@ -1,11 +1,11 @@
 import {
-  EnrichedDataPoint,
-  SwingPointType,
-} from 'src/analysis/core/enriched-data-point';
-import {
   AnalysisContextClass,
   YValueAccessor,
 } from '../../../analysis/core/analysis-context';
+import {
+  EnrichedDataPoint,
+  SwingPointType,
+} from '../../../analysis/core/enriched-data-points/enriched-data-point';
 import {
   AnalysisStep,
   Step,

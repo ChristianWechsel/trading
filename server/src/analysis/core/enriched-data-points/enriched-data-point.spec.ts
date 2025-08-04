@@ -1,4 +1,4 @@
-import { OHLCV } from '../../data-aggregation/ohlcv.entity';
+import { OHLCV } from '../../../data-aggregation/ohlcv.entity';
 import { EnrichedDataPoint } from './enriched-data-point';
 
 describe('EnrichedDataPoint', () => {

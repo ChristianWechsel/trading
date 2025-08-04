@@ -4,7 +4,7 @@ import {
   SignalForTrade,
   Step,
 } from '../../../analysis/core/analysis.interface';
-import { Trade } from '../../../analysis/core/trade';
+import { Trade } from '../../core/trade/trade';
 
 export class Trading implements AnalysisStep {
   dependsOn: Step[] = ['TradingSignal'];

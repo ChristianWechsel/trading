@@ -1,5 +1,5 @@
+import { EnrichedDataPoint } from '../../../analysis/core/enriched-data-points/enriched-data-point';
 import { CreateTestData, OHLCVRecord } from '../../../utils/test-utils';
-import { EnrichedDataPoint } from '../../core/enriched-data-point';
 import { TrendTestCase } from './trend-detection.spec';
 
 export class TrendDetectionTestdata extends CreateTestData {

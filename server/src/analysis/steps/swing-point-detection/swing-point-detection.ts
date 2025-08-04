@@ -1,9 +1,9 @@
 import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
-import { AnalysisStep, Step } from '../../core/analysis.interface';
 import {
   EnrichedDataPoint,
   SwingPointType,
-} from '../../core/enriched-data-point';
+} from '../../../analysis/core/enriched-data-points/enriched-data-point';
+import { AnalysisStep, Step } from '../../core/analysis.interface';
 import { ComparableNumber } from '../utils/comparable-number/comparable-number';
 
 export class SwingPointDetection implements AnalysisStep {

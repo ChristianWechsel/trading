@@ -1,8 +1,8 @@
 import { OHLCV } from '../data-aggregation/ohlcv.entity';
 import { AnalysisQueryDto } from './analysis-query.dto';
 import { TrendDataMetadata } from './core/analysis.interface';
-import { EnrichedDataPoint } from './core/enriched-data-point';
-import { Trade } from './core/trade';
+import { EnrichedDataPoint } from './core/enriched-data-points/enriched-data-point';
+import { Trade } from './core/trade/trade';
 import { TestDatasets } from './TestDatasets';
 
 export type TestData = {

@@ -1,5 +1,5 @@
 import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
-import { SwingPointType } from '../../core/enriched-data-point';
+import { SwingPointType } from '../../../analysis/core/enriched-data-points/enriched-data-point';
 import { SwingPointDetection } from './swing-point-detection';
 import { SwingPointDetectionTestdata } from './swing-point-detection.testdata';
 

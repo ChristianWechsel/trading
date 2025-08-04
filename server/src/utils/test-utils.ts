@@ -1,9 +1,10 @@
-import { AnalysisQueryDto } from 'src/analysis/analysis-query.dto';
+import { AnalysisQueryDto } from '../analysis/analysis-query.dto';
 import { AnalysisContextClass } from '../analysis/core/analysis-context';
+
 import {
   EnrichedDataPoint,
   SwingPointType,
-} from '../analysis/core/enriched-data-point';
+} from '../analysis/core/enriched-data-points/enriched-data-point';
 import { OHLCV, OHLCVEntity } from '../data-aggregation/ohlcv.entity';
 
 export type OHLCVRecord = {

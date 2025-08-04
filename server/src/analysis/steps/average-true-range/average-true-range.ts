@@ -1,8 +1,8 @@
 import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
+import { EnrichedDataPoint } from '../../../analysis/core/enriched-data-points/enriched-data-point';
 import { OHLCV } from '../../../data-aggregation/ohlcv.entity';
 import { analysisConfig } from '../../config/analysis.config';
 import { AnalysisStep, Step } from '../../core/analysis.interface';
-import { EnrichedDataPoint } from '../../core/enriched-data-point';
 
 export class AverageTrueRange implements AnalysisStep {
   dependsOn: Step[] = [];

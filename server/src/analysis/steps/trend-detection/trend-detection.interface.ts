@@ -1,7 +1,7 @@
 import {
   EnrichedDataPoint,
   SwingPointType,
-} from '../../core/enriched-data-point';
+} from '../../../analysis/core/enriched-data-points/enriched-data-point';
 import { ComparableNumber } from '../utils/comparable-number/comparable-number';
 import { Memory } from '../utils/memory/memory';
 import { State } from './trend-detection-states';

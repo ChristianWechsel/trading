@@ -1,8 +1,12 @@
 import { OHLCV, OHLCVEntity } from '../data-aggregation/ohlcv.entity';
 import { TestData } from './analysis.int.testdata';
 import { TrendDataMetadata } from './core/analysis.interface';
-import { EnrichedDataPoint, SwingPointType } from './core/enriched-data-point';
-import { Trade } from './core/trade';
+import {
+  EnrichedDataPoint,
+  SwingPointType,
+} from './core/enriched-data-points/enriched-data-point';
+
+import { Trade } from './core/trade/trade';
 
 type TestDataSource = {
   points: {

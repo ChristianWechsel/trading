@@ -10,8 +10,9 @@ import {
   TrendDetectionOptions,
 } from './analysis-options';
 import { SignalForTrade, Step, TrendDataMetadata } from './analysis.interface';
-import { EnrichedDataPoint } from './enriched-data-point';
-import { Trade } from './trade';
+import { EnrichedDataPoint } from './enriched-data-points/enriched-data-point';
+
+import { Trade } from './trade/trade';
 
 export type YValueAccessor = (dataPoint: EnrichedDataPoint) => number;
 
