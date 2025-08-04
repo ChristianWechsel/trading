@@ -1,17 +1,24 @@
+export type IDPosition = string;
+
 export class Position {
   private stops: { loss?: number; profit?: number };
   private isClosed: boolean;
+  private exitPrice?: number;
 
   constructor(
     private position: {
       symbol: string;
       shares: number;
       entryPrice: number;
-      entryDate: string;
+      entryDate: Date;
     },
   ) {
     this.stops = {};
     this.isClosed = false;
+  }
+
+  getIdentifier(): IDPosition {
+    return `${this.position.symbol} ${this.position.entryDate.toISOString()}`;
   }
 
   setStopLossPrice(price: number): void {
@@ -36,37 +43,26 @@ export class Position {
     return this.stops.profit;
   }
 
-  setIsClosed(closed: boolean): void {
-    this.isClosed = closed;
+  closePosition(exitPrice: number): void {
+    this.isClosed = true;
+    this.exitPrice = exitPrice;
   }
 
-  getIsClosed(): boolean {
-    return this.isClosed;
-  }
-
-  /**
-   * Calculates the total value of the position at the entry price.
-   */
   getEntryValue(): number {
     return this.position.shares * this.position.entryPrice;
   }
 
-  /**
-   * Calculates the current value of the position given a new price.
-   * @param currentPrice The current market price.
-   */
-  getCurrentValue(currentPrice: number): number {
-    if (currentPrice < 0) {
-      throw new Error('Current price cannot be negative.');
+  getExitValue(): number {
+    if (!this.exitPrice) {
+      throw new Error('Position is not closed yet.');
     }
-    return this.position.shares * currentPrice;
+    return this.position.shares * this.exitPrice;
   }
 
-  /**
-   * Calculates the profit or loss based on the current price.
-   * @param currentPrice The current market price.
-   */
-  getProfitOrLoss(currentPrice: number): number {
-    return this.getCurrentValue(currentPrice) - this.getEntryValue();
+  getProfitOrLoss(): number {
+    if (!this.exitPrice) {
+      throw new Error('Position is not closed yet.');
+    }
+    return this.position.shares * this.exitPrice - this.getEntryValue();
   }
 }

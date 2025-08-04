@@ -27,23 +27,20 @@ describe('Account', () => {
   });
 
   describe('debit', () => {
-    it('should reduce the cash balance and return true for a valid debit', () => {
+    it('should reduce the cash balance for a valid debit', () => {
       const debitAmount = 500;
-      const result = account.debit(debitAmount);
-      expect(result).toBe(true);
+      account.debit(debitAmount);
       expect(account.getCash()).toBe(initialCapital - debitAmount);
     });
 
     it('should allow the balance to go negative if debit amount exceeds cash', () => {
       const debitAmount = initialCapital + 1;
-      const result = account.debit(debitAmount);
-      expect(result).toBe(true);
+      account.debit(debitAmount);
       expect(account.getCash()).toBe(-1);
     });
 
     it('should allow debiting the exact available cash', () => {
-      const result = account.debit(initialCapital);
-      expect(result).toBe(true);
+      account.debit(initialCapital);
       expect(account.getCash()).toBe(0);
     });
 
@@ -77,8 +74,7 @@ describe('Account', () => {
     });
 
     it('should handle a debit that results in a negative balance followed by a credit', () => {
-      const result = account.debit(12000); // Should succeed, balance becomes -2000
-      expect(result).toBe(true);
+      account.debit(12000); // Balance becomes -2000
       expect(account.getCash()).toBe(-2000);
 
       account.credit(500); // Balance becomes -1500

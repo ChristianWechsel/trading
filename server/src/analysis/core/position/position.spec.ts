@@ -5,7 +5,7 @@ describe('Position', () => {
     symbol: 'AAPL',
     shares: 10,
     entryPrice: 150,
-    entryDate: '2023-01-01',
+    entryDate: new Date('2023-01-01T00:00:00.000Z'),
   };
   let position: Position;
 
@@ -16,6 +16,13 @@ describe('Position', () => {
   describe('constructor', () => {
     it('should create a position without throwing an error for valid data', () => {
       expect(() => new Position(validPositionData)).not.toThrow();
+    });
+
+    it('should return the correct identifier', () => {
+      const expectedIdentifier = `${
+        validPositionData.symbol
+      } ${validPositionData.entryDate.toISOString()}`;
+      expect(position.getIdentifier()).toBe(expectedIdentifier);
     });
   });
 
@@ -48,47 +55,43 @@ describe('Position', () => {
     });
   });
 
-  describe('Closing Status', () => {
-    it('should initially be not closed', () => {
-      expect(position.getIsClosed()).toBe(false);
-    });
-
-    it('should allow setting the closed status to true', () => {
-      position.setIsClosed(true);
-      expect(position.getIsClosed()).toBe(true);
-    });
-
-    it('should allow setting the closed status back to false', () => {
-      position.setIsClosed(true); // Set to true first
-      position.setIsClosed(false); // Then set back to false
-      expect(position.getIsClosed()).toBe(false);
-    });
-  });
-
   describe('Value and P/L Calculations', () => {
     it('should calculate the correct entry value', () => {
       expect(position.getEntryValue()).toBe(1500); // 10 * 150
     });
 
-    it('should calculate the correct current value for a given price', () => {
-      expect(position.getCurrentValue(160)).toBe(1600); // 10 * 160
+    it('should calculate the correct exit value after closing', () => {
+      position.closePosition(160);
+      expect(position.getExitValue()).toBe(1600); // 10 * 160
     });
 
-    it('should throw an error for a negative current price', () => {
-      expect(() => position.getCurrentValue(-1)).toThrow(
-        'Current price cannot be negative.',
+    it('should throw an error when trying to get exit value before closing', () => {
+      expect(() => position.getExitValue()).toThrow(
+        'Position is not closed yet.',
       );
     });
 
-    it('should calculate the correct profit or loss', () => {
-      // Profit
-      expect(position.getProfitOrLoss(160)).toBe(100); // 1600 - 1500
+    describe('getProfitOrLoss', () => {
+      it('should throw an error if the position is not closed', () => {
+        expect(() => position.getProfitOrLoss()).toThrow(
+          'Position is not closed yet.',
+        );
+      });
 
-      // Loss
-      expect(position.getProfitOrLoss(145)).toBe(-50); // 1450 - 1500
+      it('should calculate the correct profit after closing', () => {
+        position.closePosition(160); // Close with profit
+        expect(position.getProfitOrLoss()).toBe(100); // 10 * 160 - 1500
+      });
 
-      // Break-even
-      expect(position.getProfitOrLoss(150)).toBe(0); // 1500 - 1500
+      it('should calculate the correct loss after closing', () => {
+        position.closePosition(145); // Close with loss
+        expect(position.getProfitOrLoss()).toBe(-50); // 10 * 145 - 1500
+      });
+
+      it('should calculate zero profit/loss at break-even after closing', () => {
+        position.closePosition(150); // Close at break-even
+        expect(position.getProfitOrLoss()).toBe(0); // 10 * 150 - 1500
+      });
     });
   });
 });
