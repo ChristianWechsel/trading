@@ -2,7 +2,6 @@ export type IDPosition = string;
 
 export class Position {
   private stops: { loss?: number; profit?: number };
-  private isClosed: boolean;
   private exitPrice?: number;
 
   constructor(
@@ -14,7 +13,6 @@ export class Position {
     },
   ) {
     this.stops = {};
-    this.isClosed = false;
   }
 
   getIdentifier(): IDPosition {
@@ -44,7 +42,6 @@ export class Position {
   }
 
   closePosition(exitPrice: number): void {
-    this.isClosed = true;
     this.exitPrice = exitPrice;
   }
 

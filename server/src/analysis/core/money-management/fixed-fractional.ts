@@ -1,4 +1,4 @@
-import { PositionSizingStrategy } from './money-management.interface';
+import { MoneyManagement } from './money-management.interface';
 
 /**
  * A factory function that creates a position sizing strategy based on a fixed fraction of available cash.
@@ -6,7 +6,7 @@ import { PositionSizingStrategy } from './money-management.interface';
  * @returns A PositionSizingStrategy function.
  */
 export const fixedFractionalSizing =
-  (fraction: number): PositionSizingStrategy =>
+  (fraction: number): MoneyManagement =>
   (cash: number, price: number): number => {
     if (price <= 0 || cash <= 0 || fraction <= 0 || fraction > 1) {
       return 0;

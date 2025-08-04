@@ -1,6 +1,6 @@
 import { YValueAccessor } from '../analysis-context';
 import { EnrichedDataPoint } from '../enriched-data-points/enriched-data-point';
-import { StopLossStrategy } from './risk-management.interface';
+import { RiskManagement } from './risk-management.interface';
 
 /**
  * A factory function that creates a stop-loss strategy based on a multiple of the Average True Range (ATR).
@@ -8,7 +8,7 @@ import { StopLossStrategy } from './risk-management.interface';
  * @returns A StopLossStrategy function.
  */
 export const atrStopLoss =
-  (multiplier: number): StopLossStrategy =>
+  (multiplier: number): RiskManagement =>
   (dataPoint: EnrichedDataPoint, yValueAccessor: YValueAccessor): number => {
     if (multiplier < 0) {
       throw new Error('Multiplier cannot be negative.');

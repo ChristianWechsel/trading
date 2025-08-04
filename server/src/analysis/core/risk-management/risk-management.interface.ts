@@ -7,7 +7,7 @@ import { EnrichedDataPoint } from '../enriched-data-points/enriched-data-point';
  * @param dataPoint The enriched data point at the time of entry, which may contain indicators like ATR.
  * @returns The calculated stop-loss price.
  */
-export type StopLossStrategy = (
+export type RiskManagement = (
   dataPoint: EnrichedDataPoint,
   yValueAccessor: YValueAccessor,
 ) => number;

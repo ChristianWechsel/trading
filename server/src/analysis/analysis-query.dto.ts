@@ -83,6 +83,13 @@ export class StepOptionsDto {
   yValueSource?: YValueSource;
 }
 
+export class AccountDto {
+  @IsOptional()
+  @IsNumber()
+  @IsPositive(0)
+  initialCapital?: number;
+}
+
 export class AnalysisQueryDto {
   @ValidateNested()
   @Type(() => DataAggregationDto)
@@ -97,4 +104,9 @@ export class AnalysisQueryDto {
   @ValidateNested()
   @Type(() => StepOptionsDto)
   stepOptions?: StepOptionsDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => AccountDto)
+  account?: AccountDto;
 }

@@ -3,7 +3,9 @@ import { AnalysisQueryDto } from '../analysis-query.dto';
 import { ATRComparableNumber } from '../steps/utils/comparable-number/atr-comparable-number';
 import { ComparableNumber } from '../steps/utils/comparable-number/comparable-number';
 import { RelativeComparableNumber } from '../steps/utils/comparable-number/relative-comparable-number';
+import { Account } from './account/account';
 import {
+  AccountOptions,
   AverageTrueRangeOptions,
   Options,
   SwingPointDetectionOptions,
@@ -22,11 +24,13 @@ export class AnalysisContextClass {
   private trends: TrendDataMetadata['trendData'][];
   private tradingSignals: SignalForTrade[];
   private trades: Trade[];
+  private account: Account;
 
   private defaults: {
     relativeThreshold: number;
     windowSize: number;
     period: number;
+    initialCapital: number;
   };
 
   constructor(query: AnalysisQueryDto, ohlcvs: OHLCV[]) {
@@ -34,6 +38,7 @@ export class AnalysisContextClass {
       relativeThreshold: 0.01,
       windowSize: 1,
       period: 20,
+      initialCapital: 10000,
     };
 
     this.options = new Options({
@@ -61,13 +66,16 @@ export class AnalysisContextClass {
         this.defaults,
       ),
       yValueSource: query.stepOptions?.yValueSource ?? 'close',
+      account: new AccountOptions(query.account?.initialCapital, this.defaults),
     });
+
     this.enrichedDataPoints = ohlcvs
       .map((ohlcv) => ohlcv.clone())
       .map((ohlcv) => new EnrichedDataPoint(ohlcv));
     this.trends = [];
     this.tradingSignals = [];
     this.trades = [];
+    this.account = new Account();
   }
 
   getOptions(): Options {

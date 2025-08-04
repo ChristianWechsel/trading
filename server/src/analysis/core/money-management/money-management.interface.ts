@@ -4,4 +4,4 @@
  * @param price The current price per share.
  * @returns The number of shares to purchase.
  */
-export type PositionSizingStrategy = (cash: number, price: number) => number;
+export type MoneyManagement = (cash: number, price: number) => number;

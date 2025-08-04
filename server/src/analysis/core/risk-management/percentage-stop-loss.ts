@@ -1,6 +1,6 @@
 import { YValueAccessor } from '../analysis-context';
 import { EnrichedDataPoint } from '../enriched-data-points/enriched-data-point';
-import { StopLossStrategy } from './risk-management.interface';
+import { RiskManagement } from './risk-management.interface';
 
 /**
  * A factory function that creates a stop-loss strategy based on a fixed percentage below the entry price.
@@ -8,7 +8,7 @@ import { StopLossStrategy } from './risk-management.interface';
  * @returns A StopLossStrategy function.
  */
 export const percentageStopLoss =
-  (percentage: number): StopLossStrategy =>
+  (percentage: number): RiskManagement =>
   (dataPoint: EnrichedDataPoint, yValueAccessor: YValueAccessor): number => {
     if (percentage < 0) {
       throw new Error('Percentage cannot be negative.');

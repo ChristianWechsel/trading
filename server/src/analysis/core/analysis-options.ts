@@ -1,4 +1,6 @@
 import { YValueSource } from '../analysis-query.dto';
+import { MoneyManagement } from './money-management/money-management.interface';
+import { RiskManagement } from './risk-management/risk-management.interface';
 
 export class Options {
   constructor(
@@ -7,6 +9,9 @@ export class Options {
       swingPointDetection: SwingPointDetectionOptions;
       trendDetection: TrendDetectionOptions;
       yValueSource: YValueSource;
+      account: AccountOptions;
+      moneyManagement: MoneyManagement;
+      riskManagement: RiskManagement;
     },
   ) {}
 
@@ -81,5 +86,20 @@ export class TrendDetectionOptions {
 
   getAtrFactor() {
     return this.options.atrFactor;
+  }
+}
+
+export class AccountOptions {
+  constructor(
+    private options: Partial<{
+      initialCapital: number;
+    }>,
+    private defaults: {
+      initialCapital: number;
+    },
+  ) {}
+
+  getInitialCapital() {
+    return this.options.initialCapital ?? this.defaults.initialCapital;
   }
 }
