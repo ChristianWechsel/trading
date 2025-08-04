@@ -1,3 +1,4 @@
+import { YValueAccessor } from '../analysis-context';
 import { EnrichedDataPoint } from '../enriched-data-points/enriched-data-point';
 import { StopLossStrategy } from './risk-management.interface';
 
@@ -8,18 +9,17 @@ import { StopLossStrategy } from './risk-management.interface';
  */
 export const atrStopLoss =
   (multiplier: number): StopLossStrategy =>
-  (entryPrice: number, dataPoint: EnrichedDataPoint): number => {
+  (dataPoint: EnrichedDataPoint, yValueAccessor: YValueAccessor): number => {
     if (multiplier < 0) {
       throw new Error('Multiplier cannot be negative.');
     }
-
+    const price = yValueAccessor(dataPoint);
     const atrValue = dataPoint.getAverageTrueRange();
-
     if (typeof atrValue !== 'number') {
       throw new Error(
         `ATR value is not available or not a number on the given data point.`,
       );
     }
 
-    return entryPrice - atrValue * multiplier;
+    return price - atrValue * multiplier;
   };

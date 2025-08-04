@@ -1,36 +1,40 @@
 import { CreateTestData } from '../../../utils/test-utils';
+import { YValueAccessor } from '../analysis-context';
+import { EnrichedDataPoint } from '../enriched-data-points/enriched-data-point';
 import { percentageStopLoss } from './percentage-stop-loss';
 
 describe('percentageStopLoss', () => {
-  const entryPrice = 100;
-  // Mock dataPoint, as it's not used by this strategy
   const createTestData = new CreateTestData();
+  let mockDataPoint: EnrichedDataPoint;
+  let yValueAccessor: YValueAccessor;
+
+  beforeEach(() => {
+    mockDataPoint = createTestData.createEnrichedDataPoint({});
+    // Simulate the accessor returning the closing price
+    yValueAccessor = () => 100;
+  });
 
   it('should calculate the correct stop-loss price for a given percentage', () => {
-    const mockDataPoint = createTestData.createEnrichedDataPoint({});
     const strategy = percentageStopLoss(5); // 5% stop-loss
-    const stopLossPrice = strategy(entryPrice, mockDataPoint);
-    expect(stopLossPrice).toBe(95);
+    const stopLossPrice = strategy(mockDataPoint, yValueAccessor);
+    expect(stopLossPrice).toBe(95); // 100 * (1 - 0.05)
   });
 
   it('should return the entry price if percentage is 0', () => {
-    const mockDataPoint = createTestData.createEnrichedDataPoint({});
     const strategy = percentageStopLoss(0);
-    const stopLossPrice = strategy(entryPrice, mockDataPoint);
+    const stopLossPrice = strategy(mockDataPoint, yValueAccessor);
     expect(stopLossPrice).toBe(100);
   });
 
   it('should return 0 if percentage is 100', () => {
-    const mockDataPoint = createTestData.createEnrichedDataPoint({});
     const strategy = percentageStopLoss(100);
-    const stopLossPrice = strategy(entryPrice, mockDataPoint);
+    const stopLossPrice = strategy(mockDataPoint, yValueAccessor);
     expect(stopLossPrice).toBe(0);
   });
 
   it('should throw an error if percentage is negative', () => {
-    const mockDataPoint = createTestData.createEnrichedDataPoint({});
-    expect(() => percentageStopLoss(-10)(entryPrice, mockDataPoint)).toThrow(
-      'Percentage cannot be negative.',
-    );
+    expect(() =>
+      percentageStopLoss(-10)(mockDataPoint, yValueAccessor),
+    ).toThrow('Percentage cannot be negative.');
   });
 });

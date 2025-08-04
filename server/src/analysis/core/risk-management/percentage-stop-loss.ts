@@ -1,3 +1,5 @@
+import { YValueAccessor } from '../analysis-context';
+import { EnrichedDataPoint } from '../enriched-data-points/enriched-data-point';
 import { StopLossStrategy } from './risk-management.interface';
 
 /**
@@ -7,10 +9,11 @@ import { StopLossStrategy } from './risk-management.interface';
  */
 export const percentageStopLoss =
   (percentage: number): StopLossStrategy =>
-  (entryPrice: number): number => {
+  (dataPoint: EnrichedDataPoint, yValueAccessor: YValueAccessor): number => {
     if (percentage < 0) {
       throw new Error('Percentage cannot be negative.');
     }
+    const price = yValueAccessor(dataPoint);
     const factor = 1 - percentage / 100;
-    return entryPrice * factor;
+    return price * factor;
   };

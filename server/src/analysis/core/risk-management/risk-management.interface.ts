@@ -1,3 +1,4 @@
+import { YValueAccessor } from '../analysis-context';
 import { EnrichedDataPoint } from '../enriched-data-points/enriched-data-point';
 
 /**
@@ -7,6 +8,6 @@ import { EnrichedDataPoint } from '../enriched-data-points/enriched-data-point';
  * @returns The calculated stop-loss price.
  */
 export type StopLossStrategy = (
-  entryPrice: number,
   dataPoint: EnrichedDataPoint,
+  yValueAccessor: YValueAccessor,
 ) => number;
