@@ -1,5 +1,6 @@
 export class Position {
   private stops: { loss?: number; profit?: number };
+  private isClosed: boolean;
 
   constructor(
     private position: {
@@ -10,6 +11,7 @@ export class Position {
     },
   ) {
     this.stops = {};
+    this.isClosed = false;
   }
 
   setStopLossPrice(price: number): void {
@@ -32,6 +34,14 @@ export class Position {
 
   getTakeProfitPrice(): number | undefined {
     return this.stops.profit;
+  }
+
+  setIsClosed(closed: boolean): void {
+    this.isClosed = closed;
+  }
+
+  getIsClosed(): boolean {
+    return this.isClosed;
   }
 
   /**

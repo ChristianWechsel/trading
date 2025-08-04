@@ -48,6 +48,23 @@ describe('Position', () => {
     });
   });
 
+  describe('Closing Status', () => {
+    it('should initially be not closed', () => {
+      expect(position.getIsClosed()).toBe(false);
+    });
+
+    it('should allow setting the closed status to true', () => {
+      position.setIsClosed(true);
+      expect(position.getIsClosed()).toBe(true);
+    });
+
+    it('should allow setting the closed status back to false', () => {
+      position.setIsClosed(true); // Set to true first
+      position.setIsClosed(false); // Then set back to false
+      expect(position.getIsClosed()).toBe(false);
+    });
+  });
+
   describe('Value and P/L Calculations', () => {
     it('should calculate the correct entry value', () => {
       expect(position.getEntryValue()).toBe(1500); // 10 * 150
