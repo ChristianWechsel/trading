@@ -95,6 +95,13 @@ export class StepOptionsDto {
   yValueSource?: YValueSource;
 }
 
+export class AccountDto {
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  initialCapital?: number;
+}
+
 export class MoneyManagementDto {
   @IsOptional()
   @IsEnum(selectorMoneyManagementValues)
@@ -121,9 +128,9 @@ export class RiskManagementDto {
 
 export class TradingDto {
   @IsOptional()
-  @IsNumber()
-  @IsPositive()
-  initialCapital?: number;
+  @ValidateNested()
+  @Type(() => AccountDto)
+  account?: AccountDto;
 
   @IsOptional()
   @ValidateNested()

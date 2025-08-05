@@ -1,10 +1,12 @@
 import {
+  AccountDto,
+  AverageTrueRangeOptionsDto,
   MoneyManagementDto,
   RiskManagementDto,
+  SwingPointDetectionOptionsDto,
+  TrendDetectionOptionsDto,
   YValueSource,
 } from '../analysis-query.dto';
-import { MoneyManagement } from './money-management/money-management.interface';
-import { RiskManagement } from './risk-management/risk-management.interface';
 
 export class Options {
   constructor(
@@ -14,8 +16,8 @@ export class Options {
       trendDetection: TrendDetectionOptions;
       yValueSource: YValueSource;
       account: AccountOptions;
-      moneyManagement: MoneyManagementDto;
-      riskManagement: RiskManagementDto;
+      moneyManagement: MoneyManagementOptions;
+      riskManagement: RiskManagementOptions;
     },
   ) {}
 
@@ -39,19 +41,19 @@ export class Options {
     return this.options.account;
   }
 
-  getMoneyManagement(): MoneyManagement {
+  getMoneyManagement(): MoneyManagementOptions {
     return this.options.moneyManagement;
   }
 
-  getRiskManagement(): RiskManagement {
+  getRiskManagement(): RiskManagementOptions {
     return this.options.riskManagement;
   }
 }
 
 export class AverageTrueRangeOptions {
   constructor(
-    private options: Partial<{ period: number }>,
-    private defaults: { period: number },
+    private options: AverageTrueRangeOptionsDto,
+    private defaults: Required<AverageTrueRangeOptionsDto>,
   ) {}
 
   getPeriod() {
@@ -61,15 +63,10 @@ export class AverageTrueRangeOptions {
 
 export class SwingPointDetectionOptions {
   constructor(
-    private options: Partial<{
-      relativeThreshold: number;
-      windowSize: number;
-      atrFactor: number;
-    }>,
-    private defaults: {
-      relativeThreshold: number;
-      windowSize: number;
-    },
+    private options: SwingPointDetectionOptionsDto,
+    private defaults: Required<
+      Pick<SwingPointDetectionOptionsDto, 'relativeThreshold' | 'windowSize'>
+    >,
   ) {}
 
   getRelativeThreshold() {
@@ -87,13 +84,10 @@ export class SwingPointDetectionOptions {
 
 export class TrendDetectionOptions {
   constructor(
-    private options: Partial<{
-      relativeThreshold: number;
-      atrFactor: number;
-    }>,
-    private defaults: {
-      relativeThreshold: number;
-    },
+    private options: TrendDetectionOptionsDto,
+    private defaults: Required<
+      Pick<TrendDetectionOptionsDto, 'relativeThreshold'>
+    >,
   ) {}
 
   getRelativeThreshold() {
@@ -107,15 +101,45 @@ export class TrendDetectionOptions {
 
 export class AccountOptions {
   constructor(
-    private options: Partial<{
-      initialCapital: number;
-    }>,
-    private defaults: {
-      initialCapital: number;
-    },
+    private options: AccountDto,
+    private defaults: Required<AccountDto>,
   ) {}
 
   getInitialCapital() {
     return this.options.initialCapital ?? this.defaults.initialCapital;
+  }
+}
+
+export class MoneyManagementOptions {
+  constructor(
+    private options: MoneyManagementDto,
+    private defaults: Required<MoneyManagementDto>,
+  ) {}
+
+  getMoneyManagement() {
+    return this.options.moneyManagement ?? this.defaults.moneyManagement;
+  }
+
+  getFixedFractional() {
+    return this.options.fixedFractional ?? this.defaults.fixedFractional;
+  }
+}
+
+export class RiskManagementOptions {
+  constructor(
+    private options: RiskManagementDto,
+    private defaults: Required<RiskManagementDto>,
+  ) {}
+
+  getRiskManagement() {
+    return this.options.riskManagement ?? this.defaults.riskManagement;
+  }
+
+  getAtrFactor() {
+    return this.options.atrFactor ?? this.defaults.atrFactor;
+  }
+
+  getFixedFractional() {
+    return this.options.fixedFractional ?? this.defaults.fixedFractional;
   }
 }

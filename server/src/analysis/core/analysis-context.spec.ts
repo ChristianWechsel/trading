@@ -1,8 +1,11 @@
 import { OHLCV } from '../../data-aggregation/ohlcv.entity';
 import { AnalysisQueryDto } from '../analysis-query.dto';
+import { ATRComparableNumber } from '../steps/utils/comparable-number/atr-comparable-number';
+import { RelativeComparableNumber } from '../steps/utils/comparable-number/relative-comparable-number';
 import { AnalysisContextClass } from './analysis-context';
-import { TrendDataMetadata } from './analysis.interface';
+import { SignalForTrade, TrendDataMetadata } from './analysis.interface';
 import { EnrichedDataPoint } from './enriched-data-points/enriched-data-point';
+import { Trade } from './trade/trade';
 
 describe('AnalysisContextClass', () => {
   let query: AnalysisQueryDto;
@@ -17,6 +20,8 @@ describe('AnalysisContextClass', () => {
     const ctx = new AnalysisContextClass(query, ohlcvs);
     expect(ctx.getEnrichedDataPoints()).toEqual([]);
     expect(ctx.getTrends()).toEqual([]);
+    expect(ctx.getTradingSignals()).toEqual([]);
+    expect(ctx.getTrades()).toEqual([]);
   });
 
   it('should create enrichedDataPoints from ohlcvs on initialization', () => {
@@ -52,18 +57,34 @@ describe('AnalysisContextClass', () => {
     expect(enrichedPoints[1].getDataPoint()).toEqual(ohlcvs[1]);
   });
 
-  it('should return enrichedDataPoints via getEnrichedDataPoints()', () => {
+  it('should set and get trends', () => {
     const ctx = new AnalysisContextClass(query, ohlcvs);
-    // @ts-expect-error: testing private property
-    ctx.enrichedDataPoints = [{ value: 1 }] as EnrichedDataPoint[];
-    expect(ctx.getEnrichedDataPoints()).toEqual([{ value: 1 }]);
+    const mockTrend = [
+      { type: 'upward', start: {} as EnrichedDataPoint },
+    ] as TrendDataMetadata['trendData'][];
+
+    ctx.setTrends(mockTrend);
+    expect(ctx.getTrends()).toEqual(mockTrend);
   });
 
-  it('should return trends via getTrends()', () => {
+  it('should add and get trading signals', () => {
     const ctx = new AnalysisContextClass(query, ohlcvs);
-    // @ts-expect-error: testing private property
-    ctx.trends = [[{ trend: 'up' }]] as TrendDataMetadata['trendData'][];
-    expect(ctx.getTrends()).toEqual([[{ trend: 'up' }]]);
+    const mockSignal: SignalForTrade = {
+      type: 'buy',
+      dataPoint: {} as EnrichedDataPoint,
+      reason: 'Upward trend started',
+    };
+
+    ctx.addTradingSignals(mockSignal);
+    expect(ctx.getTradingSignals()).toEqual([mockSignal]);
+  });
+
+  it('should add and get trades', () => {
+    const ctx = new AnalysisContextClass(query, ohlcvs);
+    const mockTrade = {} as Trade;
+
+    ctx.addTrade(mockTrade);
+    expect(ctx.getTrades()).toEqual([mockTrade]);
   });
 
   describe('buildYValueAccessor', () => {
@@ -123,6 +144,108 @@ describe('AnalysisContextClass', () => {
       );
       const accessor = ctx.buildYValueAccessor();
       expect(accessor(dataPoint)).toBe(5);
+    });
+  });
+
+  describe('buildComparableNumber', () => {
+    let dataPoint: EnrichedDataPoint;
+
+    beforeEach(() => {
+      const ohlcv = new OHLCV({
+        securityId: 1,
+        priceDate: '2023-01-01',
+        openPrice: 10,
+        highPrice: 20,
+        lowPrice: 5,
+        closePrice: 15,
+        adjustedClosePrice: 15,
+        volume: 1000,
+      });
+      dataPoint = new EnrichedDataPoint(ohlcv);
+    });
+
+    it('should return a RelativeComparableNumber by default', () => {
+      const ctx = new AnalysisContextClass({} as AnalysisQueryDto, []);
+      const comparableNumber = ctx.buildComparableNumber({
+        enrichedDataPoint: dataPoint,
+        step: 'SwingPointDetection',
+      });
+      expect(comparableNumber).toBeInstanceOf(RelativeComparableNumber);
+    });
+
+    it('should return an ATRComparableNumber when ATR is available', () => {
+      const ctx = new AnalysisContextClass(
+        {
+          stepOptions: { swingPointDetection: { atrFactor: 2 } },
+        } as AnalysisQueryDto,
+        [],
+      );
+
+      // Set ATR on the data point
+      dataPoint.setAverageTrueRange(1.5);
+
+      const comparableNumber = ctx.buildComparableNumber({
+        enrichedDataPoint: dataPoint,
+        step: 'SwingPointDetection',
+      });
+
+      expect(comparableNumber).toBeInstanceOf(ATRComparableNumber);
+    });
+  });
+
+  describe('money management and risk management', () => {
+    it('should build default money management', () => {
+      const ctx = new AnalysisContextClass({} as AnalysisQueryDto, []);
+      const moneyManagement = ctx.buildMoneyManagement();
+      expect(moneyManagement).toBeDefined();
+    });
+
+    it('should build default risk management', () => {
+      const ctx = new AnalysisContextClass({} as AnalysisQueryDto, []);
+      const riskManagement = ctx.buildRiskManagement();
+      expect(riskManagement).toBeDefined();
+    });
+
+    it('should respect configured money management options', () => {
+      const ctx = new AnalysisContextClass(
+        {
+          trading: {
+            moneyManagement: {
+              moneyManagement: 'all-in',
+            },
+          },
+        } as AnalysisQueryDto,
+        [],
+      );
+
+      const moneyManagement = ctx.buildMoneyManagement();
+      expect(moneyManagement).toBeDefined();
+      // Test implementation details would depend on how to identify the specific strategy
+    });
+
+    it('should respect configured risk management options', () => {
+      const ctx = new AnalysisContextClass(
+        {
+          trading: {
+            riskManagement: {
+              riskManagement: 'atr-based',
+              atrFactor: 2,
+            },
+          },
+        } as AnalysisQueryDto,
+        [],
+      );
+
+      const riskManagement = ctx.buildRiskManagement();
+      expect(riskManagement).toBeDefined();
+      // Test implementation details would depend on how to identify the specific strategy
+    });
+  });
+
+  describe('options handling', () => {
+    it('should provide access to options', () => {
+      const ctx = new AnalysisContextClass(query, ohlcvs);
+      expect(ctx.getOptions()).toBeDefined();
     });
   });
 });

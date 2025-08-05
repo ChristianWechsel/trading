@@ -1,5 +1,14 @@
 import { OHLCV } from '../../data-aggregation/ohlcv.entity';
-import { AnalysisQueryDto, YValueSource } from '../analysis-query.dto';
+import {
+  AccountDto,
+  AnalysisQueryDto,
+  AverageTrueRangeOptionsDto,
+  MoneyManagementDto,
+  RiskManagementDto,
+  SwingPointDetectionOptionsDto,
+  TrendDetectionOptionsDto,
+  YValueSource,
+} from '../analysis-query.dto';
 import { ATRComparableNumber } from '../steps/utils/comparable-number/atr-comparable-number';
 import { ComparableNumber } from '../steps/utils/comparable-number/comparable-number';
 import { RelativeComparableNumber } from '../steps/utils/comparable-number/relative-comparable-number';
@@ -7,7 +16,9 @@ import { Account } from './account/account';
 import {
   AccountOptions,
   AverageTrueRangeOptions,
+  MoneyManagementOptions,
   Options,
+  RiskManagementOptions,
   SwingPointDetectionOptions,
   TrendDetectionOptions,
 } from './analysis-options';
@@ -39,24 +50,45 @@ export class AnalysisContextClass {
   private account: Account;
 
   private defaults: {
+    averageTrueRangeOptions: Required<AverageTrueRangeOptionsDto>;
+    swingPointDetectionOptions: Required<
+      Pick<SwingPointDetectionOptionsDto, 'relativeThreshold' | 'windowSize'>
+    >;
+    trendDetectionOptions: Required<
+      Pick<TrendDetectionOptionsDto, 'relativeThreshold'>
+    >;
+    accountOptions: Required<AccountDto>;
+    moneyManagementOptions: Required<MoneyManagementDto>;
+    riskManagementOptions: Required<RiskManagementDto>;
     yValueSource: YValueSource;
-    relativeThreshold: number;
-    windowSize: number;
-    period: number;
-    initialCapital: number;
-    moneyManagement: MoneyManagement;
-    riskManagement: RiskManagement;
   };
 
   constructor(query: AnalysisQueryDto, ohlcvs: OHLCV[]) {
+    const relativeThresholdValue = 0.01;
     this.defaults = {
+      averageTrueRangeOptions: {
+        period: 20,
+      },
+      swingPointDetectionOptions: {
+        relativeThreshold: relativeThresholdValue,
+        windowSize: 1,
+      },
+      trendDetectionOptions: {
+        relativeThreshold: relativeThresholdValue,
+      },
+      accountOptions: {
+        initialCapital: 10000,
+      },
+      moneyManagementOptions: {
+        fixedFractional: 0.5,
+        moneyManagement: 'fixed-fractional',
+      },
+      riskManagementOptions: {
+        atrFactor: 2,
+        fixedFractional: 0.5,
+        riskManagement: 'fixed-percentage',
+      },
       yValueSource: 'close',
-      relativeThreshold: 0.01,
-      windowSize: 1,
-      period: 20,
-      initialCapital: 10000,
-      moneyManagement: fixedFractionalSizing(0.5),
-      riskManagement: atrStopLoss(2),
     };
 
     this.options = new Options({
@@ -64,7 +96,7 @@ export class AnalysisContextClass {
         {
           period: query.stepOptions?.averageTrueRange?.period,
         },
-        this.defaults,
+        this.defaults.averageTrueRangeOptions,
       ),
       swingPointDetection: new SwingPointDetectionOptions(
         {
@@ -73,7 +105,7 @@ export class AnalysisContextClass {
           atrFactor: query.stepOptions?.swingPointDetection?.atrFactor,
           windowSize: query.stepOptions?.swingPointDetection?.windowSize,
         },
-        this.defaults,
+        this.defaults.swingPointDetectionOptions,
       ),
       trendDetection: new TrendDetectionOptions(
         {
@@ -81,18 +113,27 @@ export class AnalysisContextClass {
             query.stepOptions?.trendDetection?.relativeThreshold,
           atrFactor: query.stepOptions?.trendDetection?.atrFactor,
         },
-        this.defaults,
+        this.defaults.trendDetectionOptions,
       ),
       yValueSource:
         query.stepOptions?.yValueSource ?? this.defaults.yValueSource,
       account: new AccountOptions(
-        { initialCapital: query.trading?.initialCapital },
-        this.defaults,
+        { initialCapital: query.trading?.account?.initialCapital },
+        this.defaults.accountOptions,
       ),
-      moneyManagement: this.selectMoneyManagement(
-        query.trading?.moneyManagement,
+      moneyManagement: new MoneyManagementOptions(
+        {
+          fixedFractional: query.trading?.moneyManagement?.fixedFractional,
+        },
+        this.defaults.moneyManagementOptions,
       ),
-      riskManagement: this.selectRiskManagement(query.trading?.riskManagement),
+      riskManagement: new RiskManagementOptions(
+        {
+          atrFactor: query.trading?.riskManagement?.atrFactor,
+          fixedFractional: query.trading?.riskManagement?.fixedFractional,
+        },
+        this.defaults.riskManagementOptions,
+      ),
     });
 
     this.enrichedDataPoints = ohlcvs
@@ -168,7 +209,17 @@ export class AnalysisContextClass {
     return new RelativeComparableNumber(value, relativeThreshold);
   }
 
-  buildMoneyManagement(): MoneyManagement {}
+  buildMoneyManagement(): MoneyManagement {
+    return this.selectMoneyManagement(
+      this.options.getMoneyManagement().getMoneyManagement(),
+    );
+  }
+
+  buildRiskManagement(): RiskManagement {
+    return this.selectRiskManagement(
+      this.options.getRiskManagement().getRiskManagement(),
+    );
+  }
 
   private getATRFactor(step: Step) {
     switch (step) {
@@ -196,7 +247,7 @@ export class AnalysisContextClass {
         return this.options.getTrendDetection().getRelativeThreshold();
 
       default:
-        return this.defaults.relativeThreshold;
+        return this.defaults.swingPointDetectionOptions.relativeThreshold;
     }
   }
 
@@ -207,11 +258,10 @@ export class AnalysisContextClass {
       case 'all-in':
         return allInSizing;
 
-      case 'fixed-fractional':
-        return fixedFractionalSizing(1);
-
       default:
-        return this.defaults.moneyManagement;
+        return fixedFractionalSizing(
+          this.options.getMoneyManagement().getFixedFractional(),
+        );
     }
   }
 
@@ -222,11 +272,10 @@ export class AnalysisContextClass {
       case 'atr-based':
         return atrStopLoss(1);
 
-      case 'fixed-percentage':
-        return percentageStopLoss(1);
-
       default:
-        return this.defaults.riskManagement;
+        return percentageStopLoss(
+          this.options.getRiskManagement().getFixedFractional(),
+        );
     }
   }
 }
