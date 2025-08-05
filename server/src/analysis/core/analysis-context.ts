@@ -30,6 +30,7 @@ import {
   MoneyManagement,
   SelectorMoneyManagement,
 } from './money-management/money-management.interface';
+import { Portfolio } from './portfolio/portfolio';
 import { atrStopLoss } from './risk-management/atr-stopp-loss';
 import { percentageStopLoss } from './risk-management/percentage-stop-loss';
 import {
@@ -48,6 +49,7 @@ export class AnalysisContextClass {
   private tradingSignals: SignalForTrade[];
   private trades: Trade[];
   private account: Account;
+  private portfolio: Portfolio;
 
   private defaults: {
     averageTrueRangeOptions: Required<AverageTrueRangeOptionsDto>;
@@ -147,6 +149,14 @@ export class AnalysisContextClass {
 
   getOptions(): Options {
     return this.options;
+  }
+
+  getAccount(): Account {
+    return this.account;
+  }
+
+  getPortfolio(): Portfolio {
+    return this.portfolio;
   }
 
   getEnrichedDataPoints(): EnrichedDataPoint[] {
