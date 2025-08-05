@@ -20,6 +20,7 @@ import {
   Options,
   RiskManagementOptions,
   SwingPointDetectionOptions,
+  TickerOptions,
   TrendDetectionOptions,
 } from './analysis-options';
 import { SignalForTrade, Step, TrendDataMetadata } from './analysis.interface';
@@ -94,6 +95,7 @@ export class AnalysisContextClass {
     };
 
     this.options = new Options({
+      ticker: new TickerOptions(query.dataAggregation.ticker),
       averageTrueRange: new AverageTrueRangeOptions(
         {
           period: query.stepOptions?.averageTrueRange?.period,
@@ -145,6 +147,7 @@ export class AnalysisContextClass {
     this.tradingSignals = [];
     this.trades = [];
     this.account = new Account(this.options.getAccount().getInitialCapital());
+    this.portfolio = new Portfolio(this.account);
   }
 
   getOptions(): Options {

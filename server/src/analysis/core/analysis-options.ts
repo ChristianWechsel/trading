@@ -1,3 +1,4 @@
+import { TickerDto } from 'src/data-aggregation/data-aggregation.dto';
 import {
   AccountDto,
   AverageTrueRangeOptionsDto,
@@ -18,8 +19,12 @@ export class Options {
       account: AccountOptions;
       moneyManagement: MoneyManagementOptions;
       riskManagement: RiskManagementOptions;
+      ticker: TickerOptions;
     },
   ) {}
+  getTicker(): TickerOptions {
+    return this.options.ticker;
+  }
 
   getAverageTrueRange(): AverageTrueRangeOptions {
     return this.options.averageTrueRange;
@@ -141,5 +146,13 @@ export class RiskManagementOptions {
 
   getFixedFractional() {
     return this.options.fixedFractional ?? this.defaults.fixedFractional;
+  }
+}
+
+export class TickerOptions {
+  constructor(private options: TickerDto) {}
+
+  getTicker() {
+    return this.options;
   }
 }

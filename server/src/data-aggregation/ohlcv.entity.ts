@@ -39,6 +39,9 @@ export class OHLCV {
   getPriceDateEpochTime(): number {
     return new Date(this.ohlcvData.priceDate).getTime();
   }
+  getPriceDate(): Date {
+    return new Date(this.ohlcvData.priceDate);
+  }
   getOpenPrice(): number {
     return this.ohlcvData.openPrice;
   }

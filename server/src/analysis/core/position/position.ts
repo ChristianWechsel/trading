@@ -1,3 +1,5 @@
+import { TickerDto } from '../../../data-aggregation/data-aggregation.dto';
+
 export type IDPosition = string;
 
 export class Position {
@@ -6,7 +8,7 @@ export class Position {
 
   constructor(
     private position: {
-      symbol: string;
+      ticker: TickerDto;
       shares: number;
       entryPrice: number;
       entryDate: Date;
@@ -15,8 +17,15 @@ export class Position {
     this.stops = {};
   }
 
+  isPosition(ticker: TickerDto): boolean {
+    return (
+      this.position.ticker.symbol === ticker.symbol &&
+      this.position.ticker.exchange === ticker.exchange
+    );
+  }
+
   getIdentifier(): IDPosition {
-    return `${this.position.symbol} ${this.position.entryDate.toISOString()}`;
+    return `${this.position.ticker.symbol} ${this.position.ticker.exchange} ${this.position.entryDate.toISOString()}`;
   }
 
   setStopLossPrice(price: number): void {

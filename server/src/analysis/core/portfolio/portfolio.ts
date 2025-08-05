@@ -7,6 +7,10 @@ export class Portfolio {
 
   constructor(private readonly account: Account) {}
 
+  hasOpenPositions(): boolean {
+    return this.openPositions.size > 0;
+  }
+
   getOpenPositions(): Position[] {
     return Array.from(this.openPositions.values());
   }
