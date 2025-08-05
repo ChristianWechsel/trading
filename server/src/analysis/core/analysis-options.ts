@@ -1,4 +1,8 @@
-import { YValueSource } from '../analysis-query.dto';
+import {
+  MoneyManagementDto,
+  RiskManagementDto,
+  YValueSource,
+} from '../analysis-query.dto';
 import { MoneyManagement } from './money-management/money-management.interface';
 import { RiskManagement } from './risk-management/risk-management.interface';
 
@@ -10,8 +14,8 @@ export class Options {
       trendDetection: TrendDetectionOptions;
       yValueSource: YValueSource;
       account: AccountOptions;
-      moneyManagement: MoneyManagement;
-      riskManagement: RiskManagement;
+      moneyManagement: MoneyManagementDto;
+      riskManagement: RiskManagementDto;
     },
   ) {}
 
@@ -29,6 +33,18 @@ export class Options {
 
   getYValueSource(): YValueSource {
     return this.options.yValueSource;
+  }
+
+  getAccount(): AccountOptions {
+    return this.options.account;
+  }
+
+  getMoneyManagement(): MoneyManagement {
+    return this.options.moneyManagement;
+  }
+
+  getRiskManagement(): RiskManagement {
+    return this.options.riskManagement;
   }
 }
 

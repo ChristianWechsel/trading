@@ -95,6 +95,30 @@ export class StepOptionsDto {
   yValueSource?: YValueSource;
 }
 
+export class MoneyManagementDto {
+  @IsOptional()
+  @IsEnum(selectorMoneyManagementValues)
+  moneyManagement?: SelectorMoneyManagement;
+
+  @IsOptional()
+  @IsPositive()
+  fixedFractional?: number;
+}
+
+export class RiskManagementDto {
+  @IsOptional()
+  @IsEnum(selectorRiskManagementValues)
+  riskManagement?: SelectorRiskManagement;
+
+  @IsOptional()
+  @IsPositive()
+  atrFactor?: number;
+
+  @IsOptional()
+  @IsPositive()
+  fixedFractional?: number;
+}
+
 export class TradingDto {
   @IsOptional()
   @IsNumber()
@@ -102,12 +126,14 @@ export class TradingDto {
   initialCapital?: number;
 
   @IsOptional()
-  @IsEnum(selectorMoneyManagementValues)
-  moneyManagement?: SelectorMoneyManagement;
+  @ValidateNested()
+  @Type(() => MoneyManagementDto)
+  moneyManagement?: MoneyManagementDto;
 
   @IsOptional()
-  @IsEnum(selectorRiskManagementValues)
-  riskManagement?: SelectorRiskManagement;
+  @ValidateNested()
+  @Type(() => RiskManagementDto)
+  riskManagement?: RiskManagementDto;
 }
 
 export class AnalysisQueryDto {

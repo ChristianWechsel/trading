@@ -1,5 +1,5 @@
 import { OHLCV } from '../../data-aggregation/ohlcv.entity';
-import { AnalysisQueryDto } from '../analysis-query.dto';
+import { AnalysisQueryDto, YValueSource } from '../analysis-query.dto';
 import { ATRComparableNumber } from '../steps/utils/comparable-number/atr-comparable-number';
 import { ComparableNumber } from '../steps/utils/comparable-number/comparable-number';
 import { RelativeComparableNumber } from '../steps/utils/comparable-number/relative-comparable-number';
@@ -39,18 +39,24 @@ export class AnalysisContextClass {
   private account: Account;
 
   private defaults: {
+    yValueSource: YValueSource;
     relativeThreshold: number;
     windowSize: number;
     period: number;
     initialCapital: number;
+    moneyManagement: MoneyManagement;
+    riskManagement: RiskManagement;
   };
 
   constructor(query: AnalysisQueryDto, ohlcvs: OHLCV[]) {
     this.defaults = {
+      yValueSource: 'close',
       relativeThreshold: 0.01,
       windowSize: 1,
       period: 20,
       initialCapital: 10000,
+      moneyManagement: fixedFractionalSizing(0.5),
+      riskManagement: atrStopLoss(2),
     };
 
     this.options = new Options({
@@ -77,8 +83,16 @@ export class AnalysisContextClass {
         },
         this.defaults,
       ),
-      yValueSource: query.stepOptions?.yValueSource ?? 'close',
-      account: new AccountOptions(query.trading?.initialCapital, this.defaults),
+      yValueSource:
+        query.stepOptions?.yValueSource ?? this.defaults.yValueSource,
+      account: new AccountOptions(
+        { initialCapital: query.trading?.initialCapital },
+        this.defaults,
+      ),
+      moneyManagement: this.selectMoneyManagement(
+        query.trading?.moneyManagement,
+      ),
+      riskManagement: this.selectRiskManagement(query.trading?.riskManagement),
     });
 
     this.enrichedDataPoints = ohlcvs
@@ -87,7 +101,7 @@ export class AnalysisContextClass {
     this.trends = [];
     this.tradingSignals = [];
     this.trades = [];
-    this.account = new Account();
+    this.account = new Account(this.options.getAccount().getInitialCapital());
   }
 
   getOptions(): Options {
@@ -154,6 +168,8 @@ export class AnalysisContextClass {
     return new RelativeComparableNumber(value, relativeThreshold);
   }
 
+  buildMoneyManagement(): MoneyManagement {}
+
   private getATRFactor(step: Step) {
     switch (step) {
       case 'SwingPointDetection':
@@ -185,32 +201,32 @@ export class AnalysisContextClass {
   }
 
   private selectMoneyManagement(
-    selector: SelectorMoneyManagement,
+    selector?: SelectorMoneyManagement,
   ): MoneyManagement {
     switch (selector) {
       case 'all-in':
         return allInSizing;
 
       case 'fixed-fractional':
-        return fixedFractionalSizing;
+        return fixedFractionalSizing(1);
 
       default:
-        throw new Error(`Unknown money management strategy`);
+        return this.defaults.moneyManagement;
     }
   }
 
   private selectRiskManagement(
-    selector: SelectorRiskManagement,
+    selector?: SelectorRiskManagement,
   ): RiskManagement {
     switch (selector) {
       case 'atr-based':
-        return atrStopLoss;
+        return atrStopLoss(1);
 
       case 'fixed-percentage':
-        return percentageStopLoss;
+        return percentageStopLoss(1);
 
       default:
-        throw new Error(`Unknown risk management strategy`);
+        return this.defaults.riskManagement;
     }
   }
 }
