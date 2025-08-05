@@ -38,7 +38,6 @@ import {
   RiskManagement,
   SelectorRiskManagement,
 } from './risk-management/risk-management.interface';
-
 import { Trade } from './trade/trade';
 
 export type YValueAccessor = (dataPoint: EnrichedDataPoint) => number;
@@ -88,7 +87,7 @@ export class AnalysisContextClass {
       },
       riskManagementOptions: {
         atrFactor: 2,
-        fixedFractional: 0.5,
+        fixedFractional: 10,
         riskManagement: 'fixed-percentage',
       },
       yValueSource: 'close',

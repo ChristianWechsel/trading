@@ -1,19 +1,12 @@
-import { Position } from 'src/analysis/core/position/position';
 import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
 import { AnalysisStep, Step } from '../../../analysis/core/analysis.interface';
+import { Position } from '../../../analysis/core/position/position';
 
 export class Trading implements AnalysisStep {
   dependsOn: Step[] = ['TradingSignal'];
   name: Step = 'Trading';
 
   execute(context: AnalysisContextClass): void {
-    // alle dataPoints durchlaufen
-    // für jeden dataPoint prüfen,
-    //    TradingSignal prüfen
-    //      => Preis wird durch yValueAccesor bestimmt
-    //    ob ein StopLoss getroffen wurde
-    //      => Wird durch Tiefstkurs bestimmt
-    // Kauf Verkauf erfassen
     const tradingSignals = context.getTradingSignals();
     if (!tradingSignals || tradingSignals.length === 0) return;
 

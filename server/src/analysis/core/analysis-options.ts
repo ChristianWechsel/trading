@@ -1,4 +1,4 @@
-import { TickerDto } from 'src/data-aggregation/data-aggregation.dto';
+import { TickerDto } from '../../data-aggregation/data-aggregation.dto';
 import {
   AccountDto,
   AverageTrueRangeOptionsDto,
