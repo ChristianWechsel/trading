@@ -152,9 +152,12 @@
    - Projekt bauen: `npm run build` (damit dist/data-source.js aktuell ist)
    - Migration generieren:
      ```bash
-     npx typeorm migration:generate -d dist/data-source.js src/migrations/<MigrationName>
+     npx typeorm migration:generate -d dist/src/data-source.js src/migrations/<MigrationName>
      ```
-   - Beispiel: `npx typeorm migration:generate -d dist/data-source.js src/migrations/CreatePushSubscription`
+   - Beispiel: `npx typeorm migration:generate -d dist/src/data-source.js src/migrations/CreatePushSubscription`
+
+   falls es Probleme mit Passwort gibt vorher
+   export DB_PASSWORD="MyS3cure!Passw0rd" in cmd ausführen
 
 4. **Migration prüfen**
 
@@ -163,9 +166,10 @@
 
 5. **Migration anwenden**
 
+   - npm run build ausführen
    - Migration ausführen:
      ```bash
-     npx typeorm migration:run -d dist/data-source.js
+     npx typeorm migration:run -d dist/src/data-source.js
      ```
 
 6. **Ergebnis kontrollieren**
