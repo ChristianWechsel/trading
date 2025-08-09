@@ -5,6 +5,7 @@
 # Auswertung
 
 - In Position sind manchmal numbers und manchmal string enthalten
+- In Position das Ausstiegsdatum notieren
 - Auflistung aller Trades, mit Kauf-/Verkausdatum und Einstriegs-/Ausstiegspreis, Grund für Eintieg und Ausstieg
 - Nicht alle Positionen sind geschlossen => warum?
 - Initiales Konto und Endkonto anzeigen

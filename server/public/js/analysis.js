@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         riskManagementAtrFactor,
                     );
                     updateAccountBalances(analysisData);
+                    updatePositions(analysisData);
                 }
             });
         } catch (error) {
@@ -80,7 +81,7 @@ async function retrieveAnalysisData(
             },
         },
         steps,
-        stepOptions: {}
+        stepOptions: {},
     };
 
     if (yValueSource) {
@@ -165,7 +166,8 @@ async function retrieveAnalysisData(
 
 function updateAccountBalances(analysisData) {
     // Anfangskontostand
-    const initialBalance = analysisData.options.options.account.defaults.initialCapital;
+    const initialBalance =
+        analysisData.options.options.account.defaults.initialCapital;
     document.getElementById('initial-account-balance').textContent =
         `Anfangskontostand: ${Number(initialBalance).toFixed(2)}`;
 
@@ -173,4 +175,36 @@ function updateAccountBalances(analysisData) {
     const endBalance = analysisData.account.cash;
     document.getElementById('account-balance').textContent =
         `Endkontostand: ${Number(endBalance).toFixed(2)}`;
+}
+
+function updatePositions(analysisData) {
+    // Offene Positionen
+    const openPositionsList = document.getElementById('open-positions');
+    openPositionsList.innerHTML = '';
+    if (
+        analysisData.portfolio.openPositions
+    ) {
+        Object.values(analysisData.portfolio.openPositions).forEach((pos) => {
+            const li = document.createElement('li');
+            li.textContent = `Entry: ${pos.position.entryDate.slice(0, 10)}, Preis: ${Number(pos.position.entryPrice).toFixed(2)}, Stück: ${pos.position.shares}, Stop Loss: ${pos.stops.loss ? Number(pos.stops.loss).toFixed(2) : '-'}`;
+            openPositionsList.appendChild(li);
+        });
+    } else {
+        openPositionsList.innerHTML = '<li>Keine offenen Positionen</li>';
+    }
+
+    // Geschlossene Positionen
+    const closedPositionsList = document.getElementById('closed-positions');
+    closedPositionsList.innerHTML = '';
+    if (
+        analysisData.portfolio.closedPositions
+    ) {
+        Object.values(analysisData.portfolio.closedPositions).forEach((pos) => {
+            const li = document.createElement('li');
+            li.textContent = `Entry: ${pos.position.entryDate.slice(0, 10)}, Preis: ${Number(pos.position.entryPrice).toFixed(2)}, Stück: ${pos.position.shares}, ExitPrice: ${Number(pos.exitPrice).toFixed(2)}`;
+            closedPositionsList.appendChild(li);
+        });
+    } else {
+        closedPositionsList.innerHTML = '<li>Keine geschlossenen Positionen</li>';
+    }
 }

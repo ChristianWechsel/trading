@@ -68,8 +68,15 @@ block content
 
   #analysis-container
     // Hier wird der Kontostand dynamisch eingefügt
+    h3 Kontostand
     p#initial-account-balance
     p#account-balance
+
+    h3 Offene Positionen
+    ul#open-positions
+
+    h3 Geschlossene Positionen
+    ul#closed-positions
 
 block scripts
   script(src="/static/vendor/lightweight-charts/lightweight-charts.standalone.production.js")
