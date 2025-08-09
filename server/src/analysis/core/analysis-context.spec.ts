@@ -11,7 +11,12 @@ describe('AnalysisContextClass', () => {
   let ohlcvs: OHLCV[];
 
   beforeEach(() => {
-    query = {} as AnalysisQueryDto;
+    query = {
+      dataAggregation: {
+        ticker: { symbol: 'TEST', exchange: 'XETRA' },
+      },
+      steps: [],
+    } as AnalysisQueryDto;
     ohlcvs = [] as OHLCV[];
   });
 
@@ -45,7 +50,13 @@ describe('AnalysisContextClass', () => {
         volume: 1200,
       }),
     ];
-    const ctx = new AnalysisContextClass(query, ohlcvs);
+    const ctx = new AnalysisContextClass(
+      {
+        dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
+        steps: [],
+      } as AnalysisQueryDto,
+      ohlcvs,
+    );
     const enrichedPoints = ctx.getEnrichedDataPoints();
 
     expect(enrichedPoints).toHaveLength(2);
@@ -56,7 +67,13 @@ describe('AnalysisContextClass', () => {
   });
 
   it('should set and get trends', () => {
-    const ctx = new AnalysisContextClass(query, ohlcvs);
+    const ctx = new AnalysisContextClass(
+      {
+        dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
+        steps: [],
+      } as AnalysisQueryDto,
+      ohlcvs,
+    );
     const mockTrend = [
       { type: 'upward', start: {} as EnrichedDataPoint },
     ] as TrendDataMetadata['trendData'][];
@@ -66,7 +83,13 @@ describe('AnalysisContextClass', () => {
   });
 
   it('should add and get trading signals', () => {
-    const ctx = new AnalysisContextClass(query, ohlcvs);
+    const ctx = new AnalysisContextClass(
+      {
+        dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
+        steps: [],
+      } as AnalysisQueryDto,
+      ohlcvs,
+    );
     const mockSignal: SignalForTrade = {
       type: 'buy',
       dataPoint: {} as EnrichedDataPoint,
@@ -95,14 +118,24 @@ describe('AnalysisContextClass', () => {
     });
 
     it('should return a function that accesses the close price by default', () => {
-      const ctx = new AnalysisContextClass({} as AnalysisQueryDto, []);
+      const ctx = new AnalysisContextClass(
+        {
+          dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
+          steps: [],
+        } as AnalysisQueryDto,
+        [],
+      );
       const accessor = ctx.buildYValueAccessor();
       expect(accessor(dataPoint)).toBe(15);
     });
 
     it('should return a function that accesses the close price if yValueSource is "close"', () => {
       const ctx = new AnalysisContextClass(
-        { stepOptions: { yValueSource: 'close' } } as AnalysisQueryDto,
+        {
+          dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
+          stepOptions: { yValueSource: 'close' },
+          steps: [],
+        } as AnalysisQueryDto,
         [],
       );
       const accessor = ctx.buildYValueAccessor();
@@ -111,7 +144,11 @@ describe('AnalysisContextClass', () => {
 
     it('should return a function that accesses the open price if yValueSource is "open"', () => {
       const ctx = new AnalysisContextClass(
-        { stepOptions: { yValueSource: 'open' } } as AnalysisQueryDto,
+        {
+          dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
+          stepOptions: { yValueSource: 'open' },
+          steps: [],
+        } as AnalysisQueryDto,
         [],
       );
       const accessor = ctx.buildYValueAccessor();
@@ -120,7 +157,11 @@ describe('AnalysisContextClass', () => {
 
     it('should return a function that accesses the high price if yValueSource is "high"', () => {
       const ctx = new AnalysisContextClass(
-        { stepOptions: { yValueSource: 'high' } } as AnalysisQueryDto,
+        {
+          dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
+          stepOptions: { yValueSource: 'high' },
+          steps: [],
+        } as AnalysisQueryDto,
         [],
       );
       const accessor = ctx.buildYValueAccessor();
@@ -129,7 +170,11 @@ describe('AnalysisContextClass', () => {
 
     it('should return a function that accesses the low price if yValueSource is "low"', () => {
       const ctx = new AnalysisContextClass(
-        { stepOptions: { yValueSource: 'low' } } as AnalysisQueryDto,
+        {
+          dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
+          stepOptions: { yValueSource: 'low' },
+          steps: [],
+        } as AnalysisQueryDto,
         [],
       );
       const accessor = ctx.buildYValueAccessor();
@@ -155,7 +200,13 @@ describe('AnalysisContextClass', () => {
     });
 
     it('should return a RelativeComparableNumber by default', () => {
-      const ctx = new AnalysisContextClass({} as AnalysisQueryDto, []);
+      const ctx = new AnalysisContextClass(
+        {
+          dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
+          steps: [],
+        } as AnalysisQueryDto,
+        [],
+      );
       const comparableNumber = ctx.buildComparableNumber({
         enrichedDataPoint: dataPoint,
         step: 'SwingPointDetection',
@@ -166,7 +217,9 @@ describe('AnalysisContextClass', () => {
     it('should return an ATRComparableNumber when ATR is available', () => {
       const ctx = new AnalysisContextClass(
         {
+          dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
           stepOptions: { swingPointDetection: { atrFactor: 2 } },
+          steps: [],
         } as AnalysisQueryDto,
         [],
       );
@@ -185,13 +238,25 @@ describe('AnalysisContextClass', () => {
 
   describe('money management and risk management', () => {
     it('should build default money management', () => {
-      const ctx = new AnalysisContextClass({} as AnalysisQueryDto, []);
+      const ctx = new AnalysisContextClass(
+        {
+          dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
+          steps: [],
+        } as AnalysisQueryDto,
+        [],
+      );
       const moneyManagement = ctx.buildMoneyManagement();
       expect(moneyManagement).toBeDefined();
     });
 
     it('should build default risk management', () => {
-      const ctx = new AnalysisContextClass({} as AnalysisQueryDto, []);
+      const ctx = new AnalysisContextClass(
+        {
+          dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
+          steps: [],
+        } as AnalysisQueryDto,
+        [],
+      );
       const riskManagement = ctx.buildRiskManagement();
       expect(riskManagement).toBeDefined();
     });
@@ -199,11 +264,13 @@ describe('AnalysisContextClass', () => {
     it('should respect configured money management options', () => {
       const ctx = new AnalysisContextClass(
         {
+          dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
           trading: {
             moneyManagement: {
               moneyManagement: 'all-in',
             },
           },
+          steps: [],
         } as AnalysisQueryDto,
         [],
       );
@@ -216,12 +283,14 @@ describe('AnalysisContextClass', () => {
     it('should respect configured risk management options', () => {
       const ctx = new AnalysisContextClass(
         {
+          dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
           trading: {
             riskManagement: {
               riskManagement: 'atr-based',
               atrFactor: 2,
             },
           },
+          steps: [],
         } as AnalysisQueryDto,
         [],
       );
@@ -234,7 +303,13 @@ describe('AnalysisContextClass', () => {
 
   describe('options handling', () => {
     it('should provide access to options', () => {
-      const ctx = new AnalysisContextClass(query, ohlcvs);
+      const ctx = new AnalysisContextClass(
+        {
+          dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
+          steps: [],
+        } as AnalysisQueryDto,
+        ohlcvs,
+      );
       expect(ctx.getOptions()).toBeDefined();
     });
   });
