@@ -27,27 +27,24 @@ block content
           div
             input(type="checkbox", id=step, name="steps", value=step)
             label(for=step)= step
+
       .form-group
         label(for="y-value-source") Y-Wert Quelle
         select#y-value-source(name="yValueSource", required)
-          option(value="open") Open
-          option(value="high") High
-          option(value="low") Low
-          option(value="close" selected) Close
+          each source in yValueSources
+            option(value=source.value selected=(source.value === 'close'))= source.label
 
       .form-group
         label(for="money-management") Money Management
         select#money-management(name="moneyManagement")
-          option(value="" selected) -- Bitte wählen --
-          option(value="all-in") All-In
-          option(value="fixed-fractional") Fixed Fractional
+          each option in moneyManagementOptions
+            option(value=option.value selected=(option.value === ''))= option.label
 
       .form-group
         label(for="risk-management") Risk Management
         select#risk-management(name="riskManagement")
-          option(value="" selected) -- Bitte wählen --
-          option(value="atr-based") ATR-Based
-          option(value="fixed-percentage") Fixed Percentage
+          each option in riskManagementOptions
+            option(value=option.value selected=(option.value === ''))= option.label
 
       .form-group
         label(for="initial-capital") Startkapital
