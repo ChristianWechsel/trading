@@ -16,13 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const moneyManagement = formData.get('moneyManagement');
                 const riskManagement = formData.get('riskManagement');
                 const initialCapital = formData.get('initialCapital');
-                // granular für SwingPointDetection
                 const swingPointDetectionAtrFactor = formData.get('swingPointDetectionAtrFactor');
                 const swingPointDetectionRelativeThreshold = formData.get('swingPointDetectionRelativeThreshold');
-                // granular für TrendDetection
                 const trendDetectionAtrFactor = formData.get('trendDetectionAtrFactor');
                 const trendDetectionRelativeThreshold = formData.get('trendDetectionRelativeThreshold');
-                // granular für RiskManagement
                 const riskManagementAtrFactor = formData.get('riskManagementAtrFactor');
 
                 if (symbol && exchange && steps.length > 0) {
@@ -42,13 +39,43 @@ document.addEventListener('DOMContentLoaded', () => {
                         trendDetectionRelativeThreshold,
                         riskManagementAtrFactor,
                     );
-                    const chart = createChart(analysisContainer);
-                    // chart.timeScale().fitContent();
-                    addLineSeries(chart, getChartData(chartData.enrichedDataPoints));
-                    // getTrendChannelData(chartData).forEach(trendDataPoints => {
-                    //     addLineSeries(chart, getChartData(trendDataPoints));
-                    // });
 
+                    // Clear previous result
+                    while (analysisContainer.firstChild) {
+                        analysisContainer.removeChild(analysisContainer.firstChild);
+                    }
+
+                    // Create result structure
+                    const resultDiv = document.createElement('div');
+                    resultDiv.className = 'analysis-result';
+
+                    const heading = document.createElement('h2');
+                    heading.textContent = 'Analyse Ergebnis';
+                    resultDiv.appendChild(heading);
+
+                    // Account
+                    const accountDiv = document.createElement('div');
+                    accountDiv.className = 'account-result';
+                    const accountHeading = document.createElement('h3');
+                    accountHeading.textContent = 'Account';
+                    accountDiv.appendChild(accountHeading);
+                    const accountCapital = document.createElement('p');
+                    accountCapital.textContent = `Initialkapital: ${chartData.account?.initialCapital ?? '-'}`;
+                    accountDiv.appendChild(accountCapital);
+                    resultDiv.appendChild(accountDiv);
+
+                    // Portfolio
+                    const portfolioDiv = document.createElement('div');
+                    portfolioDiv.className = 'portfolio-result';
+                    const portfolioHeading = document.createElement('h3');
+                    portfolioHeading.textContent = 'Portfolio';
+                    portfolioDiv.appendChild(portfolioHeading);
+                    const portfolioValue = document.createElement('p');
+                    portfolioValue.textContent = `Wert: ${chartData.portfolio?.value ?? '-'}`;
+                    portfolioDiv.appendChild(portfolioValue);
+                    resultDiv.appendChild(portfolioDiv);
+
+                    analysisContainer.appendChild(resultDiv);
                 }
             });
         } catch (error) {
@@ -146,19 +173,7 @@ async function loadChartData(
     if (!response.ok) throw new Error('Fehler beim Laden der Daten');
     return await response.json();
 }
-
-function createChart(chartContainer) {
-    return LightweightCharts.createChart(chartContainer, {
-        width: chartContainer.clientWidth,
-        height: chartContainer.clientHeight,
-        timeScale: {
-            tickMarkFormatter: (time) => {
-                // time ist der UNIX-Timestamp in Sekunden
-                const date = new Date(time * 1000);
-                const year = date.getFullYear();
-                const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                const day = date.getDate().toString().padStart(2, '0');
-                return `${year}-${month}-${day}`;
+return `${year}-${month}-${day}`;
             },
         },
     });

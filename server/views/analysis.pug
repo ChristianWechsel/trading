@@ -67,6 +67,18 @@ block content
     button(type="submit") Analyse starten
 
   #analysis-container
+    //- Ergebnisdarstellung nach Analyse
+    if analysisResult
+      .analysis-result
+        h2 Analyse Ergebnis
+        .account-result
+          h3 Account
+          p Initialkapital: #{analysisResult.account.initialCapital}
+          //- Weitere Account-Felder nach Bedarf
+        .portfolio-result
+          h3 Portfolio
+          p Wert: #{analysisResult.portfolio.value}
+          //- Weitere Portfolio-Felder nach Bedarf
 
 block scripts
   script(src="/static/vendor/lightweight-charts/lightweight-charts.standalone.production.js")
