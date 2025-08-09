@@ -34,6 +34,16 @@ export class AppController {
   @Get('analysis')
   @Render('analysis')
   analysisPage() {
-    return {};
+    return {
+      steps: [
+        'MovingAverage',
+        'SwingPointDetection',
+        'TrendDetection',
+        'TrendChannelCalculation',
+        'AverageTrueRange',
+        'Trading',
+        'TradingSignal',
+      ],
+    };
   }
 }

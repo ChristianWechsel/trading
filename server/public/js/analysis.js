@@ -12,6 +12,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 const from = formData.get('from');
                 const to = formData.get('to');
                 const steps = formData.getAll('steps');
+                const yValueSource = formData.get('yValueSource');
+                const moneyManagement = formData.get('moneyManagement');
+                const riskManagement = formData.get('riskManagement');
+                const initialCapital = formData.get('initialCapital');
+                // granular für SwingPointDetection
+                const swingPointDetectionAtrFactor = formData.get('swingPointDetectionAtrFactor');
+                const swingPointDetectionRelativeThreshold = formData.get('swingPointDetectionRelativeThreshold');
+                // granular für TrendDetection
+                const trendDetectionAtrFactor = formData.get('trendDetectionAtrFactor');
+                const trendDetectionRelativeThreshold = formData.get('trendDetectionRelativeThreshold');
+                // granular für RiskManagement
+                const riskManagementAtrFactor = formData.get('riskManagementAtrFactor');
 
                 if (symbol && exchange && steps.length > 0) {
                     const chartData = await loadChartData(
@@ -20,6 +32,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         from,
                         to,
                         steps,
+                        yValueSource,
+                        moneyManagement,
+                        riskManagement,
+                        initialCapital,
+                        swingPointDetectionAtrFactor,
+                        swingPointDetectionRelativeThreshold,
+                        trendDetectionAtrFactor,
+                        trendDetectionRelativeThreshold,
+                        riskManagementAtrFactor,
                     );
                     const chart = createChart(analysisContainer);
                     // chart.timeScale().fitContent();
@@ -36,7 +57,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-async function loadChartData(symbol, exchange, from, to, steps) {
+async function loadChartData(
+    symbol,
+    exchange,
+    from,
+    to,
+    steps,
+    yValueSource,
+    moneyManagement,
+    riskManagement,
+    initialCapital,
+    swingPointDetectionAtrFactor,
+    swingPointDetectionRelativeThreshold,
+    trendDetectionAtrFactor,
+    trendDetectionRelativeThreshold,
+    riskManagementAtrFactor,
+) {
     const postData = {
         dataAggregation: {
             ticker: {
@@ -45,7 +81,52 @@ async function loadChartData(symbol, exchange, from, to, steps) {
             },
         },
         steps,
+        stepOptions: {
+            yValueSource,
+        },
     };
+
+    // SwingPointDetection Optionen
+    if (swingPointDetectionAtrFactor || swingPointDetectionRelativeThreshold) {
+        postData.stepOptions.swingPointDetection = {};
+        if (swingPointDetectionAtrFactor) {
+            postData.stepOptions.swingPointDetection.atrFactor = parseFloat(swingPointDetectionAtrFactor);
+        }
+        if (swingPointDetectionRelativeThreshold) {
+            postData.stepOptions.swingPointDetection.relativeThreshold = parseFloat(swingPointDetectionRelativeThreshold);
+        }
+    }
+
+    // TrendDetection Optionen
+    if (trendDetectionAtrFactor || trendDetectionRelativeThreshold) {
+        postData.stepOptions.trendDetection = {};
+        if (trendDetectionAtrFactor) {
+            postData.stepOptions.trendDetection.atrFactor = parseFloat(trendDetectionAtrFactor);
+        }
+        if (trendDetectionRelativeThreshold) {
+            postData.stepOptions.trendDetection.relativeThreshold = parseFloat(trendDetectionRelativeThreshold);
+        }
+    }
+
+    // RiskManagement Optionen
+    if (moneyManagement || riskManagement || initialCapital || riskManagementAtrFactor) {
+        if (!postData.trading) postData.trading = {};
+        if (moneyManagement) {
+            postData.trading.moneyManagement = { moneyManagement };
+        }
+        if (riskManagement || riskManagementAtrFactor) {
+            postData.trading.riskManagement = {};
+            if (riskManagement) {
+                postData.trading.riskManagement.riskManagement = riskManagement;
+            }
+            if (riskManagementAtrFactor) {
+                postData.trading.riskManagement.atrFactor = parseFloat(riskManagementAtrFactor);
+            }
+        }
+        if (initialCapital) {
+            postData.trading.account = { initialCapital: parseFloat(initialCapital) };
+        }
+    }
 
     if (from || to) {
         postData.dataAggregation.range = {};

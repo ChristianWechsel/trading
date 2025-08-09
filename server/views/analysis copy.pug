@@ -19,14 +19,23 @@ block content
       label(for="date-to") Bis (optional)
       input#date-to(type="date", name="to")
 
-    button(type="submit") Analyse starten
     fieldset
       legend Analysemethoden
       .checkbox-group
+        - const steps = [
+            'MovingAverage',
+            'SwingPointDetection',
+            'TrendDetection',
+            'TrendChannelCalculation',
+            'AverageTrueRange',
+            'Trading',
+            'TradingSignal'
+          ]
         each step in steps
           div
             input(type="checkbox", id=step, name="steps", value=step)
             label(for=step)= step
+
       .form-group
         label(for="y-value-source") Y-Wert Quelle
         select#y-value-source(name="yValueSource", required)
@@ -68,6 +77,7 @@ block content
         input(type="number", name="riskManagementAtrFactor", min="0", step="any" placeholder="ATR-Faktor (z.B. 2)")
         input(type="number", name="riskManagementRelativeThreshold", min="0", max="1", step="any" placeholder="Relative Threshold (z.B. 0.05)")
 
+    button(type="submit") Analyse starten
 
   #analysis-container
 
