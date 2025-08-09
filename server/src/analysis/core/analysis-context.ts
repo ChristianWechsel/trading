@@ -38,7 +38,6 @@ import {
   RiskManagement,
   SelectorRiskManagement,
 } from './risk-management/risk-management.interface';
-import { Trade } from './trade/trade';
 
 export type YValueAccessor = (dataPoint: EnrichedDataPoint) => number;
 
@@ -47,7 +46,6 @@ export class AnalysisContextClass {
   private enrichedDataPoints: EnrichedDataPoint[];
   private trends: TrendDataMetadata['trendData'][];
   private tradingSignals: SignalForTrade[];
-  private trades: Trade[];
   private account: Account;
   private portfolio: Portfolio;
 
@@ -144,7 +142,6 @@ export class AnalysisContextClass {
       .map((ohlcv) => new EnrichedDataPoint(ohlcv));
     this.trends = [];
     this.tradingSignals = [];
-    this.trades = [];
     this.account = new Account(this.options.getAccount().getInitialCapital());
     this.portfolio = new Portfolio(this.account);
   }
@@ -179,14 +176,6 @@ export class AnalysisContextClass {
 
   getTradingSignals(): SignalForTrade[] {
     return this.tradingSignals;
-  }
-
-  addTrade(trade: Trade): void {
-    this.trades.push(trade);
-  }
-
-  getTrades(): Trade[] {
-    return this.trades;
   }
 
   buildYValueAccessor(): YValueAccessor {

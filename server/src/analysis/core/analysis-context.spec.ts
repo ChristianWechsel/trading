@@ -5,7 +5,6 @@ import { RelativeComparableNumber } from '../steps/utils/comparable-number/relat
 import { AnalysisContextClass } from './analysis-context';
 import { SignalForTrade, TrendDataMetadata } from './analysis.interface';
 import { EnrichedDataPoint } from './enriched-data-points/enriched-data-point';
-import { Trade } from './trade/trade';
 
 describe('AnalysisContextClass', () => {
   let query: AnalysisQueryDto;
@@ -21,7 +20,6 @@ describe('AnalysisContextClass', () => {
     expect(ctx.getEnrichedDataPoints()).toEqual([]);
     expect(ctx.getTrends()).toEqual([]);
     expect(ctx.getTradingSignals()).toEqual([]);
-    expect(ctx.getTrades()).toEqual([]);
   });
 
   it('should create enrichedDataPoints from ohlcvs on initialization', () => {
@@ -77,14 +75,6 @@ describe('AnalysisContextClass', () => {
 
     ctx.addTradingSignals(mockSignal);
     expect(ctx.getTradingSignals()).toEqual([mockSignal]);
-  });
-
-  it('should add and get trades', () => {
-    const ctx = new AnalysisContextClass(query, ohlcvs);
-    const mockTrade = {} as Trade;
-
-    ctx.addTrade(mockTrade);
-    expect(ctx.getTrades()).toEqual([mockTrade]);
   });
 
   describe('buildYValueAccessor', () => {

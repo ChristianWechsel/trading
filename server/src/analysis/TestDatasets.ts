@@ -6,8 +6,6 @@ import {
   SwingPointType,
 } from './core/enriched-data-points/enriched-data-point';
 
-import { Trade } from './core/trade/trade';
-
 type TestDataSource = {
   points: {
     datum: OHLCVEntity;
@@ -15,7 +13,6 @@ type TestDataSource = {
     averageTrueRange: number;
   }[];
   trends: TrendDataMetadata['trendData'][];
-  trades?: Trade[];
 };
 
 export class TestDatasets {
@@ -87,7 +84,7 @@ export class TestDatasets {
 
   getFullAnalysisWithATRData(): Pick<
     TestData,
-    'data' | 'expected' | 'expectedTrends' | 'expectedTrades'
+    'data' | 'expected' | 'expectedTrends'
   > {
     return {
       data: FullAnalysisWithATR.points.map<OHLCV>((item) =>
@@ -97,7 +94,6 @@ export class TestDatasets {
         this.getExpected(),
       ),
       expectedTrends: FullAnalysisWithATR.trends,
-      expectedTrades: FullAnalysisWithATR.trades,
     };
   }
 
@@ -3700,12 +3696,6 @@ const FullAnalysisWithATR: TestDataSource = {
         },
       },
     },
-  ],
-  trades: [
-    new Trade({
-      entry: { date: '2023-01-06', price: 112 },
-      exit: { date: '2023-01-12', price: 124 },
-    }),
   ],
 };
 
