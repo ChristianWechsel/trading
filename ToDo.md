@@ -2,6 +2,15 @@
 
 ## Analyse-Engine: Modulare Handelssimulation
 
+# Auswertung
+
+- In Position sind manchmal numbers und manchmal string enthalten
+- Auflistung aller Trades, mit Kauf-/Verkausdatum und Einstriegs-/Ausstiegspreis, Grund für Eintieg und Ausstieg
+- Nicht alle Positionen sind geschlossen => warum?
+- Initiales Konto und Endkonto anzeigen
+- Parallel dazu den Chart legen, um zu erkennen, was gemacht wurde
+- Trendkanäle in Chart anzeigen.
+
 # Klasse Trade kann entfallen
 
 # Klasse Position soll zu einem TradingJournal ausgebaut werden. Daher muss angegeben werden, warum Kauf/Verkauf stattgefunden hat
