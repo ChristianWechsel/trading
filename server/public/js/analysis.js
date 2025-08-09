@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         trendDetectionRelativeThreshold,
                         riskManagementAtrFactor,
                     );
-                    console.table(analysisData);
+                    updateAccountBalances(analysisData);
                 }
             });
         } catch (error) {
@@ -161,4 +161,16 @@ async function retrieveAnalysisData(
     });
     if (!response.ok) throw new Error('Fehler beim Laden der Daten');
     return await response.json();
+}
+
+function updateAccountBalances(analysisData) {
+    // Anfangskontostand
+    const initialBalance = analysisData.options.options.account.defaults.initialCapital;
+    document.getElementById('initial-account-balance').textContent =
+        `Anfangskontostand: ${Number(initialBalance).toFixed(2)}`;
+
+    // Endkontostand
+    const endBalance = analysisData.account.cash;
+    document.getElementById('account-balance').textContent =
+        `Endkontostand: ${Number(endBalance).toFixed(2)}`;
 }
