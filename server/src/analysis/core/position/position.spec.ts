@@ -1,8 +1,11 @@
-import { Position } from './position';
+import { Position, PositionDetails } from './position';
 
 describe('Position', () => {
-  const validPositionData = {
-    symbol: 'AAPL',
+  const validPositionData: PositionDetails = {
+    ticker: {
+      symbol: 'AAPL',
+      exchange: 'NASDAQ',
+    },
     shares: 10,
     entryPrice: 150,
     entryDate: new Date('2023-01-01T00:00:00.000Z'),
@@ -19,9 +22,7 @@ describe('Position', () => {
     });
 
     it('should return the correct identifier', () => {
-      const expectedIdentifier = `${
-        validPositionData.symbol
-      } ${validPositionData.entryDate.toISOString()}`;
+      const expectedIdentifier = `${validPositionData.ticker.symbol} ${validPositionData.ticker.exchange} ${validPositionData.entryDate.toISOString()}`;
       expect(position.getIdentifier()).toBe(expectedIdentifier);
     });
   });

@@ -2,18 +2,18 @@ import { TickerDto } from '../../../data-aggregation/data-aggregation.dto';
 
 export type IDPosition = string;
 
+export type PositionDetails = {
+  ticker: TickerDto;
+  shares: number;
+  entryPrice: number;
+  entryDate: Date;
+};
+
 export class Position {
   private stops: { loss?: number; profit?: number };
   private exitPrice?: number;
 
-  constructor(
-    private position: {
-      ticker: TickerDto;
-      shares: number;
-      entryPrice: number;
-      entryDate: Date;
-    },
-  ) {
+  constructor(private position: PositionDetails) {
     this.stops = {};
   }
 
