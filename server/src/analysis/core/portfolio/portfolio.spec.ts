@@ -8,14 +8,20 @@ describe('Portfolio', () => {
   const initialCapital = 20000;
 
   const aaplPosition = new Position({
-    symbol: 'AAPL',
+    ticker: {
+      symbol: 'AAPL',
+      exchange: 'NASDAQ',
+    },
     shares: 10,
     entryPrice: 150,
     entryDate: new Date('2023-01-01T00:00:00.000Z'),
   });
 
   const googPosition = new Position({
-    symbol: 'GOOG',
+    ticker: {
+      symbol: 'GOOG',
+      exchange: 'NASDAQ',
+    },
     shares: 5,
     entryPrice: 100,
     entryDate: new Date('2023-01-02T00:00:00.000Z'),
