@@ -56,7 +56,10 @@ describe('AnalysisPipeline', () => {
   ];
 
   beforeEach(() => {
-    query = {} as AnalysisQueryDto;
+    query = {
+      dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
+      steps: [],
+    } as AnalysisQueryDto;
     context = new AnalysisContextClass(query, ohlcvs);
   });
 
