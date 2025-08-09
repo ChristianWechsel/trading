@@ -21,6 +21,9 @@ const allSteps: Step[] = [
   'SwingPointDetection',
   'TrendDetection',
   'TrendChannelCalculation',
+  'AverageTrueRange',
+  'Trading',
+  'TradingSignal',
 ];
 
 export type YValueSource = 'open' | 'high' | 'low' | 'close';

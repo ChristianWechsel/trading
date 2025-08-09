@@ -22,7 +22,15 @@ block content
     fieldset
       legend Analysemethoden
       .checkbox-group
-        - const steps = ['MovingAverage', 'SwingPointDetection', 'TrendDetection', 'TrendChannelCalculation']
+        - const steps = [
+            'MovingAverage',
+            'SwingPointDetection',
+            'TrendDetection',
+            'TrendChannelCalculation',
+            'AverageTrueRange',
+            'Trading',
+            'TradingSignal'
+          ]
         each step in steps
           div
             input(type="checkbox", id=step, name="steps", value=step)
