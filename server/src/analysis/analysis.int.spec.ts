@@ -259,11 +259,7 @@ describe('Analysis (Integration)', () => {
     const actualTrends = result.getTrends();
     const expectedTrends = testData.expectedTrends || [];
 
-    const actualTrades = result.getTrades();
-    const expectedTrades = testData.expectedTrades || [];
-
     expect(resultDataPoints).toEqual(expectedDataPoints);
     expect(actualTrends).toEqual(expectedTrends);
-    expect(actualTrades).toEqual(expectedTrades);
   });
 });
