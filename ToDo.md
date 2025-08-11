@@ -14,8 +14,6 @@
 - Parallel dazu den Chart legen, um zu erkennen, was gemacht wurde
 - Trendkanäle in Chart anzeigen.
 
-# Klasse Trade kann entfallen
-
 # Klasse Position soll zu einem TradingJournal ausgebaut werden. Daher muss angegeben werden, warum Kauf/Verkauf stattgefunden hat
 
 Ideen zur Weiterentwicklung der Architektur:
