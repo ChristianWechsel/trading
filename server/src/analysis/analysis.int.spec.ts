@@ -223,7 +223,7 @@ describe('Analysis (Integration)', () => {
     expect(resultDataPoints).toEqual(expectedDataPoints);
   });
 
-  it.only('should perform a full analysis with all steps using ATR', async () => {
+  it('should perform a full analysis with all steps using ATR', async () => {
     const testData = analysisIntTestData.getFullAnalysisWithATR();
     const mockDataAggregationService: IDataAggregationService = {
       loadAndUpdateIfNeeded: () => Promise.resolve(testData.data),
