@@ -261,5 +261,7 @@ describe('Analysis (Integration)', () => {
 
     expect(resultDataPoints).toEqual(expectedDataPoints);
     expect(actualTrends).toEqual(expectedTrends);
+
+    expect(result.getAccount().getCash()).toBe(testData.expectedCash);
   });
 });

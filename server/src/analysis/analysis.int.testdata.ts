@@ -9,6 +9,7 @@ export type TestData = {
   data: OHLCV[];
   expected: EnrichedDataPoint[];
   expectedTrends?: TrendDataMetadata['trendData'][];
+  expectedCash?: number;
 };
 
 export class AnalysisIntTestData {
@@ -210,6 +211,7 @@ export class AnalysisIntTestData {
         },
       },
       ...dataset,
+      expectedCash: 10528,
     };
   }
 }
