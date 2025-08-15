@@ -1,74 +1,93 @@
 import { TickerDto } from '../../../data-aggregation/data-aggregation.dto';
+import { Transaction, TransactionData } from '../transaction/transaction';
 
 export type IDPosition = string;
 
-export type PositionDetails = {
-  ticker: TickerDto;
-  shares: number;
-  entryPrice: number;
-  entryDate: Date;
-};
+type Stops = Partial<{
+  loss: number;
+  profit: number;
+}>;
+
+// ich will wissen, um welche Aktie es geht
+// Erfassen von Käufen und Verkäufen
+// Auch Teilkäufe und Teilverkäufe erfassen
+// Grund angeben für jeden Kauf / Verkauf => Grund als Union definieren
+// Für jeden Verkauf den Gewinn/Verlust ermitteln => wie berechnen bei Teilverkäufen?
+// Oder Gewinn Verlust nur berechnen, wenn Position geschlossen (= alle Anteile verkauft)
+// StopLoss und TakeProfit festlegen. Diese können jederzeit geändert werden.
 
 export class Position {
-  private stops: { loss?: number; profit?: number };
-  private exitPrice?: number;
+  private transactions: Transaction[];
+  private stops: Stops;
 
-  constructor(private position: PositionDetails) {
+  constructor(private ticker: TickerDto) {
+    this.transactions = [];
     this.stops = {};
   }
 
   isPosition(ticker: TickerDto): boolean {
     return (
-      this.position.ticker.symbol === ticker.symbol &&
-      this.position.ticker.exchange === ticker.exchange
+      this.ticker.symbol === ticker.symbol &&
+      this.ticker.exchange === ticker.exchange
     );
   }
 
   getIdentifier(): IDPosition {
-    return `${this.position.ticker.symbol} ${this.position.ticker.exchange} ${this.position.entryDate.toISOString()}`;
+    return `${this.ticker.symbol} ${this.ticker.exchange}`;
   }
 
-  setStopLossPrice(price: number): void {
-    if (price < 0) {
-      throw new Error('Stop loss price cannot be negative.');
+  buy(order: TransactionData) {
+    this.transactions.push(new Transaction(order));
+  }
+
+  sell(order: TransactionData) {
+    this.transactions.push(new Transaction(order));
+  }
+
+  setStops(stops: Stops): void {
+    this.stops = { ...this.stops, ...stops };
+  }
+
+  calc(datum: Pick<TransactionData, 'price' | 'date'>) {
+    const shares = this.getCurrentShares();
+    const { price, date } = datum;
+    const stopLoss = this.stops.loss;
+    const stopProfit = this.stops.profit;
+
+    if (this.isStopLossTriggered(shares, stopLoss, price)) {
+      this.sell({ date, price, reason: 'stop-loss', shares, type: 'sell' });
+    } else if (this.isTakeProfitTriggerd(shares, stopProfit, price)) {
+      this.sell({ date, price, reason: 'take-profit', shares, type: 'sell' });
     }
-    this.stops.loss = price;
   }
 
-  setTakeProfitPrice(price: number): void {
-    if (price < 0) {
-      throw new Error('Take profit price cannot be negative.');
-    }
-    this.stops.profit = price;
+  private getCurrentShares() {
+    return this.transactions.reduce<number>(
+      (sharesAccumulated, transaction) => {
+        if (transaction.getType() === 'buy') {
+          sharesAccumulated += transaction.getShares();
+        } else {
+          sharesAccumulated -= transaction.getShares();
+        }
+        return sharesAccumulated;
+      },
+      0,
+    );
   }
 
-  getStopLossPrice(): number | undefined {
-    return this.stops.loss;
+  private isStopLossTriggered(
+    shares: number,
+    stopLoss: number | undefined,
+    price: number,
+  ) {
+    return shares !== 0 && stopLoss && price < stopLoss;
   }
 
-  getTakeProfitPrice(): number | undefined {
-    return this.stops.profit;
-  }
-
-  closePosition(exitPrice: number): void {
-    this.exitPrice = exitPrice;
-  }
-
-  getEntryValue(): number {
-    return this.position.shares * this.position.entryPrice;
-  }
-
-  getExitValue(): number {
-    if (!this.exitPrice) {
-      throw new Error('Position is not closed yet.');
-    }
-    return this.position.shares * this.exitPrice;
-  }
-
-  getProfitOrLoss(): number {
-    if (!this.exitPrice) {
-      throw new Error('Position is not closed yet.');
-    }
-    return this.position.shares * this.exitPrice - this.getEntryValue();
+  private isTakeProfitTriggerd(
+    shares: number,
+    stopProfit: number | undefined,
+    price: number,
+  ) {
+    return shares !== 0 && stopProfit && price > stopProfit;
   }
 }

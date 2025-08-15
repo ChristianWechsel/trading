@@ -1,6 +1,13 @@
 import { Account } from '../account/account';
 import { IDPosition, Position } from '../position/position';
 
+// Portfolio besteht aus mehrern Positionen. Jede Position verwaltet alle Transaktionen
+// offene und geschlossende Positionen verwerfen. Jede Position muss für sich selbst entscheiden, ob gekauft, verkauft oder
+// über stops Aktion ausgelöst wird. Dies muss Portfolio nicht kümmern
+// Es muss für jede Iteration der aktuelle Preis an Position weitergebgen werden,
+// damit die stops korrekt ausgelöst werden können
+// Ebenso müssen die Strategiesignale an Position weitergegeben werden
+
 export class Portfolio {
   private openPositions = new Map<IDPosition, Position>();
   private closedPositions = new Map<IDPosition, Position>();

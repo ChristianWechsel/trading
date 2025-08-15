@@ -1,98 +1,150 @@
-import { Position, PositionDetails } from './position';
+import { TickerDto } from '../../../data-aggregation/data-aggregation.dto';
+import { Position } from './position';
 
 describe('Position', () => {
-  const validPositionData: PositionDetails = {
-    ticker: {
-      symbol: 'AAPL',
-      exchange: 'NASDAQ',
-    },
-    shares: 10,
-    entryPrice: 150,
-    entryDate: new Date('2023-01-01T00:00:00.000Z'),
-  };
   let position: Position;
+  const ticker: TickerDto = { symbol: 'AAPL', exchange: 'NASDAQ' };
 
   beforeEach(() => {
-    position = new Position(validPositionData);
+    position = new Position(ticker);
   });
 
-  describe('constructor', () => {
-    it('should create a position without throwing an error for valid data', () => {
-      expect(() => new Position(validPositionData)).not.toThrow();
+  it('should be created', () => {
+    expect(position).toBeInstanceOf(Position);
+  });
+
+  it('should identify position by ticker', () => {
+    expect(position.isPosition({ symbol: 'AAPL', exchange: 'NASDAQ' })).toBe(
+      true,
+    );
+    expect(position.isPosition({ symbol: 'GOOGL', exchange: 'NASDAQ' })).toBe(
+      false,
+    );
+  });
+
+  it('should return correct identifier', () => {
+    expect(position.getIdentifier()).toBe('AAPL NASDAQ');
+  });
+
+  describe('transactions and shares calculation', () => {
+    it('should have zero shares initially', () => {
+      // @ts-expect-error testing private method
+      expect(position.getCurrentShares()).toBe(0);
     });
 
-    it('should return the correct identifier', () => {
-      const expectedIdentifier = `${validPositionData.ticker.symbol} ${validPositionData.ticker.exchange} ${validPositionData.entryDate.toISOString()}`;
-      expect(position.getIdentifier()).toBe(expectedIdentifier);
+    it('should calculate current shares correctly after buying', () => {
+      position.buy({
+        date: new Date(),
+        price: 150,
+        shares: 10,
+        type: 'buy',
+        reason: 'Upward trend started',
+      });
+      // @ts-expect-error testing private method
+      expect(position.getCurrentShares()).toBe(10);
+    });
+
+    it('should calculate current shares correctly after multiple buys', () => {
+      position.buy({
+        date: new Date(),
+        price: 150,
+        shares: 10,
+        type: 'buy',
+        reason: 'Upward trend started',
+      });
+      position.buy({
+        date: new Date(),
+        price: 155,
+        shares: 5,
+        type: 'buy',
+        reason: 'Upward trend started',
+      });
+      // @ts-expect-error testing private method
+      expect(position.getCurrentShares()).toBe(15);
+    });
+
+    it('should calculate current shares correctly after selling', () => {
+      position.buy({
+        date: new Date(),
+        price: 150,
+        shares: 10,
+        type: 'buy',
+        reason: 'Upward trend started',
+      });
+      position.sell({
+        date: new Date(),
+        price: 160,
+        shares: 5,
+        type: 'sell',
+        reason: 'Upward trend ended',
+      });
+      // @ts-expect-error testing private method
+      expect(position.getCurrentShares()).toBe(5);
+    });
+
+    it('should calculate current shares correctly after selling all shares', () => {
+      position.buy({
+        date: new Date(),
+        price: 150,
+        shares: 10,
+        type: 'buy',
+        reason: 'Upward trend started',
+      });
+      position.sell({
+        date: new Date(),
+        price: 160,
+        shares: 10,
+        type: 'sell',
+        reason: 'Upward trend ended',
+      });
+      // @ts-expect-error testing private method
+      expect(position.getCurrentShares()).toBe(0);
     });
   });
 
-  describe('Stop and Profit Targets', () => {
-    it('should initially have no stop-loss or take-profit price', () => {
-      expect(position.getStopLossPrice()).toBeUndefined();
-      expect(position.getTakeProfitPrice()).toBeUndefined();
-    });
-
-    it('should set and get the stop-loss price', () => {
-      position.setStopLossPrice(140);
-      expect(position.getStopLossPrice()).toBe(140);
-    });
-
-    it('should throw an error when setting a negative stop-loss price', () => {
-      expect(() => position.setStopLossPrice(-1)).toThrow(
-        'Stop loss price cannot be negative.',
-      );
-    });
-
-    it('should set and get the take-profit price', () => {
-      position.setTakeProfitPrice(160);
-      expect(position.getTakeProfitPrice()).toBe(160);
-    });
-
-    it('should throw an error when setting a negative take-profit price', () => {
-      expect(() => position.setTakeProfitPrice(-1)).toThrow(
-        'Take profit price cannot be negative.',
-      );
-    });
-  });
-
-  describe('Value and P/L Calculations', () => {
-    it('should calculate the correct entry value', () => {
-      expect(position.getEntryValue()).toBe(1500); // 10 * 150
-    });
-
-    it('should calculate the correct exit value after closing', () => {
-      position.closePosition(160);
-      expect(position.getExitValue()).toBe(1600); // 10 * 160
-    });
-
-    it('should throw an error when trying to get exit value before closing', () => {
-      expect(() => position.getExitValue()).toThrow(
-        'Position is not closed yet.',
-      );
-    });
-
-    describe('getProfitOrLoss', () => {
-      it('should throw an error if the position is not closed', () => {
-        expect(() => position.getProfitOrLoss()).toThrow(
-          'Position is not closed yet.',
-        );
+  describe('stops', () => {
+    beforeEach(() => {
+      position.buy({
+        date: new Date(),
+        price: 100,
+        shares: 10,
+        type: 'buy',
+        reason: 'Upward trend started',
       });
+      position.setStops({ loss: 90, profit: 110 });
+    });
 
-      it('should calculate the correct profit after closing', () => {
-        position.closePosition(160); // Close with profit
-        expect(position.getProfitOrLoss()).toBe(100); // 10 * 160 - 1500
-      });
+    it('should not trigger sell if price is between stops', () => {
+      position.calc({ date: new Date(), price: 105 });
+      // @ts-expect-error testing private method
+      expect(position.getCurrentShares()).toBe(10);
+    });
 
-      it('should calculate the correct loss after closing', () => {
-        position.closePosition(145); // Close with loss
-        expect(position.getProfitOrLoss()).toBe(-50); // 10 * 145 - 1500
-      });
+    it('should trigger stop-loss and sell all shares', () => {
+      position.calc({ date: new Date(), price: 89 });
+      // @ts-expect-error testing private method
+      expect(position.getCurrentShares()).toBe(0);
+    });
 
-      it('should calculate zero profit/loss at break-even after closing', () => {
-        position.closePosition(150); // Close at break-even
-        expect(position.getProfitOrLoss()).toBe(0); // 10 * 150 - 1500
+    it('should trigger take-profit and sell all shares', () => {
+      position.calc({ date: new Date(), price: 111 });
+      // @ts-expect-error testing private method
+      expect(position.getCurrentShares()).toBe(0);
+    });
+
+    it('should not trigger sell if there are no shares', () => {
+      position.sell({
+        date: new Date(),
+        price: 105,
+        shares: 10,
+        type: 'sell',
+        reason: 'Upward trend ended',
       });
+      position.calc({ date: new Date(), price: 89 });
+      // @ts-expect-error testing private method
+      expect(position.getCurrentShares()).toBe(0);
+      // @ts-expect-error testing private property
+      expect(position.transactions.length).toBe(2); // buy, sell
     });
   });
 });

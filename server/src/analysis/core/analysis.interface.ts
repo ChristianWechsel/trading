@@ -42,5 +42,11 @@ export type Step =
 export type SignalForTrade = {
   type: 'buy' | 'sell';
   dataPoint: EnrichedDataPoint;
-  reason: 'Upward trend started' | 'Upward trend ended';
+  reason:
+    | 'Upward trend started'
+    | 'Upward trend ended'
+    | 'Downward trend started'
+    | 'Downward trend ended'
+    | 'stop-loss'
+    | 'take-profit';
 };
