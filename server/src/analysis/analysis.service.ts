@@ -11,9 +11,9 @@ export class AnalysisService {
     ohlcvs: OHLCV[],
   ): AnalysisContextClass {
     const context = new AnalysisContextClass(query, ohlcvs);
-
+    const steps = context.getOptions().getSteps().getSteps();
     const builder = new AnalysisBuilder();
-    for (const step of query.steps) {
+    for (const step of steps) {
       builder.addStep(step);
     }
 

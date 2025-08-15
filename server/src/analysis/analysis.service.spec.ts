@@ -43,7 +43,16 @@ describe('AnalysisService', () => {
 
     (AnalysisBuilder as jest.Mock).mockReturnValue(analysisBuilderMock);
 
-    analysisContextMock = {} as jest.Mocked<AnalysisContextClass>;
+    // Mock the chain of calls: context.getOptions().getSteps().getSteps()
+    const mockSteps = {
+      getSteps: jest.fn().mockReturnValue([]),
+    };
+    const mockOptions = {
+      getSteps: jest.fn().mockReturnValue(mockSteps),
+    };
+    analysisContextMock = {
+      getOptions: jest.fn().mockReturnValue(mockOptions),
+    } as unknown as jest.Mocked<AnalysisContextClass>;
     (AnalysisContextClass as jest.Mock).mockReturnValue(analysisContextMock);
   });
 
@@ -53,6 +62,20 @@ describe('AnalysisService', () => {
       steps: ['MovingAverage', 'SwingPointDetection'],
     };
     const ohlcvs: OHLCV[] = [];
+
+    // Mock the chain of calls to return the steps from the query
+    const mockSteps = {
+      getSteps: jest
+        .fn()
+        .mockReturnValue(['MovingAverage', 'SwingPointDetection']),
+    };
+    const mockOptions = {
+      getSteps: jest.fn().mockReturnValue(mockSteps),
+    };
+    const mockContext = {
+      getOptions: jest.fn().mockReturnValue(mockOptions),
+    };
+    (AnalysisContextClass as jest.Mock).mockReturnValue(mockContext);
 
     service.performAnalysis(query, ohlcvs);
 
@@ -79,86 +102,6 @@ describe('AnalysisService', () => {
       volume: 1000,
     };
     const ohlcvs: OHLCV[] = [new OHLCV(ohlcvData)];
-
-    service.performAnalysis(query, ohlcvs);
-
-    expect(AnalysisContextClass).toHaveBeenCalledWith(query, ohlcvs);
-  });
-
-  it('should build the pipeline and run the analysis', () => {
-    const query: AnalysisQueryDto = {
-      dataAggregation: { ticker: { symbol: 'AAPL', exchange: 'US' } },
-      steps: [],
-    };
-    const ohlcvs: OHLCV[] = [];
-    const expectedResult = {} as AnalysisContextClass;
-    analysisPipelineMock.run.mockReturnValue(expectedResult);
-
-    const result = service.performAnalysis(query, ohlcvs);
-
-    expect(analysisBuilderMock.build).toHaveBeenCalled();
-    expect(analysisPipelineMock.run).toHaveBeenCalledWith(analysisContextMock);
-    expect(result).toBe(expectedResult);
-  });
-});
-
-describe('AnalysisService', () => {
-  let service: AnalysisService;
-  let analysisBuilderMock: jest.Mocked<AnalysisBuilder>;
-  let analysisPipelineMock: jest.Mocked<AnalysisPipeline>;
-  let analysisContextMock: jest.Mocked<AnalysisContextClass>;
-
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [AnalysisService],
-    }).compile();
-
-    service = module.get<AnalysisService>(AnalysisService);
-
-    // Reset mocks before each test
-    (AnalysisBuilder as jest.Mock).mockClear();
-    (AnalysisPipeline as jest.Mock).mockClear();
-    (AnalysisContextClass as jest.Mock).mockClear();
-    (OHLCV as jest.Mock).mockClear();
-
-    // Setup mock implementations
-    analysisPipelineMock = {
-      run: jest.fn(),
-    } as unknown as jest.Mocked<AnalysisPipeline>;
-
-    analysisBuilderMock = {
-      addStep: jest.fn(),
-      build: jest.fn().mockReturnValue(analysisPipelineMock),
-    } as unknown as jest.Mocked<AnalysisBuilder>;
-
-    (AnalysisBuilder as jest.Mock).mockReturnValue(analysisBuilderMock);
-
-    analysisContextMock = {} as unknown as jest.Mocked<AnalysisContextClass>;
-    (AnalysisContextClass as jest.Mock).mockReturnValue(analysisContextMock);
-  });
-
-  it('should add each step from the query to the builder', () => {
-    const query: AnalysisQueryDto = {
-      dataAggregation: { ticker: { symbol: 'AAPL', exchange: 'US' } },
-      steps: ['MovingAverage', 'SwingPointDetection'],
-    };
-    const ohlcvs: OHLCV[] = [];
-
-    service.performAnalysis(query, ohlcvs);
-
-    expect(analysisBuilderMock.addStep).toHaveBeenCalledWith('MovingAverage');
-    expect(analysisBuilderMock.addStep).toHaveBeenCalledWith(
-      'SwingPointDetection',
-    );
-    expect(analysisBuilderMock.addStep).toHaveBeenCalledTimes(2);
-  });
-
-  it('should create an AnalysisContext', () => {
-    const query: AnalysisQueryDto = {
-      dataAggregation: { ticker: { symbol: 'AAPL', exchange: 'US' } },
-      steps: [],
-    };
-    const ohlcvs: OHLCV[] = [new OHLCV({} as any)];
 
     service.performAnalysis(query, ohlcvs);
 
