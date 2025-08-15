@@ -1,4 +1,9 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn, ValueTransformer } from 'typeorm';
+
+const numberTransformer: ValueTransformer = {
+  to: (value: number) => value,
+  from: (value: string | number) => Number(value),
+};
 
 @Entity()
 export class OHLCVEntity {
@@ -8,22 +13,42 @@ export class OHLCVEntity {
   @PrimaryColumn({ type: 'date' })
   priceDate: string;
 
-  @Column('decimal', { precision: 12, scale: 4 })
+  @Column('decimal', {
+    precision: 12,
+    scale: 4,
+    transformer: numberTransformer,
+  })
   openPrice: number;
 
-  @Column('decimal', { precision: 12, scale: 4 })
+  @Column('decimal', {
+    precision: 12,
+    scale: 4,
+    transformer: numberTransformer,
+  })
   highPrice: number;
 
-  @Column('decimal', { precision: 12, scale: 4 })
+  @Column('decimal', {
+    precision: 12,
+    scale: 4,
+    transformer: numberTransformer,
+  })
   lowPrice: number;
 
-  @Column('decimal', { precision: 12, scale: 4 })
+  @Column('decimal', {
+    precision: 12,
+    scale: 4,
+    transformer: numberTransformer,
+  })
   closePrice: number;
 
-  @Column('decimal', { precision: 12, scale: 4 })
+  @Column('decimal', {
+    precision: 12,
+    scale: 4,
+    transformer: numberTransformer,
+  })
   adjustedClosePrice: number;
 
-  @Column('bigint')
+  @Column('bigint', { transformer: numberTransformer })
   volume: number;
 }
 
