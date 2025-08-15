@@ -312,5 +312,29 @@ describe('AnalysisContextClass', () => {
       );
       expect(ctx.getOptions()).toBeDefined();
     });
+
+    it('should use provided steps from query', () => {
+      const ctx = new AnalysisContextClass(
+        {
+          dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
+          steps: ['SwingPointDetection', 'TrendDetection'],
+        } as AnalysisQueryDto,
+        ohlcvs,
+      );
+      const steps = ctx.getOptions().getSteps().getSteps();
+      expect(steps).toEqual(['SwingPointDetection', 'TrendDetection']);
+    });
+
+    it('should use default steps when no steps provided', () => {
+      const ctx = new AnalysisContextClass(
+        {
+          dataAggregation: { ticker: { symbol: 'TEST', exchange: 'XETRA' } },
+          steps: [],
+        } as AnalysisQueryDto,
+        ohlcvs,
+      );
+      const steps = ctx.getOptions().getSteps().getSteps();
+      expect(steps).toEqual(['Trading']);
+    });
   });
 });

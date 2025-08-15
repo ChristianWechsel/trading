@@ -10,12 +10,13 @@ export class AnalysisService {
     query: AnalysisQueryDto,
     ohlcvs: OHLCV[],
   ): AnalysisContextClass {
+    const context = new AnalysisContextClass(query, ohlcvs);
+
     const builder = new AnalysisBuilder();
     for (const step of query.steps) {
       builder.addStep(step);
     }
 
-    const context = new AnalysisContextClass(query, ohlcvs);
     const pipeline = builder.build();
     const analysisResult = pipeline.run(context);
 

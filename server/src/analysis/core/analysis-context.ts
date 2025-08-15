@@ -19,6 +19,7 @@ import {
   MoneyManagementOptions,
   Options,
   RiskManagementOptions,
+  StepsOptions,
   SwingPointDetectionOptions,
   TickerOptions,
   TrendDetectionOptions,
@@ -61,6 +62,7 @@ export class AnalysisContextClass {
     moneyManagementOptions: Required<MoneyManagementDto>;
     riskManagementOptions: Required<RiskManagementDto>;
     yValueSource: YValueSource;
+    steps: Step[];
   };
 
   constructor(query: AnalysisQueryDto, ohlcvs: OHLCV[]) {
@@ -89,6 +91,7 @@ export class AnalysisContextClass {
         riskManagement: 'fixed-percentage',
       },
       yValueSource: 'close',
+      steps: ['Trading'],
     };
 
     this.options = new Options({
@@ -135,6 +138,7 @@ export class AnalysisContextClass {
         },
         this.defaults.riskManagementOptions,
       ),
+      steps: new StepsOptions(query.steps, this.defaults.steps),
     });
 
     this.enrichedDataPoints = ohlcvs

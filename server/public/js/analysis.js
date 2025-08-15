@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 );
                 const riskManagementAtrFactor = formData.get('riskManagementAtrFactor');
 
-                if (symbol && exchange && steps.length > 0) {
+                if (symbol && exchange) {
                     const analysisData = await retrieveAnalysisData(
                         symbol,
                         exchange,
@@ -59,8 +59,8 @@ async function retrieveAnalysisData(
     // required
     symbol,
     exchange,
-    steps,
     // optional
+    steps,
     from,
     to,
     yValueSource,
@@ -80,9 +80,13 @@ async function retrieveAnalysisData(
                 exchange,
             },
         },
-        steps,
+        steps: [],
         stepOptions: {},
     };
+
+    if (steps && steps.length > 0) {
+        postData.steps.push(...steps);
+    }
 
     if (yValueSource) {
         postData.stepOptions.yValueSource = yValueSource;
@@ -181,9 +185,7 @@ function updatePositions(analysisData) {
     // Offene Positionen
     const openPositionsList = document.getElementById('open-positions');
     openPositionsList.innerHTML = '';
-    if (
-        analysisData.portfolio.openPositions
-    ) {
+    if (analysisData.portfolio.openPositions) {
         Object.values(analysisData.portfolio.openPositions).forEach((pos) => {
             const li = document.createElement('li');
             li.textContent = `Entry: ${pos.position.entryDate.slice(0, 10)}, Preis: ${Number(pos.position.entryPrice).toFixed(2)}, Stück: ${pos.position.shares}, Stop Loss: ${pos.stops.loss ? Number(pos.stops.loss).toFixed(2) : '-'}`;
@@ -196,9 +198,7 @@ function updatePositions(analysisData) {
     // Geschlossene Positionen
     const closedPositionsList = document.getElementById('closed-positions');
     closedPositionsList.innerHTML = '';
-    if (
-        analysisData.portfolio.closedPositions
-    ) {
+    if (analysisData.portfolio.closedPositions) {
         Object.values(analysisData.portfolio.closedPositions).forEach((pos) => {
             const li = document.createElement('li');
             li.textContent = `Entry: ${pos.position.entryDate.slice(0, 10)}, Preis: ${Number(pos.position.entryPrice).toFixed(2)}, Stück: ${pos.position.shares}, ExitPrice: ${Number(pos.exitPrice).toFixed(2)}`;

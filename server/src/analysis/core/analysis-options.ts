@@ -8,6 +8,7 @@ import {
   TrendDetectionOptionsDto,
   YValueSource,
 } from '../analysis-query.dto';
+import { Step } from './analysis.interface';
 
 export class Options {
   constructor(
@@ -20,6 +21,7 @@ export class Options {
       moneyManagement: MoneyManagementOptions;
       riskManagement: RiskManagementOptions;
       ticker: TickerOptions;
+      steps: StepsOptions;
     },
   ) {}
   getTicker(): TickerOptions {
@@ -52,6 +54,10 @@ export class Options {
 
   getRiskManagement(): RiskManagementOptions {
     return this.options.riskManagement;
+  }
+
+  getSteps(): StepsOptions {
+    return this.options.steps;
   }
 }
 
@@ -154,5 +160,16 @@ export class TickerOptions {
 
   getTicker() {
     return this.options;
+  }
+}
+
+export class StepsOptions {
+  constructor(
+    private steps: Step[],
+    private defaults: Step[],
+  ) {}
+
+  getSteps() {
+    return this.steps.length > 0 ? this.steps : this.defaults;
   }
 }
