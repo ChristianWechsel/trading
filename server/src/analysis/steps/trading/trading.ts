@@ -1,6 +1,5 @@
 import { AnalysisContextClass } from '../../../analysis/core/analysis-context';
 import { AnalysisStep, Step } from '../../../analysis/core/analysis.interface';
-import { Position } from '../../../analysis/core/position/position';
 
 export class Trading implements AnalysisStep {
   dependsOn: Step[] = ['TradingSignal'];
@@ -17,24 +16,15 @@ export class Trading implements AnalysisStep {
     const moneyManagement = context.buildMoneyManagement();
     const riskManagement = context.buildRiskManagement();
     const portfolio = context.getPortfolio();
+    portfolio.addPosition(ticker);
 
     dataPoints.forEach((dataPoint) => {
       const price = yYalueAccessor(dataPoint);
+      portfolio.calc(ticker, {
+        date: dataPoint.getDataPoint().getPriceDate(),
+        price,
+      });
 
-      if (portfolio.hasOpenPositions()) {
-        const openPositions = portfolio.getOpenPositions();
-        openPositions.forEach((position) => {
-          const stopLossPrice = position.getStopLossPrice();
-
-          if (
-            stopLossPrice !== undefined &&
-            dataPoint.getDataPoint().getLowPrice() <= stopLossPrice
-          ) {
-            const id = position.getIdentifier();
-            portfolio.closePosition(id, stopLossPrice);
-          }
-        });
-      }
       const tradingSignal = tradingSignals.find(
         (signal) =>
           signal.dataPoint.getDataPoint().getPriceDateIsoDate() ===
@@ -42,26 +32,26 @@ export class Trading implements AnalysisStep {
       );
 
       if (tradingSignal && tradingSignal.type === 'buy') {
-        const position = new Position({
-          entryDate: dataPoint.getDataPoint().getPriceDate(),
-          entryPrice: price,
+        portfolio.placeOrder(ticker, {
+          type: 'buy',
+          price,
           shares: moneyManagement(account.getCash(), price),
-          ticker,
+          reason: 'Upward trend started',
+          date: dataPoint.getDataPoint().getPriceDate(),
         });
-        position.setStopLossPrice(riskManagement(dataPoint, yYalueAccessor));
-        portfolio.openPosition(position);
+        portfolio.setStops(ticker, {
+          loss: riskManagement(dataPoint, yYalueAccessor),
+        });
       }
 
       if (tradingSignal && tradingSignal.type === 'sell') {
-        const openPositions = portfolio.getOpenPositions();
-        const positionToClose = openPositions.find((position) =>
-          position.isPosition(ticker),
-        );
-
-        if (positionToClose) {
-          const id = positionToClose.getIdentifier();
-          portfolio.closePosition(id, price);
-        }
+        portfolio.placeOrder(ticker, {
+          type: 'sell',
+          price,
+          shares: moneyManagement(account.getCash(), price),
+          reason: 'Upward trend ended',
+          date: dataPoint.getDataPoint().getPriceDate(),
+        });
       }
     });
   }
