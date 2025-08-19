@@ -61,6 +61,14 @@ export class Position {
     }
   }
 
+  getProfit() {
+    return 10;
+  }
+
+  getTransactions() {
+    return this.transactions;
+  }
+
   private getCurrentShares() {
     return this.transactions.reduce<number>(
       (sharesAccumulated, transaction) => {

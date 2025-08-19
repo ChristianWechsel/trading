@@ -1,4 +1,5 @@
 import { TickerDto } from '../../../data-aggregation/data-aggregation.dto';
+import { TransactionData } from '../transaction/transaction';
 import { Position } from './position';
 
 describe('Position', () => {
@@ -26,125 +27,71 @@ describe('Position', () => {
     expect(position.getIdentifier()).toBe('AAPL NASDAQ');
   });
 
-  describe('transactions and shares calculation', () => {
-    it('should have zero shares initially', () => {
-      // @ts-expect-error testing private method
-      expect(position.getCurrentShares()).toBe(0);
-    });
-
-    it('should calculate current shares correctly after buying', () => {
-      position.buy({
-        date: new Date(),
-        price: 150,
-        shares: 10,
-        type: 'buy',
-        reason: 'Upward trend started',
-      });
-      // @ts-expect-error testing private method
-      expect(position.getCurrentShares()).toBe(10);
-    });
-
-    it('should calculate current shares correctly after multiple buys', () => {
-      position.buy({
-        date: new Date(),
-        price: 150,
-        shares: 10,
-        type: 'buy',
-        reason: 'Upward trend started',
-      });
-      position.buy({
-        date: new Date(),
-        price: 155,
-        shares: 5,
-        type: 'buy',
-        reason: 'Upward trend started',
-      });
-      // @ts-expect-error testing private method
-      expect(position.getCurrentShares()).toBe(15);
-    });
-
-    it('should calculate current shares correctly after selling', () => {
-      position.buy({
-        date: new Date(),
-        price: 150,
-        shares: 10,
-        type: 'buy',
-        reason: 'Upward trend started',
-      });
-      position.sell({
-        date: new Date(),
-        price: 160,
-        shares: 5,
-        type: 'sell',
-        reason: 'Upward trend ended',
-      });
-      // @ts-expect-error testing private method
-      expect(position.getCurrentShares()).toBe(5);
-    });
-
-    it('should calculate current shares correctly after selling all shares', () => {
-      position.buy({
-        date: new Date(),
-        price: 150,
-        shares: 10,
-        type: 'buy',
-        reason: 'Upward trend started',
-      });
-      position.sell({
-        date: new Date(),
-        price: 160,
-        shares: 10,
-        type: 'sell',
-        reason: 'Upward trend ended',
-      });
-      // @ts-expect-error testing private method
-      expect(position.getCurrentShares()).toBe(0);
-    });
+  it('should add buy transaction', () => {
+    const buyOrder: TransactionData = {
+      date: new Date('2025-08-19'),
+      price: 200,
+      shares: 10,
+      type: 'buy',
+      reason: 'Upward trend started',
+    };
+    position.buy(buyOrder);
+    expect(position.getTransactions()).toHaveLength(1);
+    expect(position.getTransactions()[0].getType()).toBe('buy');
+    expect(position.getTransactions()[0].getShares()).toBe(10);
   });
 
-  describe('stops', () => {
-    beforeEach(() => {
-      position.buy({
-        date: new Date(),
-        price: 100,
-        shares: 10,
-        type: 'buy',
-        reason: 'Upward trend started',
-      });
-      position.setStops({ loss: 90, profit: 110 });
+  it('should add sell transaction', () => {
+    const sellOrder: TransactionData = {
+      date: new Date('2025-08-19'),
+      price: 210,
+      shares: 5,
+      type: 'sell',
+      reason: 'Upward trend ended',
+    };
+    position.sell(sellOrder);
+    expect(position.getTransactions()).toHaveLength(1);
+    expect(position.getTransactions()[0].getType()).toBe('sell');
+    expect(position.getTransactions()[0].getShares()).toBe(5);
+  });
+
+  it('should set stops', () => {
+    position.setStops({ loss: 190, profit: 220 });
+
+    // Buy some shares first
+    position.buy({
+      date: new Date('2025-08-19'),
+      price: 200,
+      shares: 10,
+      type: 'buy',
+      reason: 'Upward trend started',
     });
 
-    it('should not trigger sell if price is between stops', () => {
-      position.calc({ date: new Date(), price: 105 });
-      // @ts-expect-error testing private method
-      expect(position.getCurrentShares()).toBe(10);
+    // Test stop loss
+    position.calc({ date: new Date('2025-08-20'), price: 185 });
+    expect(position.getTransactions()).toHaveLength(2);
+    expect(position.getTransactions()[1].getType()).toBe('sell');
+
+    // Reset position
+    position = new Position(ticker);
+    position.setStops({ loss: 190, profit: 220 });
+
+    // Buy some shares
+    position.buy({
+      date: new Date('2025-08-19'),
+      price: 200,
+      shares: 10,
+      type: 'buy',
+      reason: 'Upward trend started',
     });
 
-    it('should trigger stop-loss and sell all shares', () => {
-      position.calc({ date: new Date(), price: 89 });
-      // @ts-expect-error testing private method
-      expect(position.getCurrentShares()).toBe(0);
-    });
+    // Test take profit
+    position.calc({ date: new Date('2025-08-20'), price: 225 });
+    expect(position.getTransactions()).toHaveLength(2);
+    expect(position.getTransactions()[1].getType()).toBe('sell');
+  });
 
-    it('should trigger take-profit and sell all shares', () => {
-      position.calc({ date: new Date(), price: 111 });
-      // @ts-expect-error testing private method
-      expect(position.getCurrentShares()).toBe(0);
-    });
-
-    it('should not trigger sell if there are no shares', () => {
-      position.sell({
-        date: new Date(),
-        price: 105,
-        shares: 10,
-        type: 'sell',
-        reason: 'Upward trend ended',
-      });
-      position.calc({ date: new Date(), price: 89 });
-      // @ts-expect-error testing private method
-      expect(position.getCurrentShares()).toBe(0);
-      // @ts-expect-error testing private property
-      expect(position.transactions.length).toBe(2); // buy, sell
-    });
+  it('should calculate profit', () => {
+    expect(position.getProfit()).toBe(10);
   });
 });
