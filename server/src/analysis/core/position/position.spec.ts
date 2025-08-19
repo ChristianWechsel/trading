@@ -28,8 +28,39 @@ describe('Position', () => {
     );
   });
 
-  it('should return correct identifier', () => {
-    expect(position.getIdentifier()).toBe('AAPL NASDAQ');
+  it('should track current shares correctly', () => {
+    // Initial state: 0 shares
+    expect(position.getCurrentShares()).toBe(0);
+
+    // Buy 10 shares
+    position.placeOrder({
+      date: new Date('2025-08-19'),
+      price: 200,
+      shares: 10,
+      type: 'buy',
+      reason: 'Upward trend started',
+    });
+    expect(position.getCurrentShares()).toBe(10);
+
+    // Sell 4 shares
+    position.placeOrder({
+      date: new Date('2025-08-20'),
+      price: 210,
+      shares: 4,
+      type: 'sell',
+      reason: 'Upward trend ended',
+    });
+    expect(position.getCurrentShares()).toBe(6);
+
+    // Buy 5 more shares
+    position.placeOrder({
+      date: new Date('2025-08-21'),
+      price: 205,
+      shares: 5,
+      type: 'buy',
+      reason: 'Upward trend started',
+    });
+    expect(position.getCurrentShares()).toBe(11);
   });
 
   it('should add buy transaction and trigger buy callback', () => {
