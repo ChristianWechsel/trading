@@ -62,7 +62,34 @@ export class Position {
   }
 
   getProfit() {
-    return 10;
+    const buys = this.getBuys().reduce<number[]>(
+      (listEveryShareWithPrice, buy) => {
+        const shares = buy.getShares();
+        const price = buy.getPrice();
+        const list = new Array<number>(shares).fill(price);
+        listEveryShareWithPrice.push(...list);
+        return listEveryShareWithPrice;
+      },
+      [],
+    );
+    const sells = this.getSells().reduce<number[]>(
+      (listEveryShareWithPrice, sell) => {
+        const shares = sell.getShares();
+        const price = sell.getPrice();
+        const list = new Array<number>(shares).fill(price);
+        listEveryShareWithPrice.push(...list);
+        return listEveryShareWithPrice;
+      },
+      [],
+    );
+
+    return sells.reduce<number>((profit, sell, idxSell) => {
+      const buy = buys[idxSell];
+
+      const margin = sell - buy;
+      profit += margin;
+      return profit;
+    }, 0);
   }
 
   getTransactions() {
@@ -97,5 +124,13 @@ export class Position {
     price: number,
   ) {
     return shares !== 0 && stopProfit && price > stopProfit;
+  }
+
+  private getBuys() {
+    return this.transactions.filter((tx) => tx.getType() === 'buy');
+  }
+
+  private getSells() {
+    return this.transactions.filter((tx) => tx.getType() === 'sell');
   }
 }

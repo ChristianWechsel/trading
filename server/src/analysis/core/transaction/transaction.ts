@@ -16,4 +16,8 @@ export class Transaction {
   getShares() {
     return this.details.shares;
   }
+
+  getPrice() {
+    return this.details.price;
+  }
 }
