@@ -8,14 +8,6 @@ type Stops = Partial<{
   profit: number;
 }>;
 
-// ich will wissen, um welche Aktie es geht
-// Erfassen von Käufen und Verkäufen
-// Auch Teilkäufe und Teilverkäufe erfassen
-// Grund angeben für jeden Kauf / Verkauf => Grund als Union definieren
-// Für jeden Verkauf den Gewinn/Verlust ermitteln => wie berechnen bei Teilverkäufen?
-// Oder Gewinn Verlust nur berechnen, wenn Position geschlossen (= alle Anteile verkauft)
-// StopLoss und TakeProfit festlegen. Diese können jederzeit geändert werden.
-
 export class Position {
   private transactions: Transaction[];
   private stops: Stops;
