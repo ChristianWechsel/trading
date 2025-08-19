@@ -35,7 +35,7 @@ describe('Position', () => {
       type: 'buy',
       reason: 'Upward trend started',
     };
-    position.buy(buyOrder);
+    position.placeOrder(buyOrder);
     expect(position.getTransactions()).toHaveLength(1);
     expect(position.getTransactions()[0].getType()).toBe('buy');
     expect(position.getTransactions()[0].getShares()).toBe(10);
@@ -49,7 +49,7 @@ describe('Position', () => {
       type: 'sell',
       reason: 'Upward trend ended',
     };
-    position.sell(sellOrder);
+    position.placeOrder(sellOrder);
     expect(position.getTransactions()).toHaveLength(1);
     expect(position.getTransactions()[0].getType()).toBe('sell');
     expect(position.getTransactions()[0].getShares()).toBe(5);
@@ -59,7 +59,7 @@ describe('Position', () => {
     position.setStops({ loss: 190, profit: 220 });
 
     // Buy some shares first
-    position.buy({
+    position.placeOrder({
       date: new Date('2025-08-19'),
       price: 200,
       shares: 10,
@@ -77,7 +77,7 @@ describe('Position', () => {
     position.setStops({ loss: 190, profit: 220 });
 
     // Buy some shares
-    position.buy({
+    position.placeOrder({
       date: new Date('2025-08-19'),
       price: 200,
       shares: 10,
@@ -93,7 +93,7 @@ describe('Position', () => {
 
   it('should calculate profit for one buy and one sell transaction', () => {
     // Buy 10 shares at $100 each
-    position.buy({
+    position.placeOrder({
       date: new Date('2025-08-19'),
       price: 100,
       shares: 10,
@@ -102,7 +102,7 @@ describe('Position', () => {
     });
 
     // Sell 10 shares at $120 each
-    position.sell({
+    position.placeOrder({
       date: new Date('2025-08-25'),
       price: 120,
       shares: 10,
@@ -116,7 +116,7 @@ describe('Position', () => {
 
   it('should calculate profit for multiple buys and one sell with different prices', () => {
     // Buy 5 shares at $100 each
-    position.buy({
+    position.placeOrder({
       date: new Date('2025-08-19'),
       price: 100,
       shares: 5,
@@ -125,7 +125,7 @@ describe('Position', () => {
     });
 
     // Buy 8 shares at $110 each
-    position.buy({
+    position.placeOrder({
       date: new Date('2025-08-20'),
       price: 110,
       shares: 8,
@@ -134,7 +134,7 @@ describe('Position', () => {
     });
 
     // Sell all 13 shares at $120 each
-    position.sell({
+    position.placeOrder({
       date: new Date('2025-08-25'),
       price: 120,
       shares: 13,
@@ -148,7 +148,7 @@ describe('Position', () => {
 
   it('should calculate profit using FIFO when partially selling shares', () => {
     // Buy 5 shares at $100 each
-    position.buy({
+    position.placeOrder({
       date: new Date('2025-08-19'),
       price: 100,
       shares: 5,
@@ -157,7 +157,7 @@ describe('Position', () => {
     });
 
     // Buy 8 shares at $110 each
-    position.buy({
+    position.placeOrder({
       date: new Date('2025-08-20'),
       price: 110,
       shares: 8,
@@ -166,7 +166,7 @@ describe('Position', () => {
     });
 
     // Sell only 7 shares at $120 each (5 from first buy, 2 from second buy)
-    position.sell({
+    position.placeOrder({
       date: new Date('2025-08-25'),
       price: 120,
       shares: 7,
@@ -180,7 +180,7 @@ describe('Position', () => {
 
   it('should calculate profit for multiple buys and multiple sells', () => {
     // Buy 10 shares at $100 each
-    position.buy({
+    position.placeOrder({
       date: new Date('2025-08-19'),
       price: 100,
       shares: 10,
@@ -189,7 +189,7 @@ describe('Position', () => {
     });
 
     // Buy 5 shares at $90 each
-    position.buy({
+    position.placeOrder({
       date: new Date('2025-08-20'),
       price: 90,
       shares: 5,
@@ -198,7 +198,7 @@ describe('Position', () => {
     });
 
     // Sell 7 shares at $110 each
-    position.sell({
+    position.placeOrder({
       date: new Date('2025-08-25'),
       price: 110,
       shares: 7,
@@ -207,7 +207,7 @@ describe('Position', () => {
     });
 
     // Buy 3 shares at $105 each
-    position.buy({
+    position.placeOrder({
       date: new Date('2025-08-28'),
       price: 105,
       shares: 3,
@@ -216,7 +216,7 @@ describe('Position', () => {
     });
 
     // Sell 6 shares at $120 each
-    position.sell({
+    position.placeOrder({
       date: new Date('2025-08-30'),
       price: 120,
       shares: 6,
@@ -233,7 +233,7 @@ describe('Position', () => {
 
   it('should calculate losses when selling at lower prices', () => {
     // Buy 10 shares at $100 each
-    position.buy({
+    position.placeOrder({
       date: new Date('2025-08-19'),
       price: 100,
       shares: 10,
@@ -242,7 +242,7 @@ describe('Position', () => {
     });
 
     // Buy 5 shares at $90 each
-    position.buy({
+    position.placeOrder({
       date: new Date('2025-08-20'),
       price: 90,
       shares: 5,
@@ -251,7 +251,7 @@ describe('Position', () => {
     });
 
     // Sell 8 shares at $80 each (at a loss)
-    position.sell({
+    position.placeOrder({
       date: new Date('2025-08-25'),
       price: 80,
       shares: 8,

@@ -28,11 +28,7 @@ export class Position {
     return `${this.ticker.symbol} ${this.ticker.exchange}`;
   }
 
-  buy(order: TransactionData) {
-    this.transactions.push(new Transaction(order));
-  }
-
-  sell(order: TransactionData) {
+  placeOrder(order: TransactionData) {
     this.transactions.push(new Transaction(order));
   }
 
@@ -47,9 +43,21 @@ export class Position {
     const stopProfit = this.stops.profit;
 
     if (this.isStopLossTriggered(shares, stopLoss, price)) {
-      this.sell({ date, price, reason: 'stop-loss', shares, type: 'sell' });
+      this.placeOrder({
+        date,
+        price,
+        reason: 'stop-loss',
+        shares,
+        type: 'sell',
+      });
     } else if (this.isTakeProfitTriggerd(shares, stopProfit, price)) {
-      this.sell({ date, price, reason: 'take-profit', shares, type: 'sell' });
+      this.placeOrder({
+        date,
+        price,
+        reason: 'take-profit',
+        shares,
+        type: 'sell',
+      });
     }
   }
 
