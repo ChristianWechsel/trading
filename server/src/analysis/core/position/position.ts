@@ -14,7 +14,13 @@ export class Position {
   private transactions: Transaction[];
   private stops: Stops;
 
-  constructor(private ticker: TickerDto) {
+  constructor(
+    private ticker: TickerDto,
+    private on: {
+      buy: (shares: number, price: number) => void;
+      sell: (shares: number, price: number) => void;
+    },
+  ) {
     this.transactions = [];
     this.stops = {};
   }
@@ -32,6 +38,7 @@ export class Position {
 
   placeOrder(order: TransactionData) {
     this.transactions.push(new Transaction(order));
+    this.triggerOrderCallbacks(order);
   }
 
   setStops(stops: Stops) {
@@ -96,6 +103,17 @@ export class Position {
 
   getTransactions() {
     return this.transactions;
+  }
+
+  private triggerOrderCallbacks(order: TransactionData) {
+    switch (order.type) {
+      case 'buy':
+        this.on.buy(order.shares, order.price);
+        break;
+      case 'sell':
+        this.on.sell(order.shares, order.price);
+        break;
+    }
   }
 
   private getCurrentShares() {

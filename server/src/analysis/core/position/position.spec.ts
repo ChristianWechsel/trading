@@ -5,9 +5,14 @@ import { Position } from './position';
 describe('Position', () => {
   let position: Position;
   const ticker: TickerDto = { symbol: 'AAPL', exchange: 'NASDAQ' };
+  const mockCallbacks = {
+    buy: jest.fn(),
+    sell: jest.fn(),
+  };
 
   beforeEach(() => {
-    position = new Position(ticker);
+    position = new Position(ticker, mockCallbacks);
+    jest.clearAllMocks();
   });
 
   it('should be created', () => {
@@ -27,7 +32,7 @@ describe('Position', () => {
     expect(position.getIdentifier()).toBe('AAPL NASDAQ');
   });
 
-  it('should add buy transaction', () => {
+  it('should add buy transaction and trigger buy callback', () => {
     const buyOrder: TransactionData = {
       date: new Date('2025-08-19'),
       price: 200,
@@ -39,9 +44,11 @@ describe('Position', () => {
     expect(position.getTransactions()).toHaveLength(1);
     expect(position.getTransactions()[0].getType()).toBe('buy');
     expect(position.getTransactions()[0].getShares()).toBe(10);
+    expect(mockCallbacks.buy).toHaveBeenCalledWith(10, 200);
+    expect(mockCallbacks.sell).not.toHaveBeenCalled();
   });
 
-  it('should add sell transaction', () => {
+  it('should add sell transaction and trigger sell callback', () => {
     const sellOrder: TransactionData = {
       date: new Date('2025-08-19'),
       price: 210,
@@ -53,9 +60,11 @@ describe('Position', () => {
     expect(position.getTransactions()).toHaveLength(1);
     expect(position.getTransactions()[0].getType()).toBe('sell');
     expect(position.getTransactions()[0].getShares()).toBe(5);
+    expect(mockCallbacks.sell).toHaveBeenCalledWith(5, 210);
+    expect(mockCallbacks.buy).not.toHaveBeenCalled();
   });
 
-  it('should set stops', () => {
+  it('should set stops and trigger callbacks', () => {
     position.setStops({ loss: 190, profit: 220 });
 
     // Buy some shares first
@@ -66,14 +75,20 @@ describe('Position', () => {
       type: 'buy',
       reason: 'Upward trend started',
     });
+    expect(mockCallbacks.buy).toHaveBeenCalledWith(10, 200);
+    mockCallbacks.buy.mockClear();
 
     // Test stop loss
     position.calc({ date: new Date('2025-08-20'), price: 185 });
     expect(position.getTransactions()).toHaveLength(2);
     expect(position.getTransactions()[1].getType()).toBe('sell');
+    expect(mockCallbacks.sell).toHaveBeenCalledWith(10, 185);
+    expect(mockCallbacks.buy).not.toHaveBeenCalled();
 
     // Reset position
-    position = new Position(ticker);
+    position = new Position(ticker, mockCallbacks);
+    mockCallbacks.buy.mockClear();
+    mockCallbacks.sell.mockClear();
     position.setStops({ loss: 190, profit: 220 });
 
     // Buy some shares
@@ -84,11 +99,15 @@ describe('Position', () => {
       type: 'buy',
       reason: 'Upward trend started',
     });
+    expect(mockCallbacks.buy).toHaveBeenCalledWith(10, 200);
+    mockCallbacks.buy.mockClear();
 
     // Test take profit
     position.calc({ date: new Date('2025-08-20'), price: 225 });
     expect(position.getTransactions()).toHaveLength(2);
     expect(position.getTransactions()[1].getType()).toBe('sell');
+    expect(mockCallbacks.sell).toHaveBeenCalledWith(10, 225);
+    expect(mockCallbacks.buy).not.toHaveBeenCalled();
   });
 
   it('should calculate profit for one buy and one sell transaction', () => {
@@ -262,5 +281,44 @@ describe('Position', () => {
     // Loss calculation (FIFO):
     // Sell 8 shares: (80 - 100) * 8 = -$160
     expect(position.getProfit()).toBe(-160);
+  });
+
+  it('should call callbacks with correct parameters for multiple transactions', () => {
+    // Clear mocks before this test
+    mockCallbacks.buy.mockClear();
+    mockCallbacks.sell.mockClear();
+
+    // Buy and sell several times with different shares and prices
+    position.placeOrder({
+      date: new Date('2025-08-19'),
+      price: 100,
+      shares: 5,
+      type: 'buy',
+      reason: 'Upward trend started',
+    });
+
+    position.placeOrder({
+      date: new Date('2025-08-20'),
+      price: 110,
+      shares: 3,
+      type: 'buy',
+      reason: 'Upward trend started',
+    });
+
+    position.placeOrder({
+      date: new Date('2025-08-21'),
+      price: 120,
+      shares: 2,
+      type: 'sell',
+      reason: 'Upward trend ended',
+    });
+
+    // Verify callback calls
+    expect(mockCallbacks.buy).toHaveBeenCalledTimes(2);
+    expect(mockCallbacks.buy).toHaveBeenNthCalledWith(1, 5, 100);
+    expect(mockCallbacks.buy).toHaveBeenNthCalledWith(2, 3, 110);
+
+    expect(mockCallbacks.sell).toHaveBeenCalledTimes(1);
+    expect(mockCallbacks.sell).toHaveBeenCalledWith(2, 120);
   });
 });
