@@ -45,10 +45,11 @@ export class Trading implements AnalysisStep {
       }
 
       if (tradingSignal && tradingSignal.type === 'sell') {
+        const shares = portfolio.getCurrentShares(ticker);
         portfolio.placeOrder(ticker, {
           type: 'sell',
           price,
-          shares: moneyManagement(account.getCash(), price),
+          shares,
           reason: 'Upward trend ended',
           date: dataPoint.getDataPoint().getPriceDate(),
         });

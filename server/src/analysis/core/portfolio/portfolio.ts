@@ -46,6 +46,14 @@ export class Portfolio {
     }
   }
 
+  getCurrentShares(ticker: TickerDto): number {
+    const position = this.getPosition(ticker);
+    if (position) {
+      return position.getCurrentShares();
+    }
+    return 0;
+  }
+
   getTransactions() {
     return this.positions.flatMap((p) => p.getTransactions());
   }
