@@ -1,8 +1,6 @@
 import { TickerDto } from '../../../data-aggregation/data-aggregation.dto';
 import { Transaction, TransactionData } from '../transaction/transaction';
 
-export type IDPosition = string;
-
 export type Stops = Partial<{
   loss: number;
   profit: number;
@@ -30,10 +28,6 @@ export class Position {
       this.ticker.symbol === ticker.symbol &&
       this.ticker.exchange === ticker.exchange
     );
-  }
-
-  getIdentifier(): IDPosition {
-    return `${this.ticker.symbol} ${this.ticker.exchange}`;
   }
 
   placeOrder(order: TransactionData) {
@@ -68,6 +62,20 @@ export class Position {
         type: 'sell',
       });
     }
+  }
+
+  getCurrentShares() {
+    return this.transactions.reduce<number>(
+      (sharesAccumulated, transaction) => {
+        if (transaction.getType() === 'buy') {
+          sharesAccumulated += transaction.getShares();
+        } else {
+          sharesAccumulated -= transaction.getShares();
+        }
+        return sharesAccumulated;
+      },
+      0,
+    );
   }
 
   getProfit() {
@@ -114,20 +122,6 @@ export class Position {
         this.on.sell(order.shares, order.price);
         break;
     }
-  }
-
-  private getCurrentShares() {
-    return this.transactions.reduce<number>(
-      (sharesAccumulated, transaction) => {
-        if (transaction.getType() === 'buy') {
-          sharesAccumulated += transaction.getShares();
-        } else {
-          sharesAccumulated -= transaction.getShares();
-        }
-        return sharesAccumulated;
-      },
-      0,
-    );
   }
 
   private isStopLossTriggered(
