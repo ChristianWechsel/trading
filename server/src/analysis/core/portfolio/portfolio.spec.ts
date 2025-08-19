@@ -1,5 +1,5 @@
 import { Account } from '../account/account';
-import { Position } from '../position/position';
+import { TransactionData } from '../transaction/transaction';
 import { Portfolio } from './portfolio';
 
 describe('Portfolio', () => {
@@ -7,25 +7,9 @@ describe('Portfolio', () => {
   let portfolio: Portfolio;
   const initialCapital = 20000;
 
-  const aaplPosition = new Position({
-    ticker: {
-      symbol: 'AAPL',
-      exchange: 'NASDAQ',
-    },
-    shares: 10,
-    entryPrice: 150,
-    entryDate: new Date('2023-01-01T00:00:00.000Z'),
-  });
-
-  const googPosition = new Position({
-    ticker: {
-      symbol: 'GOOG',
-      exchange: 'NASDAQ',
-    },
-    shares: 5,
-    entryPrice: 100,
-    entryDate: new Date('2023-01-02T00:00:00.000Z'),
-  });
+  // Ticker Definitionen
+  const aaplTicker = { symbol: 'AAPL', exchange: 'NASDAQ' };
+  const googTicker = { symbol: 'GOOG', exchange: 'NASDAQ' };
 
   beforeEach(() => {
     account = new Account(initialCapital);
@@ -33,75 +17,204 @@ describe('Portfolio', () => {
   });
 
   describe('Initial State', () => {
-    it('should start with no open or closed positions', () => {
-      expect(portfolio.getOpenPositions()).toHaveLength(0);
-      expect(portfolio.getClosedPositions()).toHaveLength(0);
+    it('should start with no transactions', () => {
+      expect(portfolio.getTransactions()).toHaveLength(0);
     });
   });
 
-  describe('openPosition', () => {
-    it('should open a position, debit the account, and return the position ID', () => {
-      const cost = aaplPosition.getEntryValue(); // 1500
-      const id = portfolio.openPosition(aaplPosition);
+  describe('addPosition', () => {
+    it('should add a position', () => {
+      portfolio.addPosition(aaplTicker);
 
-      expect(id).toBe(aaplPosition.getIdentifier());
-      expect(portfolio.getOpenPositions()).toHaveLength(1);
-      expect(portfolio.getOpenPositions()[0]).toBe(aaplPosition);
-      expect(account.getCash()).toBe(initialCapital - cost);
+      // Platziere eine Order, um zu prüfen, ob die Position korrekt angelegt wurde
+      const buyOrder: TransactionData = {
+        date: new Date('2025-08-19'),
+        price: 150,
+        shares: 10,
+        type: 'buy',
+        reason: 'Upward trend started',
+      };
+
+      portfolio.placeOrder(aaplTicker, buyOrder);
+
+      expect(portfolio.getTransactions()).toHaveLength(1);
+      expect(account.getCash()).toBe(initialCapital - 150 * 10);
     });
 
-    it('should allow opening multiple positions', () => {
-      portfolio.openPosition(aaplPosition);
-      portfolio.openPosition(googPosition);
+    it('should not add the same position twice', () => {
+      portfolio.addPosition(aaplTicker);
+      portfolio.addPosition(aaplTicker);
 
-      const totalCost =
-        aaplPosition.getEntryValue() + googPosition.getEntryValue(); // 1500 + 500
-      expect(portfolio.getOpenPositions()).toHaveLength(2);
-      expect(account.getCash()).toBe(initialCapital - totalCost);
+      const buyOrder: TransactionData = {
+        date: new Date('2025-08-19'),
+        price: 150,
+        shares: 10,
+        type: 'buy',
+        reason: 'Upward trend started',
+      };
+
+      portfolio.placeOrder(aaplTicker, buyOrder);
+
+      expect(portfolio.getTransactions()).toHaveLength(1);
     });
 
-    it('should throw an error if the same position is already open', () => {
-      portfolio.openPosition(aaplPosition);
-      expect(() => portfolio.openPosition(aaplPosition)).toThrow(
-        `Position ${aaplPosition.getIdentifier()} is already open.`,
-      );
+    it('should allow adding multiple positions', () => {
+      portfolio.addPosition(aaplTicker);
+      portfolio.addPosition(googTicker);
+
+      // Kauf von AAPL
+      const aaplBuyOrder: TransactionData = {
+        date: new Date('2025-08-19'),
+        price: 150,
+        shares: 10,
+        type: 'buy',
+        reason: 'Upward trend started',
+      };
+
+      // Kauf von GOOG
+      const googBuyOrder: TransactionData = {
+        date: new Date('2025-08-20'),
+        price: 100,
+        shares: 5,
+        type: 'buy',
+        reason: 'Upward trend started',
+      };
+
+      portfolio.placeOrder(aaplTicker, aaplBuyOrder);
+      portfolio.placeOrder(googTicker, googBuyOrder);
+
+      expect(portfolio.getTransactions()).toHaveLength(2);
+      expect(account.getCash()).toBe(initialCapital - 150 * 10 - 100 * 5);
     });
   });
 
-  describe('closePosition', () => {
+  describe('placeOrder', () => {
     beforeEach(() => {
-      portfolio.openPosition(aaplPosition); // cost 1500
-      portfolio.openPosition(googPosition); // cost 500
-      // Cash is now 20000 - 2000 = 18000
+      portfolio.addPosition(aaplTicker);
+      portfolio.addPosition(googTicker);
     });
 
-    it('should close a specific position, credit the account, and move it to closed positions', () => {
-      const exitPriceAapl = 160;
-      aaplPosition.closePosition(exitPriceAapl); // 10 shares * 160 = 1600
-      const proceeds = aaplPosition.getExitValue(); // 1600
-      const aaplId = aaplPosition.getIdentifier();
+    it('should execute a buy order and debit the account', () => {
+      const buyOrder: TransactionData = {
+        date: new Date('2025-08-19'),
+        price: 150,
+        shares: 10,
+        type: 'buy',
+        reason: 'Upward trend started',
+      };
 
-      portfolio.closePosition(aaplId, exitPriceAapl);
+      portfolio.placeOrder(aaplTicker, buyOrder);
 
-      // Check open positions
-      expect(portfolio.getOpenPositions()).toHaveLength(1);
-      expect(portfolio.getOpenPositions()[0].getIdentifier()).toBe(
-        googPosition.getIdentifier(),
-      );
-
-      // Check closed positions
-      expect(portfolio.getClosedPositions()).toHaveLength(1);
-      expect(portfolio.getClosedPositions()[0].getIdentifier()).toBe(aaplId);
-
-      // Check account balance
-      expect(account.getCash()).toBe(18000 + proceeds); // 19600
+      expect(portfolio.getTransactions()).toHaveLength(1);
+      expect(account.getCash()).toBe(initialCapital - 150 * 10);
     });
 
-    it('should throw an error when trying to close a non-existent position', () => {
-      const nonExistentId = 'TSLA 2023-01-01T00:00:00.000Z';
-      expect(() => portfolio.closePosition(nonExistentId, 300)).toThrow(
-        `Cannot close position: No position found for ID ${nonExistentId}.`,
-      );
+    it('should execute a sell order and credit the account', () => {
+      // Zuerst kaufen, damit wir verkaufen können
+      const buyOrder: TransactionData = {
+        date: new Date('2025-08-19'),
+        price: 150,
+        shares: 10,
+        type: 'buy',
+        reason: 'Upward trend started',
+      };
+
+      portfolio.placeOrder(aaplTicker, buyOrder);
+
+      // Dann verkaufen
+      const sellOrder: TransactionData = {
+        date: new Date('2025-08-20'),
+        price: 160,
+        shares: 5,
+        type: 'sell',
+        reason: 'Upward trend ended',
+      };
+
+      portfolio.placeOrder(aaplTicker, sellOrder);
+
+      expect(portfolio.getTransactions()).toHaveLength(2);
+      // 20000 - 150 * 10 + 160 * 5 = 20000 - 1500 + 800 = 19300
+      expect(account.getCash()).toBe(initialCapital - 150 * 10 + 160 * 5);
+    });
+
+    it('should do nothing if position does not exist', () => {
+      const nonExistentTicker = { symbol: 'TSLA', exchange: 'NASDAQ' };
+      const buyOrder: TransactionData = {
+        date: new Date('2025-08-19'),
+        price: 150,
+        shares: 10,
+        type: 'buy',
+        reason: 'Upward trend started',
+      };
+
+      portfolio.placeOrder(nonExistentTicker, buyOrder);
+
+      expect(portfolio.getTransactions()).toHaveLength(0);
+      expect(account.getCash()).toBe(initialCapital);
+    });
+  });
+
+  describe('setStops and calc', () => {
+    beforeEach(() => {
+      portfolio.addPosition(aaplTicker);
+
+      // Kauf von AAPL
+      const buyOrder: TransactionData = {
+        date: new Date('2025-08-19'),
+        price: 150,
+        shares: 10,
+        type: 'buy',
+        reason: 'Upward trend started',
+      };
+
+      portfolio.placeOrder(aaplTicker, buyOrder);
+    });
+
+    it('should trigger stop loss and sell all shares', () => {
+      // Set stop loss at 140
+      portfolio.setStops(aaplTicker, { loss: 140 });
+
+      // Simulate price drop to 135
+      portfolio.calc(aaplTicker, { date: new Date('2025-08-20'), price: 135 });
+
+      // Should trigger stop loss and create a sell transaction
+      expect(portfolio.getTransactions()).toHaveLength(2);
+      expect(portfolio.getTransactions()[1].getType()).toBe('sell');
+      expect(portfolio.getTransactions()[1].getShares()).toBe(10);
+      expect(portfolio.getTransactions()[1].getPrice()).toBe(135);
+
+      // Check account balance: 20000 - 150 * 10 + 135 * 10 = 20000 - 1500 + 1350 = 19850
+      expect(account.getCash()).toBe(initialCapital - 150 * 10 + 135 * 10);
+    });
+
+    it('should trigger take profit and sell all shares', () => {
+      // Set take profit at 160
+      portfolio.setStops(aaplTicker, { profit: 160 });
+
+      // Simulate price rise to 165
+      portfolio.calc(aaplTicker, { date: new Date('2025-08-20'), price: 165 });
+
+      // Should trigger take profit and create a sell transaction
+      expect(portfolio.getTransactions()).toHaveLength(2);
+      expect(portfolio.getTransactions()[1].getType()).toBe('sell');
+      expect(portfolio.getTransactions()[1].getShares()).toBe(10);
+      expect(portfolio.getTransactions()[1].getPrice()).toBe(165);
+
+      // Check account balance: 20000 - 150 * 10 + 165 * 10 = 20000 - 1500 + 1650 = 20150
+      expect(account.getCash()).toBe(initialCapital - 150 * 10 + 165 * 10);
+    });
+
+    it('should do nothing if no stops are triggered', () => {
+      portfolio.setStops(aaplTicker, { loss: 140, profit: 160 });
+
+      // Simulate price at 145 (between stop loss and take profit)
+      portfolio.calc(aaplTicker, { date: new Date('2025-08-20'), price: 145 });
+
+      // No new transaction should be created
+      expect(portfolio.getTransactions()).toHaveLength(1);
+
+      // Account balance unchanged
+      expect(account.getCash()).toBe(initialCapital - 150 * 10);
     });
   });
 });
