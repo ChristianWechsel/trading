@@ -3,10 +3,12 @@ import { Transaction, TransactionData } from '../transaction/transaction';
 
 export type IDPosition = string;
 
-type Stops = Partial<{
+export type Stops = Partial<{
   loss: number;
   profit: number;
 }>;
+
+export type PriceDateInfo = Pick<TransactionData, 'price' | 'date'>;
 
 export class Position {
   private transactions: Transaction[];
@@ -32,11 +34,11 @@ export class Position {
     this.transactions.push(new Transaction(order));
   }
 
-  setStops(stops: Stops): void {
+  setStops(stops: Stops) {
     this.stops = { ...this.stops, ...stops };
   }
 
-  calc(datum: Pick<TransactionData, 'price' | 'date'>) {
+  calc(datum: PriceDateInfo) {
     const shares = this.getCurrentShares();
     const { price, date } = datum;
     const stopLoss = this.stops.loss;

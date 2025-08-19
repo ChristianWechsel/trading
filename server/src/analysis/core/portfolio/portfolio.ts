@@ -1,6 +1,6 @@
 import { TickerDto } from 'src/data-aggregation/data-aggregation.dto';
 import { Account } from '../account/account';
-import { Position } from '../position/position';
+import { Position, PriceDateInfo, Stops } from '../position/position';
 import { TransactionData } from '../transaction/transaction';
 
 // Portfolio besteht aus mehrern Positionen. Jede Position verwaltet alle Transaktionen
@@ -26,11 +26,41 @@ export class Portfolio {
   placeOrder(ticker: TickerDto, order: TransactionData) {
     const position = this.getPosition(ticker);
     if (position) {
-      position.buy(quantity);
+      this.updateAccountBalance(order);
+      position.placeOrder(order);
+    }
+  }
+
+  setStops(ticker: TickerDto, stops: Stops) {
+    const position = this.getPosition(ticker);
+    if (position) {
+      position.setStops(stops);
+    }
+  }
+
+  calc(ticker: TickerDto, datum: PriceDateInfo) {
+    const position = this.getPosition(ticker);
+    if (position) {
+      position.calc(datum);
     }
   }
 
   private hasPosition(ticker: TickerDto) {
     return this.positions.some((p) => p.isPosition(ticker));
+  }
+
+  private getPosition(ticker: TickerDto) {
+    return this.positions.find((p) => p.isPosition(ticker));
+  }
+
+  private updateAccountBalance(order: TransactionData) {
+    switch (order.type) {
+      case 'buy':
+        this.account.debit(order.price * order.shares);
+        break;
+      case 'sell':
+        this.account.credit(order.price * order.shares);
+        break;
+    }
   }
 }
