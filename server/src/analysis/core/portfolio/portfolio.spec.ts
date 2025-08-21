@@ -179,9 +179,9 @@ describe('Portfolio', () => {
 
       // Should trigger stop loss and create a sell transaction
       expect(portfolio.getTransactions()).toHaveLength(2);
-      expect(portfolio.getTransactions()[1].getType()).toBe('sell');
-      expect(portfolio.getTransactions()[1].getShares()).toBe(10);
-      expect(portfolio.getTransactions()[1].getPrice()).toBe(135);
+      expect(portfolio.getTransactions()[1].type).toBe('sell');
+      expect(portfolio.getTransactions()[1].shares).toBe(10);
+      expect(portfolio.getTransactions()[1].price).toBe(135);
 
       // Check account balance: 20000 - 150 * 10 + 135 * 10 = 20000 - 1500 + 1350 = 19850
       expect(account.getCash()).toBe(initialCapital - 150 * 10 + 135 * 10);
@@ -196,9 +196,9 @@ describe('Portfolio', () => {
 
       // Should trigger take profit and create a sell transaction
       expect(portfolio.getTransactions()).toHaveLength(2);
-      expect(portfolio.getTransactions()[1].getType()).toBe('sell');
-      expect(portfolio.getTransactions()[1].getShares()).toBe(10);
-      expect(portfolio.getTransactions()[1].getPrice()).toBe(165);
+      expect(portfolio.getTransactions()[1].type).toBe('sell');
+      expect(portfolio.getTransactions()[1].shares).toBe(10);
+      expect(portfolio.getTransactions()[1].price).toBe(165);
 
       // Check account balance: 20000 - 150 * 10 + 165 * 10 = 20000 - 1500 + 1650 = 20150
       expect(account.getCash()).toBe(initialCapital - 150 * 10 + 165 * 10);
