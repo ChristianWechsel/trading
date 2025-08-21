@@ -39,6 +39,7 @@ import {
   RiskManagement,
   SelectorRiskManagement,
 } from './risk-management/risk-management.interface';
+import { TradingJournal } from './trading-journal/trading-journal';
 
 export type YValueAccessor = (dataPoint: EnrichedDataPoint) => number;
 
@@ -49,6 +50,7 @@ export class AnalysisContextClass {
   private tradingSignals: SignalForTrade[];
   private account: Account;
   private portfolio: Portfolio;
+  private tradingJournal: TradingJournal;
 
   private defaults: {
     averageTrueRangeOptions: Required<AverageTrueRangeOptionsDto>;
@@ -148,6 +150,7 @@ export class AnalysisContextClass {
     this.tradingSignals = [];
     this.account = new Account(this.options.getAccount().getInitialCapital());
     this.portfolio = new Portfolio(this.account);
+    this.tradingJournal = new TradingJournal();
   }
 
   getOptions(): Options {
@@ -156,6 +159,10 @@ export class AnalysisContextClass {
 
   getAccount(): Account {
     return this.account;
+  }
+
+  getTradingJournal(): TradingJournal {
+    return this.tradingJournal;
   }
 
   getPortfolio(): Portfolio {

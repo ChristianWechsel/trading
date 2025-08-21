@@ -1,5 +1,5 @@
 import { TickerDto } from '../../../data-aggregation/data-aggregation.dto';
-import { Transaction, TransactionData } from '../transaction/transaction';
+import { TransactionData } from '../transaction/transaction';
 
 export type Stops = Partial<{
   loss: number;
@@ -9,7 +9,7 @@ export type Stops = Partial<{
 export type PriceDateInfo = Pick<TransactionData, 'price' | 'date'>;
 
 export class Position {
-  private transactions: Transaction[];
+  private transactions: TransactionData[];
   private stops: Stops;
 
   constructor(
@@ -31,7 +31,7 @@ export class Position {
   }
 
   placeOrder(order: TransactionData) {
-    this.transactions.push(new Transaction(order));
+    this.transactions.push(order);
     this.triggerOrderCallbacks(order);
   }
 
@@ -67,10 +67,10 @@ export class Position {
   getCurrentShares() {
     return this.transactions.reduce<number>(
       (sharesAccumulated, transaction) => {
-        if (transaction.getType() === 'buy') {
-          sharesAccumulated += transaction.getShares();
+        if (transaction.type === 'buy') {
+          sharesAccumulated += transaction.shares;
         } else {
-          sharesAccumulated -= transaction.getShares();
+          sharesAccumulated -= transaction.shares;
         }
         return sharesAccumulated;
       },
@@ -81,8 +81,8 @@ export class Position {
   getProfit() {
     const buys = this.getBuys().reduce<number[]>(
       (listEveryShareWithPrice, buy) => {
-        const shares = buy.getShares();
-        const price = buy.getPrice();
+        const shares = buy.shares;
+        const price = buy.price;
         const list = new Array<number>(shares).fill(price);
         listEveryShareWithPrice.push(...list);
         return listEveryShareWithPrice;
@@ -91,8 +91,8 @@ export class Position {
     );
     const sells = this.getSells().reduce<number[]>(
       (listEveryShareWithPrice, sell) => {
-        const shares = sell.getShares();
-        const price = sell.getPrice();
+        const shares = sell.shares;
+        const price = sell.price;
         const list = new Array<number>(shares).fill(price);
         listEveryShareWithPrice.push(...list);
         return listEveryShareWithPrice;
@@ -141,10 +141,10 @@ export class Position {
   }
 
   private getBuys() {
-    return this.transactions.filter((tx) => tx.getType() === 'buy');
+    return this.transactions.filter((tx) => tx.type === 'buy');
   }
 
   private getSells() {
-    return this.transactions.filter((tx) => tx.getType() === 'sell');
+    return this.transactions.filter((tx) => tx.type === 'sell');
   }
 }

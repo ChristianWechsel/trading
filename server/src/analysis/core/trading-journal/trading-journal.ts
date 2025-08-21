@@ -1,12 +1,12 @@
 import { TickerDto } from '../../../data-aggregation/data-aggregation.dto';
-import { Transaction } from '../transaction/transaction';
+import { TransactionData } from '../transaction/transaction';
 
 type TransactionRecord = {
   general: { date: Date; ticker: TickerDto };
   financialInfo: {
     cash: number;
   };
-  transaction: Transaction;
+  transaction: TransactionData;
 };
 
 export class TradingJournal {
