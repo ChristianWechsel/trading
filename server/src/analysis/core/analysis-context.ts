@@ -149,8 +149,8 @@ export class AnalysisContextClass {
     this.trends = [];
     this.tradingSignals = [];
     this.account = new Account(this.options.getAccount().getInitialCapital());
-    this.portfolio = new Portfolio(this.account);
     this.tradingJournal = new TradingJournal();
+    this.portfolio = new Portfolio(this.account, this.tradingJournal);
   }
 
   getOptions(): Options {

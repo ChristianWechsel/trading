@@ -1,7 +1,17 @@
+import { TickerDto } from '../../../data-aggregation/data-aggregation.dto';
 import { Account } from '../account/account';
 import { TransactionData } from '../analysis.interface';
 import { TradingJournal } from '../trading-journal/trading-journal';
 import { Portfolio } from './portfolio';
+
+// Definiere den TransactionRecord-Typ für Tests
+type TransactionRecord = {
+  general: { date: Date; ticker: TickerDto };
+  financialInfo: {
+    cash: number;
+  };
+  transaction: TransactionData;
+};
 
 describe('Portfolio', () => {
   let account: Account;
@@ -92,12 +102,14 @@ describe('Portfolio', () => {
   });
 
   describe('placeOrder', () => {
+    let addRecordSpy: jest.SpyInstance<void, [TransactionRecord]>;
+
     beforeEach(() => {
       portfolio.addPosition(aaplTicker);
       portfolio.addPosition(googTicker);
 
       // Spy auf die addRecord-Methode des TradingJournals
-      jest.spyOn(tradingJournal, 'addRecord');
+      addRecordSpy = jest.spyOn(tradingJournal, 'addRecord');
     });
 
     it('should execute a buy order and debit the account', () => {
@@ -115,9 +127,9 @@ describe('Portfolio', () => {
       expect(account.getCash()).toBe(initialCapital - 150 * 10);
 
       // Überprüfe, ob das TradingJournal aktualisiert wurde
-      expect(tradingJournal.addRecord).toHaveBeenCalledWith({
+      expect(addRecordSpy).toHaveBeenCalledWith({
         general: { date: buyOrder.date, ticker: aaplTicker },
-        financialInfo: { cash: account.getCash() },
+        financialInfo: { cash: initialCapital }, // Cash VOR der Transaktion
         transaction: buyOrder,
       });
     });
@@ -155,9 +167,9 @@ describe('Portfolio', () => {
 
       // Überprüfe, ob das TradingJournal für den Verkauf aktualisiert wurde
       // Da addRecord zweimal aufgerufen wird (für Kauf und Verkauf), überprüfen wir den letzten Aufruf
-      expect(tradingJournal.addRecord).toHaveBeenLastCalledWith({
+      expect(addRecordSpy).toHaveBeenLastCalledWith({
         general: { date: sellOrder.date, ticker: aaplTicker },
-        financialInfo: { cash: expectedBalance },
+        financialInfo: { cash: initialCapital - 150 * 10 }, // Cash VOR dem Verkauf
         transaction: sellOrder,
       });
     });
@@ -180,6 +192,8 @@ describe('Portfolio', () => {
   });
 
   describe('setStops and calc', () => {
+    let addRecordSpy: jest.SpyInstance<void, [TransactionRecord]>;
+
     beforeEach(() => {
       portfolio.addPosition(aaplTicker);
 
@@ -196,7 +210,7 @@ describe('Portfolio', () => {
 
       // Spy auf die addRecord-Methode des TradingJournals zurücksetzen
       jest.clearAllMocks();
-      jest.spyOn(tradingJournal, 'addRecord');
+      addRecordSpy = jest.spyOn(tradingJournal, 'addRecord');
     });
 
     it('should trigger stop loss and sell all shares', () => {
@@ -220,17 +234,18 @@ describe('Portfolio', () => {
       expect(account.getCash()).toBe(expectedBalance);
 
       // Überprüfe, ob das TradingJournal für den Stop-Loss-Verkauf aktualisiert wurde
-      expect(tradingJournal.addRecord).toHaveBeenCalledWith({
+      // Verwende expliziten Cast mit as TransactionRecord
+      expect(addRecordSpy).toHaveBeenCalledWith({
         general: { date: stopLossDate, ticker: aaplTicker },
-        financialInfo: { cash: expectedBalance },
-        transaction: expect.objectContaining({
+        financialInfo: { cash: initialCapital - 150 * 10 }, // Cash VOR dem Stop-Loss
+        transaction: {
           type: 'sell',
           price: 135,
           shares: 10,
           reason: 'stop-loss',
           date: stopLossDate,
-        }),
-      });
+        } as TransactionData,
+      } as TransactionRecord);
     });
 
     it('should trigger take profit and sell all shares', () => {
@@ -257,17 +272,17 @@ describe('Portfolio', () => {
       expect(account.getCash()).toBe(expectedBalance);
 
       // Überprüfe, ob das TradingJournal für den Take-Profit-Verkauf aktualisiert wurde
-      expect(tradingJournal.addRecord).toHaveBeenCalledWith({
+      expect(addRecordSpy).toHaveBeenCalledWith({
         general: { date: takeProfitDate, ticker: aaplTicker },
-        financialInfo: { cash: expectedBalance },
-        transaction: expect.objectContaining({
+        financialInfo: { cash: initialCapital - 150 * 10 }, // Cash VOR dem Take-Profit
+        transaction: {
           type: 'sell',
           price: 165,
           shares: 10,
           reason: 'take-profit',
           date: takeProfitDate,
-        }),
-      });
+        } as TransactionData,
+      } as TransactionRecord);
     });
 
     it('should do nothing if no stops are triggered', () => {
