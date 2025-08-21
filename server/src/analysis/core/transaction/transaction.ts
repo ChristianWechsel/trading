@@ -20,4 +20,12 @@ export class Transaction {
   getPrice() {
     return this.details.price;
   }
+
+  getReason() {
+    return this.details.reason;
+  }
+
+  getDate() {
+    return this.details.date;
+  }
 }
