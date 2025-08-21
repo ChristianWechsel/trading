@@ -2,11 +2,15 @@ import { TickerDto } from 'src/data-aggregation/data-aggregation.dto';
 import { Account } from '../account/account';
 import { TransactionData } from '../analysis.interface';
 import { Position, PriceDateInfo, Stops } from '../position/position';
+import { TradingJournal } from '../trading-journal/trading-journal';
 
 export class Portfolio {
   private positions: Position[];
 
-  constructor(private readonly account: Account) {
+  constructor(
+    private readonly account: Account,
+    private readonly tradingJournal: TradingJournal,
+  ) {
     this.positions = [];
   }
 
@@ -14,11 +18,21 @@ export class Portfolio {
     if (!this.hasPosition(ticker)) {
       this.positions.push(
         new Position(ticker, {
-          buy: (shares, price) => {
-            this.account.debit(price * shares);
+          buy: (transaction) => {
+            this.tradingJournal.addRecord({
+              transaction,
+              financialInfo: { cash: this.account.getCash() },
+              general: { ticker, date: transaction.date },
+            });
+            this.account.debit(transaction.price * transaction.shares);
           },
-          sell: (shares, price) => {
-            this.account.credit(price * shares);
+          sell: (transaction) => {
+            this.tradingJournal.addRecord({
+              transaction,
+              financialInfo: { cash: this.account.getCash() },
+              general: { ticker, date: transaction.date },
+            });
+            this.account.credit(transaction.price * transaction.shares);
           },
         }),
       );

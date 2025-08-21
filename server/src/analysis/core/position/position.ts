@@ -15,8 +15,8 @@ export class Position {
   constructor(
     private ticker: TickerDto,
     private on: {
-      buy: (shares: number, price: number) => void;
-      sell: (shares: number, price: number) => void;
+      buy: (transaction: TransactionData) => void;
+      sell: (transaction: TransactionData) => void;
     },
   ) {
     this.transactions = [];
@@ -116,10 +116,10 @@ export class Position {
   private triggerOrderCallbacks(order: TransactionData) {
     switch (order.type) {
       case 'buy':
-        this.on.buy(order.shares, order.price);
+        this.on.buy(order);
         break;
       case 'sell':
-        this.on.sell(order.shares, order.price);
+        this.on.sell(order);
         break;
     }
   }

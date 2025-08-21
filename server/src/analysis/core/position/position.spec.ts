@@ -82,7 +82,7 @@ describe('Position', () => {
     expect(buyTransaction?.type).toBe('buy');
     expect(buyTransaction?.shares).toBe(10);
 
-    expect(mockCallbacks.buy).toHaveBeenCalledWith(10, 200);
+    expect(mockCallbacks.buy).toHaveBeenCalledWith(buyOrder);
     expect(mockCallbacks.sell).not.toHaveBeenCalled();
   });
 
@@ -105,7 +105,7 @@ describe('Position', () => {
     expect(sellTransaction?.type).toBe('sell');
     expect(sellTransaction?.shares).toBe(5);
 
-    expect(mockCallbacks.sell).toHaveBeenCalledWith(5, 210);
+    expect(mockCallbacks.sell).toHaveBeenCalledWith(sellOrder);
     expect(mockCallbacks.buy).not.toHaveBeenCalled();
   });
 
@@ -113,14 +113,15 @@ describe('Position', () => {
     position.setStops({ loss: 190, profit: 220 });
 
     // Buy some shares first
-    position.placeOrder({
+    const stopLossBuyOrder: TransactionData = {
       date: new Date('2025-08-19'),
       price: 200,
       shares: 10,
       type: 'buy',
       reason: 'Upward trend started',
-    });
-    expect(mockCallbacks.buy).toHaveBeenCalledWith(10, 200);
+    };
+    position.placeOrder(stopLossBuyOrder);
+    expect(mockCallbacks.buy).toHaveBeenCalledWith(stopLossBuyOrder);
     mockCallbacks.buy.mockClear();
 
     // Test stop loss
@@ -133,7 +134,7 @@ describe('Position', () => {
       .find((t) => t.type === 'sell' && Math.abs(t.price - 185) < 0.01);
     expect(sellTransaction).toBeTruthy();
 
-    expect(mockCallbacks.sell).toHaveBeenCalledWith(10, 185);
+    expect(mockCallbacks.sell).toHaveBeenCalledWith(sellTransaction);
     expect(mockCallbacks.buy).not.toHaveBeenCalled();
 
     // Reset position
@@ -143,14 +144,15 @@ describe('Position', () => {
     position.setStops({ loss: 190, profit: 220 });
 
     // Buy some shares
-    position.placeOrder({
+    const takeProfitBuyOrder: TransactionData = {
       date: new Date('2025-08-19'),
       price: 200,
       shares: 10,
       type: 'buy',
       reason: 'Upward trend started',
-    });
-    expect(mockCallbacks.buy).toHaveBeenCalledWith(10, 200);
+    };
+    position.placeOrder(takeProfitBuyOrder);
+    expect(mockCallbacks.buy).toHaveBeenCalledWith(takeProfitBuyOrder);
     mockCallbacks.buy.mockClear();
 
     // Test take profit
@@ -163,7 +165,7 @@ describe('Position', () => {
       .find((t) => t.type === 'sell' && Math.abs(t.price - 225) < 0.01);
     expect(takeProfitTransaction).toBeTruthy();
 
-    expect(mockCallbacks.sell).toHaveBeenCalledWith(10, 225);
+    expect(mockCallbacks.sell).toHaveBeenCalledWith(takeProfitTransaction);
     expect(mockCallbacks.buy).not.toHaveBeenCalled();
   });
 
@@ -372,10 +374,22 @@ describe('Position', () => {
 
     // Verify callback calls
     expect(mockCallbacks.buy).toHaveBeenCalledTimes(2);
-    expect(mockCallbacks.buy).toHaveBeenNthCalledWith(1, 5, 100);
-    expect(mockCallbacks.buy).toHaveBeenNthCalledWith(2, 3, 110);
+
+    // Finde die Transaktionen für die Callback-Überprüfung
+    const firstBuyTransaction = position
+      .getTransactions()
+      .find((t) => t.type === 'buy' && t.shares === 5 && t.price === 100);
+    const secondBuyTransaction = position
+      .getTransactions()
+      .find((t) => t.type === 'buy' && t.shares === 3 && t.price === 110);
+    const sellTransaction = position
+      .getTransactions()
+      .find((t) => t.type === 'sell' && t.shares === 2 && t.price === 120);
+
+    expect(mockCallbacks.buy).toHaveBeenNthCalledWith(1, firstBuyTransaction);
+    expect(mockCallbacks.buy).toHaveBeenNthCalledWith(2, secondBuyTransaction);
 
     expect(mockCallbacks.sell).toHaveBeenCalledTimes(1);
-    expect(mockCallbacks.sell).toHaveBeenCalledWith(2, 120);
+    expect(mockCallbacks.sell).toHaveBeenCalledWith(sellTransaction);
   });
 });

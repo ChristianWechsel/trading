@@ -17,6 +17,7 @@ export class Trading implements AnalysisStep {
     const riskManagement = context.buildRiskManagement();
     const portfolio = context.getPortfolio();
     portfolio.addPosition(ticker);
+    const tradingJournal = context.getTradingJournal();
 
     dataPoints.forEach((dataPoint) => {
       const price = yYalueAccessor(dataPoint);
