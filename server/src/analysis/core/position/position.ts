@@ -1,5 +1,5 @@
 import { TickerDto } from '../../../data-aggregation/data-aggregation.dto';
-import { TransactionData } from '../transaction/transaction';
+import { TransactionData } from '../analysis.interface';
 
 export type Stops = Partial<{
   loss: number;

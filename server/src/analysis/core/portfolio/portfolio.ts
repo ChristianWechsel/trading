@@ -1,7 +1,7 @@
 import { TickerDto } from 'src/data-aggregation/data-aggregation.dto';
 import { Account } from '../account/account';
+import { TransactionData } from '../analysis.interface';
 import { Position, PriceDateInfo, Stops } from '../position/position';
-import { TransactionData } from '../transaction/transaction';
 
 export class Portfolio {
   private positions: Position[];

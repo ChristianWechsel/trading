@@ -50,3 +50,9 @@ export type SignalForTrade = {
     | 'stop-loss'
     | 'take-profit';
 };
+
+export type TransactionData = Pick<SignalForTrade, 'type' | 'reason'> & {
+  shares: number;
+  price: number;
+  date: Date;
+};

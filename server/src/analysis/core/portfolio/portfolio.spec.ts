@@ -1,5 +1,5 @@
 import { Account } from '../account/account';
-import { TransactionData } from '../transaction/transaction';
+import { TransactionData } from '../analysis.interface';
 import { Portfolio } from './portfolio';
 
 describe('Portfolio', () => {
