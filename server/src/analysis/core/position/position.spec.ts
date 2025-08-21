@@ -73,8 +73,15 @@ describe('Position', () => {
     };
     position.placeOrder(buyOrder);
     expect(position.getTransactions()).toHaveLength(1);
-    expect(position.getTransactions()[0].getType()).toBe('buy');
-    expect(position.getTransactions()[0].getShares()).toBe(10);
+
+    // Find the buy transaction instead of assuming index
+    const buyTransaction = position
+      .getTransactions()
+      .find((t) => t.type === 'buy');
+    expect(buyTransaction).toBeTruthy();
+    expect(buyTransaction?.type).toBe('buy');
+    expect(buyTransaction?.shares).toBe(10);
+
     expect(mockCallbacks.buy).toHaveBeenCalledWith(10, 200);
     expect(mockCallbacks.sell).not.toHaveBeenCalled();
   });
@@ -89,8 +96,15 @@ describe('Position', () => {
     };
     position.placeOrder(sellOrder);
     expect(position.getTransactions()).toHaveLength(1);
-    expect(position.getTransactions()[0].getType()).toBe('sell');
-    expect(position.getTransactions()[0].getShares()).toBe(5);
+
+    // Find the sell transaction instead of assuming index
+    const sellTransaction = position
+      .getTransactions()
+      .find((t) => t.type === 'sell');
+    expect(sellTransaction).toBeTruthy();
+    expect(sellTransaction?.type).toBe('sell');
+    expect(sellTransaction?.shares).toBe(5);
+
     expect(mockCallbacks.sell).toHaveBeenCalledWith(5, 210);
     expect(mockCallbacks.buy).not.toHaveBeenCalled();
   });
@@ -112,7 +126,13 @@ describe('Position', () => {
     // Test stop loss
     position.calc({ date: new Date('2025-08-20'), price: 185 });
     expect(position.getTransactions()).toHaveLength(2);
-    expect(position.getTransactions()[1].getType()).toBe('sell');
+
+    // Find the sell transaction instead of assuming index
+    const sellTransaction = position
+      .getTransactions()
+      .find((t) => t.type === 'sell' && Math.abs(t.price - 185) < 0.01);
+    expect(sellTransaction).toBeTruthy();
+
     expect(mockCallbacks.sell).toHaveBeenCalledWith(10, 185);
     expect(mockCallbacks.buy).not.toHaveBeenCalled();
 
@@ -136,7 +156,13 @@ describe('Position', () => {
     // Test take profit
     position.calc({ date: new Date('2025-08-20'), price: 225 });
     expect(position.getTransactions()).toHaveLength(2);
-    expect(position.getTransactions()[1].getType()).toBe('sell');
+
+    // Find the sell transaction instead of assuming index
+    const takeProfitTransaction = position
+      .getTransactions()
+      .find((t) => t.type === 'sell' && Math.abs(t.price - 225) < 0.01);
+    expect(takeProfitTransaction).toBeTruthy();
+
     expect(mockCallbacks.sell).toHaveBeenCalledWith(10, 225);
     expect(mockCallbacks.buy).not.toHaveBeenCalled();
   });
