@@ -263,5 +263,45 @@ describe('Analysis (Integration)', () => {
     expect(actualTrends).toEqual(expectedTrends);
 
     expect(result.getAccount().getCash()).toBe(testData.expectedCash);
+    expect(result.getTradingJournal().getRecords()).toEqual([
+      {
+        transaction: {
+          type: 'buy',
+          price: 112,
+          shares: 44,
+          reason: 'Upward trend started',
+          date: new Date('2023-01-06T00:00:00.000Z'),
+        },
+        financialInfo: {
+          cash: 10000,
+        },
+        general: {
+          ticker: {
+            symbol: 'MCD',
+            exchange: 'US',
+          },
+          date: new Date('2023-01-06T00:00:00.000Z'),
+        },
+      },
+      {
+        transaction: {
+          type: 'sell',
+          price: 124,
+          shares: 44,
+          reason: 'Upward trend ended',
+          date: new Date('2023-01-12T00:00:00.000Z'),
+        },
+        financialInfo: {
+          cash: 5072,
+        },
+        general: {
+          ticker: {
+            symbol: 'MCD',
+            exchange: 'US',
+          },
+          date: new Date('2023-01-12T00:00:00.000Z'),
+        },
+      },
+    ]);
   });
 });
